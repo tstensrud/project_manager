@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{%block title%}Romskjema - oversikt bygg{% endblock %}
+{% block header %}Bygg{% endblock %}
+
+
+
+{%block page_subtitle %}Bygg{% endblock %}
+{%block content %}
+    <div class="text-container">
+      <div class="summaries-wrapper">
+        <h1  class="app-content-Text">Legg til bygg i prosjekt</h1>
+        <p>
+            <form class="custom-form profile-form" method="POST" role="form">
+                <input type="text" name="building_name" id="building_name" placeholder="Navn på bygg">
+                    <button type="submit" class="form-button">
+                        Legg til
+                    </button>
+            </form>
+        </p>
+      </div>
+    {% if not project_buildings %}
+        <p class="p-description">Ingen bygg lagt inn for {{ project.ProjectName }}</p>
+    {%else %}
+        {% for building, area, supply, extract, heating in project_buildings %}
+
+        <div class="summaries-wrapper">
+            
+            <div class="summaries-table">
+              <div class="summaries-row header">
+                    <div class="summaries-cell white">
+                        {{building.BuildingName}}
+                    </div>
+                    <div class="summaries-cell">
+                    </div>
+                </div>
+
+              <div class="summaries-row header blue">
+                <div class="summaries-cell white">
+                    Prosjektert
+                </div>
+                <div class="summaries-cell">
+                </div>
+              </div>
+              
+              <div class="summaries-row">
+                <div class="summaries-cell">
+                  Tilluft: 
+                </div>
+                <div class="summaries-cell">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 -5 20 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> 
+                    <span class="supply-text"> {% if supply == None %}0{% else %}{{supply}}{% endif %}</span> m<sup>3</sup>/h
+                </div>
+              </div>
+
+              <div class="summaries-row">
+                <div class="summaries-cell">
+                  Avtrekk: 
+                </div>
+                <div class="summaries-cell">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 -5 20 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <span class="extract-text">{% if extract == None %}0{% else %}{{extract}}{% endif %}</span> m<sup>3</sup>/h
+                </div>
+              </div>
+
+              <div class="summaries-row">
+                <div class="summaries-cell">
+                  Prosjektert varme
+                </div>
+                <div class="summaries-cell">
+                    {{heating}} W
+                </div>
+              </div>
+
+              <div class="summaries-row">
+                <div class="summaries-cell">
+                    Prosjektert areal
+                </div>
+                <div class="summaries-cell">
+                    {% if area == None %}0{% else %}{{area}}{% endif %} m<sup>2</sup>
+                </div>
+              </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

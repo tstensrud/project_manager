@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{%block title%}Romskjema - endre prosjektinnstillinger{% endblock %}
+{% block header %}Prosjektinnstillinger{% endblock %}
+
+{%block page_subtitle %}Instillinger for {{project.ProjectName}}{% endblock %}
+{%block content %}
+    <form class="custom-form profile-form" method="POST" role="form">
+        <p>
+            <p>
+                Prosjektnummer
+                <br>
+                <input type="text" name="project_number" id="project_number" value="{{project.ProjectNumber}}" placeholder="Prosjektnummer">
+            </p>
+            <p>
+                Prosjektnavn
+                <br>
+                <input type="text" name="project_name" id="project_name" value="{{project.ProjectName}}" placeholder="Prosjektnavn">
+            </p>
+            <p>
+                Prosjektbeskrivelse <br>
+                <textarea class="form-text-area" name="project_description" id="project_description">{{project.ProjectDescription}}</textarea>
+            </p>
+        </p>
+        <p>
+            Kravspesifikasjon
+            <br>
+            <select name="project_specification" id="project_specification">
+                <option value="none">- Velg -</option>
+                {% for spec in specifications %}
+                <option value="{{spec.id}}">{{spec.name}}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <button type="submit" class="form-button">
+                Oppdater
+            </button>
+        </p>
+    </form>
+{% endblock %}

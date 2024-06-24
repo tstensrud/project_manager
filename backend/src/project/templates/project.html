@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{%block title%}Romskjema{% endblock %}
+{% block header %}Romskjema{% endblock %}
+
+{%block page_subtitle %}Prosjektoversikt{% endblock %}
+{%block content %}
+
+<div class="text-container">
+    <div class="summaries-wrapper">
+            
+        <div class="summaries-table">
+          <div class="summaries-row header blue">
+            <div class="summaries-cell white">
+                Gjellende kravspesifikasjon
+            </div>
+        </div>
+
+        <div class="summaries-row">
+            <div class="summaries-cell">
+                <a href="{{ url_for('specifications.specifications', specification=project.Specification) }}">{{project.Specification}}</a>
+            </div>
+        </div>
+
+        <div class="summaries-row header blue">
+            <div class="summaries-cell white">
+                Prosjektbeskrivelse
+            </div>
+        </div>
+        
+        <div class="summaries-row">
+            <div class="summaries-cell">
+                {{project.ProjectDescription | replace('\n', '<br>') | safe}}
+            </div>
+        </div>
+
+        <div class="summaries-row header blue">
+            <div class="summaries-cell white">
+                Noe annen informasjon som kunne være av nytte
+            </div>
+        </div>
+        
+        <div class="summaries-row">
+            <div class="summaries-cell">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nam magnam minima quasi, voluptatem iure quis fugit! Quis est necessitatibus facere corrupti, repellendus provident facilis autem corporis veritatis vitae, odio excepturi.
+                <br>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum, animi laborum quidem ipsam vero placeat atque ex laboriosam ut accusantium expedita vel id ipsa ullam, distinctio libero odio, voluptates quia?
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}

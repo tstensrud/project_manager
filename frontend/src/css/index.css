@@ -57,7 +57,6 @@
 }
  /*#1a2238 #9daaf2 #ff6a3d #f4db7d*/
 
-
  /* Globals */
  :root {
   --app-bg: #1e2d47;
@@ -76,8 +75,6 @@
   --filter-shadow: rgba(16, 24, 39, 0.8) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
  
-
-
 
 .light:root {
   --app-bg: #fff;
@@ -132,7 +129,6 @@ body {
   background-color: var(--sidebar);
   display: flex;
   flex-direction: column;
-  border-bottom-right-radius: 10px;
 }
 .sidebar-header {
   display: flex;

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{%block title%}Romskjema - nytt prosjekt{% endblock %}
+{% block pagetitle %}Nytt prosjekt{%endblock%}
+
+{%block page_subtitle %}Opprett nytt prosjekt{% endblock %}
+{%block content %}
+
+<form class="custom-form profile-form" method="POST" role="form">
+    <p>
+        Prosjektnummer <br>
+        <input class="form-control" type="text" name="project_number" id="project_number" placeholder="Prosjektnummer">
+    </p>
+    <p>
+        Prosjektnavn <br>
+        <input class="form-control" type="text" name="project_name" id="project_name" placeholder="Navn på prosjekt">
+    </p>
+    <p>
+        Prosjektbeskrivelse <br>
+    <textarea class="form-text-area" name="project_description" id="project_description">Kort beskrivelse og annen viktig informasjon</textarea>
+    </p>
+    <button type="submit" class="form-button">
+        Legg til
+    </button>
+</form>
+{% endblock %}
