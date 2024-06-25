@@ -11,13 +11,12 @@ import TapWaterIcon from '../assets/svg/tapWaterIcon.svg?react';
 import ProjectSettingsIcon from '../assets/svg/projectSettingsIcon.svg?react';
 import ReportsIcon from '../assets/svg/reportsIcon.svg?react';
 import DashboardIcon from '../assets/svg/dashboardIcon.svg?react';
-import AccountIcon from '../assets/svg/accountIcon.svg?react';
-import SpecificationsIcon from '../assets/svg/specificationsIcon.svg?react';
 
 
-function Menu() {
+function MenuProject() {
     
-    const menuItems = [{id: 1, text: "Prosjektoversikt", svg: ProjectIcon, url: ""},
+    const menuItems = [
+        {id: 1, text: "Prosjektoversikt", svg: ProjectIcon, url: "project"},
         {id: 2, text:"Bygg", svg: BuildingIcon, url: "buildings"},
         {id: 3, text: "Romliste", svg: RoomsIcon, url: "rooms"},
         {id: 4, text: "Ventilasjonssytemer", svg: VentilationSystemIcon, url: "ventsystems"},
@@ -28,10 +27,8 @@ function Menu() {
         {id: 9, text: "Prosjektinnstillinger", svg: ProjectSettingsIcon, url: ""},
         {id: 10, text: "Rapporter", svg: ReportsIcon, url: ""},
         {id: 11, text: "Prosjekt dashboard", svg: DashboardIcon, url: "projects"},
-        {id: 12, text: "Kravspesifikasjoner", svg: SpecificationsIcon, url: "specifications"},
-        {id: 13, text: "Brukerkonto", svg: AccountIcon, url: "userprofile"},
-        {id: 14, text: "Admin", url: "admin"},
-        {id: 15, text: "Logg ut", url: ""}];
+        {id: 12, text: "Logg ut", url: "logout"}
+    ];
 
     return (
         <>
@@ -47,4 +44,4 @@ function Menu() {
     );
 }
 
-export default Menu;
+export default MenuProject;

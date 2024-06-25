@@ -1,8 +1,10 @@
+from datetime import timedelta
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 
 db = SQLAlchemy()
 DB_NAME = "db.db"
@@ -10,14 +12,16 @@ DB_NAME = "db.db"
 def create_app():
     app = Flask(__name__)
     CORS(app)
+    jwt = JWTManager(app)
     app.config['SECRET_KEY'] = "9UE5CwQRIJqM5O2SbDifX"
     app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}"
-    
+    app.config['JWT_SECRET_KEY'] = "ASsaf39834578DJYACDS1234fwec1af521f35f1"
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
     db.init_app(app)
 
         
     from .views import views
-    from .auth import auth
+
 
     #from .admin import admin
     #from .rooms import rooms
@@ -45,13 +49,12 @@ def create_app():
     
 
     app.register_blueprint(views, url_prefix='/')
-    app.register_blueprint(auth, url_prefix='/')
 
     from .models import User
     create_db(app)
 
     login_manager = LoginManager()
-    login_manager.login_view = "auth.login"
+    login_manager.login_view = "views.token"
     login_manager.init_app(app)
 
     @login_manager.user_loader

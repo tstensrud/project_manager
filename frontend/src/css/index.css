@@ -118,6 +118,8 @@ body {
   overflow: auto;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   margin: 0 auto;
+  justify-content: center;
+  align-items: center;
 }
 /* End globals */
 
@@ -129,6 +131,7 @@ body {
   background-color: var(--sidebar);
   display: flex;
   flex-direction: column;
+  height: 100%
 }
 .sidebar-header {
   display: flex;
@@ -534,4 +537,18 @@ a {
   margin-right: 10px;
   width: 75px;
   font-size: 14px;
+}
+
+.login-div-container {
+  width: 400px;
+  height: 400px;
+  position: fixed;
+  background-color: var(--sidebar);
+  color: var(--app-content-main-color);
+  border-radius: 15px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
 }
