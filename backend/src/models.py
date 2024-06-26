@@ -56,10 +56,10 @@ class TodoItem(db.Model):
 class Projects(db.Model):
     __tablename__ = "Projects"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    ProjectNumber = db.Column(db.Integer, nullable=False)
-    ProjectName = db.Column(db.String(50), nullable=False)
-    ProjectDescription = db.Column(db.Text)
-    Specification = db.Column(db.String(50))
+    project_number = db.Column(db.Integer, nullable=False)
+    project_name = db.Column(db.String(50), nullable=False)
+    project_description = db.Column(db.Text)
+    specification = db.Column(db.String(50))
 
     todo_item = db.relationship('TodoItem', backref='project', uselist=False, lazy=True)
     buildings = db.relationship('Buildings', backref='project_buildings', uselist=False, lazy=True)
@@ -68,17 +68,17 @@ class Projects(db.Model):
     def get_json(self):
         return {
             "id": self.id,
-            "ProjectNumber": self.ProjectNumber,
-            "ProjectName": self.ProjectName,
-            "ProjectDescription": self.ProjectDescription,
-            "Specification": self.Specification
+            "ProjectNumber": self.project_number,
+            "ProjectName": self.project_name,
+            "ProjectDescription": self.project_description,
+            "Specification": self.specification
         }
 
 class Buildings(db.Model):
     __tablename__ = "Buildings"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    ProjectId = db.Column(db.Integer, db.ForeignKey('Projects.id'), nullable=False)
-    BuildingName = db.Column(db.String(100), nullable=False)
+    project_id = db.Column(db.Integer, db.ForeignKey('Projects.id'), nullable=False)
+    building_name = db.Column(db.String(100), nullable=False)
 
     rooms = db.relationship('Rooms', backref='building', lazy=True)
     energy_properties = db.relationship('BuildingEnergySettings', backref='heating', uselist=False, lazy=True)
@@ -87,21 +87,21 @@ class Buildings(db.Model):
     def get_json(self):
         return {
             "id": self.id,
-            "ProjectId": self.ProjectId,
-            "BuildingName": self.BuildingName
+            "ProjectId": self.project_id,
+            "BuildingName": self.building_name
         }
 
 class Rooms(db.Model):
     __tablename__ = "Rooms"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    BuildingId = db.Column(db.Integer, db.ForeignKey('Buildings.id'), nullable=False)
-    RoomTypeId = db.Column(db.Integer, db.ForeignKey('RoomTypes.id'), nullable=False)
-    Floor = db.Column(db.String(100), nullable=False)
-    RoomNumber = db.Column(db.String(100), nullable=False)
-    RoomName = db.Column(db.String(100), nullable=False)
-    Area = db.Column(db.Float, nullable=False)
-    RoomPopulation = db.Column(db.Integer, nullable=False)
-    Comments = db.Column(db.String(250))
+    building_id = db.Column(db.Integer, db.ForeignKey('Buildings.id'), nullable=False)
+    room_type_id = db.Column(db.Integer, db.ForeignKey('RoomTypes.id'), nullable=False)
+    floor = db.Column(db.String(100), nullable=False)
+    room_number = db.Column(db.String(100), nullable=False)
+    room_name = db.Column(db.String(100), nullable=False)
+    area = db.Column(db.Float, nullable=False)
+    room_population = db.Column(db.Integer, nullable=False)
+    comments = db.Column(db.String(250))
 
     room_type = db.relationship('RoomTypes', backref='room_type', uselist=False, lazy=True)
     ventilation_properties = db.relationship('RoomVentilationProperties', backref='room_ventilation', uselist=False, lazy=True)
@@ -110,209 +110,209 @@ class Rooms(db.Model):
     def get_json(self):
         return {
             "id": self.id,
-            "BuildingId": self.BuildingId,
-            "RoomTypeId": self.RoomTypeId,
-            "Floor": self.Floor,
-            "RoomNumber": self.RoomNumber,
-            "RoomName": self.RoomName,
-            "Area": self.Area,
-            "RoomPopulation": self.RoomPopulation,
-            "Comments": self.Comments
+            "BuildingId": self.building_id,
+            "RoomTypeId": self.room_type_id,
+            "Floor": self.floor,
+            "RoomNumber": self.room_number,
+            "RoomName": self.room_name,
+            "Area": self.area,
+            "RoomPopulation": self.room_population,
+            "Comments": self.comments
         }
 
 class VentilationSystems(db.Model):
     __tablename__ = "VentilationSystems"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    ProjectId = db.Column(db.Integer, db.ForeignKey('Projects.id'), nullable=False)
-    SystemName = db.Column(db.String(30), nullable=False)
-    Location = db.Column(db.String(100))
-    ServiceArea = db.Column(db.String(250))
-    HeatExchange = db.Column(db.String(30))
-    AirFlow = db.Column(db.Float)
-    AirFlowSupply = db.Column(db.Float)
-    AirFlowExtract = db.Column(db.Float)
-    SpecialSystem = db.Column(db.String)
+    project_id = db.Column(db.Integer, db.ForeignKey('Projects.id'), nullable=False)
+    system_name = db.Column(db.String(30), nullable=False)
+    location = db.Column(db.String(100))
+    service_area = db.Column(db.String(250))
+    heat_exchange = db.Column(db.String(30))
+    air_flow = db.Column(db.Float)
+    air_flow_supply = db.Column(db.Float)
+    air_flow_extract = db.Column(db.Float)
+    special_system = db.Column(db.String)
 
-    room = db.relationship('RoomVentilationProperties', backref="room", lazy=True)
+    room = db.relationship('RoomVentilationProperties', backref="ventilationsystem", lazy=True)
 
     def get_json(self):
         return {
             "id": self.id,
-            "ProjectId": self.ProjectId,
-            "SystemName": self.SystemName,
-            "Location": self.Location,
-            "ServiceArea": self.ServiceArea,
-            "HeatExchange": self.HeatExchange,
-            "AirFlow": self.AirFlow,
-            "AirFlowSupply": self.AirFlowSupply,
-            "AirFlowExtract": self.AirFlowExtract,
-            "SpecialSystem": self.SpecialSystem
+            "ProjectId": self.project_id,
+            "SystemName": self.system_name,
+            "Location": self.location,
+            "ServiceArea": self.service_area,
+            "HeatExchange": self.heat_exchange,
+            "AirFlow": self.air_flow,
+            "AirFlowSupply": self.air_flow_supply,
+            "AirFlowExtract": self.air_flow_extract,
+            "SpecialSystem": self.special_system
         }
 
 class RoomVentilationProperties(db.Model):
     __tablename__ = "RoomVentilationProperties"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    RoomId = db.Column(db.Integer, db.ForeignKey('Rooms.id', ondelete="SET NULL"), nullable=False, unique=True)
-    SystemId = db.Column(db.Integer, db.ForeignKey('VentilationSystems.id', ondelete="SET NULL"), nullable=True)
-    AirPerPerson = db.Column(db.Float)
-    AirPersonSum = db.Column(db.Integer)
-    AirEmission = db.Column(db.Float)
-    AirEmissionSum = db.Column(db.Float)
-    AirProcess = db.Column(db.Float)
-    AirMinimum = db.Column(db.Float)
-    AirDemand = db.Column(db.Float)
-    AirSupply = db.Column(db.Float)
-    AirExtract = db.Column(db.Float)
-    AirChosen = db.Column(db.Float)
-    VentilationPrinciple = db.Column(db.String(50))
-    HeatExchange = db.Column(db.String(50))
-    RoomControl = db.Column(db.String(50))
-    Notes = db.Column(db.String(100))
-    DbTechnical = db.Column(db.String(50))
-    DbNeighbour = db.Column(db.String(50))
-    DbCorridor = db.Column(db.String(50))
-    Comments = db.Column(db.String(20))
+    room_id = db.Column(db.Integer, db.ForeignKey('Rooms.id', ondelete="SET NULL"), nullable=False, unique=True)
+    system_id = db.Column(db.Integer, db.ForeignKey('VentilationSystems.id', ondelete="SET NULL"), nullable=True)
+    air_per_person = db.Column(db.Float)
+    air_person_sum = db.Column(db.Integer)
+    air_mission = db.Column(db.Float)
+    air_emission_sum = db.Column(db.Float)
+    air_process = db.Column(db.Float)
+    air_minimum = db.Column(db.Float)
+    air_demand = db.Column(db.Float)
+    air_supply = db.Column(db.Float)
+    air_extract = db.Column(db.Float)
+    air_chosen = db.Column(db.Float)
+    vent_principle = db.Column(db.String(50))
+    heat_exchange = db.Column(db.String(50))
+    room_control = db.Column(db.String(50))
+    notes = db.Column(db.String(100))
+    db_technical = db.Column(db.String(50))
+    db_neighbour = db.Column(db.String(50))
+    db_corridor = db.Column(db.String(50))
+    comments = db.Column(db.String(20))
 
 
     def get_json(self):
         return {
             "id": self.id,
-            "RoomId": self.RoomId,
-            "SystemId": self.SystemId,
-            "AirPerPerson": self.AirPerPerson,
-            "AirPersonSum": self.AirPersonSum,
-            "AirEmission": self.AirEmission,
-            "AirEmissionSum": self.AirEmissionSum,
-            "AirProcess": self.AirProcess,
-            "AirMinimum": self.AirMinimum,
-            "AirDemand": self.AirDemand,
-            "AirSupply": self.AirSupply,
-            "AirExtract": self.AirExtract,
-            "AirChosen": self.AirChosen,
-            "VentilationPrinciple": self.VentilationPrinciple,
-            "HeatExchange": self.HeatExchange,
-            "RoomControl": self.RoomControl,
-            "Notes": self.Notes,
-            "DbTechnical": self.DbTechnical,
-            "DbNeighbour": self.DbNeighbour,
-            "DbCorridor": self.DbCorridor,
-            "Comments": self.Comments
+            "RoomId": self.room_id,
+            "SystemId": self.system_id,
+            "AirPerPerson": self.air_per_person,
+            "AirPersonSum": self.air_person_sum,
+            "AirEmission": self.air_mission,
+            "AirEmissionSum": self.air_emission_sum,
+            "AirProcess": self.air_process,
+            "AirMinimum": self.air_minimum,
+            "AirDemand": self.air_demand,
+            "AirSupply": self.air_supply,
+            "AirExtract": self.air_extract,
+            "AirChosen": self.air_chosen,
+            "VentilationPrinciple": self.vent_principle,
+            "HeatExchange": self.heat_exchange,
+            "RoomControl": self.room_control,
+            "Notes": self.notes,
+            "DbTechnical": self.db_technical,
+            "DbNeighbour": self.db_neighbour,
+            "DbCorridor": self.db_corridor,
+            "Comments": self.comments
         }
 
 
 class BuildingEnergySettings(db.Model):
     __tablename__ = "BuildingEnergySettings"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    ProjectId = db.Column(db.Integer, db.ForeignKey('Projects.id'), nullable=False)
-    BuildingID = db.Column(db.Integer, db.ForeignKey('Buildings.id', ondelete="SET NULL"), nullable=False, unique=True)
+    project_id = db.Column(db.Integer, db.ForeignKey('Projects.id'), nullable=False)
+    building_id = db.Column(db.Integer, db.ForeignKey('Buildings.id', ondelete="SET NULL"), nullable=False, unique=True)
     # Heating properties
-    InsideTemp = db.Column(db.Float)
-    VentTemp = db.Column(db.Float)
-    Infiltration = db.Column(db.Float)
-    UvalueOuterWall = db.Column(db.Float)
-    UvalueWindowDoor = db.Column(db.Float)
-    UvalueFloorGround = db.Column(db.Float)
-    UvalueFloorAir = db.Column(db.Float)
-    UvalueRoof = db.Column(db.Float)
-    ColdBridge = db.Column(db.Float)
-    YearMidTemp = db.Column(db.Float)
-    TempFloorAir = db.Column(db.Float)
-    Dut = db.Column(db.Float)
-    Safety = db.Column(db.Integer)
+    inside_temp = db.Column(db.Float)
+    vent_temp = db.Column(db.Float)
+    infiltration = db.Column(db.Float)
+    u_value_outer_wall = db.Column(db.Float)
+    u_value_window_doors = db.Column(db.Float)
+    u_value_floor_ground = db.Column(db.Float)
+    u_value_floor_air = db.Column(db.Float)
+    u_value_roof = db.Column(db.Float)
+    cold_bridge_value = db.Column(db.Float)
+    year_mid_temp = db.Column(db.Float)
+    temp_floor_air = db.Column(db.Float)
+    dut = db.Column(db.Float)
+    safety = db.Column(db.Integer)
 
 
-    room_energy = db.relationship('RoomEnergyProperties', backref='building_energy_settings', lazy=True)
+    room_energy = db.relationship('RoomEnergyProperties', backref='buildingenergysettings', lazy=True)
 
     def get_json(self):
         return {
             "id": self.id,
-            "ProjectId": self.ProjectId,
-            "BuildingID": self.BuildingID,
-            "InsideTemp": self.InsideTemp,
-            "VentTemp": self.VentTemp,
-            "Infiltration": self.Infiltration,
-            "UvalueOuterWall": self.UvalueOuterWall,
-            "UvalueWindowDoor": self.UvalueWindowDoor,
-            "UvalueFloorGround": self.UvalueFloorGround,
-            "UvalueFloorAir": self.UvalueFloorAir,
-            "UvalueRoof": self.UvalueRoof,
-            "ColdBridge": self.ColdBridge,
-            "YearMidTemp": self.YearMidTemp,
-            "TempFloorAir": self.TempFloorAir,
-            "Dut": self.Dut,
-            "Safety": self.Safety
+            "ProjectId": self.project_id,
+            "BuildingID": self.building_id,
+            "InsideTemp": self.inside_temp,
+            "VentTemp": self.vent_temp,
+            "Infiltration": self.infiltration,
+            "UvalueOuterWall": self.u_value_outer_wall,
+            "UvalueWindowDoor": self.u_value_window_doors,
+            "UvalueFloorGround": self.u_value_floor_ground,
+            "UvalueFloorAir": self.u_value_floor_air,
+            "UvalueRoof": self.u_value_roof,
+            "ColdBridge": self.cold_bridge_value,
+            "YearMidTemp": self.year_mid_temp,
+            "TempFloorAir": self.temp_floor_air,
+            "Dut": self.dut,
+            "Safety": self.safety
         }
 
 class RoomEnergyProperties(db.Model):
     __tablename__ = "RoomEnergyProperties"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    RoomId = db.Column(db.Integer, db.ForeignKey('Rooms.id', ondelete="SET NULL"), nullable=False, unique=True)
-    BuildingEnergySettings = db.Column(db.Integer, db.ForeignKey('BuildingEnergySettings.id', ondelete="SET NULL"), nullable=False)
+    room_id = db.Column(db.Integer, db.ForeignKey('Rooms.id', ondelete="SET NULL"), nullable=False, unique=True)
+    building_energy_settings = db.Column(db.Integer, db.ForeignKey('BuildingEnergySettings.id', ondelete="SET NULL"), nullable=False)
     # Heating settings
-    OuterWallArea = db.Column(db.Float)
-    RoomHeight = db.Column(db.Float)
-    WindowDoorArea = db.Column(db.Float)
-    InnerWallArea = db.Column(db.Float)
-    RoofArea = db.Column(db.Float)
-    FloorGroundArea = db.Column(db.Float)
-    FloorAirArea = db.Column(db.Float)
-    RoomVolume = db.Column(db.Float)
-    HeatLossColdBridge = db.Column(db.Float)
-    HeatLossTransmission = db.Column(db.Float)
-    HeatLossInfiltration = db.Column(db.Float)
-    HeatLossVentilation = db.Column(db.Float)
-    HeatLossSum = db.Column(db.Float)
-    ChosenHeating = db.Column(db.Float)
-    HeatSource = db.Column(db.String(50))
+    outer_wall_area = db.Column(db.Float)
+    room_height = db.Column(db.Float)
+    window_door_area = db.Column(db.Float)
+    inner_wall_area = db.Column(db.Float)
+    roof_area = db.Column(db.Float)
+    floor_ground_area = db.Column(db.Float)
+    floor_air_area = db.Column(db.Float)
+    room_volume = db.Column(db.Float)
+    heatloss_cold_bridge = db.Column(db.Float)
+    heatloss_transmission = db.Column(db.Float)
+    heatloss_infiltration = db.Column(db.Float)
+    heatloss_ventilation = db.Column(db.Float)
+    heatloss_sum = db.Column(db.Float)
+    chosen_heating = db.Column(db.Float)
+    heat_source = db.Column(db.String(50))
     # Cooling settings
-    RoomTempSummer = db.Column(db.Float)
-    InternalLoadPeople = db.Column(db.Float)
-    InternalLoadLight = db.Column(db.Float)
-    SunAdition = db.Column(db.Float)
-    VentAirTempSummer = db.Column(db.Float)
-    SumInternalHeatloadPeople = db.Column(db.Float)
-    SumInternalHeatloadLight = db.Column(db.Float)
-    InternalHeatloadEquipment = db.Column(db.Float)
-    SunAdition = db.Column(db.Float)
-    SunReduction = db.Column(db.Float)
-    SumInternalHeatLoad = db.Column(db.Float)
-    CoolingVentilationAir = db.Column(db.Float)
-    CoolingEquipment = db.Column(db.Float)
-    CoolingSum = db.Column(db.Float)
+    room_temp_summer = db.Column(db.Float)
+    internal_heatload_people = db.Column(db.Float)
+    internal_heatload_lights = db.Column(db.Float)
+    sun_adition = db.Column(db.Float)
+    ventair_temp_summer = db.Column(db.Float)
+    sum_internal_heatload_people = db.Column(db.Float)
+    sum_internal_heatload_lights = db.Column(db.Float)
+    internal_heatload_equipment = db.Column(db.Float)
+    sun_adition = db.Column(db.Float)
+    sun_reduction = db.Column(db.Float)
+    sum_internal_heatload = db.Column(db.Float)
+    cooling_ventilationair = db.Column(db.Float)
+    cooling_equipment = db.Column(db.Float)
+    cooling_sum = db.Column(db.Float)
 
     def get_json(self):
         return {
             "id": self.id,
-            "RoomId": self.RoomId,
-            "BuildingEnergySettings": self.BuildingEnergySettings,
-            "OuterWallArea": self.OuterWallArea,
-            "RoomHeight": self.RoomHeight,
-            "WindowDoorArea": self.WindowDoorArea,
-            "InnerWallArea": self.InnerWallArea,
-            "RoofArea": self.RoofArea,
-            "FloorGroundArea": self.FloorGroundArea,
-            "FloorAirArea": self.FloorAirArea,
-            "RoomVolume": self.RoomVolume,
-            "HeatLossColdBridge": self.HeatLossColdBridge,
-            "HeatLossTransmission": self.HeatLossTransmission,
-            "HeatLossInfiltration": self.HeatLossInfiltration,
-            "HeatLossVentilation": self.HeatLossVentilation,
-            "HeatLossSum": self.HeatLossSum,
-            "ChosenHeating": self.ChosenHeating,
-            "HeatSource": self.HeatSource,
-            "RoomTempSummer": self.RoomTempSummer,
-            "InternalLoadPeople": self.InternalLoadPeople,
-            "InternalLoadLight": self.InternalLoadLight,
-            "SunAdition": self.SunAdition,
-            "VentAirTempSummer": self.VentAirTempSummer,
-            "SumInternalHeatloadPeople": self.SumInternalHeatloadPeople,
-            "SumInternalHeatloadLight": self.SumInternalHeatloadLight,
-            "InternalHeatloadEquipment": self.InternalHeatloadEquipment,
-            "SunReduction": self.SunReduction,
-            "SumInternalHeatLoad": self.SumInternalHeatLoad,
-            "CoolingVentilationAir": self.CoolingVentilationAir,
-            "CoolingEquipment": self.CoolingEquipment,
-            "CoolingSum": self.CoolingSum
+            "RoomId": self.room_id,
+            "BuildingEnergySettings": self.building_energy_settings,
+            "OuterWallArea": self.outer_wall_area,
+            "RoomHeight": self.room_height,
+            "WindowDoorArea": self.window_door_area,
+            "InnerWallArea": self.inner_wall_area,
+            "RoofArea": self.roof_area,
+            "FloorGroundArea": self.floor_ground_area,
+            "FloorAirArea": self.floor_air_area,
+            "RoomVolume": self.room_volume,
+            "HeatLossColdBridge": self.heatloss_cold_bridge,
+            "HeatLossTransmission": self.heatloss_transmission,
+            "HeatLossInfiltration": self.heatloss_infiltration,
+            "HeatLossVentilation": self.heatloss_ventilation,
+            "HeatLossSum": self.heatloss_sum,
+            "ChosenHeating": self.chosen_heating,
+            "HeatSource": self.heat_source,
+            "RoomTempSummer": self.room_temp_summer,
+            "InternalLoadPeople": self.internal_heatload_people,
+            "InternalLoadLight": self.internal_heatload_lights,
+            "SunAdition": self.sun_adition,
+            "VentAirTempSummer": self.ventair_temp_summer,
+            "SumInternalHeatloadPeople": self.sum_internal_heatload_people,
+            "SumInternalHeatloadLight": self.sum_internal_heatload_lights,
+            "InternalHeatloadEquipment": self.internal_heatload_equipment,
+            "SunReduction": self.sun_reduction,
+            "SumInternalHeatLoad": self.sum_internal_heatload,
+            "CoolingVentilationAir": self.cooling_ventilationair,
+            "CoolingEquipment": self.cooling_equipment,
+            "CoolingSum": self.cooling_sum
         }
 
 ''' 

@@ -4,17 +4,18 @@ import TodoButton from './layout/TodoButton';
 import MenuProject from './layout/MenuProject';
 import MenuDashboard from './layout/MenuDashboard';
 import Header from './layout/Header';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { GlobalContext } from './GlobalContext';
+
 
 function Layout() {
-    const [activeProject, setActiveProject] = useState();
+    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
     return(
         <>
         <ToggleMode/>
-
         {
-            activeProject === undefined ?
+            activeProject === 0 ?
             (
                 <MenuDashboard />
             ) : (

@@ -15,7 +15,7 @@ def rooms(project_id):
     endpoint = request.endpoint
     project_buildings = dbo.get_all_project_buildings(project.id)
     project_rooms = dbo.get_all_project_rooms(project.id)
-    project_specification: str = project.Specification
+    project_specification: str = project.specification
     project_room_types = dbo.get_specification_room_types(project_specification)
 
     if request.method == "POST":

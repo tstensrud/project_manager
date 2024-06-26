@@ -1,6 +1,5 @@
-from flask import Blueprint, redirect, url_for, render_template, flash, jsonify, request, session
+from flask import Blueprint, redirect, jsonify, request, session
 from flask_jwt_extended import jwt_required
-from flask_login import login_required, current_user
 from .. import models, db
 from .. import db_operations as dbo
 from markupsafe import escape
@@ -11,38 +10,38 @@ projects_bp = Blueprint('projects', __name__, static_folder='static', template_f
 @jwt_required()
 def projects():
     projects_objects = dbo.get_all_projects()
-    project_json_data = []
-    for project in projects_objects:
-        project_data = project.get_json()
-        project_json_data.append(project_data)
+    project_json_data = list(map(lambda x: x.get_json(), projects_objects))
+
     if project_json_data:
         return jsonify({"data": project_json_data})
     else:
         return jsonify({"data": "Ingen prosjekter opprettet"})
         
 
-@projects_bp.route('/new_project', methods=['POST'])
+@projects_bp.route('/new_project/', methods=['POST'])
 @jwt_required()
 def new_project():
-    project_name = request.form.get('project_name').strip()
-    project_number = request.form.get('project_number').strip()
-    project_description = request.form.get('project_description').strip()
+    print("Submitting new project")
+    data = request.get_json()
+    if not data:
+        return jsonify({"data": "No data received"})
+    print(data)
+    project_number = escape(data["projectNumber"])
+    project_name = escape(data["projectName"])
+    project_description = escape(data["projectDescription"])
             
     if dbo.check_for_existing_project_number(project_number):
-        flash("Prosjektnummer finnes allerede", category="error")
-        return redirect(url_for("projects.projects"))
-    
-    new_project = models.Projects(ProjectNumber=project_number, 
-                                    ProjectName=project_name, 
-                                    ProjectDescription=project_description, 
-                                    Specification=None)
+        return jsonify({"data": "Prosjektnummer finnes allerede."})
+    else:
+        new_project = models.Projects(project_number=project_number, 
+                                        project_name=project_name, 
+                                        project_description=project_description, 
+                                        specification=None)
     try:
         db.session.add(new_project)
         db.session.commit()
     except Exception as e:
-        flash(f"Kunne ikke opprette prosjekt: {e}", category="error")
-        return redirect(url_for("projects.projects"))
+        return jsonify({"data": f"Feil under oppretting av prosjekt: {e}"})
+
     
-    session['project_name'] = project_name
-    flash(f"Prosjekt \"{project_name}\" er opprettet", category="success")
-    return redirect(url_for('projects.projects'))
+    return jsonify({"data": new_project.get_json()})

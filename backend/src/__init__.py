@@ -5,7 +5,10 @@ from os import path
 from flask_login import LoginManager
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 db = SQLAlchemy()
 DB_NAME = "db.db"
 
@@ -15,6 +18,7 @@ def create_app():
     jwt = JWTManager(app)
     app.config['SECRET_KEY'] = "9UE5CwQRIJqM5O2SbDifX"
     app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}"
+    #app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['JWT_SECRET_KEY'] = "ASsaf39834578DJYACDS1234fwec1af521f35f1"
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
     db.init_app(app)
@@ -26,10 +30,10 @@ def create_app():
     #from .admin import admin
     #from .rooms import rooms
     #from .ventilation import ventilation
-    #from. project import project
+    from. project import project
     from .projects import projects
     #from .ventsystems import ventsystems
-    #from .buildings import buildings
+    from .buildings import buildings
     from .specifications import specifications
     #from .heating import heating
     #from .cooling import cooling
@@ -39,13 +43,13 @@ def create_app():
     #app.register_blueprint(admin.admin_bp, url_prefix='/admin')
     app.register_blueprint(projects.projects_bp, url_prefix='/projects')
     app.register_blueprint(specifications.specifications_bp, url_prefix='/specifications')
-    #app.register_blueprint(rooms.rooms_bp, url_prefix='/<project_id>/rooms')
-    #app.register_blueprint(ventilation.ventilation_bp, url_prefix='/<project_id>/ventilation')
-    #app.register_blueprint(project.project_bp, url_prefix='/<project_id>/project')
-    #app.register_blueprint(ventsystems.ventsystems_bp, url_prefix='/<project_id>/ventsystems')
-    #app.register_blueprint(buildings.buildings_bp, url_prefix='/<project_id>/buildings')
-    #app.register_blueprint(heating.heating_bp, url_prefix='/<project_id>/heating')
-    #app.register_blueprint(cooling.cooling_bp, url_prefix='/<project_id>/cooling')
+    #app.register_blueprint(rooms.rooms_bp, url_prefix='/rooms')
+    #app.register_blueprint(ventilation.ventilation_bp, url_prefix='/ventilation')
+    app.register_blueprint(project.project_bp, url_prefix='/project/')
+    #app.register_blueprint(ventsystems.ventsystems_bp, url_prefix='/ventsystems')
+    app.register_blueprint(buildings.buildings_bp, url_prefix='/buildings/')
+    #app.register_blueprint(heating.heating_bp, url_prefix='/heating')
+    #app.register_blueprint(cooling.cooling_bp, url_prefix='/cooling')
     
 
     app.register_blueprint(views, url_prefix='/')

@@ -21,7 +21,7 @@ function Login(props) {
         })
         .then ((response) => {
             props.setToken(response.data.access_token)
-            navigate("/projects");
+            navigate("/dashboard");
 
         }).catch((error) => {
             if (error.response) {

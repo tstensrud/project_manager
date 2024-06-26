@@ -1,14 +1,54 @@
-import PlusIcon from '../../assets/svg/plusIcon.svg?react';
-import MinusIcon from '../../assets/svg/minusIcon.svg?react';
+import { GlobalContext } from '../../GlobalContext';
+import useFetch from '../../hooks/useFetch'
+import { useParams } from 'react-router-dom';
+import { useEffect, useState, useContext } from 'react';
+import SubTitleComponent from '../../layout/SubTitleComponent';
+import BuildingSummary from './BuildingSummary';
+import useSubmitData from '../../hooks/useSubmitData'
 
 function Buildings() {
+    const {projectId} = useParams();
+    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+    const [allData, setAllData] = useState();
+    const [formInput, setFormInput] = useState('');
+    const {data, loading, error, refetch} = useFetch(`/buildings/${projectId}/`);
+    const {buildingData, setData, handleSubmit} = useSubmitData(`/buildings/${projectId}/new_building/`);
+    
+    useEffect(() => {
+        const activeProjectLayout = setActiveProject(projectId);
+    },[]);
+
+
+    const handleChange = (e) => {
+        setData({
+            ...buildingData,
+            [e.target.name]: e.target.value,
+        })
+        setFormInput(e.target.value);
+    }
+
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+        await handleSubmit(e);
+        refetch();
+        setFormInput('');
+    }
+
     return(<>
+        <SubTitleComponent>
+            Bygg tilknyttet 
+        </SubTitleComponent>
         <div className="text-container">
             <div className="summaries-wrapper">
                 <h1 className="app-content-Text">Legg til bygg i prosjekt</h1>
-                <form className="custom-form profile-form" method="POST" role="form">
+                <form className="custom-form profile-form" onSubmit={handleFormSubmit}>
                     <p>
-                        <input type="text" name="building_name" id="building_name" placeholder="Navn på bygg" />
+                        <input
+                        onChange={handleChange}
+                        type="text"
+                        value={formInput}
+                        name="buildingName"
+                        placeholder="Navn på bygg" />
                         <button type="submit" className="form-button">
                             Legg til
                         </button>
@@ -16,67 +56,18 @@ function Buildings() {
                     </p>
                 </form>
             </div>
-            <p className="p-description">Ingen bygg lagt inn for </p>
-            <div className="summaries-wrapper">
-                <div className="summaries-table">
-                    <div className="summaries-row header">
-                        <div className="summaries-cell white">
-                            bygningsnavn
-                        </div>
-                        <div className="summaries-cell">
-                        </div>
-                    </div>
-
-                    <div className="summaries-row header blue">
-                        <div className="summaries-cell white">
-                            Prosjektert
-                        </div>
-                        <div className="summaries-cell">
-                        </div>
-                    </div>
-
-                    <div className="summaries-row">
-                        <div className="summaries-cell">
-                            Tilluft:
-                        </div>
-                        <div className="summaries-cell">
-                            {PlusIcon && <PlusIcon />}
-                            <span className="supply-text"> </span> m<sup>3</sup>/h
-                        </div>
-                    </div>
-
-                    <div className="summaries-row">
-                        <div className="summaries-cell">
-                            Avtrekk:
-                        </div>
-                        <div className="summaries-cell">
-                            {MinusIcon && <MinusIcon />}
-                            <span className="extract-text"></span> m<sup>3</sup>/h
-                        </div>
-                    </div>
-
-                    <div className="summaries-row">
-                        <div className="summaries-cell">
-                            Prosjektert varme
-                        </div>
-                        <div className="summaries-cell">
-                            W
-                        </div>
-                    </div>
-
-                    <div className="summaries-row">
-                        <div className="summaries-cell">
-                            Prosjektert areal
-                        </div>
-                        <div className="summaries-cell">
-                            m<sup>2</sup>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {
+            data && data.building_data === null ? (
+                <p className="p-description">Ingen bygg lagt inn</p>
+            ) : (
+                data && Object.keys(data.building_data).map(key => (
+                    <BuildingSummary buildingData={data.building_data[key]} />
+                ))
+            )
+            }
         </div>
-    
+
     </>);
 }
 
-export default Buildings
+export default Buildings;

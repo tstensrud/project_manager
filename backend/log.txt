@@ -1,0 +1,44 @@
+- 2024-06-26 19:21:21.971889: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 19:22:19.626088: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 19:38:48.255262: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 19:39:15.381960: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 19:40:41.907457: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 19:41:11.170573: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 19:45:39.680053: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 19:45:46.612217: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 19:48:03.479994: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:03:43.599059: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:03:55.615069: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:04:10.189074: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:04:34.996077: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:04:41.674363: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:04:46.711593: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:04:51.117471: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:05:31.287888: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:05:35.644233: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:10:24.896089: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:21:28.783155: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:23:22.252208: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+
+- 2024-06-26 20:25:39.552751: new building: 'ProjectId' is an invalid keyword argument for BuildingEnergySettings
+

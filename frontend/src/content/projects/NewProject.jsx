@@ -1,20 +1,52 @@
+import { useState } from 'react';
+import useSubmitData from '../../hooks/useSubmitData'
+import SubTitleComponent from '../../layout/SubTitleComponent';
+
 function NewProject() {
+
+    const {data, setData, response, loading, error, handleSubmit} = useSubmitData('/projects/new_project/');
+
+    const handleChange = (e) => {
+        setData({
+            ...data,
+            [e.target.name]: e.target.value,
+        });
+    }
+
     return (
         <>
-            <form className="custom-form profile-form" method="POST" role="form">
+        <SubTitleComponent>Opprett nytt prosjekt</SubTitleComponent>
+            {loading && <p>Loading...</p>}
+            {error && <p>Error: {error.message}</p>}
+            
+            <form className="custom-form profile-form" onSubmit={handleSubmit}>
                 <p>
                     Prosjektnummer <br />
-                    <input className="form-control" type="text" name="project_number" id="project_number" placeholder="Prosjektnummer" />
+                    <input
+                    name="projectNumber"
+                    onChange={handleChange}
+                    className="form-control" 
+                    type="text" 
+                    placeholder="Prosjektnummer" />
                 </p>
                 <p>
                     Prosjektnavn <br />
-                    <input className="form-control" type="text" name="project_name" id="project_name" placeholder="Navn på prosjekt" />
+                    <input
+                    name="projectName"
+                    onChange={handleChange}
+                    className="form-control" 
+                    type="text" 
+                    placeholder="Navn på prosjekt" />
                 </p>
                 <p>
                     Prosjektbeskrivelse <br />
-                    <textarea className="form-text-area" name="project_description" id="project_description">Kort beskrivelse og annen viktig informasjon</textarea>
+                    <textarea 
+                    name="projectDescription"
+                    onChange={handleChange}
+                    className="form-text-area">
+                    </textarea>
                 </p>
-                <button type="submit" className="form-button">
+                <button type="submit" className="form-button" disabled={loading}>
                     Legg til
                 </button>
             </form>
