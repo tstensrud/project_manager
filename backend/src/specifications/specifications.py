@@ -19,15 +19,16 @@ def specifications():
     room_types_list = [{"id": key, "name": value} for key, value in room_id_type.items()]
     return jsonify(room_types_list)
 
-@specifications_bp.route('/get_spec_room_types', methods=['GET'])
-def get_specification_room_types():
+@specifications_bp.route('/get_spec_room_types/<spec_id>/', methods=['GET'])
+def get_specification_room_types(spec_id):
     spec = "Skok skoler 2022-o2023"
-    specification_data = dbo.get_specification_room_types(spec)
+    specification_data = dbo.get_specification_room_types(spec_id)
     room_id_type = {}
-    for object in specification_data:
-        room_id_type[object.id] = object.name
+    for room_type in specification_data:
+        room_id_type[room_type.id] = room_type.name
     room_types_list = [{"id": key, "name": value} for key, value in room_id_type.items()]
-    return jsonify(room_types_list)
+    #print(room_types_list)
+    return jsonify({"spec_room_type_data": room_types_list})
 
 
 @specifications_bp.route('/<specification>/new_room', methods=['GET', 'POST'])

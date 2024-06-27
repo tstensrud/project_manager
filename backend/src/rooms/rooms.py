@@ -1,60 +1,58 @@
-from flask import Blueprint, redirect, url_for, render_template, flash, jsonify, session, request
-from flask_login import login_required, current_user
+from flask import Blueprint, url_for, flash, jsonify, session, request
+from flask_login import login_required
 from .. import db_operations as dbo
 from .. import db_ops_energy as dboh
 from ..globals import pattern_float, pattern_int, blueprint_setup
 from markupsafe import escape
+from flask_jwt_extended import jwt_required
 
 rooms_bp = Blueprint('rooms', __name__, static_folder='static', template_folder='templates')
 blueprint_setup(rooms_bp)
 
-@rooms_bp.route('/', methods=['GET', 'POST'])
-#@login_required
+@rooms_bp.route('/<project_id>/', methods=['GET', 'POST'])
+@jwt_required()
 def rooms(project_id):
     project = dbo.get_project(project_id)
-    endpoint = request.endpoint
-    project_buildings = dbo.get_all_project_buildings(project.id)
-    project_rooms = dbo.get_all_project_rooms(project.id)
-    project_specification: str = project.specification
-    project_room_types = dbo.get_specification_room_types(project_specification)
+
+    if request.method == "GET":
+        project_rooms = dbo.get_all_project_rooms(project.id)
+        if project_rooms:
+            project_room_data = list(map(lambda x: x.get_json(), project_rooms))
+            return jsonify({"room_data": project_room_data})
+        else:
+            return jsonify({"room_data": None})
 
     if request.method == "POST":
-        building_id = request.form.get("building_id")
-        
-        if not building_id:
-            flash("Feil byggnings-ID", category="error")
-            return redirect(url_for("rooms.rooms", project_id = project.id))
-        building_id = int(building_id)
-        
-        room_type_id = escape(request.form.get("room_type"))
-        floor = escape(request.form.get("room_floor").strip())
-        name = escape(request.form.get("room_name").strip())
-        
-        room_number = escape(request.form.get("room_number").strip())
+        project_specification: str = project.specification
+        data = request.get_json()
+        print(f"JSON data received: {data}")
+        building_id = int(escape(data["buildingId"]))
+        room_type_id = int(escape(data["roomType"]))
+        floor = escape(data["floor"].strip())
+        name = escape(data["roomName"].strip())
+        room_number = escape(data["roomNumber"].strip())
         
         if dbo.check_if_roomnumber_exists(project.id, building_id, room_number):
-            flash(f"Romnummer {room_number} finnes allerede for dette bygget", category="error")
-            return redirect(url_for("rooms.rooms", project_id = project.id))
+            return jsonify({"message": "Romnummer finnes allerede for dette bygget"})
         
-        area = escape(request.form.get("room_area").strip())
+        area = escape(data["roomArea"].strip())
         try:
             area = float(area)
         except ValueError:
-            flash("Areal kan kun inneholde tall", category="error")
-            return redirect(url_for("rooms.rooms", project_id=project_id))
+            return jsonify({"message": "Areal må kun inneholde tall"})
             
-        people = escape(request.form.get("room_people").strip())
+        people = escape(data["roomPeople"].strip())
         try:
             people = int(people)
         except ValueError:
-            flash("Personbelastning kan kun inneholde tall", category="error")
-            return redirect(url_for("rooms.rooms", project_id=project_id))
+            return jsonify({"message": "Persontantall må kun inneholde tall"})
     
         new_room_id = dbo.new_room(building_id, room_type_id, floor, room_number, name, area, people)
 
         # Check if creating room was OK
         if new_room_id is not False:
             vent_props = dbo.get_room_type_data(room_type_id, project_specification)
+            print(vent_props)
 
             # Create row for room vent props
             new_room_vent_prop = dbo.new_vent_prop_room(new_room_id, vent_props.air_per_person, vent_props.air_emission,
@@ -68,25 +66,20 @@ def rooms(project_id):
                 
             # Create row for room heating props
             new_room_energy = dboh.new_room_energy(building_heating_settings.id, new_room_id)
-            if new_room_energy != True:
-                flash("Kunne ikke opprette rom", category="error")
 
-        return redirect(url_for("rooms.rooms", project_id = project.id))
-            
-                
-        
-    elif request.method == "GET":
-        return render_template("rooms.html", 
-                            user=current_user, 
-                            project=project,
-                            project_buildings = project_buildings,
-                            project_rooms = project_rooms,
-                            project_room_types = project_room_types,
-                            endpoint=endpoint,
-                            project_id = project_id)
+        return jsonify({"message": "Rom opprettet"})
 
-@rooms_bp.route('/update_room', methods=['POST'])
-@login_required
+@rooms_bp.route('/<project_id>/get_room/<room_id>/', methods=['GET'])
+@jwt_required()
+def get_room(project_id, room_id):
+    room = dbo.get_room(room_id)
+    room_data = room.get_json()
+    print(f"ROOM DATA IS: {room_data}")
+    return jsonify({"room_data": room_data})
+
+
+@rooms_bp.route('/<project_id>/update_room/', methods=['POST'])
+@jwt_required()
 def udpate_room(project_id):
     if request.method == "POST":
         data = request.get_json()

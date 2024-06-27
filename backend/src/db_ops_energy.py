@@ -10,21 +10,21 @@ Heating
 '''
 #@login_required
 def set_up_energy_settings_building(project_id: int, building_id: int) -> bool:
-    building_settings = models.BuildingEnergySettings(ProjectId = project_id,
-                                                       BuildingID = building_id,
-                                                       InsideTemp = 20.0,
-                                                       VentTemp = 18.0,
-                                                       Infiltration = 0.15,
-                                                       UvalueOuterWall = 0.22,
-                                                       UvalueWindowDoor = 0.18,
-                                                       UvalueFloorGround = 0.18,
-                                                       UvalueFloorAir = 0.18,
-                                                       UvalueRoof = .018,
-                                                       ColdBridge = 0.06,
-                                                       YearMidTemp = 5.0,
-                                                       TempFloorAir = -22,
-                                                       Dut= -22.0,
-                                                       Safety= 10.0)
+    building_settings = models.BuildingEnergySettings(project_id = project_id,
+                                                      building_id = building_id,
+                                                      inside_temp = 20.0,
+                                                      vent_temp = 18.0,
+                                                      infiltration = 0.15,
+                                                      u_value_outer_wall = 0.22,
+                                                      u_value_window_doors = 0.18,
+                                                      u_value_floor_ground = 0.18,
+                                                      u_value_floor_air = 0.18,
+                                                      u_value_roof = .018,
+                                                      cold_bridge_value = 0.06,
+                                                      year_mid_temp = 5.0,
+                                                      temp_floor_air = -22,
+                                                      dut= -22.0,
+                                                      safety= 10.0)
     try:
         db.session.add(building_settings)
         db.session.commit()
@@ -37,36 +37,36 @@ def set_up_energy_settings_building(project_id: int, building_id: int) -> bool:
 #@login_required
 def new_room_energy(building_energy_settings_id: int, room_id: int) -> bool:
     val = 1
-    new_room = models.RoomEnergyProperties(RoomId=room_id,
-                                            BuildingEnergySettings=building_energy_settings_id,
-                                            OuterWallArea = val,
-                                            RoomHeight=val,
-                                            WindowDoorArea=val,
-                                            InnerWallArea=val,
-                                            RoofArea=val,
-                                            FloorGroundArea=val,
-                                            FloorAirArea=val,
-                                            RoomVolume=val,
-                                            HeatLossColdBridge=val,
-                                            HeatLossTransmission=val,
-                                            HeatLossInfiltration=val,
-                                            HeatLossVentilation=val,
-                                            HeatLossSum=val,
-                                            ChosenHeating=val,
-                                            HeatSource="",
-                                            RoomTempSummer=26.0,
-                                            InternalLoadPeople=100,
-                                            InternalLoadLight=7.0,
-                                            VentAirTempSummer=18.0,
-                                            SumInternalHeatloadPeople=val,
-                                            SumInternalHeatloadLight=val,
-                                            InternalHeatloadEquipment=val,
-                                            SunAdition=val,
-                                            SunReduction=val,
-                                            SumInternalHeatLoad=val,
-                                            CoolingVentilationAir=val,
-                                            CoolingEquipment=val,
-                                            CoolingSum=val)
+    new_room = models.RoomEnergyProperties(room_id = room_id,
+                                                building_energy_settings = building_energy_settings_id,
+                                                outer_wall_area = val,
+                                                room_height = val,
+                                                window_door_area = val,
+                                                inner_wall_area = val,
+                                                roof_area = val,
+                                                floor_ground_area = val,
+                                                floor_air_area = val,
+                                                room_volume = val,
+                                                heatloss_cold_bridge = val,
+                                                heatloss_transmission = val,
+                                                heatloss_infiltration = val,
+                                                heatloss_ventilation = val,
+                                                heatloss_sum = val,
+                                                chosen_heating = val,
+                                                heat_source = "",
+                                                room_temp_summer = 26.0,
+                                                internal_heatload_people = 100,
+                                                internal_heatload_lights = 7.0,
+                                                ventair_temp_summer = 18.0,
+                                                sum_internal_heatload_people = val,
+                                                sum_internal_heatload_lights = val,
+                                                internal_heatload_equipment = val,
+                                                sun_adition = val,
+                                                sun_reduction = val,
+                                                sum_internal_heatload = val,
+                                                cooling_ventilationair = val,
+                                                cooling_equipment = val,
+                                                cooling_sum = val)
     try:
         db.session.add(new_room)
         db.session.commit()
@@ -149,24 +149,24 @@ def calculate_total_heat_loss_for_room(energy_room_id: int) -> bool:
             #print(f"No building settings found for room with heating_room_id: {heating_room_id}")
             return False
         room_data = room.room_energy  
-        dt_surfaces_to_air = building.InsideTemp - building.Dut
-        dt_floor_ground = building.InsideTemp - building.YearMidTemp
+        dt_surfaces_to_air = building.InsideTemp - building.dut
+        dt_floor_ground = building.InsideTemp - building.year_mid_temp
         outer_wall_area = room.outer_wall_area - room.window_door_area
         #print(f"dt_surfaces_to_air: {dt_surfaces_to_air}, dt_floor_ground: {dt_floor_ground}, outer_wall_area: {outer_wall_area}")
         
-        transmission_loss_outer_walls = building.UvalueOuterWall * dt_surfaces_to_air * outer_wall_area
-        transmission_loss_windows_doors = building.UvalueWindowDoor * dt_surfaces_to_air * room.window_door_area
+        transmission_loss_outer_walls = building.u_value_outer_wall * dt_surfaces_to_air * outer_wall_area
+        transmission_loss_windows_doors = building.u_value_window_doors * dt_surfaces_to_air * room.window_door_area
         if room.floor_ground_area != 0:
-            transmission_loss_floor = building.UvalueFloorGround * dt_floor_ground * room.floor_ground_area
+            transmission_loss_floor = building.u_value_floor_ground * dt_floor_ground * room.floor_ground_area
         else:
-            transmission_loss_floor = building.UvalueFloorAir * dt_floor_ground * room.floor_air_area
-        transmission_loss_roof = building.UvalueRoof * dt_surfaces_to_air * room.roof_area
+            transmission_loss_floor = building.u_value_floor_air * dt_floor_ground * room.floor_air_area
+        transmission_loss_roof = building.u_value_roof * dt_surfaces_to_air * room.roof_area
         #print(f"Transmission losses calculated: outer_walls={transmission_loss_outer_walls}, windows_doors={transmission_loss_windows_doors}, floor={transmission_loss_floor}, roof={transmission_loss_roof}")
-        room_cold_bridge_loss = building.ColdBridge * room_data.Area * dt_surfaces_to_air
-        room_ventilation_loss = ventilation_loss((room_data.ventilation_properties.AirSupply / room_data.Area), room_data.Area, building.InsideTemp , building.VentTemp)
-        room_infiltration_loss = infiltration_loss(dt_surfaces_to_air, (room_data.Area * room.room_height), building.Infiltration)
+        room_cold_bridge_loss = building.cold_bridge_value * room_data.Area * dt_surfaces_to_air
+        room_ventilation_loss = ventilation_loss((room_data.ventilation_properties.AirSupply / room_data.Area), room_data.Area, building.InsideTemp, building.vent_temp)
+        room_infiltration_loss = infiltration_loss(dt_surfaces_to_air, (room_data.Area * room.room_height), building.infiltration)
         #print(f"Cold bridge loss: {room_cold_bridge_loss}, ventilation loss: {room_ventilation_loss}, infiltration loss: {room_infiltration_loss}")
-        safety = 1 + ((building.Safety) / 100)
+        safety = 1 + ((building.safety) / 100)
         #print(f"Safety: {building.Safety}")
         
         total_heat_loss = safety * (transmission_loss_outer_walls+

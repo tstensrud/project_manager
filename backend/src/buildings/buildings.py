@@ -26,12 +26,25 @@ def buildings(project_id):
                 building_data[building.id] = dbo.get_building_data(building.id)
             return jsonify({"building_data": building_data})
 
+@buildings_bp.route('/<project_id>/get_project_buildings/', methods=["GET"])
+#@jwt_required()
+def get_project_buildings(project_id):
+    buildings = dbo.get_all_project_buildings(project_id)
+
+    if buildings is None:
+        return jsonify({"building_data": None})
+    else:
+        building_data = {}
+        for building in buildings:
+            building_data[building.id] = building.building_name
+        return jsonify({"building_data": building_data})
+
+
 @buildings_bp.route('/<project_id>/new_building/', methods=["POST"])
 @jwt_required()
 def new_building(project_id):
     data = request.get_json()
     name = escape(data["buildingName"])
-    
     if not data:
         return jsonify({"building_data": "No data received"})
     else:

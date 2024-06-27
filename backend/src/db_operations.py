@@ -153,8 +153,8 @@ Rooms methods
 '''
 #@login_required
 def new_room(building_id: int, room_type_id: int, floor: str, room_number: str, room_name: str, area: float, room_pop: int):
-    new_room = models.Rooms(BuildingId = building_id, RoomTypeId = room_type_id, Floor = floor, RoomNumber = room_number,
-                                RoomName = room_name, Area = area, RoomPopulation = room_pop)
+    new_room = models.Rooms(building_id = building_id, room_type_id = room_type_id, floor = floor, room_number = room_number,
+                                room_name = room_name, area = area, room_population = room_pop)
     try:
         db.session.add(new_room)
         db.session.commit()
@@ -240,21 +240,21 @@ Ventilation methods
 def new_vent_prop_room(room_id: int, air_per_person: float, air_emission: float, air_process: float,
                        air_minimum: float, ventilation_principle: str, heat_exchange: str, room_control: str,
                        notes: str, db_technical: str, db_neighbour: str, db_corridor: str, comments: str) -> bool:
-    room_ventilation_properties = models.RoomVentilationProperties(RoomId = room_id,
-                                                                        AirPerPerson=air_per_person,
-                                                                        AirEmission=air_emission,
-                                                                        AirProcess=air_process,
-                                                                        AirMinimum=air_minimum,
-                                                                        AirSupply = 0.0,
-                                                                        AirExtract= 0.0,
-                                                                        VentilationPrinciple=ventilation_principle,
-                                                                        HeatExchange=heat_exchange,
-                                                                        RoomControl=room_control,
-                                                                        Notes=notes,
-                                                                        DbTechnical=db_technical,
-                                                                        DbNeighbour=db_neighbour,
-                                                                        DbCorridor=db_corridor,
-                                                                        Comments=comments)
+    room_ventilation_properties = models.RoomVentilationProperties(room_id = room_id,
+                                                                   air_per_person=air_per_person,
+                                                                   air_mission=air_emission,
+                                                                   air_process=air_process,
+                                                                   air_minimum=air_minimum,
+                                                                   air_supply = 0.0,
+                                                                   air_extract= 0.0,
+                                                                   vent_principle=ventilation_principle,
+                                                                   heat_exchange=heat_exchange,
+                                                                   room_control=room_control,
+                                                                   notes=notes,
+                                                                   db_technical=db_technical,
+                                                                   db_neighbour=db_neighbour,
+                                                                   db_corridor=db_corridor,
+                                                                   comments=comments)
     try:
         db.session.add(room_ventilation_properties)
         db.session.commit()
@@ -550,8 +550,8 @@ def find_specification_name(name: str) -> bool:
     
 # Get data for a specific roomtype in a specification
 #@login_required
-def get_room_type_data(room_type_id: int, specification: str):
-    room_data_object = db.session.query(models.RoomTypes).join(models.Specifications).filter(and_(models.Specifications.name == specification, models.RoomTypes.id == room_type_id)).first()
+def get_room_type_data(room_type_id: int, specification: int):
+    room_data_object = db.session.query(models.RoomTypes).join(models.Specifications).filter(and_(models.Specifications.id == specification, models.RoomTypes.id == room_type_id)).first()
     return room_data_object
 
 #@login_required
@@ -561,8 +561,8 @@ def get_room_type_name(specification: str, room_id: int) -> str:
 
 # Get name of all room types for a specific specification
 ##@login_required
-def get_specification_room_types(specification: str):
-    room_types = db.session.query(models.RoomTypes).join(models.Specifications).filter(models.Specifications.name == specification).all()
+def get_specification_room_types(specification_id: int):
+    room_types = db.session.query(models.RoomTypes).join(models.Specifications).filter(models.Specifications.id == specification_id).all()
     return room_types
 
 # Get all room types and data for a specific specification

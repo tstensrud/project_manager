@@ -2,7 +2,6 @@ import { useState } from 'react';
 import AxiosInstance from '../AxiosInstance';
 
 const useSubmitData = (endpoint) => {
-  console.log(endpoint);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [response, setResponse] = useState(null);

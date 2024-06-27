@@ -1,13 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { useParams } from 'react-router-dom';
+import { GlobalContext } from '../../GlobalContext';
+
+import useFetch from '../../hooks/useFetch'
+import useSubmitData from '../../hooks/useSubmitData'
+
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import Table from '../../tables/Table';
-import SelectComponent from '../../formcomponents/SelectComponent';
+import TableHeaderComponent from "../../tables/TableHeaderComponent";
+import VentilationTableRowComponent from "../../tables/VentilationTableRowComponent";
+
 
 function Rooms () {
-    const[roomTypes, setRoomTypes] = useState([]);    
-    useEffect (() => {
-        fetchRoomTypes();
-    }, []);
+    const specificationId = 1;
+    const {projectId} = useParams();
+    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+    const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/rooms/${projectId}/`);
+    const {data: roomTypeData, loading: roomTypeLoading, error: roomTypeError, refetch: roomTypeRefetch} = useFetch(`/specifications/get_spec_room_types/${specificationId}/`);
+    const {data: buildingData, loading: buildingDataLoading, error: buildingDataError, refetch: buildingReFetch} = useFetch(`/buildings/${projectId}/get_project_buildings/`);
+    const {data: allRoomData, response, setData, handleSubmit} = useSubmitData(`/rooms/${projectId}/`);
+    
+    useEffect(() => {
+        setActiveProject(projectId);
+    },[]);
 
     const columnTitles = [  {text: "Bygg"},
                             {text: "Etasje"},
@@ -17,35 +31,51 @@ function Rooms () {
                             {text: "Areal m2"},
                             {text: "Personer"},
                             {text: "Kommentarer"},
+                            {text: "Slett rom"}
     ];
 
-    const fetchRoomTypes = async () => {
-        const response = await fetch("http://127.0.0.1:5000/specifications/get_spec_room_types");
-        const data = await response.json();
-        setRoomTypes(data);
-    };
-    console.log(roomTypes);
-    
+    const handleFormChange = (e) => {
+        setData({
+            ...allRoomData,
+            [e.target.name]: e.target.value,
+        })
+    }
+
+    const handleOnSubmit = async (e) => {
+        e.preventDefault();
+        await handleSubmit(e);
+        roomRefetch();
+        // reset input fields roomtype, area, people, name. Leave floor and building.
+    }
+
+        
     return (
         <>
+        <SubTitleComponent>
+            Romskjema
+        </SubTitleComponent>
+        {response && response.message !== null ? (<p>{response.message}</p>) : (<span></span>) }
             <div className="no-print">
-                <form id="new_room" method="POST" role="form">
+                <form id="new_room" onSubmit={handleOnSubmit}>
                 <p>Legg til nytt rom</p>
                     <p>
-                        <input type="text" name="project_id" id="project_id" value="{{project.id}}" hidden readOnly />
-
-                        <SelectComponent title="- Romtyper -" id="room_type" values={roomTypes} />
                         
-                        <select name="building_id" id="building_id">
-                            <option value="none">- Bygg -</option>
-                            <option value="{{building.id}}"></option>
+                        <select onChange={handleFormChange} name="roomType">
+                            <option key="0" value="">- Velg romtype -</option>
+                            {roomTypeData && roomTypeData.spec_room_type_data.map(type => (<option key={type.id} value={type.id}>{type.name}</option>))};
                         </select>
-                        <input type="text" name="room_floor" id="room_floor" placeholder="Etasje" tabIndex="1" required />
-                        <input type="text" name="room_number" id="room_number" placeholder="Romnummer" tabIndex="2" required />
-                        <input type="text" name="room_name" id="room_name" placeholder="Romnavn" tabIndex="3" required />
-                        <input type="text" name="room_area" id="room_area" placeholder="Areal" tabIndex="4" required />
-                        <input type="text" name="room_people" id="room_people" placeholder="Antall personer" tabIndex="5" required />
-                        <button className="form-button" id="alwaysActive" type="submit" tabIndex="6">Legg til</button>
+                        
+                        <select name="buildingId" onChange={handleFormChange}>
+                            <option key="0" value="">- Velg bygg -</option>
+                            {buildingData && Object.entries(buildingData.building_data).map(([key, value]) => (<option key={key} value={key}>{value}</option>))}
+                        </select>
+
+                        <input type="text" name="floor" onChange={handleFormChange} placeholder="Etasje" tabIndex="1" required />
+                        <input type="text" name="roomNumber" onChange={handleFormChange} placeholder="Romnummer" tabIndex="2" required />
+                        <input type="text" name="roomName" onChange={handleFormChange}  placeholder="Romnavn" tabIndex="3" required />
+                        <input type="text" name="roomArea" onChange={handleFormChange} placeholder="Areal" tabIndex="4" required />
+                        <input type="text" name="roomPeople" onChange={handleFormChange} placeholder="Antall personer" tabIndex="5" required />
+                        <button className="form-button" type="submit" tabIndex="6">Legg til</button>
 
                     </p>
                 </form>
@@ -54,7 +84,39 @@ function Rooms () {
             <SubTitleComponent>
                 Romliste
             </SubTitleComponent>
-            <Table headers={columnTitles} rows={[]} />
+
+            
+            
+    {
+        roomData ? (
+            roomData.room_data === null ? (
+            <p>Ingen rom lagt til</p>
+        ) : (
+            <div className="table-wrapper">
+                <table className="fl-table" id="roomsTableVentilation">
+                    <thead>
+                        <TableHeaderComponent headers={columnTitles} />
+                    </thead>
+                    <tbody>
+                        {
+                            roomData && roomData.room_data ? (
+                            roomData.room_data.map((room) => <VentilationTableRowComponent roomId={room.id} />)
+                            ) : (
+                                <>
+                                <span>Ingen rom lagt inn</span>
+                                </>
+                            )
+                        }
+                        
+                    </tbody>
+                </table>
+            </div>
+            )
+        ) : (
+        <span>Loading...</span>
+        )
+    }
+
         </>
     );
 }

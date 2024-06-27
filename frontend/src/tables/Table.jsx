@@ -1,11 +1,11 @@
 import TableHeaderComponent from "./TableHeaderComponent";
-import TableRowComponent from "./TableRowComponent";
+import SpecTableRowComponent from "./SpecTableRowComponent";
 
 function Table({headers, rows}) {
     const listHeaders = (<TableHeaderComponent headers={headers}/>);
 
     const listRows = rows.map((row, rowIndex) => (
-    <TableRowComponent key={rowIndex}  rowData={row} />
+    <SpecTableRowComponent key={rowIndex}  rowData={row} />
     ));
 
     return (

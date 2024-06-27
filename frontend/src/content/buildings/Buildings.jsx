@@ -15,7 +15,7 @@ function Buildings() {
     const {buildingData, setData, handleSubmit} = useSubmitData(`/buildings/${projectId}/new_building/`);
     
     useEffect(() => {
-        const activeProjectLayout = setActiveProject(projectId);
+        setActiveProject(projectId);
     },[]);
 
 
@@ -60,8 +60,8 @@ function Buildings() {
             data && data.building_data === null ? (
                 <p className="p-description">Ingen bygg lagt inn</p>
             ) : (
-                data && Object.keys(data.building_data).map(key => (
-                    <BuildingSummary buildingData={data.building_data[key]} />
+                data && Object.keys(data.building_data).map((key, index) => (
+                    <BuildingSummary key={index} buildingData={data.building_data[key]} />
                 ))
             )
             }

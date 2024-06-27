@@ -5,10 +5,10 @@ from os import path
 from flask_login import LoginManager
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import os
 
-load_dotenv()
+#load_dotenv()
 db = SQLAlchemy()
 DB_NAME = "db.db"
 
@@ -28,9 +28,9 @@ def create_app():
 
 
     #from .admin import admin
-    #from .rooms import rooms
+    from .rooms import rooms
     #from .ventilation import ventilation
-    from. project import project
+    from .project import project
     from .projects import projects
     #from .ventsystems import ventsystems
     from .buildings import buildings
@@ -43,7 +43,7 @@ def create_app():
     #app.register_blueprint(admin.admin_bp, url_prefix='/admin')
     app.register_blueprint(projects.projects_bp, url_prefix='/projects')
     app.register_blueprint(specifications.specifications_bp, url_prefix='/specifications')
-    #app.register_blueprint(rooms.rooms_bp, url_prefix='/rooms')
+    app.register_blueprint(rooms.rooms_bp, url_prefix='/rooms/')
     #app.register_blueprint(ventilation.ventilation_bp, url_prefix='/ventilation')
     app.register_blueprint(project.project_bp, url_prefix='/project/')
     #app.register_blueprint(ventsystems.ventsystems_bp, url_prefix='/ventsystems')

@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b5e6b29-f1b4-44a7-b9ea-ee67bb3a48a1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/backend/venv/Scripts/Activate.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/backend/venv/Scripts/Activate.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/venv/Scripts/activate" beforeDir="false" afterPath="$PROJECT_DIR$/backend/venv/Scripts/activate" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/venv/Scripts/activate.bat" beforeDir="false" afterPath="$PROJECT_DIR$/backend/venv/Scripts/activate.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/venv/Scripts/python.exe" beforeDir="false" afterPath="$PROJECT_DIR$/backend/venv/Scripts/python.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/venv/Scripts/pythonw.exe" beforeDir="false" afterPath="$PROJECT_DIR$/backend/venv/Scripts/pythonw.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/venv/pyvenv.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/backend/venv/pyvenv.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/project_manager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/project_manager.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,9 +13,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2iNRvUj8Tme0gW7q3aLLF7YgBYx" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -31,13 +27,13 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/torbj/Documents/Programmering/Web-greier/project_manager"
+    "last_opened_file_path": "C:/Users/tstosl/dev/webdev/project_manager/backend"
   }
 }]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-09665e90c3a7-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.15026.15" />
+        <option value="bundled-python-sdk-0509580d9d50-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.14494.241" />
       </set>
     </attachedChunks>
   </component>
