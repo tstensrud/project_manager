@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, url_for, render_template, flash, jsonify, request
-from flask_login import login_required, current_user
+from flask_login import current_user
+from flask_jwt_extended import jwt_required
 from .. import db_operations as dbo
 from ..globals import replace_and_convert_to_float
 from markupsafe import escape
@@ -8,7 +9,7 @@ specifications_bp = Blueprint('specifications',__name__, static_folder='static',
 
 @specifications_bp.route('/', methods=['GET', 'POST'])
 #@specifications_bp.route('/<specification>', methods=['GET', 'POST'])
-#@login_required
+#@jwt_required()
 def specifications():
     print("TEST")
     spec = "Skok skoler 2022-o2023"
@@ -32,7 +33,7 @@ def get_specification_room_types(spec_id):
 
 
 @specifications_bp.route('/<specification>/new_room', methods=['GET', 'POST'])
-@login_required
+@jwt_required()
 def new_room(specification):
     endpoint = request.endpoint
     spec_object = dbo.get_specification_by_name(specification)
@@ -71,7 +72,7 @@ def new_room(specification):
 
 
 @specifications_bp.route('/new_specification', methods=['GET', 'POST'])
-@login_required
+@jwt_required()
 def new_specification():
     endpoint = request.endpoint
     print(endpoint)

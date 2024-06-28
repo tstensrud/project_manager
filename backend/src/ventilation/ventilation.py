@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, url_for, render_template, flash, jsonify, request, session
-from flask_login import login_required, current_user
-from .. import db_operations as dbo
-from .. import db_ops_energy as dboh
+from flask_login import current_user
+from .. import db_ops_energy as dbo
+from flask_jwt_extended import jwt_required
 from ..globals import get_project, pattern_float, blueprint_setup
 from markupsafe import escape
 
@@ -11,7 +11,7 @@ blueprint_setup(ventilation_bp)
 @ventilation_bp.route('/', defaults={'building_id': None, 'room_id': None}, methods=['GET', 'POST'])
 @ventilation_bp.route('/<building_id>', defaults={'room_id': None}, methods=['GET', 'POST'])
 @ventilation_bp.route('/<building_id>/<room_id>', methods=['GET'])
-@login_required
+@jwt_required()
 def ventilation(building_id, room_id, project_id):
     project = dbo.get_project(project_id)
     endpoint = request.endpoint
@@ -62,7 +62,7 @@ def ventilation(building_id, room_id, project_id):
                                project_id=project_id)
 
 @ventilation_bp.route('/update_ventilation', methods=['POST'])
-@login_required
+@jwt_required()
 def update_ventilation(project_id):
     data = request.get_json()
     system_id = escape(data["system_id"])
@@ -74,7 +74,7 @@ def update_ventilation(project_id):
         old_system_id = escape(data["old_system_id"])
         vent_prop_id = escape(data["row_id"])
         if old_system_id == "none":
-            if dbo.set_system_for_room_vent_prop(vent_prop_id, system_id):
+            if dbo.set_system_for_room(vent_prop_id, system_id):
                 dbo.update_system_airflows(system_id)
                 flash("System satt", category="success")
                 response = {"success": True, "redirect": url_for("ventilation.ventilation", project_id=project_id)}
@@ -92,7 +92,7 @@ def update_ventilation(project_id):
                 response = {"success": False, "redirect": url_for("ventilation.ventilation", project_id=project_id)}
                 return jsonify(response)
         else:
-            dbo.set_system_for_room_vent_prop(vent_prop_id, system_id)
+            dbo.set_system_for_room(vent_prop_id, system_id)
             if dbo.update_airflow_changed_system(system_id, old_system_id):
                 flash("System oppdatert", category="success")
                 response = {"success": True, "redirect": url_for("ventilation.ventilation", project_id=project_id)}
@@ -123,8 +123,8 @@ def update_ventilation(project_id):
 
         if dbo.update_ventilation_table(vent_prop_id, new_supply, new_extract, system_id):
             if dbo.update_system_airflows(system_id):
-                dboh.calculate_total_heat_loss_for_room(dbo.get_room_vent_prop(vent_prop_id).room_ventilation.energy_properties.id)
-                dboh.calculate_total_cooling_for_room(dbo.get_room_vent_prop(vent_prop_id).room_ventilation.energy_properties.id)
+                dbo.calculate_total_heat_loss_for_room(dbo.get_room_vent_prop(vent_prop_id).room_ventilation.energy_properties.id)
+                dbo.calculate_total_cooling_for_room(dbo.get_room_vent_prop(vent_prop_id).room_ventilation.energy_properties.id)
 
                 response = {"success": True, "redirect": url_for("ventilation.ventilation", building_id = building_id, project_id=project_id)}
         else:

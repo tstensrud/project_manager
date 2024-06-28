@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, url_for, render_template, flash, jsonify, request
-from flask_login import login_required, current_user
+from flask_login import current_user
+from flask_jwt_extended import jwt_required
 from .. import db_operations as dbo
-from .. import db_ops_energy as dboh
 from ..globals import pattern_float, replace_and_convert_to_float, blueprint_setup
 from markupsafe import escape
 
@@ -11,7 +11,7 @@ blueprint_setup(heating_bp)
 
 @heating_bp.route('/', defaults={'building': None}, methods=['GET', 'POST'])
 @heating_bp.route('/<building>', methods=['GET', 'POST'])
-@login_required
+@jwt_required()
 def heating(building, project_id):
     project = dbo.get_project(project_id)
     endpoint = request.endpoint
@@ -19,8 +19,8 @@ def heating(building, project_id):
     if request.method == "GET":
         if building is None:
             heat_loss_project = []
-            heat_loss_project.append(dboh.sum_heat_loss_project(project.id))
-            heat_loss_project.append(dboh.sum_heat_loss_project_chosen(project.id))
+            heat_loss_project.append(dbo.sum_heat_loss_project(project.id))
+            heat_loss_project.append(dbo.sum_heat_loss_project_chosen(project.id))
             return render_template('heating.html',
                                 user=current_user,
                                 project=project,
@@ -33,9 +33,9 @@ def heating(building, project_id):
         else:
             building = dbo.get_building(building)
             heatloss_sum = []
-            heatloss_sum.append(dboh.sum_heat_loss_building(building.id))
-            heatloss_sum.append(dboh.sum_heat_loss_chosen_building(building.id))
-            heatprops = dboh.get_building_energy_settings(building.id)
+            heatloss_sum.append(dbo.sum_heat_loss_building(building.id))
+            heatloss_sum.append(dbo.sum_heat_loss_chosen_building(building.id))
+            heatprops = dbo.get_building_energy_settings(building.id)
             rooms = building.rooms
             return render_template('heating.html',
                     user=current_user,
@@ -53,7 +53,7 @@ def heating(building, project_id):
         return redirect(url_for("heating.heating", building=requested_building_id, project_id=project_id))
     
 @heating_bp.route('/building_heating_settings', methods=['POST'])
-@login_required
+@jwt_required()
 def building_heating_settings(project_id):
     if request.is_json:
         data = request.get_json()
@@ -67,10 +67,10 @@ def building_heating_settings(project_id):
             else:
                 processed_data[key] = replace_and_convert_to_float(escape(value))
         
-        if dboh.update_building_heating_settings(processed_data):
-            rooms_in_building = dboh.get_all_rooms_energy_building(building_id)
+        if dbo.update_building_heating_settings(processed_data):
+            rooms_in_building = dbo.get_all_rooms_energy_building(building_id)
             for room in rooms_in_building:
-                dboh.calculate_total_heat_loss_for_room(room.id)
+                dbo.calculate_total_heat_loss_for_room(room.id)
             flash(f"Oppdatert innstillinger for bygg {building_id}", category="success")
             response = {"success": True, "redirect": url_for("heating.heating", building=building_id, project_id=project_id)}
         else:
@@ -80,7 +80,7 @@ def building_heating_settings(project_id):
     return jsonify(response)
 
 @heating_bp.route('/update_room_info', methods=['GET', 'POST'])
-@login_required
+@jwt_required()
 def update_room_info(project_id):
     if request.is_json:
         data = request.get_json()
@@ -93,8 +93,8 @@ def update_room_info(project_id):
             else:
                 value_cleaned_up = escape(value.replace(",", "."))
                 processed_data[key] = pattern_float(value_cleaned_up)
-        if dboh.update_room_heating_data(escape(data["vent_data_id"]), processed_data):
-            if dboh.calculate_total_heat_loss_for_room(data["vent_data_id"]):
+        if dbo.update_room_heating_data(escape(data["vent_data_id"]), processed_data):
+            if dbo.calculate_total_heat_loss_for_room(data["vent_data_id"]):
                 flash("Data oppdatert", category="success")
                 response = {"success": True, "redirect": url_for("heating.heating", building=building_id, project_id=project_id)}
             else:

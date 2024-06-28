@@ -1,6 +1,7 @@
 
 from flask import Blueprint, redirect, url_for, render_template, flash, jsonify, request
-from flask_login import login_required, current_user
+from flask_login import current_user
+from flask_jwt_extended import jwt_required
 from .. import db_operations as dbo
 from ..globals import pattern_int, pattern_float, blueprint_setup
 from markupsafe import escape
@@ -8,7 +9,7 @@ from markupsafe import escape
 ventsystems_bp = Blueprint('ventsystems', __name__, static_folder='static', template_folder='templates')
 blueprint_setup(ventsystems_bp)
 
-@login_required
+@jwt_required()
 @ventsystems_bp.route('/', methods=['GET', 'POST'])
 def ventsystems(project_id):
     project = dbo.get_project(project_id)
@@ -60,7 +61,7 @@ def ventsystems(project_id):
                                 project_id=project_id)
 
 
-@login_required
+@jwt_required()
 @ventsystems_bp.route('/update_system', methods=['POST'])
 def update_system(project_id):
     data = request.get_json()
@@ -82,7 +83,7 @@ def update_system(project_id):
     
     return jsonify(response)
 
-@login_required
+@jwt_required()
 @ventsystems_bp.route('/delete_system', methods=['POST'])
 def delete_system(project_id):
     if request.method == "POST":

@@ -1,11 +1,12 @@
 from flask import Blueprint, redirect, url_for, render_template, flash, request
-from flask_login import login_required, current_user
+from flask_login import current_user
 from .. import models, db
 from .. import db_ops_admin as dboa
 from .. import globals
 from werkzeug.security import generate_password_hash
 from functools import wraps
 from markupsafe import escape
+from flask_jwt_extended import jwt_required
 from ..import db_ops_users as dbou
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -20,7 +21,7 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@login_required
+@jwt_required()
 @admin_required
 def send_user_email(subject: str, body: str, to_email: str) -> bool:
     from_email = "structortsit@gmail.com"
@@ -29,7 +30,7 @@ def send_user_email(subject: str, body: str, to_email: str) -> bool:
     return True
         
 
-@login_required
+@jwt_required()
 @admin_required
 @admin_bp.route('/', methods=['GET', 'POST'])
 def admin():
@@ -51,7 +52,7 @@ def admin():
         return redirect(url_for("admin.admin"))
 
 
-@login_required
+@jwt_required()
 @admin_required
 @admin_bp.route('/new_user', methods=['POST'])
 def new_user():

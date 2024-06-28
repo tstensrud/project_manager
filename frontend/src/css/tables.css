@@ -38,6 +38,10 @@
   background: #324960;
 }
 
+.deleted-row {
+  color: #b9b9b9;
+  text-decoration: line-through;
+}
 
 .fl-table thead th:nth-child(odd) {
   color: #ffffff;

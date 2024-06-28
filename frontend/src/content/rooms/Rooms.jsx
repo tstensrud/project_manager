@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useSyncExternalStore } from 'react'
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
@@ -19,9 +19,29 @@ function Rooms () {
     const {data: buildingData, loading: buildingDataLoading, error: buildingDataError, refetch: buildingReFetch} = useFetch(`/buildings/${projectId}/get_project_buildings/`);
     const {data: allRoomData, response, setData, handleSubmit} = useSubmitData(`/rooms/${projectId}/`);
     
+    const [childMessage, setChildMessage] = useState('');
+    const [errorPopUpClass, setErrorPopUpClass] = useState('popup-hide');
+    const [childMessagePopUpClass, setChildMessagePopUpClass] = useState('popup-hide');
+    
     useEffect(() => {
         setActiveProject(projectId);
     },[]);
+
+    useEffect(() => {
+        if (response && response.error !== null) {
+            setErrorPopUpClass('popup-show');
+        } else {
+            setErrorPopUpClass('popup-hide');
+        }
+    }, [response]);
+    
+    useEffect(() => {
+        if (childMessage && childMessage !== undefined && childMessage !== '') {
+            setChildMessagePopUpClass('popup-show');
+        } else {
+            setChildMessagePopUpClass('popup-hide');
+        }
+    }, [childMessage]);
 
     const columnTitles = [  {text: "Bygg"},
                             {text: "Etasje"},
@@ -34,6 +54,18 @@ function Rooms () {
                             {text: "Slett rom"}
     ];
 
+    const handleChildMessage = (msg) => {
+        if (msg !== undefined) {
+            setChildMessage(msg);
+            console.log("CHILD MESSAGE: " + msg)
+        }
+    }
+
+    const closeMessagePopUp = () => {
+        setChildMessagePopUpClass('popup-hide');
+        setErrorPopUpClass('popup-hide')
+    }
+    
     const handleFormChange = (e) => {
         setData({
             ...allRoomData,
@@ -47,14 +79,27 @@ function Rooms () {
         roomRefetch();
         // reset input fields roomtype, area, people, name. Leave floor and building.
     }
-
-        
+  
     return (
         <>
+
+        { response && response.error !== null ? (
+        <div className={errorPopUpClass}>
+            <span className="popup-close" onClick={closeMessagePopUp}>×</span>
+            <p>Feil: {response.error}</p>
+        </div> ) : (<span>asdf</span>)}
+
+        { childMessage && childMessage !== undefined || childMessage !== '' ? (
+        <div className={errorPopUpClass}>
+            <span className="popup-close" onClick={closeMessagePopUp}>×</span>
+            <p>Feil: {childMessage}</p>
+        </div> ) : (<span></span>)}
+
         <SubTitleComponent>
             Romskjema
         </SubTitleComponent>
-        {response && response.message !== null ? (<p>{response.message}</p>) : (<span></span>) }
+
+
             <div className="no-print">
                 <form id="new_room" onSubmit={handleOnSubmit}>
                 <p>Legg til nytt rom</p>
@@ -81,16 +126,15 @@ function Rooms () {
                 </form>
             </div>
 
-            <SubTitleComponent>
-                Romliste
-            </SubTitleComponent>
-
+        <SubTitleComponent>
+            Romliste
+        </SubTitleComponent>
             
             
     {
         roomData ? (
             roomData.room_data === null ? (
-            <p>Ingen rom lagt til</p>
+            <p>Ingen rom lagt til asdf</p>
         ) : (
             <div className="table-wrapper">
                 <table className="fl-table" id="roomsTableVentilation">
@@ -100,7 +144,7 @@ function Rooms () {
                     <tbody>
                         {
                             roomData && roomData.room_data ? (
-                            roomData.room_data.map((room) => <VentilationTableRowComponent roomId={room.id} />)
+                            roomData.room_data.map((room) => <VentilationTableRowComponent msgToParent={handleChildMessage} key={room.id} roomId={room.id}/>)
                             ) : (
                                 <>
                                 <span>Ingen rom lagt inn</span>

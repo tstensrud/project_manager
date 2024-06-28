@@ -10,7 +10,7 @@ import os
 
 #load_dotenv()
 db = SQLAlchemy()
-DB_NAME = "db.db"
+DB_NAME = "projects.db"
 
 def create_app():
     app = Flask(__name__)

@@ -1,7 +1,6 @@
 
-from flask import Blueprint, flash, jsonify, request
+from flask import Blueprint, jsonify, request
 from .. import db_operations as dbo
-from .. import db_ops_energy as dboh
 from .. import globals
 from flask_jwt_extended import jwt_required
 from markupsafe import escape

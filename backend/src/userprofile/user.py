@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, url_for, render_template, flash, request
-from flask_login import login_required, current_user
+from flask_login import current_user
+from flask_jwt_extended import jwt_required
 from .. import db_ops_users as dbo
 from markupsafe import escape
 
@@ -8,7 +9,7 @@ user_bp = Blueprint('user',__name__, static_folder='static', template_folder='te
 
 
 @user_bp.route('/', methods=['GET'])
-@login_required
+@jwt_required()
 def user_profile(username: str):
     endpoint=request.endpoint
     return render_template('user_profile.html',
@@ -17,7 +18,7 @@ def user_profile(username: str):
 
 
 @user_bp.route('/update_password', methods=['POST'])
-@login_required
+@jwt_required()
 def update_password(username: str):
     user_id = escape(request.form.get("user_id"))
     user = dbo.get_user(user_id)

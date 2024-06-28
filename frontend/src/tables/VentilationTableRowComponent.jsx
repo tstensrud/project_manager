@@ -6,79 +6,101 @@ import useFetch from '../hooks/useFetch'
 import useSubmitData from "../hooks/useSubmitData";
 
 
-function VentilationTableRowComponent({roomId}) {
+function VentilationTableRowComponent({roomId, msgToParent}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
         const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/rooms/${projectId}/get_room/${roomId}/`);
-        const {data: allRoomData, response, setData, handleSubmit} = useSubmitData(`/rooms/${projectId}/update_room/`);
+        const {data: allRoomData, response, setData, handleSubmit: updateRoomData} = useSubmitData(`/rooms/${projectId}/update_room/${roomId}/`);
+        const {data: deleteRoomId, responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit} = useSubmitData(`/rooms/delete_room/${roomId}/`);
         const [editingCell, setEditingCell] = useState(null);
         const [editedData, setEditedData] = useState(null);
+        const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
+        const [rowClass, setRowClass] = useState("");
         
         useEffect(() => {
             setActiveProject(projectId);
+            setDeleteData({"roomId": roomId});
         },[]);
 
         useEffect(() => {
             if(roomData) {
-                setEditedData({ ...roomData });
+                //setEditedData({ ...roomData });
+                setEditedData('');
             }
         },[roomData]);
+
+        const sendMessageToParent = (msg) => {
+            msgToParent(msg);
+        }
 
         const handleEdit = (cellName) => {
             setEditingCell(cellName);
         };
     
         const handleChange = (e, cellName) => {
-            setEditedData((prevData) => ({
+            //setEditedData((prevData) => ({
+            setData((prevData) => ({
                 ...prevData,
                 [cellName]: e.target.value,
             }));
         };
-    
+        
+        const onDelete = async (e) => {
+            await deleteSubmit(e);
+            setDisabledDeleteButton(true);
+            setRowClass("deleted-row")
+        }
+
         const handleBlur = () => {
             setEditingCell(null);
-            console.log(allRoomData, editedData);
         };
     
-        const handleKeyDown = (e) => {
+        const handleKeyDown = async (e) => {
             if (e.key === "Enter") {
+                await updateRoomData(e);
                 handleBlur();
+                setData('');
+                roomRefetch();
+            } if (e.key == "Escape") {
+                handleBlur();
+                return;
             }
         };
 
         const renderEditableCell = (cellName) => (
-            <td name={cellName} onClick={() => handleEdit(cellName)}>
-            {editingCell === cellName && editedData ? (
+            <td className={rowClass} name={cellName} onClick={() => handleEdit(cellName)}>
+            {editingCell === cellName && roomData ? (
+                
                 <input
                     type="text"
                     className="table-input"
-                    value={editedData[cellName]}
+                    value={roomData[cellName]}
                     onChange={(e) => handleChange(e, cellName)}
                     onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
                     autoFocus
                 />
             ) : (
-                editedData ? editedData.room_data[cellName] : ''
+                roomData ? roomData.room_data[cellName] : ''
             )}
-        </td>     
+        </td>   
         );
 
-        
     return (
         <>
+        {response && response.error !== null ? (<>{sendMessageToParent(response.error)}</>) : (<></>)}
         <tr>
-            <td>{editedData ? editedData.room_data.BuildingId : ''}</td>
-            <td>{editedData ? editedData.room_data.Floor : ''}</td>
+            <td className={rowClass}>{roomData ? roomData.room_data.BuildingId : ''}</td>
+            <td className={rowClass}>{roomData ? roomData.room_data.Floor : ''}</td>
             {renderEditableCell("RoomNumber")}
-            <td>{editedData ? editedData.room_data.RoomTypeId : ''}</td>
+            <td className={rowClass}>{roomData ? roomData.room_data.RoomTypeId : ''}</td>
             {renderEditableCell("RoomName")}
             {renderEditableCell("Area")}
             {renderEditableCell("RoomPopulation")}
             {renderEditableCell("Comment")}
-            <td>
+            <td className={rowClass}>
                 <input type="text" value={roomId} hidden />
-                <button className="table-button">Slett</button>
+                <button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button>
             </td>
         </tr>
         </>

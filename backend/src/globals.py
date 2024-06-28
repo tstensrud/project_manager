@@ -1,6 +1,5 @@
-from flask import Blueprint, session, request, g
+from flask import session, request, g
 from . import db_operations as dbo
-from flask_login import login_required
 from . import models
 import re
 from datetime import datetime
@@ -20,7 +19,7 @@ def blueprint_setup(bp) -> None:
         return dict(todo_list=todo_dict)
 
 
-@login_required
+
 def get_project() -> models.Projects:
     project_id = session.get('project_id')
     project = models.Projects.query.get(project_id)

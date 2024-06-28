@@ -14,7 +14,7 @@ function Dashboard() {
     const [projectId, setProjectId] = useState('');
     const {data, loading, error} = useFetch('/projects/');
     const navigate = useNavigate();
-    
+    console.log(data);
     const handleChange = (e) => {
       const projectId = e.target.value;
       setProjectId(projectId);      
@@ -37,9 +37,13 @@ function Dashboard() {
           <p>
             <select onChange={handleChange}>
               <option>- Velg prosjekt -</option>
-            {data.data.map((project, index) => (
-              <option key={index} value={project.id}>{project.ProjectNumber} {project.ProjectName}</option>
-            ))}
+              {Array.isArray(data?.data) ? (
+                data.data.map((project, index) => (
+                  <option key={index} value={project.id}>{project.ProjectNumber} {project.ProjectName}</option>
+                ))
+              ) : (
+                <>{data.data}</>
+              )}
             </select>
           </p>
           <p>

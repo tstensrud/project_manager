@@ -1,7 +1,8 @@
 from flask import Blueprint, redirect, url_for, render_template, flash, jsonify, session, request
-from flask_login import login_required, current_user
+from flask_login import current_user
+from flask_jwt_extended import jwt_required
 from .. import db_operations as dbo
-from .. import db_ops_energy as dboh
+from .. import db_ops_energy as dbo
 from ..globals import pattern_float, pattern_int, replace_and_convert_to_float, blueprint_setup
 from markupsafe import escape
 
@@ -10,7 +11,7 @@ blueprint_setup(cooling_bp)
 
 @cooling_bp.route('/', defaults={'building': None}, methods=['GET', 'POST'])
 @cooling_bp.route('/<building>', methods=['GET', 'POST'])
-@login_required
+@jwt_required()
 def cooling(project_id, building):
     project = dbo.get_project(project_id)
     project_buildings = dbo.get_all_project_buildings(project_id)
@@ -41,7 +42,7 @@ def cooling(project_id, building):
         requested_building_id = escape(request.form.get("project_building"))
         return redirect(url_for('cooling.cooling', building=requested_building_id, project_id=project_id))
 
-@login_required
+@jwt_required()
 @cooling_bp.route('/building_cooling_settings', methods=['POST'])
 def building_cooling_settings(project_id):
     if request.is_json:
@@ -54,10 +55,10 @@ def building_cooling_settings(project_id):
                 processed_data[key] = value
             else:
                 processed_data[key] = replace_and_convert_to_float(escape(value)) 
-        rooms = dboh.get_all_rooms_energy_building(building_id)
+        rooms = dbo.get_all_rooms_energy_building(building_id)
         for room in rooms:
-            dboh.set_standard_cooling_settings(room.id, processed_data)
-            dboh.calculate_total_cooling_for_room(room.id)
+            dbo.set_standard_cooling_settings(room.id, processed_data)
+            dbo.calculate_total_cooling_for_room(room.id)
         
         response = {"success": True, "redirect": url_for("cooling.cooling", building=building_id, project_id=project_id)}
     else:
@@ -65,7 +66,7 @@ def building_cooling_settings(project_id):
         response = {"success": False, "redirect": url_for("cooling.cooling", building=building_id, project_id=project_id)} 
     return jsonify(response)
 
-@login_required
+@jwt_required()
 @cooling_bp.route('/update_cooling_table', methods=['POST'])
 def update_cooling_table(project_id):
     if request.is_json:
@@ -78,7 +79,7 @@ def update_cooling_table(project_id):
             else:
                 processed_data[key] = replace_and_convert_to_float(escape(value))
         
-        if dboh.update_room_data_cooling(processed_data["energy_data_id"], processed_data):
+        if dbo.update_room_data_cooling(processed_data["energy_data_id"], processed_data):
             response = {"success": True, "redirect": url_for("cooling.cooling", building=building_id, project_id=project_id)}
         else:
             flash("Kunne ikke oppdatere romdata kjøling", category="error")
