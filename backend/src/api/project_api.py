@@ -1,0 +1,278 @@
+from datetime import datetime, timezone, timedelta
+import os
+import json
+from flask import Blueprint, render_template, jsonify, flash, request
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
+from .. import db_operations as dbo
+from .. import globals
+from markupsafe import escape
+
+project_api_bp = Blueprint('project_api', __name__, static_folder='static', template_folder='templates')
+globals.blueprint_setup(project_api_bp)
+
+@project_api_bp.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            data = response.get_json()
+            if type(data) is dict:
+                data["access_token"] = access_token
+                response.data = json.dumps(data)
+        return response
+    except (RuntimeError, KeyError):
+        return response
+
+#
+# 
+#   PROJECT 
+# 
+#    
+
+
+@project_api_bp.route('/', methods=['GET'])
+@jwt_required()
+def project(project_uid):
+    print(f"got endpoint id: {project_uid}")
+    project = dbo.get_project(project_uid)
+    specification = dbo.get_specification(project.specification)
+    if project is not None:
+        total_area: float = dbo.summarize_project_area(project.id)
+        project_data = project.get_json()
+        if specification is not None:
+            project_data["SpecificationName"] = specification.name
+        else:
+            project_data["SpecificationName"] = None
+        print(project_data)
+        return jsonify({"data": project_data})
+    else:
+        return jsonify({"data": "Fant ikke prosjekt"})
+
+@project_api_bp.route('/settings/', methods=['GET'])
+def settings(project_uid):
+    project = dbo.get_project(project_uid)
+    project_data = project.get_json()
+    return jsonify({"data": project_data})
+
+
+@project_api_bp.route('/reports', methods=['GET'])
+def reports(project_id):
+    pass
+
+@jwt_required()
+@project_api_bp.route('/settings/update_project/', methods=['POST'])
+def set_spec(project_uid):
+    data = request.get_json()
+    #print(f"Specdata: {data}")
+    if dbo.set_project_specification(project_uid, data):
+        return jsonify({"message": "Success"})
+    else:
+        return jsonify({"message": "Failed to set specification"})
+
+#
+#
+#   TODO ITEMS
+#
+#
+
+
+@project_api_bp.route('/new_todo_item', methods=['POST'])
+@jwt_required()
+def new_todo_item(project_id):
+    if request.method == "POST":
+        return_endpoint = request.referrer
+        if return_endpoint:
+            if request.is_json:
+                data = request.get_json()
+                user_id = escape(data["user_id"])
+                content = escape(data["todo_content"])
+                if dbo.new_todo_item(project_id, user_id, content):
+                    response = {"success": True, "redirect": return_endpoint}
+                else:
+                    flash("Kunne ikke opprette punkt for huskeliste", category="error")
+                    response = {"success": False, "redirect": return_endpoint}
+        return jsonify(response)
+
+
+@project_api_bp.route('/todo_item_complete', methods=['POST'])
+@jwt_required()
+def todo_item_complete(project_id):
+    if request.method == "POST":
+        return_endpoint = request.referrer
+        if return_endpoint:
+            if request.is_json:
+                data = request.get_json()
+                if dbo.set_todo_item_completed(escape(data["item_id"]), escape(data["user_id"])):
+                    response = {"success": True, "redirect": return_endpoint}
+                else:
+                    flash("Kunne ikke markere punkt som utført", category="error")
+                    response = {"success": False, "redirect": return_endpoint}
+            
+    return jsonify(response)
+
+
+#
+#
+#   BUILDINGS
+#
+#
+
+@project_api_bp.route('/buildings/', methods=['GET'])
+@jwt_required()
+def buildings(project_uid):
+    buildings = dbo.get_all_project_buildings(project_uid)
+    if request.method == "GET":
+        if buildings is None:
+            #print("Return nothing")
+            return jsonify({"building_data": None})
+        else:
+            building_data = {}
+            for building in buildings:
+                building_data[building.uid] = dbo.get_building_data(building.uid)
+            return jsonify({"building_data": building_data})
+
+@project_api_bp.route('/buildings/get_project_buildings/', methods=["GET"])
+#@jwt_required()
+def get_project_buildings(project_uid):
+    buildings = dbo.get_all_project_buildings(project_uid)
+
+    if buildings is None:
+        return jsonify({"building_data": None})
+    else:
+        building_data = {}
+        for building in buildings:
+            building_data[building.uid] = building.building_name
+        return jsonify({"building_data": building_data})
+
+
+@project_api_bp.route('/buildings/new_building/', methods=["POST"])
+@jwt_required()
+def new_building(project_uid):
+    data = request.get_json()
+    name = escape(data["buildingName"])
+    if not data:
+        return jsonify({"building_data": "No data received"})
+    else:
+        if dbo.new_building(project_uid, name):
+            return jsonify({"building_data": "Success"})
+        else:
+            return jsonify({"building_data": "Could not add new building"})
+
+
+#
+#               
+#   ROOMS
+#
+#
+
+@project_api_bp.route('/rooms/', methods=['GET', 'POST'])
+@jwt_required()
+def rooms(project_uid):
+    project = dbo.get_project(project_uid)
+    specification = project.specification
+
+    if request.method == "GET":
+        #print("A get request was reveiced")
+        project_rooms = dbo.get_all_project_rooms(project.uid)
+        if project_rooms:
+            project_room_data = list(map(lambda x: x.get_json_room_data(), project_rooms))
+            return jsonify({"room_data": project_room_data, "spec": specification})
+        else:
+            return jsonify({"room_data": None, "spec": specification})
+
+    if request.method == "POST":
+        #print("A post request was reveiced")
+        project_specification = project.specification
+        data = request.get_json()
+        #print(f"JSON data received: {data}")
+        building_id = escape(data["buildingId"])
+        room_type_id = escape(data["roomType"])
+        floor = escape(data["floor"].strip())
+        name = escape(data["roomName"].strip())
+        room_number = escape(data["roomNumber"].strip())
+        
+        if dbo.check_if_roomnumber_exists(project.id, building_id, room_number):
+            return jsonify({"error": "Romnummer finnes allerede for dette bygget"})
+        
+        area = escape(data["roomArea"].strip())
+        try:
+            area = float(area)
+        except ValueError:
+            return jsonify({"error": "Areal må kun inneholde tall"})
+            
+        people = escape(data["roomPeople"].strip())
+        try:
+            people = int(people)
+        except ValueError:
+            return jsonify({"error": "Persontantall må kun inneholde tall"})
+    
+        vent_props = dbo.get_room_type_data(room_type_id, project_specification)
+        globals.log(f"VENT PROPS: {vent_props}")
+        new_room_id = dbo.new_room(building_id, room_type_id, floor, room_number, name, area, people, 
+                                    vent_props.air_per_person, vent_props.air_emission,
+                                    vent_props.air_process, vent_props.air_minimum,
+                                    vent_props.ventilation_principle, vent_props.heat_exchange,
+                                    vent_props.room_control, vent_props.notes, vent_props.db_technical,
+                                    vent_props.db_neighbour, vent_props.db_corridor)
+        globals.log(f"new room id: {new_room_id}")
+        dbo.initial_ventilation_calculations(new_room_id)
+        
+
+        return jsonify({"message": "Rom opprettet"})
+
+@project_api_bp.route('/rooms/get_room/<room_uid>/', methods=['GET'])
+def get_room(project_uid, room_uid):
+    print(f"RoomUID: {room_uid}")
+    room = dbo.get_room(room_uid)
+    print(room)
+    room_data = room.get_json_room_data()
+    #print(f"ROOM DATA IS: {room_data}")
+    return jsonify({"room_data": room_data})
+
+
+@project_api_bp.route('/rooms/update_room/<room_uid>/', methods=['POST'])
+@jwt_required()
+def udpate_room(project_uid, room_uid):
+    data = request.get_json()
+    print(f"Data received for update: {data}")
+    print(f"RoomID for update: {room_uid}")
+
+    room = dbo.get_room(room_uid)
+        
+    processed_data = {}
+    for key, value in data.items():
+        key = globals.camelcase_to_snake(key)
+        processed_data[key] = escape(value.strip())
+        print(f"KEY: {key}")
+        if key == "area":
+            try:
+                converted_value = float(value)
+            except ValueError as e:
+                return jsonify({"error": "Area må kun inneholde tall"})
+        elif key == "room_population":
+            try:
+                converted_value = int(value)
+            except ValueError as e:
+                return jsonify({"error": "Personer må kun inneholde tall"})
+        print("Convert success")
+    
+    return jsonify({"message": f"Received data {room_uid}"})
+
+@project_api_bp.route('/rooms/delete_room/<room_uid>/', methods=['POST'])
+@jwt_required()
+def delete_room(project_uid, room_uid):
+    if request.method == "POST":
+        data = request.get_json()
+        received_room_uid = escape(data["roomId"])
+        if room_uid != received_room_uid:
+            globals.log(f"Delete room attempted with mismatch between endpoint room_id and json-data-room id")
+            return jsonify({"message": "Feil i sletting av rom."})
+        #print(f"Room ID endpoint: {room_id}. JSON room-id: {received_room_id}")
+        if dbo.delete_room(room_uid):
+            response = {"message": "Rom slettet"}
+        else:
+            response = {"message": "Kunne ikke slette rom"}
+    return jsonify({"message": "Rom slettet"})

@@ -1,8 +1,10 @@
-from flask import Blueprint, url_for, flash, jsonify, session, request
+from flask import Blueprint, jsonify, session, request
 from flask_login import login_required
 from .. import db_operations as dbo
-from ..globals import pattern_float, pattern_int, blueprint_setup, log
+from .. import models
+from ..globals import pattern_float, pattern_int, blueprint_setup, log, camelcase_to_snake
 from markupsafe import escape
+from sqlalchemy.inspection import inspect
 from flask_jwt_extended import jwt_required
 
 rooms_bp = Blueprint('rooms', __name__, static_folder='static', template_folder='templates')
@@ -16,7 +18,7 @@ def rooms(project_id):
     if request.method == "GET":
         project_rooms = dbo.get_all_project_rooms(project.id)
         if project_rooms:
-            project_room_data = list(map(lambda x: x.get_json(), project_rooms))
+            project_room_data = list(map(lambda x: x.get_json_room_data(), project_rooms))
             return jsonify({"room_data": project_room_data})
         else:
             return jsonify({"room_data": None})
@@ -63,7 +65,7 @@ def rooms(project_id):
 @rooms_bp.route('/<project_id>/get_room/<room_id>/', methods=['GET'])
 def get_room(project_id, room_id):
     room = dbo.get_room(room_id)
-    room_data = room.get_json()
+    room_data = room.get_json_room_data()
     #print(f"ROOM DATA IS: {room_data}")
     return jsonify({"room_data": room_data})
 
@@ -72,29 +74,27 @@ def get_room(project_id, room_id):
 @jwt_required()
 def udpate_room(project_id, room_id):
     data = request.get_json()
-    print(data)
+    #print(data)
+    #print(room_id)
 
-    """ if request.method == "POST":
-        data = request.get_json()
-        project_id = escape(data["project_id"])
-        room_id = escape(data["room_id"])
-        processed_data = {}
-
-        for key, value in data.items():
-            if key == "population":
-                processed_data[key] = pattern_int(escape(value).strip())
-            elif key == "area":
-                processed_data[key] = pattern_float(escape(value).strip())
-            else:
-                processed_data[key] = escape(value.strip())
+    room = dbo.get_room(room_id)
         
-        if dbo.update_room_data(room_id, processed_data):
-            if dbo.update_ventilation_calculations(room_id):
-                dbo.calculate_total_cooling_for_room(dbo.get_room(room_id).energy_properties.id)
-                response = {"success": True, "redirect": url_for("rooms.rooms", project_id = project_id)}
-        else:
-            flash("Kunne ikke oppdatere romdata", category="error")
-            response = {"success": False} """
+    processed_data = {}
+    for key, value in data.items():
+        key = camelcase_to_snake(key)
+        processed_data[key] = escape(value.strip())
+        print(f"KEY: {key}")
+        if key == "area":
+            try:
+                converted_value = float(value)
+            except ValueError as e:
+                return jsonify({"error": "Area må kun inneholde tall"})
+        elif key == "room_population":
+            try:
+                converted_value = int(value)
+            except ValueError as e:
+                return jsonify({"error": "Personer må kun inneholde tall"})
+        print("Convert success")
     
     return jsonify({"message": f"Received data {room_id}"})
 

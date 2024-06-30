@@ -24,8 +24,7 @@ def new_project():
     print("Submitting new project")
     data = request.get_json()
     if not data:
-        return jsonify({"data": "No data received"})
-    print(data)
+        return jsonify({"error": "No data received"})
     project_number = escape(data["projectNumber"])
     project_name = escape(data["projectName"])
     project_description = escape(data["projectDescription"])
@@ -33,15 +32,7 @@ def new_project():
     if dbo.check_for_existing_project_number(project_number):
         return jsonify({"data": "Prosjektnummer finnes allerede."})
     else:
-        new_project = models.Projects(project_number=project_number, 
-                                        project_name=project_name, 
-                                        project_description=project_description, 
-                                        specification=None)
-    try:
-        db.session.add(new_project)
-        db.session.commit()
-    except Exception as e:
-        return jsonify({"data": f"Feil under oppretting av prosjekt: {e}"})
-
-    
+        new_project = dbo.new_project(project_number, project_name, project_description)
+        if new_project is False:
+            return jsonify({"error": "Kunne ikke opprette nytt prosjekt"})
     return jsonify({"data": new_project.get_json()})

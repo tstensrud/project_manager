@@ -1,13 +1,12 @@
-import datetime
+from datetime import datetime, timezone, timedelta
 import os
 import json
+from uuid import uuid4
 from werkzeug.security import generate_password_hash
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify
-from flask_login import login_user, current_user, login_required
+from flask import Blueprint, request, jsonify
 from . import models, db
 from .models import User
 from werkzeug.security import check_password_hash
-from flask_login import login_required, login_user, logout_user
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
 
 views = Blueprint("views", __name__)
@@ -15,6 +14,25 @@ views = Blueprint("views", __name__)
 '''
 Views
 '''
+@views.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            data = response.get_json()
+            if type(data) is dict:
+                data["access_token"] = access_token
+                response.data = json.dumps(data)
+        return response
+    except (RuntimeError, KeyError):
+        return response
+
+@views.route('/', methods=['GET'])
+def index():
+    return jsonify({"message": "No"})
 
 @views.route('/token', methods=['GET', 'POST'])
 def token():
@@ -35,22 +53,6 @@ def token():
     if request.method == "GET":
         return jsonify({"Message": "Nothing here"})
 
-@views.after_request
-def refresh_expiring_jwts(response):
-    try:
-        exp_timestamp = get_jwt()["exp"]
-        now = datetime.now(datetime.timezone.utc)
-        target_timestamp = datetime.timestamp(now + datetime.timedelta(minutes=30))
-        if target_timestamp > exp_timestamp:
-            access_token = create_access_token(identity=get_jwt_identity())
-            data = response.get_json()
-            if type(data) is dict:
-                data["access_token"] = access_token
-                response.data = json.dumps(data)
-        return response
-    except (RuntimeError, KeyError):
-        return response
-
 @views.route('/logout', methods=["POST"])
 def logout():
     response = jsonify({"message": "user logged out"})
@@ -60,12 +62,13 @@ def logout():
 @views.route('/initialize', methods=['GET'])
 def initialize():
         
-    email = "admin@admin.com"
+    email = "admin"
     name = "Administrator"
     password = "1234"
+    uuid = uuid4()
     user = models.User.query.filter_by(email=email).first()
     if not user:
-        admin_account = models.User(email=email, name=name, password = generate_password_hash(password, method='scrypt'), logged_in=False, admin=True, is_active=True)
+        admin_account = models.User(uuid=str(uuid), email=email, name=name, password = generate_password_hash(password, method='scrypt'), logged_in=False, admin=True, is_active=True)
         db.session.add(admin_account)
         db.session.commit()
         print("Admin account created")
@@ -83,7 +86,7 @@ def spec_rooms_setup() -> bool:
     names = ["Skok skoler 2022-o2023", "Skok flerbrukshaller 2022-o2023"]
     
     for name in names:
-        spec = models.Specifications(name=name)
+        spec = models.Specifications(uid=str(uuid4()), name=name)
         db.session.add(spec)
         try:
             db.session.commit()
@@ -104,7 +107,8 @@ def spec_rooms_setup() -> bool:
             values = []
             for _, value in value.items():
                 values.append(value)
-            room = models.RoomTypes(specification_id=spec.id,
+            room = models.RoomTypes(uid=str(uuid4()),
+                                    specification_uid=spec.uid,
                                     name=key,
                                     air_per_person = values[0],
                                     air_emission = values[1],

@@ -5,6 +5,7 @@ import Login from "./login/Login";
 import Ventilation from "./content/ventilation/Ventilation";
 import VentSystems from "./content/ventsystems/VentSystems";
 import Project from "./content/project/Project";
+import Settings from "./content/project/Settings";
 import Heating from "./content/heating/Heating";
 import Cooling from "./content/cooling/Cooling";
 import Rooms from "./content/rooms/Rooms";
@@ -28,6 +29,7 @@ function App() {
 
     
     <Router>
+      
       <Routes>
         <Route path="logout" element={<Logout token={removeToken}/>}/>
         {
@@ -44,6 +46,7 @@ function App() {
                 <Route path="admin" element={<Admin  />} />
                 <Route path="newproject" element={<NewProject />} />
                 <Route path="project/:projectId" element={<Project />} />
+                <Route path="settings/:projectId" element={<Settings />} />
                 <Route path="buildings/:projectId" element={<Buildings  />} />
                 <Route path="rooms/:projectId" element={<Rooms  />} />
                 <Route path="ventilation/:projectId" element={<Ventilation  />} />

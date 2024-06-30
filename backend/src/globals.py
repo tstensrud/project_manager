@@ -25,6 +25,10 @@ def get_project() -> models.Projects:
     project = models.Projects.query.get(project_id)
     return project
 
+'''
+RegExes
+'''
+
 def pattern_float(input):
     pattern = r"\d+(\.\d+)?"
     match = re.search(pattern, input)
@@ -41,6 +45,10 @@ def pattern_int(input):
         return int(''.join(output))
     except ValueError:
         return False
+
+def camelcase_to_snake(input):
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', input)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()   
 
 def replace_and_convert_to_float(input: str):
     replaced = input.replace(",", ".")

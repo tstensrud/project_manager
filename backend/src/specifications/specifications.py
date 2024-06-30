@@ -7,28 +7,40 @@ from markupsafe import escape
 
 specifications_bp = Blueprint('specifications',__name__, static_folder='static', template_folder='templates')
 
-@specifications_bp.route('/', methods=['GET', 'POST'])
-#@specifications_bp.route('/<specification>', methods=['GET', 'POST'])
+@specifications_bp.route('/', methods=['GET'])
 #@jwt_required()
 def specifications():
-    print("TEST")
     spec = "Skok skoler 2022-o2023"
     specification_data = dbo.get_specification_room_types(spec)
     room_id_type = {}
     for object in specification_data:
-        room_id_type[object.id] = object.name
+        room_id_type[object.uid] = object.name
     room_types_list = [{"id": key, "name": value} for key, value in room_id_type.items()]
     return jsonify(room_types_list)
 
-@specifications_bp.route('/get_spec_room_types/<spec_id>/', methods=['GET'])
-def get_specification_room_types(spec_id):
-    spec = "Skok skoler 2022-o2023"
-    specification_data = dbo.get_specification_room_types(spec_id)
-    room_id_type = {}
+@specifications_bp.route('/get_specifications/', methods=['GET'])
+def get_specifications():
+    specifications = dbo.get_specifications()
+    spec_data = {}
+    for specification in specifications:
+        spec_data[specification.uid] = specification.name
+    spec_list = [{"id": key, "name": value} for key, value in spec_data.items()]
+    return jsonify({"data": spec_list})
+
+
+
+@specifications_bp.route('/get_spec_room_types/<spec_uid>/', methods=['GET'])
+def get_specification_room_types(spec_uid):
+    print(type(spec_uid))
+    specification_data = dbo.get_specification_room_types(spec_uid)
+    spec = dbo.get_specification(spec_uid)
+    print(f"SPESIFIKASJON {spec.room_types}")
+    room_uid_type = {}
     for room_type in specification_data:
-        room_id_type[room_type.id] = room_type.name
-    room_types_list = [{"id": key, "name": value} for key, value in room_id_type.items()]
-    #print(room_types_list)
+        
+        room_uid_type[room_type.uid] = room_type.name
+    room_types_list = [{"id": key, "name": value} for key, value in room_uid_type.items()]
+    #print(f"Roomtypes lis: {room_types_list}")
     return jsonify({"spec_room_type_data": room_types_list})
 
 

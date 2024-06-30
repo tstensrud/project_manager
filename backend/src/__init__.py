@@ -27,29 +27,16 @@ def create_app():
     from .views import views
 
 
-    #from .admin import admin
-    from .rooms import rooms
-    #from .ventilation import ventilation
-    from .project import project
+
+    from .api import project_api
     from .projects import projects
-    #from .ventsystems import ventsystems
-    from .buildings import buildings
     from .specifications import specifications
-    #from .heating import heating
-    #from .cooling import cooling
-    #from .userprofile import user
     
     #app.register_blueprint(user.user_bp, url_prefix='/user/<username>')
     #app.register_blueprint(admin.admin_bp, url_prefix='/admin')
     app.register_blueprint(projects.projects_bp, url_prefix='/projects')
     app.register_blueprint(specifications.specifications_bp, url_prefix='/specifications')
-    app.register_blueprint(rooms.rooms_bp, url_prefix='/rooms/')
-    #app.register_blueprint(ventilation.ventilation_bp, url_prefix='/ventilation')
-    app.register_blueprint(project.project_bp, url_prefix='/project/')
-    #app.register_blueprint(ventsystems.ventsystems_bp, url_prefix='/ventsystems')
-    app.register_blueprint(buildings.buildings_bp, url_prefix='/buildings/')
-    #app.register_blueprint(heating.heating_bp, url_prefix='/heating')
-    #app.register_blueprint(cooling.cooling_bp, url_prefix='/cooling')
+    app.register_blueprint(project_api.project_api_bp, url_prefix='/project_api/<project_uid>/')
     
 
     app.register_blueprint(views, url_prefix='/')

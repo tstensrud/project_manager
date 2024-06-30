@@ -7,7 +7,7 @@ import SubTitleComponent from '../../layout/SubTitleComponent';
 function Project () {
     const {projectId} = useParams();
     const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
-    const {data, loading, error} = useFetch(`/project/${projectId}/`)
+    const {data, loading, error} = useFetch(`/project_api/${projectId}/`)
     
     
     useEffect(() => {
@@ -31,7 +31,7 @@ function Project () {
 
                         <div className="summaries-row">
                             <div className="summaries-cell">
-                                <a href="">{data && data.data.Specification}</a>
+                                <a href="">{data && data.data.SpecificationName}</a>
                             </div>
                         </div>
 

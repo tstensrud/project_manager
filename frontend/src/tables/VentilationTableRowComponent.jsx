@@ -9,9 +9,9 @@ import useSubmitData from "../hooks/useSubmitData";
 function VentilationTableRowComponent({roomId, msgToParent}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
-        const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/rooms/${projectId}/get_room/${roomId}/`);
-        const {data: allRoomData, response, setData, handleSubmit: updateRoomData} = useSubmitData(`/rooms/${projectId}/update_room/${roomId}/`);
-        const {data: deleteRoomId, responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit} = useSubmitData(`/rooms/delete_room/${roomId}/`);
+        const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/project_api/${projectId}/rooms/get_room/${roomId}/`);
+        const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useSubmitData(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
+        const {data: deleteRoomId, responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit} = useSubmitData(`/project_api/${projectId}/rooms/delete_room/${roomId}/`);
         const [editingCell, setEditingCell] = useState(null);
         const [editedData, setEditedData] = useState(null);
         const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
@@ -90,16 +90,15 @@ function VentilationTableRowComponent({roomId, msgToParent}) {
         <>
         {response && response.error !== null ? (<>{sendMessageToParent(response.error)}</>) : (<></>)}
         <tr>
-            <td className={rowClass}>{roomData ? roomData.room_data.BuildingId : ''}</td>
+            <td className={rowClass}>{roomData ? roomData.room_data.BuildingName : ''}</td>
             <td className={rowClass}>{roomData ? roomData.room_data.Floor : ''}</td>
             {renderEditableCell("RoomNumber")}
-            <td className={rowClass}>{roomData ? roomData.room_data.RoomTypeId : ''}</td>
+            <td className={rowClass}>{roomData ? roomData.room_data.RoomTypeName : ''}</td>
             {renderEditableCell("RoomName")}
             {renderEditableCell("Area")}
             {renderEditableCell("RoomPopulation")}
             {renderEditableCell("Comment")}
             <td className={rowClass}>
-                <input type="text" value={roomId} hidden />
                 <button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button>
             </td>
         </tr>

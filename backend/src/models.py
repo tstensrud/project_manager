@@ -5,8 +5,9 @@ from sqlalchemy.sql import func
 class User(db.Model, UserMixin):
     __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    uuid = db.Column(db.String(250), unique=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     logged_in = db.Column(db.Boolean, default=False)
     admin = db.Column(db.Boolean, default=False)
@@ -17,6 +18,7 @@ class User(db.Model, UserMixin):
     def get_json(self):
         return {
             "id": self.id,
+            "uuid": self.uuid,
             "email": self.email,
             "password": self.password,
             "name": self.name,
@@ -32,8 +34,9 @@ class User(db.Model, UserMixin):
 class TodoItem(db.Model):
     __tablename__ = "TodoItem"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    project_id = db.Column(db.Integer, db.ForeignKey('Projects.id'), nullable=False)
-    author_id = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
+    uid = db.Column(db.String(250), unique=True)
+    project_uid = db.Column(db.String(250), db.ForeignKey('Projects.uid'), nullable=False)
+    author_uid = db.Column(db.String(250), db.ForeignKey('Users.uuid'), nullable=False)
     date = db.Column(db.String(10), nullable=False)
     content = db.Column(db.Text, nullable=False)
     completed = db.Column(db.Boolean, default=False)
@@ -44,8 +47,9 @@ class TodoItem(db.Model):
     def get_json(self):
         return {
             "id": self.id,
-            "project_id": self.project_id,
-            "author_id": self.author_id,
+            "uid": self.uid,
+            "project_uid": self.project_uid,
+            "author_uid": self.author_uid,
             "date": self.date,
             "content": self.content,
             "completed": self.completed,
@@ -56,6 +60,7 @@ class TodoItem(db.Model):
 class Projects(db.Model):
     __tablename__ = "Projects"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    uid = db.Column(db.String(250), unique=True)
     project_number = db.Column(db.Integer, nullable=False)
     project_name = db.Column(db.String(50), nullable=False)
     project_description = db.Column(db.Text)
@@ -68,6 +73,7 @@ class Projects(db.Model):
     def get_json(self):
         return {
             "id": self.id,
+            "uid": self.uid,
             "ProjectNumber": self.project_number,
             "ProjectName": self.project_name,
             "ProjectDescription": self.project_description,
@@ -77,7 +83,8 @@ class Projects(db.Model):
 class Buildings(db.Model):
     __tablename__ = "Buildings"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    project_id = db.Column(db.Integer, db.ForeignKey('Projects.id'), nullable=False)
+    uid = db.Column(db.String(250), unique=True)
+    project_uid = db.Column(db.String(250), db.ForeignKey('Projects.uid'), nullable=False)
     building_name = db.Column(db.String(100), nullable=False)
 
     rooms = db.relationship('Rooms', backref='building', lazy=True)
@@ -87,19 +94,21 @@ class Buildings(db.Model):
     def get_json(self):
         return {
             "id": self.id,
-            "ProjectId": self.project_id,
+            "uid": self.id,
+            "ProjectId": self.project_uid,
             "BuildingName": self.building_name
         }
 
 class Rooms(db.Model):
     __tablename__ = "Rooms"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    uid = db.Column(db.String(250), unique=True)
 
     # Foreign keys
-    building_id = db.Column(db.Integer, db.ForeignKey('Buildings.id'), nullable=False)
-    room_type_id = db.Column(db.Integer, db.ForeignKey('RoomTypes.id'), nullable=False)
-    system_id = db.Column(db.Integer, db.ForeignKey('VentilationSystems.id', ondelete="SET NULL"), nullable=True)
-    building_energy_settings = db.Column(db.Integer, db.ForeignKey('BuildingEnergySettings.id', ondelete="SET NULL"), nullable=False)
+    building_uid = db.Column(db.String(250), db.ForeignKey('Buildings.uid'), nullable=False)
+    room_type_uid = db.Column(db.String(250), db.ForeignKey('RoomTypes.uid'), nullable=False)
+    system_uid = db.Column(db.String(250), db.ForeignKey('VentilationSystems.uid', ondelete="SET NULL"), nullable=True)
+    building_energy_settings = db.Column(db.String(250), db.ForeignKey('BuildingEnergySettings.uid', ondelete="SET NULL"), nullable=False)
 
     # Basic room data
     floor = db.Column(db.String(100), nullable=False)
@@ -163,18 +172,25 @@ class Rooms(db.Model):
     cooling_sum = db.Column(db.Float)
 
 
-    def get_json(self):
+    def get_json_room_data(self):
         return {
             "id": self.id,
-            "BuildingId": self.building_id,
-            "RoomTypeId": self.room_type_id,
+            "uid": self.uid,
+            "BuildingId": self.building_uid,
+            "BuildingName": self.building.building_name,
+            "RoomTypeId": self.room_type_uid,
+            "RoomTypeName": self.room_type.name,
             "Floor": self.floor,
             "RoomNumber": self.room_number,
             "RoomName": self.room_name,
             "Area": self.area,
             "RoomPopulation": self.room_population,
-            "Comments": self.comments,
-            "SystemId": self.system_id,
+            "Comments": self.comments
+        }
+    def get_json_ventilation_data(self):
+            return {
+            "SystemId": self.system_uid,
+            "SystemName": self.system.system_name,
             "AirPerPerson": self.air_per_person,
             "AirPersonSum": self.air_person_sum,
             "AirEmission": self.air_mission,
@@ -191,7 +207,10 @@ class Rooms(db.Model):
             "Notes": self.notes,
             "DbTechnical": self.db_technical,
             "DbNeighbour": self.db_neighbour,
-            "DbCorridor": self.db_corridor,
+            "DbCorridor": self.db_corridor
+            }
+    def get_json_heating_data(self):
+        return {
             "BuildingEnergySettings": self.building_energy_settings,
             "OuterWallArea": self.outer_wall_area,
             "RoomHeight": self.room_height,
@@ -207,26 +226,30 @@ class Rooms(db.Model):
             "HeatLossVentilation": self.heatloss_ventilation,
             "HeatLossSum": self.heatloss_sum,
             "ChosenHeating": self.chosen_heating,
-            "HeatSource": self.heat_source,
-            "RoomTempSummer": self.room_temp_summer,
-            "InternalLoadPeople": self.internal_heatload_people,
-            "InternalLoadLight": self.internal_heatload_lights,
-            "SunAdition": self.sun_adition,
-            "VentAirTempSummer": self.ventair_temp_summer,
-            "SumInternalHeatloadPeople": self.sum_internal_heatload_people,
-            "SumInternalHeatloadLight": self.sum_internal_heatload_lights,
-            "InternalHeatloadEquipment": self.internal_heatload_equipment,
-            "SunReduction": self.sun_reduction,
-            "SumInternalHeatLoad": self.sum_internal_heatload,
-            "CoolingVentilationAir": self.cooling_ventilationair,
-            "CoolingEquipment": self.cooling_equipment,
-            "CoolingSum": self.cooling_sum
+            "HeatSource": self.heat_source
+        }
+    def get_json_cooling_data(self):
+            return {
+                "RoomTempSummer": self.room_temp_summer,
+                "InternalLoadPeople": self.internal_heatload_people,
+                "InternalLoadLight": self.internal_heatload_lights,
+                "SunAdition": self.sun_adition,
+                "VentAirTempSummer": self.ventair_temp_summer,
+                "SumInternalHeatloadPeople": self.sum_internal_heatload_people,
+                "SumInternalHeatloadLight": self.sum_internal_heatload_lights,
+                "InternalHeatloadEquipment": self.internal_heatload_equipment,
+                "SunReduction": self.sun_reduction,
+                "SumInternalHeatLoad": self.sum_internal_heatload,
+                "CoolingVentilationAir": self.cooling_ventilationair,
+                "CoolingEquipment": self.cooling_equipment,
+                "CoolingSum": self.cooling_sum
         }
 
 class VentilationSystems(db.Model):
     __tablename__ = "VentilationSystems"
+    uid = db.Column(db.String(250), unique=True)
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    project_id = db.Column(db.Integer, db.ForeignKey('Projects.id'), nullable=False)
+    project_uid = db.Column(db.String(250), db.ForeignKey('Projects.uid'), nullable=False)
     system_name = db.Column(db.String(30), nullable=False)
     location = db.Column(db.String(100))
     service_area = db.Column(db.String(250))
@@ -241,7 +264,8 @@ class VentilationSystems(db.Model):
     def get_json(self):
         return {
             "id": self.id,
-            "ProjectId": self.project_id,
+            "uid": self.uid,
+            "ProjectId": self.project_uid,
             "SystemName": self.system_name,
             "Location": self.location,
             "ServiceArea": self.service_area,
@@ -256,8 +280,9 @@ class VentilationSystems(db.Model):
 class BuildingEnergySettings(db.Model):
     __tablename__ = "BuildingEnergySettings"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    project_id = db.Column(db.Integer, db.ForeignKey('Projects.id'), nullable=False)
-    building_id = db.Column(db.Integer, db.ForeignKey('Buildings.id', ondelete="SET NULL"), nullable=False, unique=True)
+    uid = db.Column(db.String(250), unique=True)
+    project_uid = db.Column(db.String(250), db.ForeignKey('Projects.uid'), nullable=False)
+    building_uid = db.Column(db.String(250), db.ForeignKey('Buildings.uid', ondelete="SET NULL"), nullable=False, unique=True)
     # Heating properties
     inside_temp = db.Column(db.Float)
     vent_temp = db.Column(db.Float)
@@ -279,8 +304,9 @@ class BuildingEnergySettings(db.Model):
     def get_json(self):
         return {
             "id": self.id,
-            "ProjectId": self.project_id,
-            "BuildingID": self.building_id,
+            "id": self.uid,
+            "ProjectId": self.project_uid,
+            "BuildingID": self.building_uid,
             "InsideTemp": self.inside_temp,
             "VentTemp": self.vent_temp,
             "Infiltration": self.infiltration,
@@ -303,19 +329,22 @@ Specification tables
 class Specifications(db.Model):
     __tablename__ = "Specifications"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    uid = db.Column(db.String(250), unique=True)
     name = db.Column(db.String(50), nullable=False)
-    room_types = db.relationship("RoomTypes", backref="specifications", uselist=False, lazy=True)
+    room_types = db.relationship("RoomTypes", backref="specifications", lazy=True)
 
     def get_json(self):
         return {
             "id": self.id,
+            "uid": self.uid,
             "name": self.name
         }
     
 class RoomTypes(db.Model):
     __tablename__ = "RoomTypes"
+    uid = db.Column(db.String(250), unique=True)
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    specification_id = db.Column(db.Integer, db.ForeignKey("Specifications.id"), nullable=False)
+    specification_uid = db.Column(db.String(250), db.ForeignKey("Specifications.uid"), nullable=False)
     name = db.Column(db.String(50), nullable=False)
     air_per_person = db.Column(db.Float)
     air_emission = db.Column(db.Float)
@@ -330,10 +359,13 @@ class RoomTypes(db.Model):
     db_corridor = db.Column(db.String(50))
     comments = db.Column(db.String(20))
 
+    room = db.relationship('Rooms', backref='room_type', lazy=True)
+
     def get_json(self):
         return {
             "id": self.id,
-            "specification_id": self.specification_id,
+            "uid": self.uid,
+            "specification_uid": self.specification_uid,
             "name": self.name,
             "air_per_person": self.air_per_person,
             "air_emission": self.air_emission,

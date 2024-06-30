@@ -1,10 +1,5 @@
 import PlusIcon from '../../assets/svg/plusIcon.svg?react';
 import MinusIcon from '../../assets/svg/minusIcon.svg?react';
-import { GlobalContext } from '../../GlobalContext';
-import useFetch from '../../hooks/useFetch'
-import { useParams } from 'react-router-dom';
-import { useEffect, useState, useContext } from 'react';
-import SubTitleComponent from '../../layout/SubTitleComponent';
 
 function BuildingSummary({buildingData}) {
 

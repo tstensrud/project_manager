@@ -7,6 +7,7 @@ import { GlobalContext } from '../../GlobalContext';
 function Dashboard() {
   
   const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+  
   useEffect(() => {
       const activeProjectLayout = setActiveProject(0)
   },[]);
@@ -14,7 +15,7 @@ function Dashboard() {
     const [projectId, setProjectId] = useState('');
     const {data, loading, error} = useFetch('/projects/');
     const navigate = useNavigate();
-    console.log(data);
+    //console.log(data);
     const handleChange = (e) => {
       const projectId = e.target.value;
       setProjectId(projectId);      
@@ -39,7 +40,7 @@ function Dashboard() {
               <option>- Velg prosjekt -</option>
               {Array.isArray(data?.data) ? (
                 data.data.map((project, index) => (
-                  <option key={index} value={project.id}>{project.ProjectNumber} {project.ProjectName}</option>
+                  <option key={index} value={project.uid}>{project.ProjectNumber} {project.ProjectName}</option>
                 ))
               ) : (
                 <>{data.data}</>

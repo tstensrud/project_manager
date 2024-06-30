@@ -11,8 +11,8 @@ function Buildings() {
     const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
     const [allData, setAllData] = useState();
     const [formInput, setFormInput] = useState('');
-    const {data, loading, error, refetch} = useFetch(`/buildings/${projectId}/`);
-    const {buildingData, setData, handleSubmit} = useSubmitData(`/buildings/${projectId}/new_building/`);
+    const {data, loading, error, refetch} = useFetch(`/project_api/${projectId}/buildings/`);
+    const {buildingData, setData, handleSubmit} = useSubmitData(`/project_api/${projectId}/buildings/new_building/`);
     
     useEffect(() => {
         setActiveProject(projectId);

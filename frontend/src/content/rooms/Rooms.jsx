@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useSyncExternalStore } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
@@ -11,18 +11,34 @@ import VentilationTableRowComponent from "../../tables/VentilationTableRowCompon
 
 
 function Rooms () {
-    const specificationId = 1;
     const {projectId} = useParams();
-    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
-    const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/rooms/${projectId}/`);
-    const {data: roomTypeData, loading: roomTypeLoading, error: roomTypeError, refetch: roomTypeRefetch} = useFetch(`/specifications/get_spec_room_types/${specificationId}/`);
-    const {data: buildingData, loading: buildingDataLoading, error: buildingDataError, refetch: buildingReFetch} = useFetch(`/buildings/${projectId}/get_project_buildings/`);
-    const {data: allRoomData, response, setData, handleSubmit} = useSubmitData(`/rooms/${projectId}/`);
+    const {setActiveProject} = useContext(GlobalContext);
+    const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/project_api/${projectId}/rooms/`);
+    const [specId, setSpecId] = useState(null);
+    const [fetchSpec, setFetchSpec] = useState(false);
+    const {data: roomTypeData, loading: roomTypeLoading, error: roomTypeError, refetch: roomTypeRefetch} = useFetch( fetchSpec ? `/specifications/get_spec_room_types/${specId}/` : null);
+    const {data: buildingData, loading: buildingDataLoading, error: buildingDataError, refetch: buildingReFetch} = useFetch(`/project_api/${projectId}/buildings/get_project_buildings/`);
+    const {data: newRoomData, response, setData, handleSubmit} = useSubmitData(`/project_api/${projectId}/rooms/`);
+
+    
     
     const [childMessage, setChildMessage] = useState('');
     const [errorPopUpClass, setErrorPopUpClass] = useState('popup-hide');
     const [childMessagePopUpClass, setChildMessagePopUpClass] = useState('popup-hide');
-    
+
+    useEffect(() => {
+        if (roomData && roomData.spec) {
+            setSpecId(roomData.spec);
+            setFetchSpec(true);
+        }
+    }, [roomData]);
+
+    useEffect(() => {
+        if (specId) {
+            roomTypeRefetch();
+        }
+    }, [specId]);
+
     useEffect(() => {
         setActiveProject(projectId);
     },[]);
@@ -57,18 +73,17 @@ function Rooms () {
     const handleChildMessage = (msg) => {
         if (msg !== undefined) {
             setChildMessage(msg);
-            console.log("CHILD MESSAGE: " + msg)
         }
     }
 
     const closeMessagePopUp = () => {
         setChildMessagePopUpClass('popup-hide');
-        setErrorPopUpClass('popup-hide')
+        setErrorPopUpClass('popup-hide');
     }
     
     const handleFormChange = (e) => {
         setData({
-            ...allRoomData,
+            ...newRoomData,
             [e.target.name]: e.target.value,
         })
     }
@@ -83,14 +98,14 @@ function Rooms () {
     return (
         <>
 
-        { response && response.error !== null ? (
+        {response && response.error && response.error !== null ? (
         <div className={errorPopUpClass}>
             <span className="popup-close" onClick={closeMessagePopUp}>×</span>
             <p>Feil: {response.error}</p>
-        </div> ) : (<span>asdf</span>)}
+        </div> ) : (<span></span>)}
 
         { childMessage && childMessage !== undefined || childMessage !== '' ? (
-        <div className={errorPopUpClass}>
+        <div className={childMessagePopUpClass}>
             <span className="popup-close" onClick={closeMessagePopUp}>×</span>
             <p>Feil: {childMessage}</p>
         </div> ) : (<span></span>)}
@@ -107,7 +122,7 @@ function Rooms () {
                         
                         <select onChange={handleFormChange} name="roomType">
                             <option key="0" value="">- Velg romtype -</option>
-                            {roomTypeData && roomTypeData.spec_room_type_data.map(type => (<option key={type.id} value={type.id}>{type.name}</option>))};
+                            {roomTypeData && roomTypeData.spec_room_type_data !== undefined && roomTypeData.spec_room_type_data.map(type => (<option key={type.id} value={type.id}>{type.name}</option>))};
                         </select>
                         
                         <select name="buildingId" onChange={handleFormChange}>
@@ -134,7 +149,7 @@ function Rooms () {
     {
         roomData ? (
             roomData.room_data === null ? (
-            <p>Ingen rom lagt til asdf</p>
+            <p>Ingen rom lagt til</p>
         ) : (
             <div className="table-wrapper">
                 <table className="fl-table" id="roomsTableVentilation">
@@ -144,23 +159,19 @@ function Rooms () {
                     <tbody>
                         {
                             roomData && roomData.room_data ? (
-                            roomData.room_data.map((room) => <VentilationTableRowComponent msgToParent={handleChildMessage} key={room.id} roomId={room.id}/>)
+                            roomData.room_data.map((room) => <VentilationTableRowComponent msgToParent={handleChildMessage} key={room.uid} roomId={room.uid}/>)
                             ) : (
                                 <>
                                 <span>Ingen rom lagt inn</span>
                                 </>
                             )
                         }
-                        
                     </tbody>
                 </table>
             </div>
             )
-        ) : (
-        <span>Loading...</span>
-        )
+        ) : (<span>Loading...</span>)
     }
-
         </>
     );
 }
