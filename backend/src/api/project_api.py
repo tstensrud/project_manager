@@ -36,7 +36,6 @@ def refresh_expiring_jwts(response):
 @project_api_bp.route('/', methods=['GET'])
 @jwt_required()
 def project(project_uid):
-    print(f"got endpoint id: {project_uid}")
     project = dbo.get_project(project_uid)
     specification = dbo.get_specification(project.specification)
     if project is not None:
@@ -46,7 +45,6 @@ def project(project_uid):
             project_data["SpecificationName"] = specification.name
         else:
             project_data["SpecificationName"] = None
-        print(project_data)
         return jsonify({"data": project_data})
     else:
         return jsonify({"data": "Fant ikke prosjekt"})
@@ -127,15 +125,13 @@ def todo_item_complete(project_id):
 @jwt_required()
 def buildings(project_uid):
     buildings = dbo.get_all_project_buildings(project_uid)
-    if request.method == "GET":
-        if buildings is None:
-            #print("Return nothing")
-            return jsonify({"building_data": None})
-        else:
-            building_data = {}
-            for building in buildings:
-                building_data[building.uid] = dbo.get_building_data(building.uid)
-            return jsonify({"building_data": building_data})
+    if buildings is None:
+        return jsonify({"building_data": None})
+    else:
+        building_data = {}
+        for building in buildings:
+            building_data[building.uid] = dbo.get_building_data(building.uid)
+        return jsonify({"building_data": building_data})
 
 @project_api_bp.route('/buildings/get_project_buildings/', methods=["GET"])
 @jwt_required()

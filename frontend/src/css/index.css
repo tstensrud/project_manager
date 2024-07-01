@@ -61,7 +61,7 @@
 
  
 
-:root {
+ :root {
   --app-bg: #fff;
   --sidebar: #f3f6fd;
   --table-border: #1a2131;
@@ -93,25 +93,45 @@ body {
 }
 
 .app-container {
-  position: absolute;
-  width: 100%;
-  bottom: 10;
-  height: 100%;
-  overflow-y: hidden;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-/* End globals */
-
-
-.app-content {
-  height: 100%;
-  max-height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  height: 100%;
 }
+
+.header, .sub-header, .footer {
+  flex: 0 0 5%; 
+}
+.main-content {
+  flex: 1 0 85%; 
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.header, .sub-header, .main-content, .footer {
+  width: 100%;
+}
+.header {
+  padding-left: 50px;
+  background-color: #f1f1f1;
+}
+.sub-header {
+  display: flex;
+  align-items: center;
+  background-color: black;
+  color: white;
+  padding-left: 50px;
+}
+.main-content {
+  background-color: #d1d1d1;
+}
+.footer {
+  display: flex;
+  background-color: #c1c1c1;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
 .app-content-header {
   display: flex;
   align-items: center;
@@ -120,31 +140,13 @@ body {
   position: fixed;
   margin-bottom: 20px;
 }
-.app-content-headerText {
-  color: var(--app-content-main-color);
-  font-size: 24px;
-  line-height: 32px;
-  margin: 0;
 
+.flex-container-row {
+  display: flex;
+  flex-direction: row;
+  float: left;
+  width: 60%;
 }
-.app-content-subTitleheaderText {
-  color: white;
-  font-size: 20px;
-  margin: 0;
-}
-.app-content-footerText {
-  color: var(--app-content-main-color);
-  font-size: 14px;
-  line-height: 14px;
-  margin: 0;
-}
-.app-content-Text {
-  color: var(--app-content-main-color);
-  font-size: 15px;
-  font-weight: 0px;
-  margin: 0;
-}
-
 
 .action-button {
   border-radius: 4px;
@@ -169,6 +171,7 @@ body {
   color: var(--action-color);
   border-color: var(--action-color);
 }
+
 
 .building-summary {
   display: float;
@@ -211,35 +214,6 @@ body {
   font-size: 14px;
 }
 
-.status:before {
-  content: "";
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  margin-right: 4px;
-}
-.status.active {
-  color: #2ba972;
-  background-color: rgba(43, 169, 114, 0.2);
-}
-.status.active:before {
-  background-color: #2ba972;
-}
-.status.disabled {
-  color: var(--app-content-main-color);
-  background-color: rgba(89, 113, 157, 0.2);
-  max-width: 200px;
-}
-.status.disabled:before {
-  background-color: #59719d;
-}
-
-.bottomDiv {
-  position: fixed;
-  bottom: 0;
-  padding: 10px 0;
-}
-
 .subtitle-header-container {
   position: sticky;
   padding: 5px;
@@ -258,11 +232,6 @@ body {
   display: grid;
   text-align: center;
   place-items: center;
-
-}
-
-
-.main-title-container {
 
 }
 
@@ -301,7 +270,6 @@ body {
 }
 
 .heating-settings {
-/*  background: var(--sidebar-hover-link);*/
   float: left;
   margin-right: 50px;
   font-size: 14px;
@@ -377,8 +345,8 @@ a {
   width: 400px;
   height: 400px;
   position: fixed;
-  background-color: var(--sidebar);
-  color: var(--app-content-main-color);
+  background-color: rgb(107, 65, 65);
+  color: white;
   border-radius: 15px;
   padding: 10px;
   display: flex;
@@ -389,18 +357,8 @@ a {
 
 /* Navigation */
 
-.navbar {
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  background-color: #f3f6fd;
-  width: 100%;
-  padding-left: 50px;
-  top: 0;
-  z-index: 1;
-}
 
-.navbar a {
+.header a {
   float: left;
   color: #1f1c2e;
   text-decoration: none;
@@ -411,11 +369,22 @@ a {
 .dropdown {
   float: left;
   overflow: hidden;
+  height: 100%;
+  align-content: center;
 }
 
 .active-project-title-container {
   float: left;
   width: 70%;
+  height: 100%;
+  text-align: center;
+  align-content: center;
+  font-size: 20px;
+}
+.navbar-button-container {
+  float: left;
+  width: 15%;
+  height: 100%;
   text-align: center;
   align-content: center;
   font-size: 20px;
@@ -439,6 +408,7 @@ a {
   background-color: inherit;
   font-family: inherit;
   margin: 0; 
+  height: 100%;
 }
 
 .dropdown-content a {
@@ -461,9 +431,11 @@ a {
 
 .logout-dropdown {
   float: left;
+  height: 100%;
+  align-content: center;
 }
 
-.navbar a:hover, .dropdown:hover .dropbtn {
+.header a:hover, .dropdown:hover .dropbtn {
   background-color: black;
   color: white;
 }

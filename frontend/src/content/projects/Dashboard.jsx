@@ -37,33 +37,34 @@ function Dashboard() {
         <SubTitleComponent>
           Dashboard
         </SubTitleComponent>
-        <form className="custom-form profile-form" onSubmit={handleSubmit}>
-        <div className="text-container">
+        
+        <div className="main-content">
           <div className="cards">
             <div className="information [ card ]">
               <h2 className="card-title">Velg prosjekt</h2>
+              <p className="info">Velg prosjekt å jobbe på fra menyen under, eller opprett nytt prosjekt fra menyen over: Dashboard - Nytt prosjekt</p>
               <p className="info">
-              <select onChange={handleChange}>
-              <option>- Velg prosjekt -</option>
-              {Array.isArray(data?.data) ? (
-                data.data.map((project, index) => (
-                  <option key={index} value={project.uid}>{project.ProjectNumber} {project.ProjectName}</option>
-                ))
-              ) : (
-                <>{data.data}</>
-              )}
-            </select>
-
+                <form className="custom-form profile-form" onSubmit={handleSubmit}>
+                  <select onChange={handleChange}>
+                    <option>- Velg prosjekt -</option>
+                    {Array.isArray(data?.data) ? (
+                      data.data.map((project, index) => (
+                        <option key={index} value={project.uid}>{project.ProjectNumber} {project.ProjectName}</option>
+                      ))
+                    ) : (
+                      <>{data.data}</>
+                    )}
+                  </select>
+                  &nbsp;&nbsp;
+                  <button type="submit" className="form-button">
+                    Gå til
+                  </button>
+                </form>
               </p>
-              <button type="submit" className="form-button">
-              Gå til
-            </button>
- 
             </div>
           </div>
+
         </div>
-        </form>
-        
       </>
     );
 }

@@ -1,19 +1,45 @@
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import Table from '../../tables/Table';
+
+import { GlobalContext } from '../../GlobalContext';
+import useFetch from '../../hooks/useFetch'
+import { Link, useParams } from 'react-router-dom';
+import { useEffect, useState, useContext } from 'react';
+
 
 function Specifications() {
-    
-    const titles = [{text: "Tittel 1"}, {text: "Tittel 2"}, {text: "Tittel 3"}, {text: "Tittel 4"}];
-    const row1 = [{text: "Tittel 9"}, {text: "Tittel 9"}, {text: "Tittel 9"}, {text: "Tittel 9"}];
-    const row2 = [{text: "Tittel 7"}, {text: "Tittel 7"}, {text: "Tittel 7"}, {text: "Tittel 7"}];
-    const rows = [row1, row2];
+    const {projectId} = useParams();
+    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+    const {data, loading, error, refetch} = useFetch(`/specifications/get_specifications/`);
+        
+    useEffect(() => {
+        setActiveProject(projectId);
+    },[]);
 
     return (
         <>
         <SubTitleComponent>
-            Kravspesifikasjon 
+            Kravspesifikasjoner
         </SubTitleComponent>
-        <Table headers={titles} rows={rows} />
+            <div className='main-content'>
+                <div className="cards">
+                    <div className="information [ card ]">
+                        <h2 className="card-title">Kravspesifikasjoner i databasen</h2>
+                        <p className="info">Velg kravspesifikasjon fra listen under for å og legge til romtyper.
+                            Du kan opprette en ny for ditt prosjekt dersom de eksisterende i databasen ikke er relevante</p>
+                        <p className="info">
+                            <ul>
+                            {
+                                data && data.data !== null ? (
+                                    data.data.map((spec) => (
+                                        <><li><Link to={`/specifications/${spec.id}/`}>{spec.name}</Link></li></>
+                                    )
+                                )) : (<>Ingen spesifikasjoner i databasen</>)
+                            }
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </>
     );
 }

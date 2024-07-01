@@ -13,13 +13,9 @@ function Layout() {
         <Header />
         <TodoButton/>
         <div className="app-container">
-            <div className="app-content">
-                <div className="content-wrapper">
-                    <Outlet />
-                </div>
-            </div>
+            <Outlet />
         </div>
-        <Footer></Footer>
+        <Footer/>
       </>
     );
 }

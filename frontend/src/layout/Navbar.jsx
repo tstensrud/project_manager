@@ -21,55 +21,57 @@ function Navbar() {
 
     return (
         <>
-        
-        <div className="navbar">
+            <div className="header">
+                <div className="navbar-button-container">
+                    <div className="dropdown">
+                        <button className="dropbtn">Prosjekt
+                            <i className="fa fa-caret-down"></i>
+                        </button>
+                        <div className="dropdown-content">
+                            <Link to={`project/${activeProject}`}>Forside</Link>
+                            <Link to={`buildings/${activeProject}`}>Bygg</Link>
+                            <Link to={`rooms/${activeProject}`}>Romoversikt</Link>
+                            <Link to={`ventsystems/${activeProject}`}>Ventilasjonssystemer</Link>
+                            <Link to={`ventilation/${activeProject}`}>Luftmengdeskjema</Link>
+                            <Link to={`heating/${activeProject}`}>Varmeberegninger</Link>
+                            <Link to={`cooling/${activeProject}`}>Kjøleberegninger</Link>
+                            <Link to={``}>Tappevann</Link>
+                            <Link to={``}>Rapporter</Link>
+                            <Link to={`settings/${activeProject}`}>Prosjektinnstillinger</Link>
+                        </div>
+                    </div>
 
-            <div className="dropdown">
-                <button className="dropbtn">Prosjekt
-                    <i className="fa fa-caret-down"></i>
-                </button>
-                <div className="dropdown-content">
-                    <Link to={`project/${activeProject}`}>Forside</Link>
-                    <Link to={`buildings/${activeProject}`}>Bygg</Link>
-                    <Link to={`rooms/${activeProject}`}>Romoversikt</Link>
-                    <Link to={`ventsystems/${activeProject}`}>Ventilasjonssystemer</Link>
-                    <Link to={`ventilation/${activeProject}`}>Luftmengdeskjema</Link>
-                    <Link to={`heating/${activeProject}`}>Varmeberegninger</Link>
-                    <Link to={`cooling/${activeProject}`}>Kjøleberegninger</Link>
-                    <Link to={``}>Tappevann</Link>
-                    <Link to={``}>Rapporter</Link>
-                    <Link to={`settings/${activeProject}`}>Prosjektinnstillinger</Link>
+                    <div className="dropdown">
+                        <button className="dropbtn">Dashboard
+                            <i className="fa fa-caret-down"></i>
+                        </button>
+                        <div className="dropdown-content">
+                            <Link to={'dashboard'}>Velg prosjekt</Link>
+                            <Link to={'newproject'}>Nytt prosjekt</Link>
+                            <Link to={'specifications'}>Kravspesifikasjoner</Link>
+                            <Link to={'newspecification'}>Ny kravspesifikasjon</Link>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div className="dropdown">
-                <button className="dropbtn">Dashboard
-                    <i className="fa fa-caret-down"></i>
-                </button>
-                <div className="dropdown-content">
-                    <Link to={'dashboard'}>Velg prosjekt</Link>
-                    <Link to={''}>Nytt prosjekt</Link>
-                    <Link to={''}>Kravspesifikasjoner</Link>
+                <div className="active-project-title-container">
+                    {activeProjectName}
                 </div>
-            </div>
-
-            <div className="active-project-title-container">
-                {activeProjectName}
-            </div>
-
-            <div className="logout-dropdown">
-                <div className="dropdown">
-                    <button className="dropbtn">Brukerinnstillinger
-                        <i className="fa fa-caret-down"></i>
-                    </button>
-                    <div className="dropdown-content">
-                        <Link to={''}>Brukerkonto</Link>
-                        <Link to={'logout'}>Logg ut</Link>
+                
+                <div className="navbar-button-container">
+                    <div className="logout-dropdown">
+                        <div className="dropdown">
+                            <button className="dropbtn">Brukerinnstillinger
+                                <i className="fa fa-caret-down"></i>
+                            </button>
+                            <div className="dropdown-content">
+                                <Link to={''}>Brukerkonto</Link>
+                                <Link to={'logout'}>Logg ut</Link>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-         </div> 
         </>
     );
 }

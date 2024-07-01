@@ -6,7 +6,7 @@ import useFetch from '../hooks/useFetch'
 import useSubmitData from "../hooks/useSubmitData";
 
 
-function VentilationTableRowComponent({roomId, msgToParent}) {
+function RoomTableRowComponent({roomId, msgToParent}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
         const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/project_api/${projectId}/rooms/get_room/${roomId}/`);
@@ -106,4 +106,4 @@ function VentilationTableRowComponent({roomId, msgToParent}) {
     );
 }
 
-export default VentilationTableRowComponent;
+export default RoomTableRowComponent;

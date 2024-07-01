@@ -138,7 +138,6 @@ def get_building_data(building_uid: int) -> dict:
     supply_air = summarize_supply_air_building(building_uid)
     extract_air = summarize_extract_air_building(building_uid)
     heating = sum_heat_loss_chosen_building(building_uid)
-    #print (f"HEATING IS {type(heating)}")
     building_data["area"] = area
     building_data["supplyAir"] = supply_air
     building_data["extractAir"] = extract_air
@@ -160,7 +159,7 @@ def new_building(project_uid: int, building_name: str) -> bool:
     
 
 def get_all_project_buildings(project_uid: int):
-    buildings = models.Buildings.query.filter_by(project_uid = project_uid).all()
+    buildings = models.Buildings.query.filter(models.Buildings.project_uid == project_uid).order_by(models.Buildings.building_name).all()
     if buildings == []:
         return None
     else:
@@ -606,8 +605,8 @@ def get_specification_room_types(specification_uid: str):
 
 # Get all room types and data for a specific specification
 
-def get_specification_room_data(specification_name: str):
-    data = db.session.query(models.RoomTypes).join(models.Specifications).filter(models.Specifications.name == specification_name).all()
+def get_specification_room_data(specification_uid: str):
+    data = db.session.query(models.RoomTypes).join(models.Specifications).filter(models.Specifications.uid == specification_uid).all()
     return data
 
 

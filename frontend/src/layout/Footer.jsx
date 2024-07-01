@@ -1,7 +1,7 @@
 function Footer() {
     return (
         <>
-            <div className="sidebar-bottom">
+            <div className="footer">
                 Structor TS &copy; 2024
             </div>
         </>

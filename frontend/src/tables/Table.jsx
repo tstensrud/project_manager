@@ -11,7 +11,7 @@ function Table({headers, rows}) {
     return (
         <>
             <div className="table-wrapper">
-                <table className="fl-table" id="roomsTableVentilation">
+                <table className="fl-table">
                     <thead>
                         {listHeaders}
                     </thead>

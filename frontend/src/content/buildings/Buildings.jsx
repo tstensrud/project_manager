@@ -38,29 +38,33 @@ function Buildings() {
         <SubTitleComponent>
             Bygg
         </SubTitleComponent>
-        <div className="text-container">
-            <div className="summaries-wrapper">
-                <h1 className="app-content-Text">Legg til bygg i prosjekt</h1>
-                <form className="custom-form profile-form" onSubmit={handleFormSubmit}>
-                    <p>
-                        <input onChange={handleChange} type="text" value={formInput} name="buildingName" placeholder="Navn på bygg" />
-                        &nbsp;&nbsp;
-                        <button type="submit" className="form-button">Legg til </button>
+        <div className="main-content">
+            <div className="text-container-above-tables">
+            <p>
+            Legg til bygg i prosjekt
+            </p>
+            <form className="custom-form profile-form" onSubmit={handleFormSubmit}>
+                <p>
+                    <input onChange={handleChange} type="text" value={formInput} name="buildingName" placeholder="Navn på bygg" />
+                    &nbsp;&nbsp;
+                    <button type="submit" className="form-button">Legg til </button>
 
-                    </p>
-                </form>
+                </p>
+            </form>
+            <div className="flex-container-row">
+                {
+                    data && data.building_data === null ? (
+                        <p className="p-description">Ingen bygg lagt inn</p>
+                    ) : (
+                        data && Object.keys(data.building_data).map((key, index) => (
+                            <BuildingSummary key={index} buildingData={data.building_data[key]} />
+                        ))
+                    )
+                }
+                
             </div>
-            {
-            data && data.building_data === null ? (
-                <p className="p-description">Ingen bygg lagt inn</p>
-            ) : (
-                data && Object.keys(data.building_data).map((key, index) => (
-                    <BuildingSummary key={index} buildingData={data.building_data[key]} />
-                ))
-            )
-            }
+            </div>
         </div>
-
     </>);
 }
 

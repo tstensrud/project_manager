@@ -27,6 +27,16 @@ def get_specifications():
     spec_list = [{"id": key, "name": value} for key, value in spec_data.items()]
     return jsonify({"data": spec_list})
 
+@specifications_bp.route('/get_spec_room_data/<spec_uid>/', methods=['GET'])
+def get_spec(spec_uid):
+    specification = dbo.get_specification_room_data(spec_uid)
+    spec = dbo.get_specification(spec_uid)
+    spec_name = spec.name
+    specification_data = list(map(lambda x: x.get_json(), specification))
+    if specification:
+        return jsonify({"data": specification_data, "spec_name": spec_name})
+    else:
+        return jsonify({"error": "No specification found"}), 404
 
 
 @specifications_bp.route('/get_spec_room_types/<spec_uid>/', methods=['GET'])
@@ -35,10 +45,8 @@ def get_specification_room_types(spec_uid):
     spec = dbo.get_specification(spec_uid)
     room_uid_type = {}
     for room_type in specification_data:
-        
         room_uid_type[room_type.uid] = room_type.name
     room_types_list = [{"id": key, "name": value} for key, value in room_uid_type.items()]
-    #print(f"Roomtypes lis: {room_types_list}")
     return jsonify({"spec_room_type_data": room_types_list})
 
 

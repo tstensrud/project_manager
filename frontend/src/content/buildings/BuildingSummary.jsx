@@ -11,63 +11,28 @@ function BuildingSummary({buildingData}) {
 
 
     return (<>
-    <div className="summaries-wrapper">
-                <div className="summaries-table">
-                    <div className="summaries-row header">
-                        <div className="summaries-cell white">
-                            {buildingName}
-                        </div>
-                        <div className="summaries-cell">
-                        </div>
-                    </div>
 
-                    <div className="summaries-row header blue">
-                        <div className="summaries-cell white">
-                            Prosjektert
-                        </div>
-                        <div className="summaries-cell">
-                        </div>
-                    </div>
-
-                    <div className="summaries-row">
-                        <div className="summaries-cell">
-                            Tilluft:
-                        </div>
-                        <div className="summaries-cell">
-                            {PlusIcon && <PlusIcon />}
+                <div className="cards">
+                    <div className="information [ card ]">
+                        <h2 className="card-title"> {buildingName}</h2>
+                        <h4>Prosjektert</h4>
+                        <p className="info">Areal<br/>
+                        {area} m<sup>2</sup>
+                        </p>
+                        
+                        <p className="info">Prosjektert luftmengde<br/>
+                        {PlusIcon && <PlusIcon />}
                             <span className="supply-text"> {supplyAir} </span> m<sup>3</sup>/h
-                        </div>
-                    </div>
+                        <br />
+                        {MinusIcon && <MinusIcon />}
+                        <span className="extract-text"> {extractAir} </span> m<sup>3</sup>/h
+                        </p>
 
-                    <div className="summaries-row">
-                        <div className="summaries-cell">
-                            Avtrekk:
-                        </div>
-                        <div className="summaries-cell">
-                            {MinusIcon && <MinusIcon />}
-                            <span className="extract-text"> {extractAir} </span> m<sup>3</sup>/h
-                        </div>
-                    </div>
-
-                    <div className="summaries-row">
-                        <div className="summaries-cell">
-                            Prosjektert varme
-                        </div>
-                        <div className="summaries-cell">
-                           {heating} W
-                        </div>
-                    </div>
-
-                    <div className="summaries-row">
-                        <div className="summaries-cell">
-                            Prosjektert areal
-                        </div>
-                        <div className="summaries-cell">
-                           {area} m<sup>2</sup>
-                        </div>
+                        <p className="info">Prosjektert varme<br/>
+                        {heating} W
+                        </p>
                     </div>
                 </div>
-            </div>
     </>);
 }
 

@@ -13,6 +13,7 @@ import Dashboard from "./content/projects/Dashboard";
 import NewProject from './content/projects/NewProject';
 import Buildings from "./content/buildings/Buildings";
 import Specifications from './content/specifications/Specifications';
+import Specification from './content/specifications/Specification';
 import UserProfile from "./content/userprofile/UserProfile";
 import Admin from "./admin/Admin";
 import NotFound from "./layout/NotFound";
@@ -42,6 +43,7 @@ function App() {
               <>
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="specifications" element={<Specifications />} />
+                <Route path="specifications/:suid" element={<Specification />} />
                 <Route path="userprofile/:userId" element={<UserProfile  />} />
                 <Route path="admin" element={<Admin  />} />
                 <Route path="newproject" element={<NewProject />} />
