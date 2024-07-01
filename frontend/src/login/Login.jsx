@@ -43,7 +43,7 @@ function Login(props) {
                 </div>
                 <p className="p-menu-item"></p>
                 <div>
-                <form onSubmit={logMeIn} className="custom-form profile-form" method="POST" role="form" action="">
+                <form onSubmit={logMeIn} className="custom-form profile-form" method="POST" role="form">
                     <input className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} type="text" placeholder="e-mail" /> <br />
                     <input className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="passord" />
                     <p>

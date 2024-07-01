@@ -45,8 +45,9 @@
 /* To-do list */
 .todo-container {
     position: fixed;
-    right: 40px;
-    z-index:900;
+    left: 10px;
+    top: 15px;
+    z-index:1000;
     align-items: center;
    
 }

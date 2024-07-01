@@ -52,6 +52,7 @@ def project(project_uid):
         return jsonify({"data": "Fant ikke prosjekt"})
 
 @project_api_bp.route('/settings/', methods=['GET'])
+@jwt_required()
 def settings(project_uid):
     project = dbo.get_project(project_uid)
     project_data = project.get_json()
@@ -59,11 +60,13 @@ def settings(project_uid):
 
 
 @project_api_bp.route('/reports', methods=['GET'])
+@jwt_required()
 def reports(project_id):
     pass
 
-@jwt_required()
+
 @project_api_bp.route('/settings/update_project/', methods=['POST'])
+@jwt_required()
 def set_spec(project_uid):
     data = request.get_json()
     #print(f"Specdata: {data}")
@@ -135,7 +138,7 @@ def buildings(project_uid):
             return jsonify({"building_data": building_data})
 
 @project_api_bp.route('/buildings/get_project_buildings/', methods=["GET"])
-#@jwt_required()
+@jwt_required()
 def get_project_buildings(project_uid):
     buildings = dbo.get_all_project_buildings(project_uid)
 
@@ -224,10 +227,9 @@ def rooms(project_uid):
         return jsonify({"message": "Rom opprettet"})
 
 @project_api_bp.route('/rooms/get_room/<room_uid>/', methods=['GET'])
+@jwt_required()
 def get_room(project_uid, room_uid):
-    print(f"RoomUID: {room_uid}")
     room = dbo.get_room(room_uid)
-    print(room)
     room_data = room.get_json_room_data()
     #print(f"ROOM DATA IS: {room_data}")
     return jsonify({"room_data": room_data})
@@ -237,16 +239,11 @@ def get_room(project_uid, room_uid):
 @jwt_required()
 def udpate_room(project_uid, room_uid):
     data = request.get_json()
-    print(f"Data received for update: {data}")
-    print(f"RoomID for update: {room_uid}")
-
     room = dbo.get_room(room_uid)
-        
     processed_data = {}
     for key, value in data.items():
         key = globals.camelcase_to_snake(key)
         processed_data[key] = escape(value.strip())
-        print(f"KEY: {key}")
         if key == "area":
             try:
                 converted_value = float(value)
@@ -257,7 +254,10 @@ def udpate_room(project_uid, room_uid):
                 converted_value = int(value)
             except ValueError as e:
                 return jsonify({"error": "Personer må kun inneholde tall"})
-        print("Convert success")
+        if dbo.update_room_data(room_uid, processed_data):
+            dbo.update_ventilation_calculations(room_uid)
+        else:
+            return jsonify({"error": "Kunne ikke oppdatere rom-data"})
     
     return jsonify({"message": f"Received data {room_uid}"})
 
@@ -270,7 +270,6 @@ def delete_room(project_uid, room_uid):
         if room_uid != received_room_uid:
             globals.log(f"Delete room attempted with mismatch between endpoint room_id and json-data-room id")
             return jsonify({"message": "Feil i sletting av rom."})
-        #print(f"Room ID endpoint: {room_id}. JSON room-id: {received_room_id}")
         if dbo.delete_room(room_uid):
             response = {"message": "Rom slettet"}
         else:

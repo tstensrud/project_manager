@@ -5,10 +5,7 @@ function MenuItem({item, isActive, onClick}) {
 
     return (
         <>
-        <li
-        className={`sidebar-list-item ${isActive ? 'active' : ''}`}
-        onClick={onClick}
-        >
+        <li>
             <Link to={url}>
             {SvgIcon && <SvgIcon />}
             <span>{text}</span>

@@ -281,10 +281,10 @@ def check_if_roomnumber_exists(project_uid, building_uid, room_number) -> bool:
 
 
 def update_room_data(room_uid: int, data) -> bool:
+    print(f"Updated room data received: UID: {room_uid}, DATA: {data}")
     room = get_room(room_uid)
     processed_data = {}
     for key, value in data.items():
-        key = globals.camelcase_to_snake(key)
         processed_data[key] = value
 
     processed_data_list = list(processed_data.keys())
@@ -292,8 +292,6 @@ def update_room_data(room_uid: int, data) -> bool:
     room_columns = {column.key for column in inspect(models.Rooms).mapper.column_attrs}
     for key in room_columns:
         if key == processed_data_list[0]:
-            ##print(f"Match found: {key}")
-            ##print(f"Value: {processed_data[key]}")
             setattr(room, key, processed_data[key])
             break
     try:

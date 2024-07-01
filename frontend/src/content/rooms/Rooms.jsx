@@ -92,7 +92,7 @@ function Rooms () {
         e.preventDefault();
         await handleSubmit(e);
         roomRefetch();
-        // reset input fields roomtype, area, people, name. Leave floor and building.
+        
     }
   
     return (
@@ -114,7 +114,7 @@ function Rooms () {
             Romskjema
         </SubTitleComponent>
 
-
+        <div className="text-container-above-tables">
             <div className="no-print">
                 <form id="new_room" onSubmit={handleOnSubmit}>
                 <p>Legg til nytt rom</p>
@@ -124,27 +124,23 @@ function Rooms () {
                             <option key="0" value="">- Velg romtype -</option>
                             {roomTypeData && roomTypeData.spec_room_type_data !== undefined && roomTypeData.spec_room_type_data.map(type => (<option key={type.id} value={type.id}>{type.name}</option>))};
                         </select>
-                        
+                        &nbsp; &nbsp;
                         <select name="buildingId" onChange={handleFormChange}>
                             <option key="0" value="">- Velg bygg -</option>
                             {buildingData && Object.entries(buildingData.building_data).map(([key, value]) => (<option key={key} value={key}>{value}</option>))}
                         </select>
-
-                        <input type="text" name="floor" onChange={handleFormChange} placeholder="Etasje" tabIndex="1" required />
-                        <input type="text" name="roomNumber" onChange={handleFormChange} placeholder="Romnummer" tabIndex="2" required />
-                        <input type="text" name="roomName" onChange={handleFormChange}  placeholder="Romnavn" tabIndex="3" required />
-                        <input type="text" name="roomArea" onChange={handleFormChange} placeholder="Areal" tabIndex="4" required />
-                        <input type="text" name="roomPeople" onChange={handleFormChange} placeholder="Antall personer" tabIndex="5" required />
+                        &nbsp; &nbsp;
+                        <input type="text" name="floor" onChange={handleFormChange} placeholder="Etasje" tabIndex="1" required /> &nbsp; &nbsp;
+                        <input type="text" name="roomNumber" onChange={handleFormChange} placeholder="Romnummer" tabIndex="2" required /> &nbsp; &nbsp;
+                        <input type="text" name="roomName" onChange={handleFormChange}  placeholder="Romnavn" tabIndex="3" required /> &nbsp; &nbsp;
+                        <input type="text" name="roomArea" onChange={handleFormChange} placeholder="Areal" tabIndex="4" required /> &nbsp; &nbsp;
+                        <input type="text" name="roomPeople" onChange={handleFormChange} placeholder="Antall personer" tabIndex="5" required /> &nbsp; &nbsp;
                         <button className="form-button" type="submit" tabIndex="6">Legg til</button>
 
                     </p>
                 </form>
             </div>
-
-        <SubTitleComponent>
-            Romliste
-        </SubTitleComponent>
-            
+        </div>           
             
     {
         roomData ? (

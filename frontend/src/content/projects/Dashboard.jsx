@@ -1,29 +1,32 @@
 import { useContext, useState, useEffect } from 'react'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import useFetch from '../../hooks/useFetch'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
 function Dashboard() {
   
-  const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+  const { activeProject, setActiveProject, setActiveProjectName, token, setToken } = useContext(GlobalContext);
   
   useEffect(() => {
-      const activeProjectLayout = setActiveProject(0)
+      const activeProjectLayout = setActiveProject('');
+      setActiveProjectName('');
   },[]);
 
     const [projectId, setProjectId] = useState('');
     const {data, loading, error} = useFetch('/projects/');
     const navigate = useNavigate();
-    //console.log(data);
+
     const handleChange = (e) => {
       const projectId = e.target.value;
-      setProjectId(projectId);      
-      console.log("ProjectID on change: " + projectId);
+      const projectName = e.target.key;
+      setActiveProjectName(projectName);
+      console.log(projectName);
+      setProjectId(projectId);
+
     }
 
     const handleSubmit = () => {
-      console.log("Project id before submit: " + projectId);
       navigate(`/project/${projectId}/`);
     } 
     
@@ -32,11 +35,15 @@ function Dashboard() {
     return (
       <>
         <SubTitleComponent>
-          Prosjekter
+          Dashboard
         </SubTitleComponent>
         <form className="custom-form profile-form" onSubmit={handleSubmit}>
-          <p>
-            <select onChange={handleChange}>
+        <div className="text-container">
+          <div className="cards">
+            <div className="information [ card ]">
+              <h2 className="card-title">Velg prosjekt</h2>
+              <p className="info">
+              <select onChange={handleChange}>
               <option>- Velg prosjekt -</option>
               {Array.isArray(data?.data) ? (
                 data.data.map((project, index) => (
@@ -46,13 +53,17 @@ function Dashboard() {
                 <>{data.data}</>
               )}
             </select>
-          </p>
-          <p>
-            <button type="submit" className="form-button">
+
+              </p>
+              <button type="submit" className="form-button">
               Gå til
             </button>
-          </p>
+ 
+            </div>
+          </div>
+        </div>
         </form>
+        
       </>
     );
 }

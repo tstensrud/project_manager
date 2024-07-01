@@ -31,10 +31,8 @@ def get_specifications():
 
 @specifications_bp.route('/get_spec_room_types/<spec_uid>/', methods=['GET'])
 def get_specification_room_types(spec_uid):
-    print(type(spec_uid))
     specification_data = dbo.get_specification_room_types(spec_uid)
     spec = dbo.get_specification(spec_uid)
-    print(f"SPESIFIKASJON {spec.room_types}")
     room_uid_type = {}
     for room_type in specification_data:
         

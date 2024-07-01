@@ -36,22 +36,16 @@ function Buildings() {
 
     return(<>
         <SubTitleComponent>
-            Bygg tilknyttet 
+            Bygg
         </SubTitleComponent>
         <div className="text-container">
             <div className="summaries-wrapper">
                 <h1 className="app-content-Text">Legg til bygg i prosjekt</h1>
                 <form className="custom-form profile-form" onSubmit={handleFormSubmit}>
                     <p>
-                        <input
-                        onChange={handleChange}
-                        type="text"
-                        value={formInput}
-                        name="buildingName"
-                        placeholder="Navn på bygg" />
-                        <button type="submit" className="form-button">
-                            Legg til
-                        </button>
+                        <input onChange={handleChange} type="text" value={formInput} name="buildingName" placeholder="Navn på bygg" />
+                        &nbsp;&nbsp;
+                        <button type="submit" className="form-button">Legg til </button>
 
                     </p>
                 </form>
