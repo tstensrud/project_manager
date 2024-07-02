@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{%block title%}Romskjema - romliste{% endblock %}
+{% block header %}Ventilasjon{% endblock %}
+
+
+{%block page_subtitle %}
+Luftmengdetabell 
+{% if building %}
+  - {{building.BuildingName}}
+  {% else %}
+  alle bygg
+{% endif %}
+{% endblock %}
+{%block content %}
+    <div class="ventilation-system-sorting-container no-print">
+      <div class="building-selector-container">
+        {% if project_buildings|length > 1 %}
+        <form id="project_building" method="POST">
+          <select name="project_building" onchange="showBuildings()">
+            <option value="none">- Velg bygg -</option>
+            <option value="showall">Alle</option>
+            {% for building in project_buildings %}
+            <option value="{{building.id}}">{{building.BuildingName}}</option>
+            {% endfor %}
+          </select>
+        </form>
+        {%endif%}
+      </div>
+    </div>
+    {% if building %}
+    <input type="text" name="building_id" id="building_id" value="{{building.id}}" hidden readonly>
+    {% else %}
+    <input type="text" name="building_id" id="building_id" value="" hidden readonly>
+    {% endif %}
+    <input type="text" name="project_id" id="project_id" value="{{project_id}}" hidden readonly>
+    <!-- End new room form -->
+    
+  {% if building %}
+    {% if summaries %}
+    <div class="summaries-wrapper">
+      <div class="summaries-table">
+        <div class="summaries-row header blue">
+          <div class="summaries-cell white">
+            {{building.BuildingName}} - oppsummering
+          </div>
+          <div class="summaries-cell">
+            
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Dimensjonert luftmengde
+          </div>
+          <div class="summaries-cell">
+            {{summaries[0]}} m<sup>3</sup>/h
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Prosjektert tilluft
+          </div>
+          <div class="summaries-cell">
+            {{summaries[1]}} m<sup>3</sup>/h
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Prosjektert avtrekk
+          </div>
+          <div class="summaries-cell">
+            {{summaries[2]}} m<sup>3</sup>/h
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  {% endif %}
+    
+<div class="table-wrapper">
+  <table class="fl-table" id="roomsTableVentilation">
+    <thead>
+      <tr>
+        <th>
+        
+        </th>
+        <th>
+          Bygg
+        </th>
+        
+        <th>
+          Etasje
+        </th>
+                
+        <th>
+          Romnr
+        </th>
+        
+        <th>
+          Romnavn
+        </th>
+
+        <th>
+            Sum personer m<sup>3</sup>/h
+        </th>
+
+        <th>
+            Sum emisjon m<sup>3</sup>/h
+        </th>
+
+        <th>
+            Prosess m<sup>3</sup>/h
+        </th>
+
+        <th>
+          Minimum m<sup>3</sup>/h
+        </th>
+
+        <th>
+          <div class="table-description-dropdown">Dimensjonert
+          <div class="table-description-dropdown-content">
+              Sum personer + emisjon + prosess
+            </div>
+          </div>
+        </th>
+
+        <th>
+            Tilluft m<sup>3</sup>/h
+        </th>
+
+        <th>
+            Avtrekk m<sup>3</sup>/h
+        </th>
+
+        <th>
+            m<sup>3</sup>/m<sup>2</sup>
+        </th>
+        <th>
+          Min m<sup>3</sup>/h
+      </th>
+
+        <th>
+            System
+        </th>
+        <th>
+            Kommentarer
+        </th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for data in ventilation_data %}
+      <tr>
+        <td hidden-data-column="vent_data_id">
+          <span class="hidden-text">{{data.id}}</span>
+        </td>
+        <td>
+          {{data.room_ventilation.building.BuildingName}}
+        </td>
+        <td>
+          {{data.room_ventilation.Floor}}
+        </td>
+        <td>
+          <a href="{{ url_for('ventilation.ventilation', building_id=data.room_ventilation.building.id, room_id=data.room_ventilation.id, project_id=project_id)}}">{{data.room_ventilation.RoomNumber}} </a>
+        </td>
+        <td>
+          {{data.room_ventilation.RoomName}}
+        </td>
+        <td>
+          {{data.AirPersonSum}}
+        </td>
+        <td>
+          {{data.AirEmissionSum}}
+        </td>
+        <td>
+            {{data.AirProcess}}
+        </td>
+        <td>
+          {{data.AirMinimum}}
+        </td>
+        <td>
+            {{data.AirDemand}}
+        </td>
+        <td class="supplyCell" data-column="supply_air">
+            {{data.AirSupply}}
+        </td>
+        <td class="extractCell" data-column="extract_air">
+            {{data.AirExtract}}
+        </td>
+        <td>
+            {{data.AirChosen}}
+        </td>
+        <td>
+          {{data.AirMinimum * data.room_ventilation.Area }}
+      </td>
+        <td data-column="system_id">         
+          
+          <form id="system" method="POST">  
+            <select class="table-select" name="system_id" id="system_id">
+              {% if not data.room.SystemName %}
+                <option value="none">- System -</option>
+              {% else %}
+                <option value="{{data.SystemId}}">- {{data.room.SystemName}} -</option>
+              {% endif %}
+              
+              {% for system in system_names %}
+                {% if system.SystemName != data.room.SystemName %}
+                  <option value="{{system.id}}">{{system.SystemName}}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </form>
+
+        </td>
+        <td data-column="comment">
+          {% if data.room.SpecialSystem != "Ja" %} 
+
+            {% if "CAV" in data.RoomControl %}
+              {% if data.AirSupply > data.AirExtract%}
+                Tilluft > Avtrekk. 
+              {% elif data.AirExtract > data.AirSupply %}
+                Avtrekk > Tilluft. 
+              {% endif %}
+              {% if data.AirSupple or data.AirExtract < data.AirDemand %}
+                Luftmengde mindre enn krav. 
+              {% endif %}
+            {% endif %}
+
+            {% if "CAV" not in data.RoomControl %}
+              
+              {% if data.AirSupply < data.AirDemand %}
+                  Tilluft under krav. 
+                {% endif %}
+                
+                
+                {% if data.AirSupply > data.AirExtract %}
+                    Ubalanse i rom: + {{data.AirSupply - data.AirExtract}}
+                  {% elif data.AirSupply < data.AirExtract %}
+                    Ubalanse i rom: {{data.AirSupply - data.AirExtract}}
+                  {% endif %}
+                {% endif %}
+
+                {% if data.SystemId != None %}
+                  {% if data.room.HeatExchange not in data.HeatExchange %}
+                    Systemgjenvinner ulikt romkrav.
+                {% endif %}
+            
+            {% endif %}
+            
+
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script src="{{ url_for('static', filename='js/ventilation_table.js') }}"></script>
+{% endblock %}

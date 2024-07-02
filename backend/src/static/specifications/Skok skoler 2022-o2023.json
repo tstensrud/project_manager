@@ -1,0 +1,615 @@
+{
+  "undervisningsrom": {
+      "air_per_person": 26.0,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2",
+    "notes": "",
+      "db_technical": "28dBA",
+      "db_neighbour": "48db",
+      "db_corridor": "34db",
+    "comments": ""
+  },
+
+  "grupperom": {
+      "air_per_person": 26.0,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2",
+    "notes": "",
+      "db_technical": "28dBA",
+      "db_neighbour": "48db",
+      "db_corridor": "34db",
+    "comments": ""
+  },
+
+  "vestibyle": {
+      "air_per_person": 26.0,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "",
+      "db_technical": "33dBA",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "korridor": {
+      "air_per_person": 0,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "",
+      "db_technical": "33dBA",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "bibliotek": {
+      "air_per_person": 26,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "samlingsrom": {
+      "air_per_person": 26,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Lydkravene skal bearbeides avhengig av valgt losning og planalgt bruk av disse rommene",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "38dB",
+    "comments": ""
+  },
+
+  "kunst_handverk_trearbeid_hardematerialer": {
+      "air_per_person": 50,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Sponavsug ved enkelte maskiner og elevenes arbeidsbenker",
+      "db_technical": "28dBA",
+      "db_neighbour": "60dB",
+      "db_corridor": "50dB",
+    "comments": ""
+  },
+
+  "kunst_handverk_leire_maling": {
+      "air_per_person": 40,
+      "air_emission": 7.2,
+      "air_process": 400,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Rom for kermamikkovn: avtrekk 500m3/h, kan reguleres ned til minimum når ovn ikke er i bruk",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "38dB",
+    "comments": ""
+  },
+
+  "kunst_handverk_tekn_design_tekstil_skaperverksted": {
+      "air_per_person": 40,
+      "air_emission": 7.2,
+      "air_process": 400,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "P, B",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Punktavsug med avtrekk, 80m3/h per stk",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "38dB",
+    "comments": ""
+  },
+
+  "naturfagsrom": {
+      "air_per_person": 26,
+      "air_emission": 7.2,
+      "air_process": 200,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "P, B",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Avtreksskap med lufthastighet 0,5m/s over lukeåpning. Avtrekk fra skap skal ha separat avtrekk ut i det fri",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "38dB",
+    "comments": ""
+  },
+
+  "forberedelse_naturfagsrom": {
+      "air_per_person": 26,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2",
+    "notes": "Avtreksskap med lufthastighet 0,5m/s over lukeåpning. Kjemikalieskap med 100m3/h avtrekk. Avtrekk fra skap skal ha separat avtrekk ut i det fri",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "38dB",
+    "comments": ""
+  },
+
+  "musikk_drama": {
+      "air_per_person": 50,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "",
+      "db_technical": "25dBA",
+      "db_neighbour": "60dB",
+      "db_corridor": "50dB",
+    "comments": ""
+  },
+
+  "musikk_dans_oving": {
+      "air_per_person": 75,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "",
+      "db_technical": "25dBA",
+      "db_neighbour": "60dB",
+      "db_corridor": "50dB",
+    "comments": ""
+  },
+
+  "kroppsoving": {
+      "air_per_person": 120,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Skillevegg mellom spilleflater skal ha Rw >= 28dB",
+      "db_technical": "28dBA",
+      "db_neighbour": "60dB",
+      "db_corridor": "50dB",
+    "comments": ""
+  },
+
+  "kroppsoving_garderobe_dusj": {
+      "air_per_person": 0,
+      "air_emission": 15,
+      "air_process": 50,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "P, B",
+    "room_control": "VAV,T,B,F",
+    "notes": "All tilluft tilfores i garderobe, avtrekk overstrømning  til dusj",
+      "db_technical": "33dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "kjokken_1_2_3": {
+      "air_per_person": 50,
+      "air_emission": 7.2,
+      "air_process": 400,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "P, B",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Avtrekk 450m3/h per hette/komfyr. Grunnventilasjon på minst 500m3/h. Hette over oppvaskmaskin av typen steamer/bakkemaskin minimum 450m3/h",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "kontorer": {
+      "air_per_person": 26,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "For kontorer skolehelse: Prosess på 100m3/h",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "38dB",
+    "comments": ""
+  },
+
+  "moterom_hvilerom": {
+      "air_per_person": 26,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "38dB",
+    "comments": ""
+  },
+
+  "kopirom": {
+      "air_per_person": 0,
+      "air_emission": 7.2,
+      "air_process": 150,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "CAV,T",
+    "notes": "Undertrykk 150m3/h",
+      "db_technical": "",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "personalrom": {
+      "air_per_person": 26,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "",
+      "db_technical": "33dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "personalgarderobe": {
+      "air_per_person": 26,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,B",
+    "notes": "",
+      "db_technical": "33dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "toalett_med_dusj": {
+      "air_per_person": 0,
+      "air_emission": 7.2,
+      "air_process": 150,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "CAV,T",
+    "notes": "Overstrømning fra tilstøtende areal, tilforsel ved gulv",
+      "db_technical": "33dBA",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "vindfang": {
+      "air_per_person": 0,
+      "air_emission": 3.6,
+      "air_process": 200,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "CAV,T",
+    "notes": "Tilluft med overstrømning inn til fellesareal",
+      "db_technical": "33dBA",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "elevgarderober": {
+      "air_per_person": 0,
+      "air_emission": 15,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "CAV,T",
+    "notes": "Overstrømning fra tilstøtende areal",
+      "db_technical": "33dBA",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "wc": {
+      "air_per_person": 0,
+      "air_emission": 7.2,
+      "air_process": 100,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "CAV",
+    "notes": "Overstrømning med avtrekk, tilforsel ved gulv",
+      "db_technical": "33dBA",
+      "db_neighbour": "",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "hcwc": {
+      "air_per_person": 0,
+      "air_emission": 7.2,
+      "air_process": 150,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "CAV",
+    "notes": "Overstrømning med avtrekk, tilforsel ved gulv",
+      "db_technical": "33dBA",
+      "db_neighbour": "",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "lager_mat": {
+      "air_per_person": 0,
+      "air_emission": 3.6,
+      "air_process": 200,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "CAV",
+    "notes": "Overstrømning med tilluft",
+      "db_technical": "",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "lager_bod": {
+      "air_per_person": 0,
+      "air_emission": 3.6,
+      "air_process": 200,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "C",
+    "notes": "Overstrømning fra tilstøtende areal",
+      "db_technical": "",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "renholdssentral": {
+      "air_per_person": 0,
+      "air_emission": 15,
+      "air_process": 500,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R, P",
+    "room_control": "VAV,T,B,F",
+    "notes": "Rommet skal ha minst 100m3/h undertrykk",
+      "db_technical": "33dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "bottekott": {
+      "air_per_person": 0,
+      "air_emission": 7.2,
+      "air_process": 100,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "C",
+    "notes": "Overstrømning fra tilstøtende areal",
+      "db_technical": "",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "teknisk_ventilasjon": {
+      "air_per_person": 0,
+      "air_emission": 3.6,
+      "air_process": 0,
+      "air_minimum": 0,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "CAV,T",
+    "notes": "",
+      "db_technical": "",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "teknisk_energi": {
+      "air_per_person": 0,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 0,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "CAV,T",
+    "notes": "",
+      "db_technical": "",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "teknisk_el_ikt": {
+      "air_per_person": 0,
+      "air_emission": 3.6,
+      "air_process": 0,
+      "air_minimum": 0,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "CAV,T",
+    "notes": "",
+      "db_technical": "",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "avfallsrom": {
+      "air_per_person": 0,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 7.2,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "",
+    "room_control": "",
+    "notes": "Eget avtrekk dersom eget rom",
+      "db_technical": "",
+      "db_neighbour": "",
+      "db_corridor": "",
+    "comments": ""
+  },
+
+  "vgs_undervisningsrom": {
+      "air_per_person": 35,
+      "air_emission": 7.2,
+      "air_process": 0,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Eget avtrekk dersom eget rom",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "vgs_mekanisk_fag": {
+      "air_per_person": 50,
+      "air_emission": 7.2,
+      "air_process": 400,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "R",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Eget avtrekk dersom eget rom",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+  "vgs_bygg_anlegg": {
+    "air_per_person": 50,
+    "air_emission": 7.2,
+    "air_process": 400,
+    "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "P, B",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Eget avtrekk dersom eget rom",
+    "db_technical": "28dBA",
+    "db_neighbour": "48dB",
+    "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "vgs_helse_oppvekst": {
+    "air_per_person": 50,
+    "air_emission": 7.2,
+    "air_process": 400,
+    "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "P, B",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Eget avtrekk dersom eget rom",
+    "db_technical": "28dBA",
+    "db_neighbour": "48dB",
+    "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "vgs_frisor": {
+      "air_per_person": 50,
+      "air_emission": 7.2,
+      "air_process": 400,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "P, B",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Eget avtrekk dersom eget rom",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+
+  "vgs_naturfag_kjemi": {
+      "air_per_person": 35,
+      "air_emission": 7.2,
+      "air_process": 600,
+      "air_minimum": 3.6,
+    "ventilation_principle": "Omrøring",
+    "heat_exchange": "P, B",
+    "room_control": "VAV,T,CO2,B",
+    "notes": "Avtreksskap med lufthastighet 0,5m/s over lukeåpning. Kjemikalieskap med 100m3/h avtrekk. Avtrekk fra skap skal ha separat avtrekk ut i det fri",
+      "db_technical": "28dBA",
+      "db_neighbour": "48dB",
+      "db_corridor": "34dB",
+    "comments": ""
+  },
+  
+  "spesialventilasjon": {
+    "air_per_person": 0,
+    "air_emission": 0,
+    "air_process": 0,
+    "air_minimum": 0,
+  "ventilation_principle": "",
+  "heat_exchange": "",
+  "room_control": "",
+  "notes": "",
+    "db_technical": "",
+    "db_neighbour": "",
+    "db_corridor": "",
+  "comments": ""
+}
+}

@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+{%block title%}Romskjema - romliste{% endblock %}
+{% block header %}Ventilasjon{% endblock %}
+
+
+{%block page_subtitle %} {% endblock %}
+{%block content %}
+    <!-- End new room form -->
+
+
+    <div class="summaries-wrapper">
+      <div class="summaries-table">
+        <div class="summaries-row header blue">
+          <div class="summaries-cell white">
+            {{room_data.RoomNumber}} {{room_data.RoomName}}
+          </div>
+          <div class="summaries-cell">
+          </div>
+        </div>
+        
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Bygg
+          </div>
+          <div class="summaries-cell">
+            {{room_data.building.BuildingName}}
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Areal
+          </div>
+          <div class="summaries-cell">
+            {{room_data.Area}} m<sup>2</sup>
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Antall personer
+          </div>
+          <div class="summaries-cell">
+            {{room_data.RoomPopulation}} stk.
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Kommentar
+          </div>
+          <div class="summaries-cell">
+            {{room_data.Comments}}
+          </div>
+        </div>
+
+        <div class="summaries-row header blue">
+          <div class="summaries-cell white">
+            Ventilasjonsdata oppsummert
+          </div>
+          <div class="summaries-cell">
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            System
+          </div>
+          <div class="summaries-cell">
+            {{system.SystemName}}
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Beregnet luftmengde
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.AirDemand}} m<sup>3</sup>/h
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Valgt tilluft
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.AirSupply}} m<sup>3</sup>/h
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Valgt avtrekk
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.AirExtract}} m<sup>3</sup>/h
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Summert personbelastning
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.AirPersonSum}} m<sup>3</sup>/h
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Summert personbelastning
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.AirEmissionSum}} m<sup>3</sup>/h
+          </div>
+        </div>
+
+        <div class="summaries-row header blue">
+          <div class="summaries-cell white">
+            Grunnlagsdata ventilasjon
+          </div>
+          <div class="summaries-cell">
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Luft per person
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.AirPerPerson}} m<sup>3</sup>/pers
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Emisjonsbelastning
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.AirEmission}} m<sup>3</sup>/h
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Prosessventilasjon
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.AirProcess}} m<sup>3</sup>/h
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Minimum ventilasjon
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.AirMinimum}} m<sup>3</sup>/h
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Ventilasjonsprinsipop
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.VentilationPrinciple}}
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Varmeveksler
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.HeatExchange}}
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Styring
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.RoomControl}}
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Presiseringer
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.Notes}}
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            dB teknisk utstyr
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.DbTechnical}}
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            dB korridor naborom
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.DbNeighbour}}
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            dB mot korridor
+          </div>
+          <div class="summaries-cell">
+            {{ventilation_data.Corridor}}
+          </div>
+        </div>
+
+        <div class="summaries-row">
+          <div class="summaries-cell">
+            Kommentarer
+          </div>
+          <div class="summaries-cell">
+                       
+            {% if ventilation_data.room.SpecialSystem != "Ja" %} 
+
+            {% if "CAV" in ventilation_data.RoomControl %}
+              {% if ventilation_data.AirSupply > ventilation_data.AirExtract%}
+                Tilluft > Avtrekk. 
+              {% elif ventilation_data.AirExtract > ventilation_data.AirSupply %}
+                Avtrekk > Tilluft. 
+              {% endif %}
+              {% if ventilation_data.AirSupple or ventilation_data.AirExtract < ventilation_data.AirDemand %}
+                Luftmengde mindre enn krav. 
+              {% endif %}
+            {% endif %}
+
+            {% if "CAV" not in ventilation_data.RoomControl %}
+              
+              {% if ventilation_data.AirSupply < ventilation_data.AirDemand %}
+                  Tilluft under krav. 
+                {% endif %}
+                
+                
+                {% if ventilation_data.AirSupply > ventilation_data.AirExtract %}
+                    Ubalanse i rom: + {{ventilation_data.AirSupply - ventilation_data.AirExtract}}
+                  {% elif ventilation_data.AirSupply < ventilation_data.AirExtract %}
+                    Ubalanse i rom: {{ventilation_data.AirSupply - ventilation_data.AirExtract}}
+                  {% endif %}
+                {% endif %}
+
+                {% if ventilation_data.SystemId != None %}
+                  {% if ventilation_data.room.HeatExchange not in ventilation_data.HeatExchange %}
+                    Systemgjenvinner ulikt romkrav.
+                {% endif %}
+            
+            {% endif %}
+            
+
+          {% endif %}
+
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+{% endblock %}

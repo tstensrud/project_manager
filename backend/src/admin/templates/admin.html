@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{%block title%}Administrator{% endblock %}
+{% block header %}Administrator{% endblock %}
+
+
+
+{%block page_subtitle %}Administrator{% endblock %}
+{%block content %}  
+<p>
+Legg til ny bruker
+    <form class="custom-form profile-form" method="POST" role="form" action="{{url_for('admin.new_user')}}">
+        <input type="email" name="email" id="email" placeholder="Epost" required>
+        <input type="text" name="name" id="name" placeholder="Navn" required>
+        <input type="text" name="password" id="password" placeholder="Passord" value="generatePassword()" required readonly>
+        <br>
+        Administrator
+        <input type="checkbox" id="special_system" name="special_system" tabindex="6">
+        <br>
+            <button type="submit" class="form-button" >
+                Registrer
+            </button>
+    </form>
+
+</p>
+
+<p>
+    Brukere
+</p>
+    <div class="table-wrapper">
+        <table class="fl-table">
+            <thead>
+                <tr>
+                <th>
+                    Bruker-ID
+                </th>
+                
+                <th>
+                    Bruker-epost
+                </th>
+                        
+                <th>
+                    Navn på bruker
+                </th>
+
+                <th>
+                    Administrator
+                </th>
+                
+                <th>
+                    Kontostatus
+                </th>
+                <th>
+                    Innlogget
+                </th>
+                <th>
+                  Nullstill passord
+              </th>
+                </tr>
+            </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>
+            {{user.id}}
+          </td>
+          <td>
+            {{user.email}}
+          </td>
+          <td>
+            {{user.name}}
+          </td>
+          <td>
+            {{user.admin}}
+          </td>
+          <td>
+            {% if not user.admin %}
+            <form id="a{{user.id}}" method="POST">
+              <input type="text" name="user_id" value="{{user.id}}" hidden>
+              <select class="table-select" name="status" onchange="changeActiveStatus('a{{user.id}}')">
+                {% if user.is_active %}
+                <option value="active">Aktiv</option>
+                <option value="inactive">Deaktiver</option>
+                {% else %}
+                <option value="inactive">Deaktivert</option>
+                <option value="active">Aktiver</option>
+                {% endif %}
+              </select>
+            </form>
+            {% endif %}
+          </td>
+          <td>
+            {{user.logged_in}}
+          </td>
+          {% endfor %}
+          <td>
+            Nullstill
+          </td>
+        </tr>
+        </tbody>
+      </table>
+  </div>
+  <script>
+        function generatePassword(length = 12) {
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            let password = "";
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
+            return password;
+        }
+
+        function generateAndPlacePassword() {
+            const password = generatePassword();
+            const passwordField = document.getElementById('password');
+            passwordField.value = password;
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            generateAndPlacePassword();
+        });
+  </script>
+  <script>
+  function changeActiveStatus(formId) {
+    document.getElementById(formId).submit();
+  }
+  </script>
+{% endblock %}

@@ -1,0 +1,8 @@
+- 2024-07-01 14:58:19.726774: VENT PROPS: <RoomTypes 4>
+
+- 2024-07-01 14:58:19.741396: new room id: a3e1eebf-db95-4f55-a69e-8414d4d21485
+
+- 2024-07-02 10:13:25.269939: VENT PROPS: <RoomTypes 1>
+
+- 2024-07-02 10:13:25.275945: new room id: 2e4P-pA1TraNKzs1rh6Mcw
+

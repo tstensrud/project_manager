@@ -1,0 +1,53 @@
+.cards {
+	display: flex;
+	gap: 2.5rem;
+	max-width: 1000px;
+	margin: 2vh;
+}
+
+.card {
+	border-radius: 16px;
+	box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.158);
+	max-width: 1000px;
+}
+
+.information {
+	background-color: white;
+	padding: 1.5rem;
+
+	.card-title {
+		font-size: 1.5rem;
+		color: var(--c-void);
+		line-height: 1.25;
+		& + * {
+			margin-top: 1rem;
+		}
+	}
+	
+	.details {
+		display: flex;
+		gap: 1rem;
+		div {
+			padding: .75em 1em;
+			background-color: white;
+			border-radius: 8px;
+			display: flex;
+			flex-direction: column-reverse;
+			gap: .125em;
+			flex-basis: 50%;
+		}
+		
+		dt {
+			font-size: .875rem;
+			color: var(--c-cold-purple);
+		}
+		
+		dd {
+			color: var(--c-indigo);
+			font-weight: 600;
+			font-size: 1.25rem;
+		}
+	}
+}
+
+
