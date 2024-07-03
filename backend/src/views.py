@@ -1,14 +1,15 @@
 from datetime import datetime, timezone, timedelta
 import os
 import json
+import random
 from uuid import uuid4
 from werkzeug.security import generate_password_hash
-from flask_login import current_user
 from flask import Blueprint, request, jsonify
 from . import models, db, globals
 from .models import User
+from . import db_operations as dbo
 from werkzeug.security import check_password_hash
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager, verify_jwt_in_request
 
 views = Blueprint("views", __name__)
 
@@ -31,8 +32,16 @@ def refresh_expiring_jwts(response):
     except (RuntimeError, KeyError):
         return response
 
+@views.route('/verify-token/', methods=['GET'])
+def verify_token():
+    try:
+        verify_jwt_in_request()
+        user_identity = get_jwt_identity()
+        return jsonify({"valie": True, "user": user_identity}), 200
+    except:
+        return jsonify({"valid": False}), 401
 
-@views.route('/token', methods=['GET', 'POST'])
+@views.route('/token/', methods=['GET', 'POST'])
 def token():
     if request.method == 'POST':
         email = request.json.get("email")
@@ -76,9 +85,10 @@ def initialize():
         db.session.commit()
         print("Admin account created")
     if spec_rooms_setup():
-        return jsonify({"message": "project initialized"})
+        dummy_project()
     else:
-        return jsonify({"error": "project failed to initialize"})
+        return jsonify({"error": "Failed to initialize app"})
+    return jsonify({"success": "App initialized"})
         
 
 '''
@@ -134,5 +144,48 @@ def spec_rooms_setup() -> bool:
                 return False
     
     return True
+
+
+'''
+Create dummy project
+'''
+def dummy_project():
+    new_project = dbo.new_project("123456", "Dummy project", "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus voluptatem odio vitae pariatur sint ipsum possimus porro, molestias ab sunt quidem sit quasi vel vero. Earum, ut? Dolorum, ipsa recusandae?")
+    spec = dbo.get_specification_by_row(1)
+    dbo.set_project_specification(new_project.uid, spec.uid)
+    for i in range(4):
+        dbo.new_building(new_project.uid, f"Bygg {i}")
+    floors = ["01", "10", "20", "30", "40"]
+    heat_ex = ["R", "P"]
+    buildings = dbo.get_all_project_buildings(new_project.uid)
+    spec_room_types = dbo.get_specification_room_types(spec.uid)
+
+    for i in range(9):
+        airflow = random.randint(2000,25000)
+        heatex = random.choice(heat_ex)
+        dbo.new_ventilation_system(new_project.uid, f"360.00{i}", f"Plassering {i}", f"Betjener område {i}", heatex, airflow, "")
+    
+
+    for i in range(200):
+        building = random.choice(buildings)
+        room_type = random.choice(spec_room_types)
+        area = random.randint(5,100)
+        pop = area = random.randint(0,70)
+
+        new_room = dbo.new_room(building.uid, room_type.uid, random.choice(floors), f"Nummer{i}", f"Navn{i}", area, pop,
+                     room_type.air_per_person, room_type.air_emission, room_type.air_process, room_type.air_minimum,
+                     room_type.ventilation_principle, room_type.heat_exchange, room_type.room_control,
+                     room_type.notes, room_type.db_technical, room_type.db_neighbour, room_type.db_corridor)
+        dbo.initial_ventilation_calculations(new_room)
+    
+        
+
+
+    
+
+
+
+
+    
 
 

@@ -9,7 +9,7 @@ from . import globals
 '''
 Project methods
 '''
-def new_project(number: str, name: str, description: str) -> bool:
+def new_project(number: str, name: str, description: str) -> models.Projects:
         uid = globals.encode_uid_base64(uuid4())
         new_project = models.Projects(uid=uid,
                                       project_number=number, 
@@ -159,7 +159,7 @@ def new_building(project_uid: int, building_name: str) -> bool:
         return False
     
 
-def get_all_project_buildings(project_uid: int):
+def get_all_project_buildings(project_uid: int) -> list:
     buildings = models.Buildings.query.filter(models.Buildings.project_uid == project_uid).order_by(models.Buildings.building_name).all()
     if buildings == []:
         return None
@@ -179,8 +179,6 @@ def new_room(building_uid: int, room_type_uid: int, floor: str, room_number: str
              air_per_person: float, air_emission: float, air_process: float, air_minimum: float, ventilation_principle: str, 
              heat_exchange: str, room_control: str, notes: str, db_technical: str, db_neighbour: str, db_corridor: str):
     building_energy_settings = get_building_energy_settings(building_uid)
-    #print(f"BUILDNIG ENERGY SETTINGS: {building_energy_settings} with ID")
-    #print(f"BUILDNIG ENERGY SETTINGS UID: {building_energy_settings.uid}")
     val = 1.0
     uid = globals.encode_uid_base64(uuid4())
     new_room = models.Rooms(
@@ -531,13 +529,21 @@ def update_airflow_changed_system(system_uid_new: int, system_uid_old: int) -> b
         return False
 
 
-def update_system_info(system_uid: int, system_number: str, system_location: str, service_area: str, airflow: float, heat_ex: str) -> bool:
+def update_system_info(system_uid: int, data: dict) -> bool:
+    print(f"Received data: {data}")
     system = get_system(system_uid)
-    system.system_name = system_number
-    system.location = system_location
-    system.service_area = service_area
-    system.air_flow = airflow
-    system.heat_exchange = heat_ex
+    processed_data = {}
+    for key, value in data.items():
+        processed_data[key] = value
+
+    processed_data_list = list(processed_data.keys())
+
+    table_columns = {column.key for column in inspect(models.VentilationSystems).mapper.column_attrs}
+    
+    for key in table_columns:
+        if key == processed_data_list[0]:
+            setattr(system, key, processed_data[key])
+            break
     try:
         db.session.commit()
         return True
@@ -565,6 +571,10 @@ def new_specifitaion(name: str) -> bool:
 
 def get_specification(spec_uid: str) -> models.Specifications:
     spec = db.session.query(models.Specifications).filter(models.Specifications.uid == spec_uid).first()
+    return spec
+
+def get_specification_by_row(id: str) -> models.Specifications:
+    spec = db.session.query(models.Specifications).filter(models.Specifications.id == id).first()
     return spec
 
 def get_specification_by_name(name: str) -> models.Specifications:

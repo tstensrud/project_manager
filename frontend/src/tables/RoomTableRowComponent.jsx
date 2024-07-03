@@ -3,15 +3,16 @@ import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../GlobalContext';
 
 import useFetch from '../hooks/useFetch'
-import useSubmitData from "../hooks/useSubmitData";
+import useUpdateData from '../hooks/useUpdateData'
+import useDeleteData from '../hooks/useDeleteData'
 
 
 function RoomTableRowComponent({roomId, msgToParent}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
         const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/project_api/${projectId}/rooms/get_room/${roomId}/`);
-        const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useSubmitData(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
-        const {data: deleteRoomId, responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit} = useSubmitData(`/project_api/${projectId}/rooms/delete_room/${roomId}/`);
+        const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useUpdateData(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
+        const {data: deleteRoomId, responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit} = useDeleteData(`/project_api/${projectId}/rooms/delete_room/${roomId}/`);
         const [editingCell, setEditingCell] = useState(null);
         const [editedData, setEditedData] = useState(null);
         const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
@@ -25,12 +26,9 @@ function RoomTableRowComponent({roomId, msgToParent}) {
 
         useEffect(() => {
             if(roomData) {
-                //setEditedData({ ...roomData });
                 setEditedData('');
             }
         },[roomData]);
-
-
 
         const sendMessageToParent = (msg) => {
             msgToParent(msg);
@@ -49,9 +47,12 @@ function RoomTableRowComponent({roomId, msgToParent}) {
         };
         
         const onDelete = async (e) => {
+            console.log("Attempting do delete: " + roomId);
             await deleteSubmit(e);
             setDisabledDeleteButton(true);
             setRowClass("deleted-row")
+            sendMessageToParent("deleted");
+            
         }
 
         const handleBlur = () => {

@@ -1,5 +1,5 @@
 from datetime import timedelta
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
@@ -52,6 +52,11 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
     
+    @app.before_request
+    def before_request():
+        if request.method == "OPTIONS":
+            return '',200
+
     return app
 
 def create_db(app):

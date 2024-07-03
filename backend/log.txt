@@ -6,3 +6,11 @@
 
 - 2024-07-02 10:13:25.275945: new room id: 2e4P-pA1TraNKzs1rh6Mcw
 
+- 2024-07-03 09:28:15.826282: VENT PROPS: <RoomTypes 3>
+
+- 2024-07-03 09:28:15.834690: new room id: fzn2LcQSScymnYBgjBO6wQ
+
+- 2024-07-03 09:28:27.416826: VENT PROPS: <RoomTypes 5>
+
+- 2024-07-03 09:28:27.423825: new room id: tusCUBlER-6tUhetkBVa2Q
+

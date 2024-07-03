@@ -4,14 +4,16 @@ import { GlobalContext } from '../GlobalContext';
 
 import useFetch from '../hooks/useFetch'
 import useSubmitData from "../hooks/useSubmitData";
+import useUpdateData from '../hooks/useUpdateData'
+import useDeleteData from '../hooks/useDeleteData'
 
 
-function SystemTableRowComponent({roomId, msgToParent}) {
+function SystemTableRowComponent({systemId, msgToParent}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
-        const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/project_api/${projectId}/rooms/get_room/${roomId}/`);
-        const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useSubmitData(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
-        const {data: deleteRoomId, responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit} = useSubmitData(`/project_api/${projectId}/rooms/delete_room/${roomId}/`);
+        const {data: systemData, loading: systemLoading, error: systemError, refetch: systemRefetch} = useFetch(`/project_api/${projectId}/get_system/${systemId}/`);
+        const {data: updatedSystemData, response, setData, handleSubmit: updateSystemData} = useUpdateData(`/project_api/${projectId}/update_system/${systemId}/`);
+        const {data: deleteSystemId, responseDeleteSystem, setData: setDeleteData, handleSubmit: deleteSubmit} = useDeleteData(`/project_api/${projectId}/delete_system/${systemId}/`);
         const [editingCell, setEditingCell] = useState(null);
         const [editedData, setEditedData] = useState(null);
         const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
@@ -20,15 +22,15 @@ function SystemTableRowComponent({roomId, msgToParent}) {
 
         useEffect(() => {
             setActiveProject(projectId);
-            setDeleteData({"roomId": roomId});
+            setDeleteData({"roomId": systemId});
         },[]);
 
         useEffect(() => {
-            if(roomData) {
+            if(systemData) {
                 //setEditedData({ ...roomData });
                 setEditedData('');
             }
-        },[roomData]);
+        },[systemData]);
 
 
 
@@ -52,6 +54,7 @@ function SystemTableRowComponent({roomId, msgToParent}) {
             await deleteSubmit(e);
             setDisabledDeleteButton(true);
             setRowClass("deleted-row")
+            sendMessageToParent("deleted");
         }
 
         const handleBlur = () => {
@@ -60,10 +63,10 @@ function SystemTableRowComponent({roomId, msgToParent}) {
     
         const handleKeyDown = async (e) => {
             if (e.key === "Enter") {
-                await updateRoomData(e);
+                await updateSystemData(e);
                 handleBlur();
                 setData('');
-                roomRefetch();
+                systemRefetch();
             } if (e.key == "Escape") {
                 handleBlur();
                 return;
@@ -80,19 +83,19 @@ function SystemTableRowComponent({roomId, msgToParent}) {
 
         const renderEditableCell = (cellName) => (
             <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)}>
-            {editingCell === cellName && roomData ? (
+            {editingCell === cellName && systemData ? (
                 
                 <input
                     type="text"
                     className="table-input"
-                    value={roomData[cellName]}
+                    value={systemData[cellName]}
                     onChange={(e) => handleChange(e, cellName)}
                     onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
                     autoFocus
                 />
             ) : (
-                roomData ? roomData.room_data[cellName] : ''
+                systemData ? systemData.system_data[cellName] : ''
             )}
         </td>   
         );
@@ -101,14 +104,19 @@ function SystemTableRowComponent({roomId, msgToParent}) {
         <>
         {response && response.error !== null ? (<>{sendMessageToParent(response.error)}</>) : (<></>)}
         <tr className={markedRow}>
-            <td className={cellClass} onClick={handleOnMarkedRow}>{roomData ? roomData.room_data.BuildingName : ''}</td>
-            <td className={cellClass} onClick={handleOnMarkedRow}>{roomData ? roomData.room_data.Floor : ''}</td>
-            {renderEditableCell("RoomNumber")}
-            <td className={cellClass} onClick={handleOnMarkedRow}>{roomData ? roomData.room_data.RoomTypeName : ''}</td>
-            {renderEditableCell("RoomName")}
-            {renderEditableCell("Area")}
-            {renderEditableCell("RoomPopulation")}
-            {renderEditableCell("Comment")}
+            <td className={cellClass} onClick={handleOnMarkedRow}>{systemData ? systemData.system_data.SystemName : ''}</td>
+            {renderEditableCell("Location")}
+            {renderEditableCell("ServiceArea")}
+            {renderEditableCell("AirFlow")}
+            {renderEditableCell("HeatExchange")}
+            <td className={cellClass} onClick={handleOnMarkedRow}>{systemData ? systemData.system_data.AirFlowSupply : ''}</td>
+            <td className={cellClass} onClick={handleOnMarkedRow}>{systemData ? systemData.system_data.AirFlowExtract : ''}</td>
+            <td className={cellClass} onClick={handleOnMarkedRow}>{systemData ? systemData.system_data.SpecialSystem : ''}</td>
+            <td className={cellClass} onClick={handleOnMarkedRow}>
+                {systemData && systemData.AirFlowSupply !== systemData.AirFlowExtract ? (<>Ubalanse på system</>) : (<></>)}
+                {systemData && systemData.AirFlowSupply > systemData.AirFlow ? (<>For mye tilluft</>) : (<></>)}
+                {systemData && systemData.AirFlowExtract > systemData.AirFlow ? (<>For mye avtrekk</>) : (<></>)}
+            </td>
             <td className={cellClass}>
                 <button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button>
             </td>

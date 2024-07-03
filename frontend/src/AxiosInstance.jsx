@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
 
 const AxiosInstance = axios.create(
   
@@ -23,8 +21,6 @@ AxiosInstance.interceptors.request.use((config) => {
 }, (error) => {
 
   return Promise.reject(error)
-
-  
 });
 
 export default AxiosInstance;

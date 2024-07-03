@@ -32,9 +32,8 @@ def refresh_expiring_jwts(response):
 # 
 #    
 
-
-@project_api_bp.route('/', methods=['GET'])
 @jwt_required()
+@project_api_bp.route('/', methods=['GET'])
 def project(project_uid):
     project = dbo.get_project(project_uid)
     specification = dbo.get_specification(project.specification)
@@ -49,22 +48,20 @@ def project(project_uid):
     else:
         return jsonify({"data": "Fant ikke prosjekt"})
 
-@project_api_bp.route('/settings/', methods=['GET'])
 @jwt_required()
+@project_api_bp.route('/settings/', methods=['GET'])
 def settings(project_uid):
     project = dbo.get_project(project_uid)
     project_data = project.get_json()
     return jsonify({"data": project_data})
 
-
-@project_api_bp.route('/reports', methods=['GET'])
 @jwt_required()
+@project_api_bp.route('/reports', methods=['GET'])
 def reports(project_id):
     pass
 
-
-@project_api_bp.route('/settings/update_project/', methods=['POST'])
 @jwt_required()
+@project_api_bp.route('/settings/update_project/', methods=['POST'])
 def set_spec(project_uid):
     data = request.get_json()
     #print(f"Specdata: {data}")
@@ -79,9 +76,8 @@ def set_spec(project_uid):
 #
 #
 
-
-@project_api_bp.route('/new_todo_item', methods=['POST'])
 @jwt_required()
+@project_api_bp.route('/new_todo_item', methods=['POST'])
 def new_todo_item(project_id):
     if request.method == "POST":
         return_endpoint = request.referrer
@@ -97,9 +93,8 @@ def new_todo_item(project_id):
                     response = {"success": False, "redirect": return_endpoint}
         return jsonify(response)
 
-
-@project_api_bp.route('/todo_item_complete', methods=['POST'])
 @jwt_required()
+@project_api_bp.route('/todo_item_complete', methods=['POST'])
 def todo_item_complete(project_id):
     if request.method == "POST":
         return_endpoint = request.referrer
@@ -121,8 +116,8 @@ def todo_item_complete(project_id):
 #
 #
 
-@project_api_bp.route('/buildings/', methods=['GET'])
 @jwt_required()
+@project_api_bp.route('/buildings/', methods=['GET'])
 def buildings(project_uid):
     buildings = dbo.get_all_project_buildings(project_uid)
     if buildings is None:
@@ -133,8 +128,8 @@ def buildings(project_uid):
             building_data[building.uid] = dbo.get_building_data(building.uid)
         return jsonify({"building_data": building_data})
 
-@project_api_bp.route('/buildings/get_project_buildings/', methods=["GET"])
 @jwt_required()
+@project_api_bp.route('/buildings/get_project_buildings/', methods=["GET"])
 def get_project_buildings(project_uid):
     buildings = dbo.get_all_project_buildings(project_uid)
 
@@ -146,9 +141,8 @@ def get_project_buildings(project_uid):
             building_data[building.uid] = building.building_name
         return jsonify({"building_data": building_data})
 
-
-@project_api_bp.route('/buildings/new_building/', methods=["POST"])
 @jwt_required()
+@project_api_bp.route('/buildings/new_building/', methods=["POST"])
 def new_building(project_uid):
     data = request.get_json()
     name = escape(data["buildingName"])
@@ -167,8 +161,8 @@ def new_building(project_uid):
 #
 #
 
-@project_api_bp.route('/rooms/', methods=['GET', 'POST'])
 @jwt_required()
+@project_api_bp.route('/rooms/', methods=['GET', 'POST'])
 def rooms(project_uid):
     project = dbo.get_project(project_uid)
     specification = project.specification
@@ -183,10 +177,8 @@ def rooms(project_uid):
             return jsonify({"room_data": None, "spec": specification})
 
     if request.method == "POST":
-        #print("A post request was reveiced")
         project_specification = project.specification
         data = request.get_json()
-        #print(f"JSON data received: {data}")
         building_id = escape(data["buildingId"])
         room_type_id = escape(data["roomType"])
         floor = escape(data["floor"].strip())
@@ -209,30 +201,26 @@ def rooms(project_uid):
             return jsonify({"error": "Persontantall må kun inneholde tall"})
     
         vent_props = dbo.get_room_type_data(room_type_id, project_specification)
-        globals.log(f"VENT PROPS: {vent_props}")
         new_room_id = dbo.new_room(building_id, room_type_id, floor, room_number, name, area, people, 
                                     vent_props.air_per_person, vent_props.air_emission,
                                     vent_props.air_process, vent_props.air_minimum,
                                     vent_props.ventilation_principle, vent_props.heat_exchange,
                                     vent_props.room_control, vent_props.notes, vent_props.db_technical,
                                     vent_props.db_neighbour, vent_props.db_corridor)
-        globals.log(f"new room id: {new_room_id}")
         dbo.initial_ventilation_calculations(new_room_id)
-        
 
-        return jsonify({"message": "Rom opprettet"})
+        return jsonify({"message": "Rom opprettet"}) 
 
-@project_api_bp.route('/rooms/get_room/<room_uid>/', methods=['GET'])
 @jwt_required()
+@project_api_bp.route('/rooms/get_room/<room_uid>/', methods=['GET'])
 def get_room(project_uid, room_uid):
     room = dbo.get_room(room_uid)
     room_data = room.get_json_room_data()
     #print(f"ROOM DATA IS: {room_data}")
     return jsonify({"room_data": room_data})
 
-
-@project_api_bp.route('/rooms/update_room/<room_uid>/', methods=['POST'])
 @jwt_required()
+@project_api_bp.route('/rooms/update_room/<room_uid>/', methods=['PATCH'])
 def udpate_room(project_uid, room_uid):
     data = request.get_json()
     room = dbo.get_room(room_uid)
@@ -250,75 +238,88 @@ def udpate_room(project_uid, room_uid):
                 converted_value = int(value)
             except ValueError as e:
                 return jsonify({"error": "Personer må kun inneholde tall"})
-        if dbo.update_room_data(room_uid, processed_data):
-            dbo.update_ventilation_calculations(room_uid)
-        else:
-            return jsonify({"error": "Kunne ikke oppdatere rom-data"})
+    if dbo.update_room_data(room_uid, processed_data):
+        dbo.update_ventilation_calculations(room_uid)
+    else:
+        return jsonify({"error": "Kunne ikke oppdatere rom-data"})
     
     return jsonify({"message": f"Received data {room_uid}"})
 
-@project_api_bp.route('/rooms/delete_room/<room_uid>/', methods=['POST'])
 @jwt_required()
+@project_api_bp.route('/rooms/delete_room/<room_uid>/', methods=['DELETE'])
 def delete_room(project_uid, room_uid):
-    if request.method == "POST":
-        data = request.get_json()
-        received_room_uid = escape(data["roomId"])
-        if room_uid != received_room_uid:
-            globals.log(f"Delete room attempted with mismatch between endpoint room_id and json-data-room id")
-            return jsonify({"message": "Feil i sletting av rom."})
-        if dbo.delete_room(room_uid):
-            response = {"message": "Rom slettet"}
-        else:
-            response = {"message": "Kunne ikke slette rom"}
+    print("Reaced delete-endpoint")
+    data = request.get_json()
+    print(f"Data received: {data}")
+    received_room_uid = escape(data["roomId"])
+    if room_uid != received_room_uid:
+        globals.log(f"Delete room attempted with mismatch between endpoint room_id and json-data-room id")
+        return jsonify({"message": "Feil i sletting av rom."})
+    if dbo.delete_room(room_uid):
+        response = {"message": "Rom slettet"}
+    else:
+        response = {"message": "Kunne ikke slette rom"}
     return jsonify({"message": "Rom slettet"})
 
 #
 #               
-#   SYSTEMS
+#   VENTILATIONSYSTEMS
 #
 #
 
 @jwt_required()
 @project_api_bp.route('/systems/', methods=['GET'])
 def ventsystems(project_uid):
-    project = dbo.get_project(project_uid)
-    data = request.get_json()
-    systems = dbo.get_all_systems(project.uid)
+    systems = dbo.get_all_systems(project_uid)
     if systems == []:
-        return jsonify({"system_data": None})
-    
-    return jsonify({"system_data": systems})
+        return jsonify({"error": "Ingen systemer i databasen"})
+    systems_data = list(map(lambda x: x.get_json(), systems))
+    return jsonify({"systems_data": systems_data})
+
+@jwt_required()
+@project_api_bp.route('/get_system/<system_uid>/', methods=['GET'])
+def get_system(project_uid, system_uid):
+    system = dbo.get_system(system_uid)
+    system_data = system.get_json()
+    if system_data:
+        return jsonify({"system_data": system_data})
+    else:
+        return jsonify({"error": "Fant ikke system"})
 
 @jwt_required()
 @project_api_bp.route('/new_system/', methods=['POST'])
 def new_system(project_uid):
+    data = request.get_json()
+    print(f"New system data received: {data}")
     project = dbo.get_project(project_uid)
-    system_number = escape(request.form.get("system_number").strip())
-    if dbo.check_if_system_number_exists(project.id, system_number):
-        return jsonify({"error", "Systemnummer finnes allerede"})
-    
+    system_number = escape(data["systemNumber"].strip())
+
+    if dbo.check_if_system_number_exists(project_uid, system_number):
+        return jsonify({"error": "Systemnummer finnes allerede"})
     try:
-        airflow = float(escape(request.form.get("airflow").strip()))
+        airflow = float(escape(data["airflow"].strip()))
     except ValueError:
         return jsonify({"error": "Luftmengde må kun inneholde tall"})
     
-    service_area = escape(request.form.get("system_service").strip())
-    placement = escape(request.form.get("system_placement").strip())
-    system_type = escape(request.form.get("special_system"))
-    if system_type != "None":
-        system_type = "Ja"
+    service_area = escape(data["serviceArea"].strip())
+    placement = escape(data["placement"].strip())
+    if "special_system" in data:
+        special_system = escape(data["special_system"])
+        if special_system is True or special_system == "True":
+            special_system = "Ja"
+        else:
+            special_system = ""
     else:
-        system_type = ""
+        special_system = ""
     
-    
-    system_h_ex_in = escape(request.form.get("heat_exchange").strip())
+    system_h_ex_in = escape(data["heat_exchange"].strip())
     if system_h_ex_in == "none":
         return jsonify({"error", "Du velge type gjenvinner"})
     if system_h_ex_in != "0":
         system_h_ex = system_h_ex_in.capitalize()
     else: system_h_ex = None
 
-    new_system = dbo.new_ventilation_system(project.uid, system_number, placement, service_area, system_h_ex, airflow, system_type)
+    new_system = dbo.new_ventilation_system(project.uid, system_number, placement, service_area, system_h_ex, airflow, special_system)
     if new_system:
         return jsonify({"success": True})
     else:
@@ -327,37 +328,28 @@ def new_system(project_uid):
 
 
 @jwt_required()
-@project_api_bp.route('/update_system/<system_uid>/', methods=['POST'])
-def update_system(project_id):
+@project_api_bp.route('/update_system/<system_uid>/', methods=['PATCH'])
+def update_system(project_uid, system_uid):
     data = request.get_json()
-    project_id = escape(data["project_id"])
-    system_id = escape(data["system_id"])
-    system_number = escape(data["system_number"].strip())
-    system_location = escape(data["system_location"].strip())
-    service_area = escape(data["service_area"].strip())
-    airflow = escape(data["airflow"].strip())
-    airflow_float = globals.pattern_float(airflow)
-    heat_ex = escape(data["system_hx"].strip())
+    processed_data = {}
+    for key, value in data.items():
+        key = globals.camelcase_to_snake(key)
+        if key == "air_flow":
+            try:
+                convert = float(value)
+            except ValueError:
+                return jsonify({"error": "Viftekapasitet må kun inneholde tall"})
+        processed_data[key] = escape(value.strip())
+    dbo.update_system_info(system_uid, processed_data)
     
-    if dbo.update_system_info(system_id, system_number, system_location, service_area, airflow_float, heat_ex):
-        flash("System-data oppdatert", category="success")
-        response = {"success": True, "redirect": url_for("ventsystems.ventsystems", project_id=project_id)}
-    else:
-        flash("Kunne ikke oppdatere system-data", category="error")
-        response = {"success": False, "redirect": url_for("ventsystems.ventsystems", project_id=project_id)}
-    
-    return jsonify(response)
+    return jsonify({"success": True})
 
 @jwt_required()
-@project_api_bp.route('/delete_system/<system_uid/', methods=['POST'])
-def delete_system(project_id):
-    if request.method == "POST":
-        data = request.get_json()
-        system_id = escape(data["system_id"])
-        if dbo.delete_system(system_id):
-            flash("System slettet", category="success")
-            response = {"success": True, "redirect": url_for("ventsystems.ventsystems", project_id=project_id)}
-        else:
-            flash("Kunne ikke slette system", category="error")
-            response = {"success": False, "redirect": url_for("ventsystems.ventsystems", project_id=project_id)}
-        return jsonify(response)
+@project_api_bp.route('/delete_system/<system_uid>/', methods=['DELETE'])
+def delete_system(project_uid, system_uid):
+    data = request.get_json()
+    if dbo.delete_system(system_uid):
+        response = {"success": True}
+    else:
+        response = {"success": False}
+    return jsonify(response)

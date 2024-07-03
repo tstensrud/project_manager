@@ -9,6 +9,7 @@ import RoomIcon from '../../assets/svg/roomsIcon.svg?react'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import TableHeaderComponent from "../../tables/TableHeaderComponent";
 import RoomTableRowComponent from "../../tables/RoomTableRowComponent";
+import MessageBox from '../../layout/MessageBox';
 
 
 function Rooms () {
@@ -22,7 +23,18 @@ function Rooms () {
     const {data: newRoomData, response, setData, handleSubmit} = useSubmitData(`/project_api/${projectId}/rooms/`);
     const [childMessage, setChildMessage] = useState('');
     const [errorPopUpClass, setErrorPopUpClass] = useState('popup-hide');
-    const [childMessagePopUpClass, setChildMessagePopUpClass] = useState('popup-hide');
+
+    
+    const columnTitles = [  {text: "Bygg"},
+        {text: "Etasje"},
+        {text: "Romnr"},
+        {text: "Romtype"},
+        {text: "Romnavn"},
+        {text: "Areal m2"},
+        {text: "Personer"},
+        {text: "Kommentarer"},
+        {text: "Slett rom"}
+    ];
 
     useEffect(() => {
         if (roomData && roomData.spec) {
@@ -39,44 +51,15 @@ function Rooms () {
 
     useEffect(() => {
         setActiveProject(projectId);
-    },[]);
-
-    useEffect(() => {
-        if (response && response.error !== null) {
-            setErrorPopUpClass('popup-show');
-        } else {
-            setErrorPopUpClass('popup-hide');
-        }
-    }, [response]);
-    
-    useEffect(() => {
-        if (childMessage && childMessage !== undefined && childMessage !== '') {
-            setChildMessagePopUpClass('popup-show');
-        } else {
-            setChildMessagePopUpClass('popup-hide');
-        }
-    }, [childMessage]);
-
-    const columnTitles = [  {text: "Bygg"},
-                            {text: "Etasje"},
-                            {text: "Romnr"},
-                            {text: "Romtype"},
-                            {text: "Romnavn"},
-                            {text: "Areal m2"},
-                            {text: "Personer"},
-                            {text: "Kommentarer"},
-                            {text: "Slett rom"}
-    ];
+    },[]);  
 
     const handleChildMessage = (msg) => {
-        if (msg !== undefined) {
+        if (msg === "deleted") {
+            roomRefetch();
+        }
+        else if (msg !== undefined) {
             setChildMessage(msg);
         }
-    }
-
-    const closeMessagePopUp = () => {
-        setChildMessagePopUpClass('popup-hide');
-        setErrorPopUpClass('popup-hide');
     }
     
     const handleFormChange = (e) => {
@@ -96,17 +79,9 @@ function Rooms () {
     return (
         <>
 
-        {response && response.error && response.error !== null ? (
-        <div className={errorPopUpClass}>
-            <span className="popup-close" onClick={closeMessagePopUp}>×</span>
-            <p>Feil: {response.error}</p>
-        </div> ) : (<span></span>)}
+        {response && response.error && response.error !== null ? (<MessageBox message={response.error} /> ) : (<></>)}
 
-        { childMessage && childMessage !== undefined || childMessage !== '' ? (
-        <div className={childMessagePopUpClass}>
-            <span className="popup-close" onClick={closeMessagePopUp}>×</span>
-            <p>Feil: {childMessage}</p>
-        </div> ) : (<span></span>)}
+        { childMessage && <MessageBox message={childMessage} />}
 
         <SubTitleComponent>
            <RoomIcon/> Romskjema
@@ -161,6 +136,9 @@ function Rooms () {
                                 </>
                             )
                         }
+                        <tr>
+                            <td></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

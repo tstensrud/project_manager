@@ -18,9 +18,9 @@ import Specification from './content/specifications/Specification';
 import NewSpec from './content/specifications/NewSpec';
 import UserProfile from "./content/userprofile/UserProfile";
 import Admin from "./admin/Admin";
-import NotFound from "./layout/NotFound";
 import useToken from './login/UseToken';
 import Logout from './login/Logout';
+import ProtectedRoute from './login/ProtectedRoute';
 
 
 
@@ -36,31 +36,28 @@ function App() {
       <Routes>
         <Route path="logout/:uuid" element={<Logout token={removeToken}/>}/>
         <Route path="/noaccess" element={<NoAccess />} />
-        {
-        !token && token !== "" && token !== undefined ? 
-        (
-          <Route path="/" element={<Login setToken={setToken}/>} />
+        {!token ? ( <Route path="/" element={<Login setToken={setToken}/>} />
         ) : (
+          <>
             <Route path="/" element={<Layout />}>
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="specifications/:projectId" element={<Specifications />} />
-                <Route path="specifications/:suid/:projectId" element={<Specification />} />
-                <Route path="newspecification" element={<NewSpec />} />
-                <Route path="userprofile/:uuid" element={<UserProfile  />} />
-                <Route path="admin" element={<Admin  />} />
-                <Route path="newproject" element={<NewProject />} />
-                <Route path="project/:projectId" element={<Project />} />
-                <Route path="settings/:projectId" element={<Settings />} />
-                <Route path="buildings/:projectId" element={<Buildings  />} />
-                <Route path="rooms/:projectId" element={<Rooms  />} />
-                <Route path="ventilation/:projectId" element={<Ventilation  />} />
-                <Route path="ventsystems/:projectId" element={<VentSystems  />} />
-                <Route path="heating/:projectId" element={<Heating />} />
-                <Route path="cooling/:projectId" element={<Cooling  />} />
+                <Route path="dashboard" element={<ProtectedRoute element={<Dashboard />}/>} />
+                <Route path="specifications/:projectId" element={<ProtectedRoute element={<Specifications />}/>} />
+                <Route path="specifications/:suid/:projectId" element={<ProtectedRoute element={<Specification />}/>} />
+                <Route path="newspecification" element={<ProtectedRoute element={<NewSpec />}/>} />
+                <Route path="userprofile/:uuid" element={<ProtectedRoute element={<UserProfile/>}/>} />
+                <Route path="admin" element={<ProtectedRoute element={<Admin/>}/>}/>
+                <Route path="newproject" element={<ProtectedRoute element={<NewProject />}/>} />
+                <Route path="project/:projectId" element={<ProtectedRoute element={<Project />}/>} />
+                <Route path="settings/:projectId" element={<ProtectedRoute element={<Settings />}/>} />
+                <Route path="buildings/:projectId" element={<ProtectedRoute element={<Buildings/>}/>} />
+                <Route path="rooms/:projectId" element={<ProtectedRoute element={<Rooms/>}/>}/>
+                <Route path="ventilation/:projectId" element={<ProtectedRoute element={<Ventilation/>}/>} />
+                <Route path="ventsystems/:projectId" element={<ProtectedRoute element={<VentSystems/>}/>} />
+                <Route path="heating/:projectId" element={<ProtectedRoute element={<Heating/>}/>}/>
+                <Route path="cooling/:projectId" element={<ProtectedRoute element={<Cooling/>}/>} />
             </Route>
-        )
-        }
-        <Route path="*" element={<NotFound />} />
+            </> )}
+        <Route path="*" element={<NoAccess />} />
       </Routes>
     </Router>
 

@@ -43,9 +43,9 @@ function Dashboard() {
           <div className="cards">
             <div className="information [ card ]">
               <h2 className="card-title">Velg prosjekt</h2>
+              <form className="custom-form profile-form" onSubmit={handleSubmit}>
               <p className="info">Velg prosjekt å jobbe på fra menyen under, eller opprett nytt prosjekt fra menyen over: Dashboard - Nytt prosjekt</p>
               <p className="info">
-                <form className="custom-form profile-form" onSubmit={handleSubmit}>
                   <select onChange={handleChange}>
                     <option>- Velg prosjekt -</option>
                     {Array.isArray(data?.data) ? (
@@ -61,8 +61,8 @@ function Dashboard() {
                     Gå til valgt prosjekt
                   </button>
                   </p>
-                </form>
               </p>
+              </form>
             </div>
           </div>
 
