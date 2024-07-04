@@ -17,6 +17,9 @@ function Buildings() {
     
     useEffect(() => {
         setActiveProject(projectId);
+        if (data) {
+            console.log(data.building_data);
+        }
     },[]);
 
 

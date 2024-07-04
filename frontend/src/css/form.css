@@ -60,6 +60,44 @@ select{
     cursor: pointer;
 }
 
+.table-sorting-button{
+    font-family: "Roboto", sans-serif;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    text-transform: uppercase;
+    outline: 0;
+    background: #4c82af;
+    border: 0;
+    padding: 10px;
+    color: #FFFFFF;
+    font-size: 14px;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer;
+}
+
+.table-sorting-button:hover {
+    background-color: #324960;
+    color: white;
+}
+
+.table-sorting-button-active{
+    font-family: "Roboto", sans-serif;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    text-transform: uppercase;
+    outline: 0;
+    background: #324960;
+    border: 0;
+    padding: 10px;
+    color: #FFFFFF;
+    font-size: 14px;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer;
+}
+
+
 .table-button{
     color: black;
     width:fit-content;
@@ -68,7 +106,6 @@ select{
     outline: none;
     border: 1px solid black;
     background-color: #e9e9e9;
-    font-family:Poppins;
     font-size: 14px;
     cursor: pointer;
     transition-duration: 0.25s;
@@ -82,7 +119,6 @@ select{
     outline: none;
     border: 1px solid black;
     background-color: #e9e9e9;
-    font-family:Poppins;
     font-size: 14px;
     cursor: pointer;
     transition-duration: 0.25s;

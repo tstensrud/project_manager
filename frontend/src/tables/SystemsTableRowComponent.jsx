@@ -104,20 +104,21 @@ function SystemTableRowComponent({systemId, msgToParent}) {
         <>
         {response && response.error !== null ? (<>{sendMessageToParent(response.error)}</>) : (<></>)}
         <tr className={markedRow}>
-            <td className={cellClass} onClick={handleOnMarkedRow}>{systemData ? systemData.system_data.SystemName : ''}</td>
+        <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+            <td className={cellClass}>{systemData ? systemData.system_data.SystemName : ''}</td>
             {renderEditableCell("Location")}
             {renderEditableCell("ServiceArea")}
             {renderEditableCell("AirFlow")}
             {renderEditableCell("HeatExchange")}
-            <td className={cellClass} onClick={handleOnMarkedRow}>{systemData ? systemData.system_data.AirFlowSupply : ''}</td>
-            <td className={cellClass} onClick={handleOnMarkedRow}>{systemData ? systemData.system_data.AirFlowExtract : ''}</td>
-            <td className={cellClass} onClick={handleOnMarkedRow}>{systemData ? systemData.system_data.SpecialSystem : ''}</td>
-            <td className={cellClass} onClick={handleOnMarkedRow}>
+            <td className={cellClass} style={{ cursor: 'pointer' }}>{systemData ? systemData.system_data.AirFlowSupply : ''}</td>
+            <td className={cellClass} style={{ cursor: 'pointer' }}>{systemData ? systemData.system_data.AirFlowExtract : ''}</td>
+            <td className={cellClass} style={{ cursor: 'pointer' }}>{systemData ? systemData.system_data.SpecialSystem : ''}</td>
+            <td className={cellClass} style={{ cursor: 'pointer' }}>
                 {systemData && systemData.AirFlowSupply !== systemData.AirFlowExtract ? (<>Ubalanse på system</>) : (<></>)}
                 {systemData && systemData.AirFlowSupply > systemData.AirFlow ? (<>For mye tilluft</>) : (<></>)}
                 {systemData && systemData.AirFlowExtract > systemData.AirFlow ? (<>For mye avtrekk</>) : (<></>)}
             </td>
-            <td className={cellClass}>
+            <td className={cellClass} style={{ cursor: 'pointer' }}>
                 <button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button>
             </td>
         </tr>

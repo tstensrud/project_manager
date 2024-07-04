@@ -170,9 +170,13 @@ def dummy_project():
         building = random.choice(buildings)
         room_type = random.choice(spec_room_types)
         area = random.randint(5,100)
-        pop = area = random.randint(0,70)
+        pop = random.randint(1,70)
+        floor = random.choice(floors)
+        number = random.randint(100,999)
+        room_number = f"{floor}{number}"
 
-        new_room = dbo.new_room(building.uid, room_type.uid, random.choice(floors), f"Nummer{i}", f"Navn{i}", area, pop,
+
+        new_room = dbo.new_room(building.uid, room_type.uid, floor, room_number, f"Navn{i}", area, pop,
                      room_type.air_per_person, room_type.air_emission, room_type.air_process, room_type.air_minimum,
                      room_type.ventilation_principle, room_type.heat_exchange, room_type.room_control,
                      room_type.notes, room_type.db_technical, room_type.db_neighbour, room_type.db_corridor)

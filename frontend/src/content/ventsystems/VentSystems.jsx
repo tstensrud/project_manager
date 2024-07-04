@@ -52,6 +52,7 @@ function VentSystems () {
     }
 
     const columnTitles = [
+        {text: "#"},
         {text: "Systemnr"},
         {text: "Plassering"},
         {text: "Betjeningsområde"},

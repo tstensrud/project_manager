@@ -108,14 +108,11 @@ def todo_item_complete(project_id):
                     response = {"success": False, "redirect": return_endpoint}
             
     return jsonify(response)
-
-
 #
 #
 #   BUILDINGS
 #
 #
-
 @jwt_required()
 @project_api_bp.route('/buildings/', methods=['GET'])
 def buildings(project_uid):
@@ -123,22 +120,10 @@ def buildings(project_uid):
     if buildings is None:
         return jsonify({"building_data": None})
     else:
-        building_data = {}
+        #building_data = {}
+        building_data = []
         for building in buildings:
-            building_data[building.uid] = dbo.get_building_data(building.uid)
-        return jsonify({"building_data": building_data})
-
-@jwt_required()
-@project_api_bp.route('/buildings/get_project_buildings/', methods=["GET"])
-def get_project_buildings(project_uid):
-    buildings = dbo.get_all_project_buildings(project_uid)
-
-    if buildings is None:
-        return jsonify({"building_data": None})
-    else:
-        building_data = {}
-        for building in buildings:
-            building_data[building.uid] = building.building_name
+            building_data.append(dbo.get_building_data(building.uid))
         return jsonify({"building_data": building_data})
 
 @jwt_required()
@@ -153,14 +138,11 @@ def new_building(project_uid):
             return jsonify({"building_data": "Success"})
         else:
             return jsonify({"building_data": "Could not add new building"})
-
-
 #
 #               
 #   ROOMS
 #
 #
-
 @jwt_required()
 @project_api_bp.route('/rooms/', methods=['GET', 'POST'])
 def rooms(project_uid):
@@ -168,7 +150,6 @@ def rooms(project_uid):
     specification = project.specification
 
     if request.method == "GET":
-        #print("A get request was reveiced")
         project_rooms = dbo.get_all_project_rooms(project.uid)
         if project_rooms:
             project_room_data = list(map(lambda x: x.get_json_room_data(), project_rooms))
@@ -209,14 +190,13 @@ def rooms(project_uid):
                                     vent_props.db_neighbour, vent_props.db_corridor)
         dbo.initial_ventilation_calculations(new_room_id)
 
-        return jsonify({"message": "Rom opprettet"}) 
+        return jsonify({"message": f"Rom opprettet: {new_room_id}"}) 
 
 @jwt_required()
 @project_api_bp.route('/rooms/get_room/<room_uid>/', methods=['GET'])
 def get_room(project_uid, room_uid):
     room = dbo.get_room(room_uid)
     room_data = room.get_json_room_data()
-    #print(f"ROOM DATA IS: {room_data}")
     return jsonify({"room_data": room_data})
 
 @jwt_required()
@@ -232,12 +212,15 @@ def udpate_room(project_uid, room_uid):
             try:
                 converted_value = float(value)
             except ValueError as e:
-                return jsonify({"error": "Area må kun inneholde tall"})
+                return jsonify({"error": "Areal må kun inneholde tall"})
         elif key == "room_population":
             try:
                 converted_value = int(value)
             except ValueError as e:
                 return jsonify({"error": "Personer må kun inneholde tall"})
+        elif key == "system_uid":
+            print(f"Trying to update system ID:{value}")
+            dbo.update_system_airflows(value)
     if dbo.update_room_data(room_uid, processed_data):
         dbo.update_ventilation_calculations(room_uid)
     else:
@@ -248,9 +231,7 @@ def udpate_room(project_uid, room_uid):
 @jwt_required()
 @project_api_bp.route('/rooms/delete_room/<room_uid>/', methods=['DELETE'])
 def delete_room(project_uid, room_uid):
-    print("Reaced delete-endpoint")
     data = request.get_json()
-    print(f"Data received: {data}")
     received_room_uid = escape(data["roomId"])
     if room_uid != received_room_uid:
         globals.log(f"Delete room attempted with mismatch between endpoint room_id and json-data-room id")
@@ -353,3 +334,17 @@ def delete_system(project_uid, system_uid):
     else:
         response = {"success": False}
     return jsonify(response)
+#
+#               
+#   VENTILATION
+#
+#
+@jwt_required()
+@project_api_bp.route('/ventilation/get_room/<room_uid>/', methods=['GET'])
+def ventilation(project_uid, room_uid):
+    room = dbo.get_room(room_uid)
+    if room:
+        vent_data = room.get_json_ventilation_data()
+        return jsonify({"vent_data": vent_data})
+    else:
+        return jsonify({"room_data": None})

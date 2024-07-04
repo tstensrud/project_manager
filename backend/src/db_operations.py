@@ -54,9 +54,12 @@ def get_all_project_names():
     return project_names
 
 
-def get_all_project_rooms(project_uid):
-    rooms = db.session.query(models.Rooms).join(models.Buildings).join(models.Projects).filter(models.Projects.uid == project_uid).order_by(models.Buildings.building_name, models.Rooms.floor, models.Rooms.room_number).all()
+def get_all_project_rooms(project_uid: str) -> list:
+    rooms = db.session.query(models.Rooms).join(models.Buildings).filter(models.Projects.uid == project_uid).order_by(models.Buildings.building_name, models.Rooms.floor, models.Rooms.room_number).all()
     return rooms
+
+
+
 
 
 def get_all_project_buildings(project_uid: int):
@@ -138,10 +141,12 @@ def get_building_data(building_uid: int) -> dict:
     supply_air = summarize_supply_air_building(building_uid)
     extract_air = summarize_extract_air_building(building_uid)
     heating = sum_heat_loss_chosen_building(building_uid)
+    demand = summarize_demand_building(building_uid)
     building_data["area"] = area
     building_data["supplyAir"] = supply_air
     building_data["extractAir"] = extract_air
     building_data["heating"] = heating
+    building_data["demand"] = demand
     return building_data
 
 

@@ -94,7 +94,7 @@ class Buildings(db.Model):
     def get_json(self):
         return {
             "id": self.id,
-            "uid": self.id,
+            "uid": self.uid,
             "ProjectId": self.project_uid,
             "BuildingName": self.building_name
         }
@@ -190,7 +190,7 @@ class Rooms(db.Model):
     def get_json_ventilation_data(self):
             return {
             "SystemId": self.system_uid,
-            "SystemName": self.system.system_name,
+            "SystemName": self.system_uid,
             "AirPerPerson": self.air_per_person,
             "AirPersonSum": self.air_person_sum,
             "AirEmission": self.air_mission,
