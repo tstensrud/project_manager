@@ -40,21 +40,23 @@ function Buildings() {
 
     return(<>
         <SubTitleComponent>
-          <HeaderIcon />  Bygg
+            <HeaderIcon />  Bygg
         </SubTitleComponent>
         <div className="main-content">
             <div className="text-container-above-tables">
-            <p>
-            Legg til bygg i prosjekt
-            </p>
-            <form className="custom-form profile-form" onSubmit={handleFormSubmit}>
-                <p>
-                    <input onChange={handleChange} type="text" value={formInput} name="buildingName" placeholder="Navn på bygg" />
-                    &nbsp;&nbsp;
-                    <button type="submit" className="form-button">Legg til </button>
+                <div className="float-container">
+                    <p>
+                        Legg til nytt bygg i prosjektet
+                    </p>
+                    <p>
+                        <form className="custom-form profile-form" onSubmit={handleFormSubmit}>
+                            <input onChange={handleChange} type="text" value={formInput} name="buildingName" placeholder="Navn på bygg" />
+                            &nbsp;&nbsp;
+                            <button type="submit" className="form-button">Legg til </button>
 
-                </p>
-            </form>
+                        </form>
+                    </p>
+                </div>
             </div>
             <div className="flex-container-row">
                 {
@@ -66,10 +68,11 @@ function Buildings() {
                         ))
                     )
                 }
-                
+
             </div>
-            </div>
-    </>);
+        </div>
+    </>
+    );
 }
 
 export default Buildings;

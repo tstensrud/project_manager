@@ -105,6 +105,7 @@ class Rooms(db.Model):
     uid = db.Column(db.String(250), unique=True)
 
     # Foreign keys
+    project_uid = db.Column(db.String(250), db.ForeignKey('Projects.uid'), nullable=False)
     building_uid = db.Column(db.String(250), db.ForeignKey('Buildings.uid'), nullable=False)
     room_type_uid = db.Column(db.String(250), db.ForeignKey('RoomTypes.uid'), nullable=False)
     system_uid = db.Column(db.String(250), db.ForeignKey('VentilationSystems.uid', ondelete="SET NULL"), nullable=True)
@@ -190,7 +191,7 @@ class Rooms(db.Model):
     def get_json_ventilation_data(self):
             return {
             "SystemId": self.system_uid,
-            "SystemName": self.system_uid,
+            #"SystemName": self.system_uid,
             "AirPerPerson": self.air_per_person,
             "AirPersonSum": self.air_person_sum,
             "AirEmission": self.air_mission,

@@ -17,19 +17,19 @@ function BuildingSummary({buildingData}) {
                         <h2 className="card-title"> {buildingName}</h2>
                         <h4>Prosjektert</h4>
                         <p className="info">Areal<br/>
-                        {area} m<sup>2</sup>
+                        {area.toLocaleString()} m<sup>2</sup>
                         </p>
                         
                         <p className="info">Prosjektert luftmengde<br/>
                         {PlusIcon && <PlusIcon />}
-                            <span className="supply-text"> {supplyAir} </span> m<sup>3</sup>/h
+                            <span className="supply-text"> {supplyAir.toLocaleString()} </span> m<sup>3</sup>/h
                         <br />
                         {MinusIcon && <MinusIcon />}
-                        <span className="extract-text"> {extractAir} </span> m<sup>3</sup>/h
+                        <span className="extract-text"> {extractAir.toLocaleString()} </span> m<sup>3</sup>/h
                         </p>
 
                         <p className="info">Prosjektert varme<br/>
-                        {heating} W
+                        {heating.toLocaleString()} W
                         </p>
                     </div>
                 </div>

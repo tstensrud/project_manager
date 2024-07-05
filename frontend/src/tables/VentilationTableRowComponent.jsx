@@ -2,13 +2,15 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../GlobalContext';
 
-import useFetch from '../hooks/useFetch'
-import useUpdateData from '../hooks/useUpdateData'
+import useFetch from '../hooks/useFetch';
+import useUpdateData from '../hooks/useUpdateData';
+import useUpdateSystem from '../hooks/useUpdateSystem';
 
 
 function RoomTableRowComponent({roomId, msgToParent, systems}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+
         
         // Initial fetches and refetch
         const {data: roomData, loading: roomLoading, error: roomError} = useFetch(`/project_api/${projectId}/rooms/get_room/${roomId}/`);
@@ -16,11 +18,13 @@ function RoomTableRowComponent({roomId, msgToParent, systems}) {
         
         // Update data
         const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useUpdateData(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
+        const {systemData, response: systemResponse, setSystemData, handleSubmit: updateSystemData} = useUpdateSystem(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
         
         // Edit of values
         const [editingCell, setEditingCell] = useState(null);
         const [editedData, setEditedData] = useState(null);
-        const [systemId, setSystemId] = useState('');
+        const [currentSystemId, setCurrentSystemId] = useState('');
+        const [currentSystemName, setCurrentSystemName] = useState('');
 
         // Marking a row
         const [markedRow, setMarkedRow] = useState('');
@@ -35,10 +39,25 @@ function RoomTableRowComponent({roomId, msgToParent, systems}) {
                 setEditedData('');
             }
             if (ventData && ventData.vent_data) {
-                setSystemId(ventData.vent_data.SystemId)
+                setCurrentSystemId(ventData.vent_data.SystemId);
+                setCurrentSystemName(ventData.vent_data.SystemName);
             }
         },[ventData]);
 
+        useEffect(() => {
+            if (systemData !== null) {
+                if (currentSystemId !== systemData) {
+                    updateSystemData();
+                    setSystemData(null);
+                    //ventRefetch();
+                }
+            }
+        }, [systemData]);
+
+        useEffect(() => {
+            ventRefetch();
+        }, [systemResponse]);
+        
         // Handlers
         const sendMessageToParent = (msg) => {
             msgToParent(msg);
@@ -98,14 +117,9 @@ function RoomTableRowComponent({roomId, msgToParent, systems}) {
         </td>   
         );
 
-        const handleSystemClick = async (e) => {
-            console.log(updatedRoomData);
-            await updateRoomData(e);
-        }
-
-        const handleSystemChange = async (e) => {
-            setData({[e.target.name]: e.target.value})
-            handleSystemClick(e);
+        const handleSystemChange = (e) => {
+            const newSystemData = {[e.target.name]: e.target.value}
+            setSystemData(newSystemData);
         };
 
     return (
@@ -113,21 +127,22 @@ function RoomTableRowComponent({roomId, msgToParent, systems}) {
         {response && response.error !== null ? (<>{sendMessageToParent(response.error)}</>) : (<></>)}
         <tr className={markedRow}>
         <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
-            <td style={{ cursor: 'pointer' }}>{roomData ? roomData.room_data.BuildingName : ''}</td>
-            <td style={{ cursor: 'pointer' }}>{roomData ? roomData.room_data.Floor : ''}</td>
-            <td style={{ cursor: 'pointer' }}>{roomData ? roomData.room_data.RoomNumber : ''}</td>
-            <td style={{ cursor: 'pointer' }}>{roomData ? roomData.room_data.RoomName : ''}</td>
-            <td style={{ cursor: 'pointer' }}>{ventData ? ventData.vent_data.AirPersonSum : ''}</td>
-            <td style={{ cursor: 'pointer' }}>{ventData ? ventData.vent_data.AirEmissionSum : ''}</td>
-            <td style={{ cursor: 'pointer' }}>{ventData ? ventData.vent_data.AirProcess : ''}</td>
-            <td style={{ cursor: 'pointer' }}>{ventData ? ventData.vent_data.AirMinimum : ''}</td>
-            <td style={{ cursor: 'pointer' }}>{ventData ? ventData.vent_data.AirDemand : ''}</td>
+            <td>{roomData ? roomData.room_data.BuildingName : ''}</td>
+            <td>{roomData ? roomData.room_data.Floor : ''}</td>
+            <td>{roomData ? roomData.room_data.RoomNumber : ''}</td>
+            <td>{roomData ? roomData.room_data.RoomName : ''}</td>
+            <td>{ventData ? ventData.vent_data.AirPersonSum : ''}</td>
+            <td>{ventData ? ventData.vent_data.AirEmissionSum : ''}</td>
+            <td>{ventData ? ventData.vent_data.AirProcess : ''}</td>
+            <td>{ventData ? ventData.vent_data.AirMinimum : ''}</td>
+            <td>{ventData ? ventData.vent_data.AirDemand : ''}</td>
             {renderEditableCell("AirSupply", "supplyCell")}
             {renderEditableCell("AirExtract", "extractCell")}
-            <td style={{ cursor: 'pointer' }}>{ventData ? ventData.vent_data.AirChosen : ''}</td>
+            <td>{ventData ? ventData.vent_data.AirChosen : ''}</td>
             <td>{(ventData && roomData) ? (ventData.vent_data.AirMinimum * roomData.room_data.Area).toFixed(0) : '' }</td>
-            <td style={{ cursor: 'pointer' }}>
-                <select name="systemUid" className="table-select" onChange={handleSystemChange}>
+            <td>
+                <select value={currentSystemName} name="systemUid" className="table-select" onChange={handleSystemChange}>
+                    {currentSystemName && currentSystemName !== null ? (<option key="0">{currentSystemName}</option>) : ''}
                     {systems && Object.keys(systems.systems_data).map((key, index) => (
                         <option key={index} value={systems.systems_data[key].uid}>{systems.systems_data[key].SystemName}</option>
                     ))}

@@ -3,7 +3,12 @@ import useFetch from '../../hooks/useFetch'
 import { Link, useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 import SubTitleComponent from '../../layout/SubTitleComponent';
+import BuildingRoomData from './BuildingRoomData';
 import HeaderIcon from '../../assets/svg/projectIcon.svg?react';
+import ProjectSummary from './ProjectSummary';
+import VentilationSummary from './VentilationSummary';
+import HeatingSummary from './HeatingSummary';
+import CoolingSummary from './CoolingSummary';
 
 function Project () {
     const {projectId} = useParams();
@@ -25,24 +30,16 @@ function Project () {
               <HeaderIcon /> &nbsp; Prosjektoversikt - {data && data.data.ProjectNumber} {data && data.data.ProjectName}
             </SubTitleComponent>
             <div className="main-content">
+
                 <div className="flex-container-row">
-                    <div className="cards">
-                        <div className="information [ card ]">
-                            <h2 className="card-title">{data && data.data.ProjectName} oppsummert</h2>
-                            <h4>Prosjektbeskrivelse</h4>
-                            <p className="info">{data && data.data.ProjectDescription} </p>
-                            <h4>Oppsummering</h4>
-                            <p className="info">Kravspesifikasjon<br />
-                                <Link url="">{data && data.data.SpecificationName}</Link>
-                            </p>
-                            <p className="info">Prosjektert luftmengde<br />
-                                m<sup>3</sup>/h
-                            </p>
-                            <p className="info">Prosjektert varme<br />
-                                W
-                            </p>
-                        </div>
-                    </div>
+                    <ProjectSummary projectId={projectId} />
+                    <BuildingRoomData projectId={projectId} />
+                    <VentilationSummary projectId={projectId} />
+                </div>
+
+                <div className="flex-container-row">
+                    <HeatingSummary projectId={projectId} />
+                    <CoolingSummary projectId={projectId} />
                 </div>
             </div>
         </>

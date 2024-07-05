@@ -58,9 +58,9 @@ def get_all_project_rooms(project_uid: str) -> list:
     rooms = db.session.query(models.Rooms).join(models.Buildings).filter(models.Projects.uid == project_uid).order_by(models.Buildings.building_name, models.Rooms.floor, models.Rooms.room_number).all()
     return rooms
 
-
-
-
+def count_rooms_in_project(project_uid) -> int:
+    total_rooms = db.session.query(func.count(models.Rooms.project_uid)).filter(models.Rooms.project_uid == project_uid).scalar()
+    return total_rooms
 
 def get_all_project_buildings(project_uid: int):
     buildings = db.session.query(models.Buildings).join(models.Projects).filter(models.Projects.uid == project_uid).all()
@@ -73,6 +73,10 @@ def check_for_existing_project_number(project_number: str) -> bool:
         return True
     else:
         return False
+
+def summarize_project_airflow(project_uid: str) -> float:
+    airflow = db.session.query(func.sum(models.Rooms.air_supply)).filter(models.Rooms.project_uid == project_uid).scalar()
+    return airflow
 
 '''
 TODO-list
@@ -164,23 +168,19 @@ def new_building(project_uid: int, building_name: str) -> bool:
         return False
     
 
-def get_all_project_buildings(project_uid: int) -> list:
+def get_all_project_buildings(project_uid: int) -> list[models.Buildings]:
     buildings = models.Buildings.query.filter(models.Buildings.project_uid == project_uid).order_by(models.Buildings.building_name).all()
     if buildings == []:
         return None
     else:
         return buildings
-
-
-def get_building_uid(project_uid: int, building_name: str) -> int:
-    building = db.session.query(models.Buildings).join(models.Projects).filter(and_(models.Projects.uid == project_uid, models.Buildings.building_name == building_name)).first()
-    return building.uid
+    
 
 '''
 Rooms methods
 '''
 
-def new_room(building_uid: int, room_type_uid: int, floor: str, room_number: str, room_name: str, area: float, room_pop: int, 
+def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str, room_number: str, room_name: str, area: float, room_pop: int, 
              air_per_person: float, air_emission: float, air_process: float, air_minimum: float, ventilation_principle: str, 
              heat_exchange: str, room_control: str, notes: str, db_technical: str, db_neighbour: str, db_corridor: str):
     building_energy_settings = get_building_energy_settings(building_uid)
@@ -188,6 +188,7 @@ def new_room(building_uid: int, room_type_uid: int, floor: str, room_number: str
     uid = globals.encode_uid_base64(uuid4())
     new_room = models.Rooms(
         uid=uid,
+        project_uid=project_uid,
         building_uid=building_uid,
         room_type_uid=room_type_uid,
         building_energy_settings=building_energy_settings.uid,
@@ -255,11 +256,6 @@ def get_room(room_uid: int) -> models.Rooms:
     return room
 
 
-def get_room_uid(project_uid: int, building_uid: int, room_number: str) -> int:
-    room = db.session.query(models.Rooms).join(models.Buildings).join(models.Projects).filter(and_(models.Projects.uid == project_uid, models.Buildings.uid == building_uid, models.Rooms.room_number == room_number)).first()
-    return room.uid
-
-
 def delete_room(room_uid: int) -> bool:   
     room = db.session.query(models.Rooms).filter(models.Rooms.uid == room_uid).first()
     if room:
@@ -284,9 +280,9 @@ def check_if_roomnumber_exists(project_uid, building_uid, room_number) -> bool:
 
 
 def update_room_data(room_uid: int, data) -> bool:
-    print(f"Updated room data received: UID: {room_uid}, DATA: {data}")
     room = get_room(room_uid)
     processed_data = {}
+
     for key, value in data.items():
         processed_data[key] = value
 
@@ -350,7 +346,6 @@ def update_ventilation_calculations(room_uid: int) -> bool:
 
 
 def update_ventilation_table(room_uid: int, new_supply: float, new_extract: float, system=None) -> bool:
-    #print(f"System id for update ventilation table: {system}")
     room = get_room(room_uid)
     room = room.room_ventilation
     room.air_supply = new_supply
@@ -456,7 +451,6 @@ def delete_system(system_uid: int) -> bool:
     rooms = db.session.query(models.Rooms).join(models.VentilationSystems).filter(models.VentilationSystems.uid==system_uid).all()
     db.session.query(models.VentilationSystems).filter(models.VentilationSystems.uid == system_uid).delete()
     
-    #print(rooms)
     for room in rooms:
         room.system_uid = None
     try:

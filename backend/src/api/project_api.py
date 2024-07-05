@@ -38,12 +38,13 @@ def project(project_uid):
     project = dbo.get_project(project_uid)
     specification = dbo.get_specification(project.specification)
     if project is not None:
-        total_area: float = dbo.summarize_project_area(project.id)
+        total_area: float = dbo.summarize_project_area(project.uid)
         project_data = project.get_json()
         if specification is not None:
             project_data["SpecificationName"] = specification.name
         else:
             project_data["SpecificationName"] = None
+        project_data["area"] = total_area
         return jsonify({"data": project_data})
     else:
         return jsonify({"data": "Fant ikke prosjekt"})
@@ -117,6 +118,7 @@ def todo_item_complete(project_id):
 @project_api_bp.route('/buildings/', methods=['GET'])
 def buildings(project_uid):
     buildings = dbo.get_all_project_buildings(project_uid)
+    total_rooms = dbo.count_rooms_in_project(project_uid)
     if buildings is None:
         return jsonify({"building_data": None})
     else:
@@ -124,7 +126,7 @@ def buildings(project_uid):
         building_data = []
         for building in buildings:
             building_data.append(dbo.get_building_data(building.uid))
-        return jsonify({"building_data": building_data})
+        return jsonify({"building_data": building_data, "rooms": total_rooms})
 
 @jwt_required()
 @project_api_bp.route('/buildings/new_building/', methods=["POST"])
@@ -182,7 +184,7 @@ def rooms(project_uid):
             return jsonify({"error": "Persontantall må kun inneholde tall"})
     
         vent_props = dbo.get_room_type_data(room_type_id, project_specification)
-        new_room_id = dbo.new_room(building_id, room_type_id, floor, room_number, name, area, people, 
+        new_room_id = dbo.new_room(project.uid, building_id, room_type_id, floor, room_number, name, area, people, 
                                     vent_props.air_per_person, vent_props.air_emission,
                                     vent_props.air_process, vent_props.air_minimum,
                                     vent_props.ventilation_principle, vent_props.heat_exchange,
@@ -203,40 +205,50 @@ def get_room(project_uid, room_uid):
 @project_api_bp.route('/rooms/update_room/<room_uid>/', methods=['PATCH'])
 def udpate_room(project_uid, room_uid):
     data = request.get_json()
-    room = dbo.get_room(room_uid)
-    processed_data = {}
-    for key, value in data.items():
-        key = globals.camelcase_to_snake(key)
-        processed_data[key] = escape(value.strip())
-        if key == "area":
-            try:
-                converted_value = float(value)
-            except ValueError as e:
-                return jsonify({"error": "Areal må kun inneholde tall"})
-        elif key == "room_population":
-            try:
-                converted_value = int(value)
-            except ValueError as e:
-                return jsonify({"error": "Personer må kun inneholde tall"})
-        elif key == "system_uid":
-            print(f"Trying to update system ID:{value}")
-            dbo.update_system_airflows(value)
-    if dbo.update_room_data(room_uid, processed_data):
-        dbo.update_ventilation_calculations(room_uid)
-    else:
-        return jsonify({"error": "Kunne ikke oppdatere rom-data"})
+    if data:
+        room = dbo.get_room(room_uid)
+        current_room_system_uid = room.system_uid
+        processed_data = {}
+        for key, value in data.items():
+            key = globals.camelcase_to_snake(key)
+            processed_data[key] = escape(value.strip())
+            if key == "area":
+                try:
+                    converted_value = float(value)
+                except ValueError as e:
+                    return jsonify({"error": "Areal må kun inneholde tall"})
+            elif key == "room_population":
+                try:
+                    converted_value = int(value)
+                except ValueError as e:
+                    return jsonify({"error": "Personer må kun inneholde tall"})
+            #elif key == "system_uid":
+                #dbo.update_system_airflows(value)
+        if dbo.update_room_data(room_uid, processed_data):
+            dbo.update_ventilation_calculations(room_uid)
+            if key == "system_uid":
+                if current_room_system_uid is None:
+                    dbo.update_system_airflows(value)
+                else:
+                    dbo.update_airflow_changed_system(value, current_room_system_uid)
+        else:
+            return jsonify({"error": "Kunne ikke oppdatere rom-data"})
+        
     
-    return jsonify({"message": f"Received data {room_uid}"})
+        return jsonify({"message": f"Received data {room_uid}"})
 
 @jwt_required()
 @project_api_bp.route('/rooms/delete_room/<room_uid>/', methods=['DELETE'])
 def delete_room(project_uid, room_uid):
     data = request.get_json()
     received_room_uid = escape(data["roomId"])
+    room = dbo.get_room(room_uid)
+    room_system = room.system_uid
     if room_uid != received_room_uid:
         globals.log(f"Delete room attempted with mismatch between endpoint room_id and json-data-room id")
         return jsonify({"message": "Feil i sletting av rom."})
     if dbo.delete_room(room_uid):
+        dbo.update_system_airflows(room_system)
         response = {"message": "Rom slettet"}
     else:
         response = {"message": "Kunne ikke slette rom"}
@@ -339,12 +351,25 @@ def delete_system(project_uid, system_uid):
 #   VENTILATION
 #
 #
+
+@jwt_required()
+@project_api_bp.route('/ventilation/', methods=['GET'])
+def ventilation(project_uid):
+    total_air_flow = dbo.summarize_project_airflow(project_uid)
+    print(total_air_flow)
+    return jsonify({"ventdata": total_air_flow})
+
 @jwt_required()
 @project_api_bp.route('/ventilation/get_room/<room_uid>/', methods=['GET'])
-def ventilation(project_uid, room_uid):
+def ventilation_get_room(project_uid, room_uid):
     room = dbo.get_room(room_uid)
     if room:
         vent_data = room.get_json_ventilation_data()
+        if vent_data["SystemId"] is not None:
+            system_name = dbo.get_system(vent_data["SystemId"])
+            vent_data["SystemName"] = system_name.system_name
+        else:
+            vent_data["SystemName"] = "Ikke satt"
         return jsonify({"vent_data": vent_data})
     else:
         return jsonify({"room_data": None})

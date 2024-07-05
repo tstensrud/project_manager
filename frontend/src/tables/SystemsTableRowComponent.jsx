@@ -11,15 +11,20 @@ import useDeleteData from '../hooks/useDeleteData'
 function SystemTableRowComponent({systemId, msgToParent}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+
+        // Hooks
         const {data: systemData, loading: systemLoading, error: systemError, refetch: systemRefetch} = useFetch(`/project_api/${projectId}/get_system/${systemId}/`);
         const {data: updatedSystemData, response, setData, handleSubmit: updateSystemData} = useUpdateData(`/project_api/${projectId}/update_system/${systemId}/`);
         const {data: deleteSystemId, responseDeleteSystem, setData: setDeleteData, handleSubmit: deleteSubmit} = useDeleteData(`/project_api/${projectId}/delete_system/${systemId}/`);
+        
+        // Use states
         const [editingCell, setEditingCell] = useState(null);
         const [editedData, setEditedData] = useState(null);
         const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
         const [cellClass, setRowClass] = useState("");
         const [markedRow, setMarkedRow] = useState('');
 
+        // use effects
         useEffect(() => {
             setActiveProject(projectId);
             setDeleteData({"roomId": systemId});
@@ -33,7 +38,7 @@ function SystemTableRowComponent({systemId, msgToParent}) {
         },[systemData]);
 
 
-
+        // Handlers
         const sendMessageToParent = (msg) => {
             msgToParent(msg);
         }
@@ -104,21 +109,21 @@ function SystemTableRowComponent({systemId, msgToParent}) {
         <>
         {response && response.error !== null ? (<>{sendMessageToParent(response.error)}</>) : (<></>)}
         <tr className={markedRow}>
-        <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+        <td className={cellClass}  style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
             <td className={cellClass}>{systemData ? systemData.system_data.SystemName : ''}</td>
             {renderEditableCell("Location")}
             {renderEditableCell("ServiceArea")}
             {renderEditableCell("AirFlow")}
             {renderEditableCell("HeatExchange")}
-            <td className={cellClass} style={{ cursor: 'pointer' }}>{systemData ? systemData.system_data.AirFlowSupply : ''}</td>
-            <td className={cellClass} style={{ cursor: 'pointer' }}>{systemData ? systemData.system_data.AirFlowExtract : ''}</td>
-            <td className={cellClass} style={{ cursor: 'pointer' }}>{systemData ? systemData.system_data.SpecialSystem : ''}</td>
-            <td className={cellClass} style={{ cursor: 'pointer' }}>
-                {systemData && systemData.AirFlowSupply !== systemData.AirFlowExtract ? (<>Ubalanse på system</>) : (<></>)}
-                {systemData && systemData.AirFlowSupply > systemData.AirFlow ? (<>For mye tilluft</>) : (<></>)}
-                {systemData && systemData.AirFlowExtract > systemData.AirFlow ? (<>For mye avtrekk</>) : (<></>)}
+            <td className={cellClass}>{systemData ? systemData.system_data.AirFlowSupply : ''}</td>
+            <td className={cellClass}>{systemData ? systemData.system_data.AirFlowExtract : ''}</td>
+            <td className={cellClass}>{systemData ? systemData.system_data.SpecialSystem : ''}</td>
+            <td className={cellClass}>
+                {systemData && systemData.system_data.AirFlowSupply !== systemData.system_data.AirFlowExtract ? (<>Ubalanse på system. </>) : (<></>)}
+                {systemData && systemData.system_data.AirFlowSupply > systemData.system_data.AirFlow ? (<>For mye tilluft. </>) : (<></>)}
+                {systemData && systemData.system_data.AirFlowExtract > systemData.system_data.AirFlow ? (<>For mye avtrekk. </>) : (<></>)}
             </td>
-            <td className={cellClass} style={{ cursor: 'pointer' }}>
+            <td className={cellClass}>
                 <button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button>
             </td>
         </tr>

@@ -46,7 +46,7 @@ function Navbar() {
                 </div>
 
                 <div className="active-project-title-container">
-                    {activeProjectName}
+                    <span className="page-title-text">{activeProjectName}</span>
                 </div>
                 
                 <div className="navbar-button-container">
