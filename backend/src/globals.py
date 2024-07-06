@@ -59,6 +59,14 @@ def replace_and_convert_to_float(input: str):
         return float_value
     except ValueError:
         return False
+    
+def replace_and_convert_to_int(input: str):
+    replaced = input.replace(",", ".")
+    try:
+        int_value = int(replaced)
+        return int_value
+    except ValueError:
+        return False
 
 
 def log(entry):

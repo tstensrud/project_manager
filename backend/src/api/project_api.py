@@ -207,7 +207,6 @@ def udpate_room(project_uid, room_uid):
     data = request.get_json()
     if data:
         room = dbo.get_room(room_uid)
-        current_room_system_uid = room.system_uid
         processed_data = {}
         for key, value in data.items():
             key = globals.camelcase_to_snake(key)
@@ -217,25 +216,17 @@ def udpate_room(project_uid, room_uid):
                     converted_value = float(value)
                 except ValueError as e:
                     return jsonify({"error": "Areal må kun inneholde tall"})
+                globals.replace_and_convert_to_float(value)
             elif key == "room_population":
                 try:
                     converted_value = int(value)
                 except ValueError as e:
                     return jsonify({"error": "Personer må kun inneholde tall"})
-            #elif key == "system_uid":
-                #dbo.update_system_airflows(value)
+                globals.replace_and_convert_to_int(value)
         if dbo.update_room_data(room_uid, processed_data):
-            dbo.update_ventilation_calculations(room_uid)
-            if key == "system_uid":
-                if current_room_system_uid is None:
-                    dbo.update_system_airflows(value)
-                else:
-                    dbo.update_airflow_changed_system(value, current_room_system_uid)
+            return jsonify({"message": "Rom oppdtatert"})
         else:
             return jsonify({"error": "Kunne ikke oppdatere rom-data"})
-        
-    
-        return jsonify({"message": f"Received data {room_uid}"})
 
 @jwt_required()
 @project_api_bp.route('/rooms/delete_room/<room_uid>/', methods=['DELETE'])
@@ -332,6 +323,7 @@ def update_system(project_uid, system_uid):
                 convert = float(value)
             except ValueError:
                 return jsonify({"error": "Viftekapasitet må kun inneholde tall"})
+        globals.replace_and_convert_to_float(value)
         processed_data[key] = escape(value.strip())
     dbo.update_system_info(system_uid, processed_data)
     
@@ -356,7 +348,6 @@ def delete_system(project_uid, system_uid):
 @project_api_bp.route('/ventilation/', methods=['GET'])
 def ventilation(project_uid):
     total_air_flow = dbo.summarize_project_airflow(project_uid)
-    print(total_air_flow)
     return jsonify({"ventdata": total_air_flow})
 
 @jwt_required()
@@ -373,3 +364,114 @@ def ventilation_get_room(project_uid, room_uid):
         return jsonify({"vent_data": vent_data})
     else:
         return jsonify({"room_data": None})
+
+@jwt_required()
+@project_api_bp.route('/ventilation/update_room/<room_uid>/', methods=['PATCH'])
+def ventilation_update_room(project_uid, room_uid):
+    room = dbo.get_room(room_uid)
+    data = request.get_json()
+    current_room_system_uid = room.system_uid
+    processed_data = {}
+    for key, value in data.items():
+        key = globals.camelcase_to_snake(key)
+        processed_data[key] = escape(value.strip())
+        if key == "air_supply":
+            try:
+                converted_value = float(value)
+            except ValueError as e:
+                return jsonify({"error": "Tilluft må kun inneholde tall"})
+            globals.replace_and_convert_to_float(value)
+        elif key == "air_extract":
+            try:
+                converted_value = int(value)
+            except ValueError as e:
+                return jsonify({"error": "Avtrekk må kun inneholde tall"})
+            globals.replace_and_convert_to_float(value)
+    if dbo.update_room_data(room_uid, processed_data):
+        dbo.update_ventilation_calculations(room_uid)
+        if key == "system_uid":
+            if current_room_system_uid is None:
+                dbo.update_system_airflows(value)
+            else:
+                dbo.update_airflow_changed_system(value, current_room_system_uid)
+    else:
+        return jsonify({"error": "Kunne ikke oppdatere rom-data"})
+    return jsonify({"success": True})
+
+#
+#               
+#   HEATING AND COOLING
+#
+#
+@jwt_required()
+@project_api_bp.route('/heating/get_room/<room_uid>/', methods=['GET'])
+def heating_room_data(project_uid, room_uid):
+    room = dbo.get_room(room_uid)
+    if room:
+        room_data = room.get_json_room_data()
+        room_heating_data = room.get_json_heating_data()
+        room_heating_data["Airflow"] = room.air_supply
+        return jsonify({"room_data": room_data, "heating_data": room_heating_data})
+    else:
+        return ({"error": "Fant ikke rom"})
+
+@jwt_required()
+@project_api_bp.route('/heating/update_room/<room_uid>/', methods=['PATCH'])
+def heating_update_room(project_uid, room_uid):
+    data = request.get_json()
+    if data:
+        float_values = ["room_height", "outer_wall_area", "inner_wall_area", "window_door_area",
+                        "roof_area", "floor_ground_area", "floor_air_area", "chosen_heating"]
+        processed_data = {}
+        for key, value in data.items():
+            key = globals.camelcase_to_snake(key)
+            print(f"Key was {key}")
+            processed_data[key] = escape(value.strip())
+            if key in float_values:
+                try:
+                    converted_value = float(value)
+                except ValueError as e:
+                    return jsonify({"error": f"Arealer, høyder og valgt varme må kun inneholde tall"})
+            globals.replace_and_convert_to_float(value)
+        if dbo.update_room_data(room_uid, processed_data):
+            if dbo.calculate_total_heat_loss_for_room(room_uid):
+                return jsonify({"success": True})
+            else:
+                return jsonify({"error": "Kunne ikke beregne nye romdata"})
+        else:
+            return jsonify({"error": "Kunne ikke oppdatere romdata"})
+ 
+@jwt_required()
+@project_api_bp.route('/heating/buildingsettings/<building_uid>/', methods=['GET'])
+def buildingsettings(project_uid, building_uid):
+    building = dbo.get_building(building_uid)
+    if building:
+        building_data = building.get_json()
+        return jsonify({"building_data": building_data})
+    else:
+        return jsonify({"error": "Fant ingen bygg"})
+    
+
+@jwt_required()
+@project_api_bp.route('/heating/buildingsettings/update/<building_uid>/', methods=['PATCH'])
+def update_buildingsettings(project_uid, building_uid):
+    building = dbo.get_building(building_uid)
+    data = request.get_json()
+    if not building:
+        return jsonify({"error": "Fant ingen bygg"})
+    if data:
+        processed_data = {}
+        for key, value in data.items():
+            try:
+                processed_data[key] = globals.replace_and_convert_to_float(value)
+            except ValueError as e:
+                return jsonify({"error": "Innstillinger må kun inne holde tall"})
+        if dbo.update_building_heating_settings(building_uid, processed_data):
+            building_rooms = dbo.get_all_rooms_building(building_uid)
+            for room in building_rooms:
+                dbo.calculate_total_heat_loss_for_room(room.uid)
+            return jsonify({"message": "Oppdatert"})
+        else:
+            return jsonify({"error": "Kunne ikke oppdatere bygg"})
+    else:
+        return jsonify({"error": "Fant ingen bygg"})

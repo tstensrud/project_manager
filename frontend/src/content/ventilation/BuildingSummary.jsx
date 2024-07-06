@@ -14,7 +14,7 @@ function BuildingSummary({data}) {
                             </div>
                         </div>
 
-                        <div class="top">
+                        <div className="top">
                             <div className="summaries-row">
                                 <div className="summaries-cell">
                                     Dimensjonert

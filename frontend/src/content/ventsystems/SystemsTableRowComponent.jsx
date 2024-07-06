@@ -1,11 +1,14 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
-import { GlobalContext } from '../GlobalContext';
+import { GlobalContext } from '../../GlobalContext';
 
-import useFetch from '../hooks/useFetch'
-import useSubmitData from "../hooks/useSubmitData";
-import useUpdateData from '../hooks/useUpdateData'
-import useDeleteData from '../hooks/useDeleteData'
+import useFetch from '../../hooks/useFetch'
+import useSubmitData from "../../hooks/useSubmitData";
+import useUpdateData from '../../hooks/useUpdateData'
+import useDeleteData from '../../hooks/useDeleteData'
+
+import MessageBox from '../../layout/MessageBox';
+
 
 
 function SystemTableRowComponent({systemId, msgToParent}) {
@@ -107,7 +110,7 @@ function SystemTableRowComponent({systemId, msgToParent}) {
 
     return (
         <>
-        {response && response.error !== null ? (<>{sendMessageToParent(response.error)}</>) : (<></>)}
+        {response && response.error !== null&& response.error !== undefined ? (<><MessageBox message={response.error} /></>) : (<></>)}
         <tr className={markedRow}>
         <td className={cellClass}  style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
             <td className={cellClass}>{systemData ? systemData.system_data.SystemName : ''}</td>

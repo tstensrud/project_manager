@@ -1,16 +1,13 @@
-- 2024-07-01 14:58:19.726774: VENT PROPS: <RoomTypes 4>
 
-- 2024-07-01 14:58:19.741396: new room id: a3e1eebf-db95-4f55-a69e-8414d4d21485
+- 2024-07-06 15:30:19.442216: update_room_data(): (builtins.ValueError) could not convert string to float: Markup('sdfg')
+[SQL: UPDATE "Rooms" SET floor_ground_area=? WHERE "Rooms".id = ?]
+[parameters: [{'floor_ground_area': Markup('sdfg'), 'Rooms_id': 170}]]
 
-- 2024-07-02 10:13:25.269939: VENT PROPS: <RoomTypes 1>
+- 2024-07-06 15:32:50.981600: update_room_data(): (builtins.ValueError) could not convert string to float: Markup('ølk')
+[SQL: UPDATE "Rooms" SET window_door_area=? WHERE "Rooms".id = ?]
+[parameters: [{'window_door_area': Markup('ølk'), 'Rooms_id': 199}]]
 
-- 2024-07-02 10:13:25.275945: new room id: 2e4P-pA1TraNKzs1rh6Mcw
-
-- 2024-07-03 09:28:15.826282: VENT PROPS: <RoomTypes 3>
-
-- 2024-07-03 09:28:15.834690: new room id: fzn2LcQSScymnYBgjBO6wQ
-
-- 2024-07-03 09:28:27.416826: VENT PROPS: <RoomTypes 5>
-
-- 2024-07-03 09:28:27.423825: new room id: tusCUBlER-6tUhetkBVa2Q
+- 2024-07-06 15:33:06.958051: update_room_data(): (builtins.ValueError) could not convert string to float: Markup('sdfg')
+[SQL: UPDATE "Rooms" SET window_door_area=? WHERE "Rooms".id = ?]
+[parameters: [{'window_door_area': Markup('sdfg'), 'Rooms_id': 199}]]
 

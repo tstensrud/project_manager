@@ -226,9 +226,9 @@ body {
 
 .heating-settings {
   float: left;
-  margin-right: 50px;
+  margin-top: 5px;
+  margin-right: 25px;
   font-size: 14px;
-  margin-left: 20px;
 }
 .split-container-left {
   float: left;
@@ -246,6 +246,15 @@ body {
   height: 100%;
   width: 60%;
 }
+.float-container-bottom {
+  display: flex;
+  float: left;
+  height: 100%;
+  width: 60%;
+  justify-content: flex-start;
+  align-items: end;
+}
+
 .float-container-bottom-right {
   display: flex;
   float: left;

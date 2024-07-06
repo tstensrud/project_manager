@@ -4,6 +4,7 @@ import { GlobalContext } from '../GlobalContext';
 
 function Header() {
     const { userUuid, setUserUuid, username, setUserName } = useContext(GlobalContext);
+    
     useEffect(() => {
         const storage_uuid = localStorage.getItem("user_uuid");
         const storage_username = localStorage.getItem("username")

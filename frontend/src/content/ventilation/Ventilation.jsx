@@ -7,13 +7,32 @@ import useFetch from '../../hooks/useFetch'
 import VentilationIcon from '../../assets/svg/ventilationIcon.svg?react'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import TableHeaderComponent from "../../tables/TableHeaderComponent";
-import VentilationTableRowComponent from "../../tables/VentilationTableRowComponent";
+import VentilationTableRowComponent from "./VentilationTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 import BuildingSummary from './BuildingSummary';
 
 function Ventilation () {
     const {projectId} = useParams();
     const {setActiveProject} = useContext(GlobalContext);
+
+    const columnTitles = [  
+        {text: "#"},
+        {text: "Bygg"},
+        {text: "Etasje"},
+        {text: "Romnr"},
+        {text: "Romnavn"},
+        {text: "Sum personer m&sup3;/h"},
+        {text: "Sum emisjon m&sup3;/h"},
+        {text: "Prosess m&sup3;/h"},
+        {text: "Minimum m&sup3;/h"},
+        {text: "Dimensjonert m&sup3;/h"},
+        {text: "Tilluft"},
+        {text: "Avtrekk"},
+        {text: "m&sup3;/m&sup2;"},
+        {text: "Min mm&sup3;/h"},
+        {text: "System"},
+        {text: "Kommentar"}
+    ];
 
     // Initial fetch of data
     const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/project_api/${projectId}/rooms/`);
@@ -28,25 +47,6 @@ function Ventilation () {
     const [buildingId, setBuildingId] = useState(null);
     const [activeSortButton, setActivesortButton] = useState(null);
     const [buildingSummaryData, setBuildingSummaryData] = useState(null);
-
-    const columnTitles = [  
-        {text: "#"},
-        {text: "Bygg"},
-        {text: "Etasje"},
-        {text: "Romnr"},
-        {text: "Romnavn"},
-        {text: "Sum personer m3/h"},
-        {text: "Sum emisjon m3/h"},
-        {text: "Prosess m3/h"},
-        {text: "Minimum m3/h"},
-        {text: "Dimensjonert m3/h"},
-        {text: "Tilluft"},
-        {text: "Avtrekk"},
-        {text: "m3/m2"},
-        {text: "Min m3/h"},
-        {text: "System"},
-        {text: "Kommentar"}
-    ];
 
     useEffect(() => {
         const filteredBuildingData = buildingData && buildingData.building_data
@@ -116,7 +116,7 @@ function Ventilation () {
                             <p>Ingen rom lagt til</p>
                         ) : (
                             <div className="table-wrapper">
-                                <table className="fl-table" id="roomsTableVentilation">
+                                <table className="fl-table">
                                     <thead>
                                         <TableHeaderComponent headers={columnTitles} />
                                     </thead>

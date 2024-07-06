@@ -68,7 +68,7 @@ def building_heating_settings(project_id):
                 processed_data[key] = replace_and_convert_to_float(escape(value))
         
         if dbo.update_building_heating_settings(processed_data):
-            rooms_in_building = dbo.get_all_rooms_energy_building(building_id)
+            rooms_in_building = dbo.get_all_rooms_building(building_id)
             for room in rooms_in_building:
                 dbo.calculate_total_heat_loss_for_room(room.id)
             flash(f"Oppdatert innstillinger for bygg {building_id}", category="success")

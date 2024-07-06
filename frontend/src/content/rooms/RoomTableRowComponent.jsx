@@ -1,24 +1,34 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
-import { GlobalContext } from '../GlobalContext';
+import { GlobalContext } from '../../GlobalContext';
 
-import useFetch from '../hooks/useFetch'
-import useUpdateData from '../hooks/useUpdateData'
-import useDeleteData from '../hooks/useDeleteData'
+import useFetch from '../../hooks/useFetch'
+import useUpdateData from '../../hooks/useUpdateData'
+import useDeleteData from '../../hooks/useDeleteData'
+import MessageBox from '../../layout/MessageBox';
 
 
 function RoomTableRowComponent({roomId, msgToParent}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+
+        // Initial fetches
         const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/project_api/${projectId}/rooms/get_room/${roomId}/`);
+        
+        // Update and delete
         const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useUpdateData(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
         const {data: deleteRoomId, responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit} = useDeleteData(`/project_api/${projectId}/rooms/delete_room/${roomId}/`);
+
+        // Edit cells
         const [editingCell, setEditingCell] = useState(null);
         const [editedData, setEditedData] = useState(null);
         const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
         const [cellClass, setRowClass] = useState("");
+
+        // Row marking
         const [markedRow, setMarkedRow] = useState('');
 
+        // Use effects
         useEffect(() => {
             setActiveProject(projectId);
             setDeleteData({"roomId": roomId});
@@ -30,6 +40,7 @@ function RoomTableRowComponent({roomId, msgToParent}) {
             }
         },[roomData]);
 
+        // Handlers
         const sendMessageToParent = (msg) => {
             msgToParent(msg);
         }
@@ -46,7 +57,6 @@ function RoomTableRowComponent({roomId, msgToParent}) {
         };
         
         const onDelete = async (e) => {
-            console.log("Attempting do delete: " + roomId);
             await deleteSubmit(e);
             setDisabledDeleteButton(true);
             setRowClass("deleted-row")
@@ -98,7 +108,8 @@ function RoomTableRowComponent({roomId, msgToParent}) {
 
     return (
         <>
-        {response && response.error !== null ? (<>{sendMessageToParent(response.error)}</>) : (<></>)}
+        {response && response.error !== null && response.error !== undefined ? (<><MessageBox message={response.error} /></>) : (<></>)}
+
         <tr className={markedRow}>
         <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
             <td className={cellClass} style={{ cursor: 'pointer' }}>{roomData ? roomData.room_data.BuildingName : ''}</td>

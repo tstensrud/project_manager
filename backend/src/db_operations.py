@@ -55,7 +55,7 @@ def get_all_project_names():
 
 
 def get_all_project_rooms(project_uid: str) -> list:
-    rooms = db.session.query(models.Rooms).join(models.Buildings).filter(models.Projects.uid == project_uid).order_by(models.Buildings.building_name, models.Rooms.floor, models.Rooms.room_number).all()
+    rooms = db.session.query(models.Rooms).filter(models.Rooms.project_uid == project_uid).order_by(models.Rooms.floor, models.Rooms.room_number).all()
     return rooms
 
 def count_rooms_in_project(project_uid) -> int:
@@ -156,11 +156,24 @@ def get_building_data(building_uid: int) -> dict:
 
 def new_building(project_uid: int, building_name: str) -> bool:
     uid = globals.encode_uid_base64(uuid4())
-    new_building = models.Buildings(uid=uid,project_uid = project_uid, building_name = building_name)
+    new_building = models.Buildings(uid=uid,project_uid=project_uid,
+                                    building_name=building_name,
+                                    inside_temp = 20.0,
+                                    vent_temp = 18.0,
+                                    infiltration = 0.15,
+                                    u_value_outer_wall = 0.22,
+                                    u_value_window_doors = 0.18,
+                                    u_value_floor_ground = 0.18,
+                                    u_value_floor_air = 0.18,
+                                    u_value_roof = .018,
+                                    cold_bridge_value = 0.06,
+                                    year_mid_temp = 5.0,
+                                    temp_floor_air = -22,
+                                    dut= -22.0,
+                                    safety= 10.0)
     try:
         db.session.add(new_building)
         db.session.commit()
-        set_up_energy_settings_building(project_uid, new_building.uid)
         return True
     except Exception as e:
         globals.log(f"new building: {e}")
@@ -183,7 +196,6 @@ Rooms methods
 def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str, room_number: str, room_name: str, area: float, room_pop: int, 
              air_per_person: float, air_emission: float, air_process: float, air_minimum: float, ventilation_principle: str, 
              heat_exchange: str, room_control: str, notes: str, db_technical: str, db_neighbour: str, db_corridor: str):
-    building_energy_settings = get_building_energy_settings(building_uid)
     val = 1.0
     uid = globals.encode_uid_base64(uuid4())
     new_room = models.Rooms(
@@ -191,7 +203,6 @@ def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str
         project_uid=project_uid,
         building_uid=building_uid,
         room_type_uid=room_type_uid,
-        building_energy_settings=building_energy_settings.uid,
         floor=floor,
         room_number=room_number,
         room_name=room_name,
@@ -662,76 +673,28 @@ def new_specification_room_type(specification_uid: int, data) -> bool:
         globals.log(f"create new room type {e}")
         db.session.rollback()
         return False
-    
-def set_up_energy_settings_building(project_uid: int, building_uid: int) -> bool:
-    uid = globals.encode_uid_base64(uuid4())
-    building_settings = models.BuildingEnergySettings(project_uid = project_uid,
-                                                      building_uid = building_uid,
-                                                      uid=uid,
-                                                      inside_temp = 20.0,
-                                                      vent_temp = 18.0,
-                                                      infiltration = 0.15,
-                                                      u_value_outer_wall = 0.22,
-                                                      u_value_window_doors = 0.18,
-                                                      u_value_floor_ground = 0.18,
-                                                      u_value_floor_air = 0.18,
-                                                      u_value_roof = .018,
-                                                      cold_bridge_value = 0.06,
-                                                      year_mid_temp = 5.0,
-                                                      temp_floor_air = -22,
-                                                      dut= -22.0,
-                                                      safety= 10.0)
-    try:
-        db.session.add(building_settings)
-        db.session.commit()
-        return True
-    except Exception as e:
-        globals.log(f"set up heating settings building: {e}")
-        db.session.rollback()
-        return False
+
+def update_building_heating_settings(building_uid: str, updated_data) -> bool:
+    building = db.session.query(models.Buildings).filter(models.Buildings.uid == building_uid).first()
 
 
-def update_building_heating_settings(updated_data) -> bool:
-    building_heat_settings_uid = updated_data["id"]
-    building_settings = db.session.query(models.BuildingEnergySettings).filter(models.BuildingEnergySettings.uid == building_heat_settings_uid).first()
-    building_settings.inside_temp = updated_data["inside_temp"]
-    building_settings.dut = updated_data["dut"]
-    building_settings.vent_temp = updated_data["vent_temp"]
-    building_settings.infiltration = updated_data["infiltration"]
-    building_settings.u_value_outer_wall = updated_data["u_outer"]
-    building_settings.u_value_window_doors = updated_data["u_window_door"]
-    building_settings.u_value_floor_ground = updated_data["u_floor_ground"]
-    building_settings.u_value_floor_air = updated_data["u_floor_air"]
-    building_settings.u_value_roof = updated_data["u_roof"]
-    building_settings.cold_bridge_value = updated_data["cold_bridge"]
-    building_settings.year_mid_temp = updated_data["year_mid_temp"]
-    building_settings.temp_floor_air = updated_data["temp_floor_air"]
-    building_settings.safety = updated_data["safety"]
+    processed_data = {}
+
+    for key, value in updated_data.items():
+        processed_data[key] = value
+
+    processed_data_list = list(processed_data.keys())
+
+    building_columns = {column.key for column in inspect(models.Buildings).mapper.column_attrs}
+    for key in building_columns:
+        if key == processed_data_list[0]:
+            setattr(building, key, processed_data[key])
+            break
     try:
         db.session.commit()
         return True
     except Exception as e:
         globals.log(f"update building settings: {e}")
-        db.session.rollback()
-        return False
-
-
-def update_room_heating_data(room_uid: int, data) -> bool:
-    room = get_room(room_uid)
-    room.outer_wall_area = data["outer_wall_area"]
-    room.room_height = data["room_height"]
-    room.inner_wall_area = data["inner_wall_area"]
-    room.window_door_area = data["window_door_area"]
-    room.roof_area = data["roof_area"]
-    room.floor_ground_area = data["floor_ground_area"]
-    room.floor_air_area = data["floor_air_area"]
-    room.heat_source = data["heat_source"]
-    room.chosen_heating = data["chosen_heating"]
-    try:
-        db.session.commit()
-        return True
-    except Exception as e:
-        globals.log(f"update room heating data: {e}")
         db.session.rollback()
         return False
 
@@ -749,14 +712,14 @@ def ventilation_loss(air_flow_per_area: float, room_area: float, indoor_temp: fl
 def calculate_total_heat_loss_for_room(room_uid: int) -> bool:
     try:
         room = get_room(room_uid)
+        building = get_building(room.building_uid)
         if not room:
             ##print(f"No room found for heating_room_uid: {heating_room_uid}")
             return False
-
-        building = room.building_energy_settings
         if not building:
             ##print(f"No building settings found for room with heating_room_uid: {heating_room_uid}")
             return False
+        
         dt_surfaces_to_air = building.inside_temp - building.dut
         dt_floor_ground = building.inside_temp - building.year_mid_temp
         outer_wall_area = room.outer_wall_area - room.window_door_area
@@ -776,14 +739,14 @@ def calculate_total_heat_loss_for_room(room_uid: int) -> bool:
         ##print(f"Cold bridge loss: {room_cold_bridge_loss}, ventilation loss: {room_ventilation_loss}, infiltration loss: {room_infiltration_loss}")
         safety = 1 + ((building.safety) / 100)
         ##print(f"Safety: {building.Safety}")
+        total_transmission_loss = transmission_loss_outer_walls + transmission_loss_windows_doors + transmission_loss_floor + transmission_loss_roof
         
-        total_heat_loss = safety * (transmission_loss_outer_walls+
-                                                    transmission_loss_windows_doors+
-                                                    transmission_loss_floor+
-                                                    transmission_loss_roof+
-                                                    room_cold_bridge_loss+
-                                                    room_infiltration_loss+
-                                                    room_ventilation_loss)
+        total_heat_loss = safety * (total_transmission_loss + room_cold_bridge_loss + room_infiltration_loss + room_ventilation_loss)
+        
+        room.heatloss_ventilation = room_ventilation_loss
+        room.heatloss_infiltration = room_infiltration_loss
+        room.heatloss_cold_bridge = room_cold_bridge_loss
+        room.heatloss_transmission = total_transmission_loss
         room.heatloss_sum = round(total_heat_loss,1)
         ##print(f"Total heat loss for room {heating_room_uid}: {total_heat_loss}")
     
@@ -795,24 +758,13 @@ def calculate_total_heat_loss_for_room(room_uid: int) -> bool:
         return False
 
 
-def get_all_rooms_energy_building(building_uid: int) -> list:
+def get_all_rooms_building(building_uid: int) -> list[models.Rooms]:
     rooms = db.session.query(models.Rooms).join(models.Buildings).filter(models.Buildings.uid == building_uid).all()
     if not rooms:
         print(f"No rooms found for building_uid: {building_uid}")
     else:
         print(f"Found {len(rooms)} rooms for building_uid: {building_uid}")
     return rooms
-
-
-def get_energy_settings_all_buildings(project_uid: int):
-    heating_settings = db.session.query(models.BuildingEnergySettings).join(models.Projects).filter(models.BuildingEnergySettings.project_uid == project_uid).all()
-    return heating_settings
-
-
-def get_building_energy_settings(building_uid: str) -> models.BuildingEnergySettings:
-    settings = db.session.query(models.BuildingEnergySettings).join(models.Buildings).filter(models.Buildings.uid == building_uid).first()
-    #print(f"BUILDING ENERGY SETTINGS FETCHED {settings}")
-    return settings
 
 
 def sum_heat_loss_building(building_uid: int) -> float:
@@ -838,12 +790,6 @@ def sum_heat_loss_project_chosen(project_uid: int) -> float:
 '''
 Cooling
 '''
-
-
-def update_internal_heat_loads(room_uid: int) -> bool:
-    room = get_room(room_uid)
-
-
 
 def set_standard_cooling_settings(room_uid: int, data) -> bool:
     room = get_room(room_uid)
@@ -899,28 +845,6 @@ def calculate_total_cooling_for_room(room_uid: int) -> bool:
             globals.log(f"cooling calculatiosn: {e}")
             db.session.rollback()
             return False
-    else:
-        return False
-
-
-def update_room_data_cooling(room_uid: int, data) -> bool:
-    #print(data)
-    room = get_room(room_uid)
-    room.room_temp_summer = data["room_temp_summer"]
-    room.internal_heatload_people = data["internal_load_people"]
-    room.internal_heatload_lights = data["internal_load_light"]
-    room.internal_heatload_equipment = data["internal_load_equipment"]
-    room.sun_adition = data["sun_adition"]
-    room.sun_reduction = data["sun_reduction"]
-    room.cooling_equipment = data["equipment_cooling"]
-    try:
-        db.session.commit()
-    except Exception as e:
-        globals.log(f"Update room data cooling: {e}")
-        db.session.rollback()
-        return False
-    if calculate_total_cooling_for_room(room_uid):
-        return True
     else:
         return False
 

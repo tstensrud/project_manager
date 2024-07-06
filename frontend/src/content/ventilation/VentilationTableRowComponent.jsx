@@ -1,10 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
-import { GlobalContext } from '../GlobalContext';
+import { GlobalContext } from '../../GlobalContext';
 
-import useFetch from '../hooks/useFetch';
-import useUpdateData from '../hooks/useUpdateData';
-import useUpdateSystem from '../hooks/useUpdateSystem';
+import MessageBox from '../../layout/MessageBox';
+import useFetch from '../../hooks/useFetch';
+import useUpdateData from '../../hooks/useUpdateData';
+import useUpdateSystem from '../../hooks/useUpdateSystem';
 
 
 function RoomTableRowComponent({roomId, msgToParent, systems}) {
@@ -17,8 +18,8 @@ function RoomTableRowComponent({roomId, msgToParent, systems}) {
         const {data: ventData, loading: ventLoading, error: ventError, refetch: ventRefetch} = useFetch(`/project_api/${projectId}/ventilation/get_room/${roomId}/`);
         
         // Update data
-        const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useUpdateData(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
-        const {systemData, response: systemResponse, setSystemData, handleSubmit: updateSystemData} = useUpdateSystem(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
+        const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomId}/`);
+        const {systemData, response: systemResponse, setSystemData, handleSubmit: updateSystemData} = useUpdateSystem(`/project_api/${projectId}/ventilation/update_room/${roomId}/`);
         
         // Edit of values
         const [editingCell, setEditingCell] = useState(null);
@@ -124,7 +125,8 @@ function RoomTableRowComponent({roomId, msgToParent, systems}) {
 
     return (
         <>
-        {response && response.error !== null ? (<>{sendMessageToParent(response.error)}</>) : (<></>)}
+        {response && response.error !== null && response.error !== undefined ? (<><MessageBox message={response.error} /></>) : (<></>)}
+
         <tr className={markedRow}>
         <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
             <td>{roomData ? roomData.room_data.BuildingName : ''}</td>

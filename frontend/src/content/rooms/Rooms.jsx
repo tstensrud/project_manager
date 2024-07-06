@@ -8,13 +8,27 @@ import useSubmitData from '../../hooks/useSubmitData'
 import RoomIcon from '../../assets/svg/roomsIcon.svg?react'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import TableHeaderComponent from "../../tables/TableHeaderComponent";
-import RoomTableRowComponent from "../../tables/RoomTableRowComponent";
+import RoomTableRowComponent from "./RoomTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 
 
 function Rooms () {
     const {projectId} = useParams();
     const {setActiveProject} = useContext(GlobalContext);
+    
+    const columnTitles = [  
+        {text: "#"},
+        {text: "Bygg"},
+        {text: "Etasje"},
+        {text: "Romnr"},
+        {text: "Romtype"},
+        {text: "Romnavn"},
+        {text: "Areal m&sup2;"},
+        {text: "Personer"},
+        {text: "Kommentarer"},
+        {text: "Slett rom"}
+        
+    ];
     
     // Form fields
     const roomTypeRef = useRef(null);
@@ -40,20 +54,6 @@ function Rooms () {
     const [sortedBuildings, setSortedBuildings] = useState(roomData?.room_data || []);
     const [buildingId, setBuildingId] = useState(null);
     const [activeSortButton, setActivesortButton] = useState(null);
-    
-    const columnTitles = [  
-        {text: "#"},
-        {text: "Bygg"},
-        {text: "Etasje"},
-        {text: "Romnr"},
-        {text: "Romtype"},
-        {text: "Romnavn"},
-        {text: "Areal m2"},
-        {text: "Personer"},
-        {text: "Kommentarer"},
-        {text: "Slett rom"}
-        
-    ];
 
     useEffect(() => {
         if (roomData && roomData.spec) {
@@ -124,8 +124,6 @@ function Rooms () {
         <>
 
         {response && response.error && response.error !== null ? (<MessageBox message={response.error} /> ) : (<></>)}
-
-        { childMessage && <MessageBox message={childMessage} />}
 
         <SubTitleComponent>
            <RoomIcon/> Romskjema

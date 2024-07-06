@@ -8,20 +8,38 @@ import useSubmitData from '../../hooks/useSubmitData'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeaderIcon from '../../assets/svg/ventSystemIcon.svg?react';
 import TableHeaderComponent from "../../tables/TableHeaderComponent";
-import SystemsTableRowComponent from "../../tables/SystemsTableRowComponent";
+import SystemsTableRowComponent from "./SystemsTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 
 function VentSystems () {
     const {projectId} = useParams();
     const {setActiveProject} = useContext(GlobalContext);
+    
+    const columnTitles = [
+        {text: "#"},
+        {text: "Systemnr"},
+        {text: "Plassering"},
+        {text: "Betjeningsområde"},
+        {text: "Viftekapasitet m&sup3;/h"},
+        {text: "Gjenvinner"},
+        {text: "Prosjektert tilluft m&sup3;/h"},
+        {text: "Prosjektert avtrekk m&sup3;/h"},
+        {text: "Spesialsystem"},
+        {text: "Kommentar"},
+        {text: "Slett system"}
+    ]
+
+    // Hooks
     const {data: receivedSystemsData, loading: systemsLoading, error: systemsError, refetch: systemsRefetch} = useFetch(`/project_api/${projectId}/systems/`);
     const {data: systemData, response: systemResponse, setData: setSystemData, handleSubmit: submitSystemData} = useSubmitData(`/project_api/${projectId}/new_system/`);
     const [childMessage, setChildMessage] = useState('');
 
+    // Use effects
     useEffect(() => {
         setActiveProject(projectId);
     },[]);
 
+    // Handlers
     const handleFormChange = (e) => {
         setSystemData({
             ...systemData,
@@ -50,20 +68,6 @@ function VentSystems () {
             setChildMessage(msg);
         }
     }
-
-    const columnTitles = [
-        {text: "#"},
-        {text: "Systemnr"},
-        {text: "Plassering"},
-        {text: "Betjeningsområde"},
-        {text: "Viftekapasitet m3/h"},
-        {text: "Gjenvinner"},
-        {text: "Prosjektert tilluft m3/h"},
-        {text: "Prosjektert avtrekk m3/h"},
-        {text: "Spesialsystem"},
-        {text: "Kommentar"},
-        {text: "Slett system"}
-    ]
     return (
 <>
     <SubTitleComponent>

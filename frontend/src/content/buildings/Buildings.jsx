@@ -1,7 +1,7 @@
 import { GlobalContext } from '../../GlobalContext';
-import useFetch from '../../hooks/useFetch'
 import { useParams } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
+import useFetch from '../../hooks/useFetch'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import BuildingSummary from './BuildingSummary';
 import useSubmitData from '../../hooks/useSubmitData'
@@ -10,10 +10,14 @@ import HeaderIcon from '../../assets/svg/buildingIcon.svg?react';
 function Buildings() {
     const {projectId} = useParams();
     const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
-    const [allData, setAllData] = useState();
-    const [formInput, setFormInput] = useState('');
+
+    // Hooks
     const {data, loading, error, refetch} = useFetch(`/project_api/${projectId}/buildings/`);
     const {buildingData, setData, handleSubmit} = useSubmitData(`/project_api/${projectId}/buildings/new_building/`);
+    const [allData, setAllData] = useState();
+    const [formInput, setFormInput] = useState('');
+
+    // Use effects
     
     useEffect(() => {
         setActiveProject(projectId);
@@ -22,7 +26,7 @@ function Buildings() {
         }
     },[]);
 
-
+    // Handlers
     const handleChange = (e) => {
         setData({
             ...buildingData,
