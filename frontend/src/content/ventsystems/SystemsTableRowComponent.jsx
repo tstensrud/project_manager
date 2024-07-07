@@ -90,7 +90,7 @@ function SystemTableRowComponent({systemId, msgToParent}) {
         }
 
         const renderEditableCell = (cellName) => (
-            <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)}>
+            <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && systemData ? (
                 
                 <input

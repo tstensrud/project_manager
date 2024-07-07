@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Layout from "./Layout";
 import NoAccess from "./layout/NoAccess";
@@ -27,18 +26,16 @@ import ProtectedRoute from './login/ProtectedRoute';
 function App() {
 
   const {token, removeToken, setToken} = useToken();
-  
-  return (
 
-    
+  return (
     <Router>
-      
       <Routes>
         <Route path="logout/:uuid" element={<Logout token={removeToken}/>}/>
         <Route path="/noaccess" element={<NoAccess />} />
         {!token ? ( <Route path="/" element={<Login setToken={setToken}/>} />
         ) : (
           <>
+          
             <Route path="/" element={<Layout />}>
                 <Route path="dashboard" element={<ProtectedRoute element={<Dashboard />}/>} />
                 <Route path="specifications/:projectId" element={<ProtectedRoute element={<Specifications />}/>} />

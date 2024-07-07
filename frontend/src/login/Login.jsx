@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { GlobalContext } from '../GlobalContext';
 
 function Login(props) {
-    const { setUserUuid } = useContext(GlobalContext);
+    const { setUserUuid, setUserName } = useContext(GlobalContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -21,10 +21,13 @@ function Login(props) {
             }
         })
         .then ((response) => {
+            //console.log('Response data:', response.data);
             props.setToken(response.data.access_token);
             setUserUuid(response.data.uuid);
-            localStorage.setItem("user_uuid", response.data.uuid);
-            localStorage.setItem("username", response.data.username);
+            setUserName(response.data.username);
+            //console.log('UUID and Username set:', { uuid: response.data.uuid, username: response.data.username });
+            //localStorage.setItem("user_uuid", response.data.uuid);
+            //localStorage.setItem("username", response.data.username);
             navigate("/dashboard");
 
         }).catch((error) => {

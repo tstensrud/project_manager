@@ -60,7 +60,7 @@ function Ventilation () {
     },[]);  
 
     useEffect(() => {
-        setSortedBuildings(roomData && roomData.room_data.filter((room) => room.BuildingId === buildingId));
+        setSortedBuildings(roomData && roomData.room_data && roomData.room_data.filter((room) => room.BuildingUid === buildingId));
     },[roomData]);
 
     const handleChildMessage = (msg) => {
@@ -83,7 +83,7 @@ function Ventilation () {
             setBuildingSummaryData(null);
         } else {
             setBuildingId(sortBy);
-            setSortedBuildings(roomData.room_data.filter((room) => room.BuildingId === sortBy));
+            setSortedBuildings(roomData.room_data.filter((room) => room.BuildingUid === sortBy));
             //setBuildingSummaryData(buildingData.building_data.filter((building_data) => building_data.uid === sortBy));
         }
     }
@@ -103,8 +103,8 @@ function Ventilation () {
                     </div>
 
                     <div className="float-container-bottom-right">
-                        <button name="all" key="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;
-                        {buildingData && Object.keys(buildingData.building_data).map((key, index) => (
+                        {/*<button name="all" key="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;*/}
+                        {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                             <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
                                 {buildingData.building_data[key].BuildingName}</button> &nbsp;</>
                             ))}
@@ -124,7 +124,7 @@ function Ventilation () {
 
                                         {
                                             sortedBuildings && sortedBuildings.length > 0 ? (
-                                                sortedBuildings.map((room) => <VentilationTableRowComponent msgToParent={handleChildMessage} key={room.uid} roomId={room.uid} systems={ventSystemData}/>)
+                                                sortedBuildings.map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} roomId={room.uid} systems={ventSystemData}/>)
                                             ) : (
                                                 <>
                                                     <tr>

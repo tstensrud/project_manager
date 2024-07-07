@@ -1,6 +1,7 @@
 import { GlobalContext } from '../../GlobalContext';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
+
 import useFetch from '../../hooks/useFetch'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import BuildingSummary from './BuildingSummary';
@@ -21,9 +22,6 @@ function Buildings() {
     
     useEffect(() => {
         setActiveProject(projectId);
-        if (data) {
-            console.log(data.building_data);
-        }
     },[]);
 
     // Handlers
@@ -65,9 +63,9 @@ function Buildings() {
             <div className="flex-container-row">
                 {
                     data && data.building_data === null ? (
-                        <p className="p-description">Ingen bygg lagt inn</p>
+                        <p className="p-description">{data.error}</p>
                     ) : (
-                        data && Object.keys(data.building_data).map((key, index) => (
+                        data && data.building_data && Object.keys(data.building_data).map((key, index) => (
                             <BuildingSummary key={index} buildingData={data.building_data[key]} />
                         ))
                     )

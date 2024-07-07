@@ -7,7 +7,7 @@ import useFetch from '../../hooks/useFetch';
 import useUpdateData from '../../hooks/useUpdateData';
 
 
-function HeatingTableRowComponent({roomId, msgToParent}) {
+function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, index}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
@@ -26,6 +26,10 @@ function HeatingTableRowComponent({roomId, msgToParent}) {
         const [markedRow, setMarkedRow] = useState('');
 
         // useEffects
+        useEffect(() => { // Refetch upon received message theat heating settings has changed
+            heatingRefetch();
+        },[settingsUpdateState]);
+
         useEffect(() => {
             setActiveProject(projectId);
         },[]);
@@ -78,7 +82,7 @@ function HeatingTableRowComponent({roomId, msgToParent}) {
         }
 
         const renderEditableCell = (cellName) => (
-            <td name={cellName} onClick={() => handleEdit(cellName)}>
+            <td name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && heatingData ? (
                 <input
                     type="text"
@@ -100,7 +104,7 @@ function HeatingTableRowComponent({roomId, msgToParent}) {
         {response && response.error !== null && response.error !== undefined ? (<><MessageBox message={response.error} /></>) : (<></>)}
 
         <tr className={markedRow}>
-        <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+        <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
             <td>{heatingData ? heatingData.room_data.RoomNumber : ''}</td>
             {renderEditableCell("RoomHeight")}
             {renderEditableCell("OuterWallArea")}
@@ -110,12 +114,12 @@ function HeatingTableRowComponent({roomId, msgToParent}) {
             {renderEditableCell("FloorGroundArea")}
             {renderEditableCell("FloorAirArea")}
             <td>{heatingData ? heatingData.heating_data.Airflow : ''}</td>
-            <td>{heatingData ? heatingData.heating_data.HeatLossSum : ''}</td>
+            <td><strong>{heatingData ? heatingData.heating_data.HeatLossSum : ''}</strong></td>
             {renderEditableCell("ChosenHeating")}
             <td>{heatingData && heatingData ? (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1): ''}</td>
             {renderEditableCell("HeatSource")}
             <td>
-                {heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum ? (<>For lite valgt varme</>) : (<></>)}
+                {heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum ? (<><strong>NB!</strong> For lite valgt varme</>) : (<></>)}
             </td>
         </tr>
         </>

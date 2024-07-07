@@ -200,8 +200,8 @@ class Rooms(db.Model):
         return {
             "id": self.id,
             "uid": self.uid,
-            "BuildingId": self.building_uid,
-            "BuildingName": self.building.building_name,
+            "BuildingUid": self.building_uid,
+            #"BuildingName": self.building.building_name,
             "RoomTypeId": self.room_type_uid,
             "RoomTypeName": self.room_type.name,
             "Floor": self.floor,

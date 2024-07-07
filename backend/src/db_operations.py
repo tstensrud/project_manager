@@ -62,11 +62,6 @@ def count_rooms_in_project(project_uid) -> int:
     total_rooms = db.session.query(func.count(models.Rooms.project_uid)).filter(models.Rooms.project_uid == project_uid).scalar()
     return total_rooms
 
-def get_all_project_buildings(project_uid: int):
-    buildings = db.session.query(models.Buildings).join(models.Projects).filter(models.Projects.uid == project_uid).all()
-    return buildings
-
-
 def check_for_existing_project_number(project_number: str) -> bool:
     project = models.Projects.query.filter_by(project_number = project_number).first()
     if project:
@@ -748,6 +743,8 @@ def calculate_total_heat_loss_for_room(room_uid: int) -> bool:
         room.heatloss_cold_bridge = room_cold_bridge_loss
         room.heatloss_transmission = total_transmission_loss
         room.heatloss_sum = round(total_heat_loss,1)
+        room.chosen_heating = round((math.ceil(room.heatloss_sum / 100) * 100), 1)
+
         ##print(f"Total heat loss for room {heating_room_uid}: {total_heat_loss}")
     
         db.session.commit()
@@ -779,7 +776,8 @@ def sum_heat_loss_chosen_building(building_uid: int) -> float:
 
 
 def sum_heat_loss_project(project_uid: int) -> float:
-    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).join(models.Buildings).join(models.Projects).filter(models.Projects.uid == project_uid).scalar()
+    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).join(models.Projects).filter(models.Rooms.project_uid == project_uid).scalar()
+    print(heat_loss)
     return heat_loss
 
 

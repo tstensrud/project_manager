@@ -14,6 +14,7 @@ import ToggleSettingsButton from './ToggleSettingsButton';
 function Heating () {
     const {projectId} = useParams();
     const {setActiveProject} = useContext(GlobalContext);
+    //const history = useHistory();
     const columnTitles = [
         {text: "#"},
         {text: "Romnr"},
@@ -35,9 +36,12 @@ function Heating () {
     // Error messages from child component
     const [childMessage, setChildMessage] = useState('');
 
-    // Hooks
+    // Fetches
     const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/project_api/${projectId}/rooms/`);
     const {data: buildingData, loading: buildingDataLoading, error: buildingDataError, refetch: buildingReFetch} = useFetch(`/project_api/${projectId}/buildings/`);
+
+    // State changes between child components
+    const [settingsUpdatedState, setSettingsUpdatedState] = useState(false);
 
     // Sorting
     const [sortedBuildings, setSortedBuildings] = useState(roomData?.room_data || []);
@@ -47,18 +51,16 @@ function Heating () {
 
     // Use effects
     useEffect(() => {
-        const filteredBuildingData = buildingData && buildingData.building_data
-        ? buildingData.building_data.filter((building) => building.uid === activeSortButton)
-        : null;
+        const filteredBuildingData = buildingData && buildingData.building_data ? buildingData.building_data.filter((building) => building.uid === activeSortButton) : null;
         setBuildingSummaryData(filteredBuildingData);
     },[activeSortButton, buildingData])
 
     useEffect(() => {
         setActiveProject(projectId);
-    },[]);  
+    },[]);
 
     useEffect(() => {
-        setSortedBuildings(roomData && roomData.room_data.filter((room) => room.BuildingId === buildingId));
+        setSortedBuildings(roomData && roomData.room_data && roomData.room_data.filter((room) => room.BuildingId === buildingId));
     },[roomData]);
 
     // Handlers
@@ -72,19 +74,26 @@ function Heating () {
         }
     }
 
+    const handleSettingsButtonUpdate = () => {
+        setSettingsUpdatedState(prevState => !prevState);
+    }
+
+
     const sortButtonClick = (e) => {
         e.preventDefault();
-        const sortBy = e.target.name;
-        setActivesortButton(sortBy);
+        const selectedBuildingUid = e.target.name;
+        setActivesortButton(selectedBuildingUid);
 
-        if (sortBy === "all") {
+        if (selectedBuildingUid === "all") {
             setBuildingId(null);
             setSortedBuildings(roomData.room_data)
             setBuildingSummaryData(null);
         } else {
-            setBuildingId(sortBy);
-            setSortedBuildings(roomData.room_data.filter((room) => room.BuildingId === sortBy));
+            setBuildingId(selectedBuildingUid);
+            setSortedBuildings(roomData.room_data.filter((room) => room.BuildingUid === selectedBuildingUid));
+            //history.push(`/projects/${projectId}/heating?building=${selectedBuildingUid}`);
         }
+        
     }
 
     return (
@@ -99,14 +108,14 @@ function Heating () {
 
                     <div className="float-container">
                         <div className='float-container-bottom'>
-                            {activeSortButton !== null && activeSortButton !== "all" ? <ToggleSettingsButton msgToParent={handleChildMessage} buildingId={activeSortButton} /> : ''}
+                            {activeSortButton !== null && activeSortButton !== "all" ? <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate}  msgToParent={handleChildMessage} buildingUid={activeSortButton} /> : ''}
                         </div>
 
                     </div>
 
                     <div className="float-container-bottom-right">
-                        <button name="all" key="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;
-                        {buildingData && Object.keys(buildingData.building_data).map((key, index) => (
+                        {/*<button name="all" key="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;*/}
+                        {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                             <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
                                 {buildingData.building_data[key].BuildingName}</button> &nbsp;</>
                         ))}
@@ -118,10 +127,9 @@ function Heating () {
                             <TableHeaderComponent headers={columnTitles} />
                         </thead>
                         <tbody>
-
                             {
                                 sortedBuildings && sortedBuildings.length > 0 ? (
-                                    sortedBuildings.map((room) => <HeatingTableRowComponent msgToParent={handleChildMessage} key={room.uid} roomId={room.uid} />)
+                                    sortedBuildings.map((room, index) => <HeatingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} key={room.uid} roomId={room.uid} />)
                                 ) : (
                                     <>
                                         <tr>

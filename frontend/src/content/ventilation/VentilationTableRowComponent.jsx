@@ -8,7 +8,7 @@ import useUpdateData from '../../hooks/useUpdateData';
 import useUpdateSystem from '../../hooks/useUpdateSystem';
 
 
-function RoomTableRowComponent({roomId, msgToParent, systems}) {
+function RoomTableRowComponent({roomId, msgToParent, systems, index}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
@@ -101,7 +101,7 @@ function RoomTableRowComponent({roomId, msgToParent, systems}) {
         }
 
         const renderEditableCell = (cellName, cellClass) => (
-            <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)}>
+            <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && ventData ? (
                 <input
                     type="text"
@@ -128,7 +128,7 @@ function RoomTableRowComponent({roomId, msgToParent, systems}) {
         {response && response.error !== null && response.error !== undefined ? (<><MessageBox message={response.error} /></>) : (<></>)}
 
         <tr className={markedRow}>
-        <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+        <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
             <td>{roomData ? roomData.room_data.BuildingName : ''}</td>
             <td>{roomData ? roomData.room_data.Floor : ''}</td>
             <td>{roomData ? roomData.room_data.RoomNumber : ''}</td>
@@ -137,7 +137,7 @@ function RoomTableRowComponent({roomId, msgToParent, systems}) {
             <td>{ventData ? ventData.vent_data.AirEmissionSum : ''}</td>
             <td>{ventData ? ventData.vent_data.AirProcess : ''}</td>
             <td>{ventData ? ventData.vent_data.AirMinimum : ''}</td>
-            <td>{ventData ? ventData.vent_data.AirDemand : ''}</td>
+            <td><strong>{ventData ? ventData.vent_data.AirDemand : ''}</strong></td>
             {renderEditableCell("AirSupply", "supplyCell")}
             {renderEditableCell("AirExtract", "extractCell")}
             <td>{ventData ? ventData.vent_data.AirChosen : ''}</td>

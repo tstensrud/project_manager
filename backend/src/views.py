@@ -32,6 +32,10 @@ def refresh_expiring_jwts(response):
     except (RuntimeError, KeyError):
         return response
 
+@views.route('/', methods=['GET'])
+def index():
+    return jsonify({"Nothing": "here"})
+
 @views.route('/verify-token/', methods=['GET'])
 def verify_token():
     try:

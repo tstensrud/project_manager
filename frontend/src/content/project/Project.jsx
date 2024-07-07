@@ -23,7 +23,6 @@ function Project () {
     useEffect(() => {
         setActiveProjectName(data && data.data.ProjectName);
     },[data]);
-    
     return (
         <>
             <SubTitleComponent>

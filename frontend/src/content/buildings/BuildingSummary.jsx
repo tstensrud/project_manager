@@ -15,8 +15,7 @@ function BuildingSummary({buildingData}) {
                 <div className="cards">
                     <div className="information [ card ]">
                         <h2 className="card-title"> {buildingName}</h2>
-                        <h4>Prosjektert</h4>
-                        <p className="info">Areal<br/>
+                        <p className="info">Prosjektert areal<br/>
                         {area.toLocaleString()} m<sup>2</sup>
                         </p>
                         

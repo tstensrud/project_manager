@@ -6,15 +6,24 @@ function BuildingRoomData({projectId}) {
         <>
             <div className="cards">
                 <div className="information [ card ]">
-                    <h2 className="card-title">Bygnings- og romdata</h2>
-                    <h4>Bygg</h4>
-                    <ul>
-                        {data && data.building_data.map((building,index) => (<li key={index}>{building.BuildingName}</li>))}
-                    </ul>
-                    <h4>Rom</h4>
-                    <p className="info">Antall rom prosjektert:<br/>
-                    {data && data.rooms}
-                    </p>
+                <h2 className="card-title">Bygnings- og romdata</h2>
+                    {
+                        data && data.building_data !== null && data.building_data !== undefined ? (
+                            <>
+                                
+                                <h4>Bygg</h4>
+                                <ul>
+                                    {data && data.building_data.map((building, index) => (<li key={index}>{building.BuildingName}</li>))}
+                                </ul>
+                                <h4>Rom</h4>
+                                <p className="info">Antall rom prosjektert:<br />
+                                    {data && data.rooms}
+                                </p>
+                            </>
+                        ) : (
+                            <>{data && data.error}</>
+                        )
+                    }
                 </div>
             </div>
         </>

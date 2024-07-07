@@ -35,10 +35,12 @@
   position: relative;
 }
 
+
 .fl-table thead th {
   color: #ffffff;
   background: #324960;
   top: 0;
+  height: 25px;
   position: sticky;
   z-index: 1;
 }

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch'
 import useUpdateData from '../../hooks/useUpdateData';
@@ -6,15 +6,18 @@ import MessageBox from '../../layout/MessageBox';
 
 
 
-function HeatingSettings ({setShowHeatingSettings, buildingId, msgToParent}) {
+function HeatingSettings ({setShowHeatingSettings, buildingUid, onSettingsUpdate}) {
     
     const {projectId} = useParams();
 
     // Hooks
-    const {data, loading, error, refetch} = useFetch(`/project_api/${projectId}/heating/buildingsettings/${buildingId}/`);
+    const {data, loading, error, refetch} = useFetch(`/project_api/${projectId}/heating/buildingsettings/${buildingUid}/`);
 
     // Update data
-    const {data: updatedBuildingData, response, setData, handleSubmit: updateBuildingData} = useUpdateData(`/project_api/${projectId}/heating/buildingsettings/update/${buildingId}/`);
+    const {data: updatedBuildingData, response, setData, handleSubmit: updateBuildingData} = useUpdateData(`/project_api/${projectId}/heating/buildingsettings/update/${buildingUid}/`);
+
+    // Set heat source for rooms in building
+    const {data: updatedHeatSourceData, response: responseHeatsource, setData: setHeatSourceData, handleSubmit: updateHeatSource} = useUpdateData(`/project_api/${projectId}/heating/buildingsettings/setheatsource/${buildingUid}/`);
 
     // Handlers
     const handleClick = (e) => {
@@ -29,8 +32,19 @@ function HeatingSettings ({setShowHeatingSettings, buildingId, msgToParent}) {
             await updateBuildingData(e);
             refetch();
             setData('');
-            sendMessageToParent("update");
+            onSettingsUpdate(); // Pass a message of change to HeatingTableRowComponent
         }
+    }
+
+    const handleHeatSourceChange = (e) => {
+        setHeatSourceData({[e.target.name]: e.target.value});
+    }
+
+    const handleHeatSourceSubmit = async (e) => {
+        e.preventDefault();
+        await updateHeatSource(e);
+        setHeatSourceData('');
+        onSettingsUpdate(); // Pass a message of change to HeatingTableRowComponent
     }
 
     const handleFormChange = (e) => {
@@ -40,10 +54,7 @@ function HeatingSettings ({setShowHeatingSettings, buildingId, msgToParent}) {
         })
     }
 
-    const sendMessageToParent = (msg) => {
-        msgToParent(msg);
-        console.log("Heating settings snding message")
-        }
+
 
     return (
         <>
@@ -54,7 +65,7 @@ function HeatingSettings ({setShowHeatingSettings, buildingId, msgToParent}) {
                 <div className="todo-popup-header">
                     <span onClick={(e) => handleClick(e, setShowHeatingSettings)} className="todo-close-btn">&times;</span>
                     <br />
-                    Varmeinnstillinger bygg {buildingId}
+                    Varmeinnstillinger bygg {data && data.building_data.BuildingName}ff
                 </div>
                 <div className="settings-popup-item-container">
                     <form name="building_heating_settings" onSubmit={handleSubmit}>
@@ -88,6 +99,14 @@ function HeatingSettings ({setShowHeatingSettings, buildingId, msgToParent}) {
                             <button className="form-button" type="submit">Oppdater</button>
                         </p>
                     </form>
+                    <br />
+                    <p>
+                        Sett primærvarmekilde for alle rom: <br />
+                        <form onSubmit={handleHeatSourceSubmit}>
+                            <input name="heat_source" onChange={handleHeatSourceChange} className='input-heating-medium-length' placeholder='Radiator'/> <br></br>
+                            <button className="form-button">Lagre</button>
+                        </form>
+                    </p>
                 </div>
             </div>
         </>

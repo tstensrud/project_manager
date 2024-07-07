@@ -8,7 +8,7 @@ import HeaderIcon from '../../assets/svg/dashboardIcon.svg?react';
 
 function Dashboard() {
   
-  const { activeProject, setActiveProject, setActiveProjectName, token, setToken } = useContext(GlobalContext);
+  const { activeProject, setActiveProject, setActiveProjectName } = useContext(GlobalContext);
 
   const [projectId, setProjectId] = useState('');
   const {data, loading, error} = useFetch('/projects/');
@@ -57,12 +57,13 @@ function Dashboard() {
                     <>{data.data}</>
                   )}
                 </select>
+                </p>
                 <p>
                 <button type="submit" className="form-button">
                   Gå til valgt prosjekt
                 </button>
                 </p>
-            </p>
+            
             </form>
           </div>
         </div>

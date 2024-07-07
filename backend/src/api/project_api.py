@@ -47,7 +47,7 @@ def project(project_uid):
         project_data["area"] = total_area
         return jsonify({"data": project_data})
     else:
-        return jsonify({"data": "Fant ikke prosjekt"})
+        return jsonify({"error": "Fant ikke prosjekt"})
 
 @jwt_required()
 @project_api_bp.route('/settings/', methods=['GET'])
@@ -120,9 +120,8 @@ def buildings(project_uid):
     buildings = dbo.get_all_project_buildings(project_uid)
     total_rooms = dbo.count_rooms_in_project(project_uid)
     if buildings is None:
-        return jsonify({"building_data": None})
+        return jsonify({"error": "Ingen bygg lagt til enda"})
     else:
-        #building_data = {}
         building_data = []
         for building in buildings:
             building_data.append(dbo.get_building_data(building.uid))
@@ -162,13 +161,14 @@ def rooms(project_uid):
     if request.method == "POST":
         project_specification = project.specification
         data = request.get_json()
-        building_id = escape(data["buildingId"])
+        print(data)
+        building_uid = escape(data["buildingUid"])
         room_type_id = escape(data["roomType"])
         floor = escape(data["floor"].strip())
         name = escape(data["roomName"].strip())
         room_number = escape(data["roomNumber"].strip())
         
-        if dbo.check_if_roomnumber_exists(project.id, building_id, room_number):
+        if dbo.check_if_roomnumber_exists(project.id, building_uid, room_number):
             return jsonify({"error": "Romnummer finnes allerede for dette bygget"})
         
         area = escape(data["roomArea"].strip())
@@ -184,7 +184,7 @@ def rooms(project_uid):
             return jsonify({"error": "Persontantall må kun inneholde tall"})
     
         vent_props = dbo.get_room_type_data(room_type_id, project_specification)
-        new_room_id = dbo.new_room(project.uid, building_id, room_type_id, floor, room_number, name, area, people, 
+        new_room_id = dbo.new_room(project.uid, building_uid, room_type_id, floor, room_number, name, area, people, 
                                     vent_props.air_per_person, vent_props.air_emission,
                                     vent_props.air_process, vent_props.air_minimum,
                                     vent_props.ventilation_principle, vent_props.heat_exchange,
@@ -199,6 +199,8 @@ def rooms(project_uid):
 def get_room(project_uid, room_uid):
     room = dbo.get_room(room_uid)
     room_data = room.get_json_room_data()
+    building = dbo.get_building(room.building_uid)
+    room_data["BuildingName"] = building.building_name
     return jsonify({"room_data": room_data})
 
 @jwt_required()
@@ -404,6 +406,12 @@ def ventilation_update_room(project_uid, room_uid):
 #
 #
 @jwt_required()
+@project_api_bp.route('/heating/', methods=['GET'])
+def heating(project_uid):
+    total_heating = dbo.sum_heat_loss_project(project_uid)
+    return jsonify({"heating_data": total_heating})
+
+@jwt_required()
 @project_api_bp.route('/heating/get_room/<room_uid>/', methods=['GET'])
 def heating_room_data(project_uid, room_uid):
     room = dbo.get_room(room_uid)
@@ -447,6 +455,7 @@ def buildingsettings(project_uid, building_uid):
     building = dbo.get_building(building_uid)
     if building:
         building_data = building.get_json()
+        print(f"Fetched {building_data}")
         return jsonify({"building_data": building_data})
     else:
         return jsonify({"error": "Fant ingen bygg"})
@@ -475,3 +484,15 @@ def update_buildingsettings(project_uid, building_uid):
             return jsonify({"error": "Kunne ikke oppdatere bygg"})
     else:
         return jsonify({"error": "Fant ingen bygg"})
+    
+@jwt_required()
+@project_api_bp.route('/heating/buildingsettings/setheatsource/<building_uid>/', methods=['PATCH'])
+def set_heatsource(project_uid, building_uid):
+    data = request.get_json()
+    if data:
+        rooms = dbo.get_all_rooms_building(building_uid)
+        for room in rooms:
+            update = dbo.update_room_data(room.uid, data)
+            if update is False:
+                return jsonify({"error": "Kunne ikke sette varmekilde for rom"})
+    return jsonify({"message": "Rom oppdatert"})

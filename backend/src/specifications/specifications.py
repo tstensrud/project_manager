@@ -46,7 +46,7 @@ def get_specification_room_types(spec_uid):
     room_uid_type = {}
     for room_type in specification_data:
         room_uid_type[room_type.uid] = room_type.name
-    room_types_list = [{"id": key, "name": value} for key, value in room_uid_type.items()]
+    room_types_list = [{"uid": key, "name": value} for key, value in room_uid_type.items()]
     return jsonify({"spec_room_type_data": room_types_list})
 
 

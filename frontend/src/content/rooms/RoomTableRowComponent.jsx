@@ -8,7 +8,7 @@ import useDeleteData from '../../hooks/useDeleteData'
 import MessageBox from '../../layout/MessageBox';
 
 
-function RoomTableRowComponent({roomId, msgToParent}) {
+function RoomTableRowComponent({roomId, msgToParent, index}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
@@ -89,7 +89,7 @@ function RoomTableRowComponent({roomId, msgToParent}) {
         }
 
         const renderEditableCell = (cellName) => (
-            <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)}>
+            <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && roomData ? (
                 <input
                     type="text"
@@ -111,16 +111,16 @@ function RoomTableRowComponent({roomId, msgToParent}) {
         {response && response.error !== null && response.error !== undefined ? (<><MessageBox message={response.error} /></>) : (<></>)}
 
         <tr className={markedRow}>
-        <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
-            <td className={cellClass} style={{ cursor: 'pointer' }}>{roomData ? roomData.room_data.BuildingName : ''}</td>
-            <td className={cellClass} style={{ cursor: 'pointer' }}>{roomData ? roomData.room_data.Floor : ''}</td>
+        <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
+            <td className={cellClass}>{roomData ? roomData.room_data.BuildingName : ''}</td>
+            <td className={cellClass}>{roomData ? roomData.room_data.Floor : ''}</td>
             {renderEditableCell("RoomNumber")}
-            <td className={cellClass} style={{ cursor: 'pointer' }}>{roomData ? roomData.room_data.RoomTypeName : ''}</td>
+            <td className={cellClass}>{roomData ? roomData.room_data.RoomTypeName : ''}</td>
             {renderEditableCell("RoomName")}
             {renderEditableCell("Area")}
             {renderEditableCell("RoomPopulation")}
             {renderEditableCell("Comment")}
-            <td className={cellClass} style={{ cursor: 'pointer' }}>
+            <td className={cellClass}>
                 <button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button>
             </td>
         </tr>

@@ -52,7 +52,7 @@ function Rooms () {
 
     // Sorting
     const [sortedBuildings, setSortedBuildings] = useState(roomData?.room_data || []);
-    const [buildingId, setBuildingId] = useState(null);
+    const [buildingUid, setBuildingUid] = useState(null);
     const [activeSortButton, setActivesortButton] = useState(null);
 
     useEffect(() => {
@@ -73,31 +73,26 @@ function Rooms () {
     },[]);  
 
     useEffect(() => {
-        setSortedBuildings(roomData && roomData.room_data.filter((room) => room.BuildingId === buildingId));
+        setSortedBuildings(roomData && roomData.room_data !== null && roomData.room_data.filter((room) => room.BuildingUid === buildingUid));
     },[roomData]);
 
     const handleChildMessage = (msg) => {
-        if (msg === "deleted") {
-            roomRefetch();
-        }
-        else if (msg !== undefined) {
+        if (msg !== undefined) {
             setChildMessage(msg);
         }
     }
     
-
-
     const sortButtonClick = (e) => {
         e.preventDefault();
         const sortBy = e.target.name;
         setActivesortButton(sortBy);
 
         if (sortBy === "all") {
-            setBuildingId(null);
+            setBuildingUid(null);
             setSortedBuildings(roomData.room_data)
         } else {
-            setBuildingId(sortBy);
-            setSortedBuildings(roomData.room_data.filter((room) => room.BuildingId === sortBy));
+            setBuildingUid(sortBy);
+            setSortedBuildings(roomData.room_data.filter((room) => room.BuildingUid === sortBy));
         }
         console.log(sortBy);
     }
@@ -106,6 +101,7 @@ function Rooms () {
         setData({
             ...newRoomData,
             [e.target.name]: e.target.value,
+            
         })
     }
 
@@ -118,6 +114,7 @@ function Rooms () {
         inputAreaRef.current.value = '';
         inputPopRef.current.value = '';
         roomTypeRef.current.value = roomTypeRef.current.options[0].value;
+        setData('');
     }
   
     return (
@@ -138,12 +135,12 @@ function Rooms () {
 
                                 <select ref={roomTypeRef} onChange={handleFormChange} name="roomType">
                                     <option key="0" value="">- Velg romtype -</option>
-                                    {roomTypeData && roomTypeData.spec_room_type_data !== undefined && roomTypeData.spec_room_type_data.map(type => (<option key={type.id} value={type.id}>{type.name}</option>))};
+                                    {roomTypeData && roomTypeData.spec_room_type_data !== undefined && roomTypeData.spec_room_type_data.map(type => (<option key={type.uid} value={type.uid}>{type.name}</option>))};
                                 </select>
                                 &nbsp; &nbsp;
-                                <select name="buildingId" onChange={handleFormChange}>
+                                <select name="buildingUid" onChange={handleFormChange}>
                                     <option key="0" value="">- Velg bygg -</option>
-                                    {buildingData && Object.keys(buildingData.building_data).map((key, index) => (<option key={index} value={buildingData.building_data[key]}>{buildingData.building_data[key].BuildingName}</option>))}
+                                    {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (<option key={index} value={buildingData.building_data[key].uid}>{buildingData.building_data[key].BuildingName}</option>))}
                                 </select>
                                 &nbsp; &nbsp;
                                 <input className="input-short" type="text" name="floor" onChange={handleFormChange} placeholder="Etasje" tabIndex="1" required /> &nbsp; &nbsp;
@@ -156,11 +153,11 @@ function Rooms () {
                         </form>
                     </div>
                     <div className="float-container-bottom-right">
-                    <button key="all" name="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;
-                    {buildingData && Object.keys(buildingData.building_data).map((key, index) => (
-                        <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
-                            {buildingData.building_data[key].BuildingName}</button> &nbsp;</>
-                        ))}
+                    {/*<button key="all" name="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;*/}
+                    {buildingData && buildingData.building_data !== undefined && Object.keys(buildingData.building_data).map((key, index) => (
+                            <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
+                                {buildingData.building_data[key].BuildingName}</button> &nbsp;</>
+                            ))}
                     </div>
                 </div>
     {
@@ -176,7 +173,7 @@ function Rooms () {
                     <tbody>
                         {
                             sortedBuildings && sortedBuildings.length > 0 ? (
-                            sortedBuildings.map((room) => <RoomTableRowComponent msgToParent={handleChildMessage} key={room.uid} roomId={room.uid}/>)
+                            sortedBuildings.map((room, index) => <RoomTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} roomId={room.uid}/>)
                         ) : (
                                 <>
                                 <tr>
