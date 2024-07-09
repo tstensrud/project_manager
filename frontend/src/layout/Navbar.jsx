@@ -2,23 +2,54 @@ import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { Link } from 'react-router-dom';
 import { GlobalContext } from '../GlobalContext';
+import useFetch from "../hooks/useFetch";
+import TodoButton from './TodoButton';
 import AccountIcon from '../assets/svg/accountIcon.svg?react';
 
 
 
 function Navbar() {
-    const { activeProject, userUuid, userName, setActiveProject, activeProjectName } = useContext(GlobalContext);
-    const [disabledNavButton, setDisabledNavButton] = useState('dropdown-content-disabled');
+    const { activeProject, setActiveProject, userUuid, setUserUuid, userName, setUserName, activeProjectName, setActiveProjectName } = useContext(GlobalContext);
+    const [projectMenuActive, setProjectMenuActive] = useState(false);
+    const [navButtonClass, setNavButtonClass] = useState('dropdown-content-disabled');
+    const {data: userData, loading, error, refetch: refetchUserInfo} = useFetch(`/get_user/`);
+
+    useEffect(() => {
+        refetchUserInfo();
+        const projectName = localStorage.getItem("projectname");
+        const projectId = localStorage.getItem("projectid");
+        setActiveProjectName(projectName);
+        setActiveProject(projectId);
+    },[]);
+
+    useEffect(() => {
+        setUserUuid(userData && userData.user.uuid);
+        setUserName(userData && userData.user.name);
+    },[userData]);
+
+    useEffect(() => {
+        if (activeProject !== "0" && activeProject !== null && activeProject !== undefined) {
+            setNavButtonClass("dropdown-content");
+        } else {
+            setNavButtonClass("dropdown-content-disabled");
+        }
+    },[activeProject]);
 
     return (
         <>
+        {
+            (activeProject && activeProject !== "0") ? (
+                <TodoButton/>
+            ) : (<></>)
+        }
+        
             <div className="header">
                 <div className="navbar-button-container">
                     <div className="dropdown">
                         <button className='dropbtn'>Prosjekt
                             <i className="fa fa-caret-down"></i>
                         </button>
-                        <div className="dropdown-content">
+                        <div className={navButtonClass}>
                             <Link to={`project/${activeProject}`}>Forside</Link>
                             <Link to={`buildings/${activeProject}`}>Bygg</Link>
                             <Link to={`rooms/${activeProject}`}>Romoversikt</Link>

@@ -1,6 +1,7 @@
 import { GlobalContext } from '../../GlobalContext';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
+import useSubmitFile from '../../hooks/useSubmitFile'
 import useFetch from '../../hooks/useFetch'
 import TableHeaderComponent from '../../tables/TableHeaderComponent';
 import SubTitleComponent from '../../layout/SubTitleComponent';
@@ -11,13 +12,14 @@ function Specification() {
 
     const {projectId} = useParams();
     const {suid} = useParams();
-    const {data, loading, error, refetch} = useFetch(`/specifications/get_spec_room_data/${suid}/`);
-    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);  
-    
-    useEffect(() => {
-        setActiveProject(projectId);
+    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
-    },[]);
+    // Hooks
+    const {data, loading, error, refetch} = useFetch(`/specifications/get_spec_room_data/${suid}/`);
+    const {file, response, setData, handleSubmit} = useSubmitFile(`/specifications/new_rooms/${suid}/`);
+    
+    const [selectedFile, setSelectedFile] = useState();
+    const [warning, setWarning] = useState('')
 
     const columnTitles = [
         {text: "Romtype"},
@@ -34,6 +36,27 @@ function Specification() {
         {text: "dB korridor"},
         {text: "Kommentar"}
 ];
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        setSelectedFile(selectedFile);
+        console.log(file);
+    }
+
+    const handleFileSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (!selectedFile) {
+            console.log("Handle file submit")
+            setWarning('Ingen fil valgt.')
+            return;
+        } else {
+            console.log("Handle file submit")
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            setData(formData)
+            await handleFileSubmit(e)
+        }
+    }
 
     return (
     <>
@@ -41,6 +64,17 @@ function Specification() {
          <HeaderIcon/>   Kravspesifikasjon: {data && data.spec_name}
         </SubTitleComponent>
             <div className="main-content">
+            <div className="text-container-above-tables">
+            <div className='container-flex-column'>
+            <form onSubmit={handleFileSubmit}>
+            <p>
+                Last opp csv-fil med rom data. {warning} <br />
+                <input type="file" accept='.csv' onChange={handleFileChange} /> &nbsp; &nbsp; <button type="submit" class="form-button">Last opp</button>
+            </p>
+            </form>
+            </div>
+
+            </div>
                 <div className="table-wrapper">
                     <table className="fl-table">
                         <thead>
@@ -69,7 +103,7 @@ function Specification() {
                                         </>)
                                 ) : (
                                     <>
-                                        <span>Ingen rom lagt inn</span>
+                                        <span>{data && data.error}</span>
                                     </>
                                 )
                             }

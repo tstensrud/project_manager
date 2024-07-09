@@ -78,36 +78,33 @@ def set_spec(project_uid):
 #
 
 @jwt_required()
-@project_api_bp.route('/new_todo_item', methods=['POST'])
-def new_todo_item(project_id):
-    if request.method == "POST":
-        return_endpoint = request.referrer
-        if return_endpoint:
-            if request.is_json:
-                data = request.get_json()
-                user_id = escape(data["user_id"])
-                content = escape(data["todo_content"])
-                if dbo.new_todo_item(project_id, user_id, content):
-                    response = {"success": True, "redirect": return_endpoint}
-                else:
-                    flash("Kunne ikke opprette punkt for huskeliste", category="error")
-                    response = {"success": False, "redirect": return_endpoint}
-        return jsonify(response)
+@project_api_bp.route('/todo/', methods=['GET'])
+def todo(project_uid):
+    todo_list = dbo.get_project_todo_items(project_uid)
+    return jsonify({"todo": todo_list})
 
 @jwt_required()
-@project_api_bp.route('/todo_item_complete', methods=['POST'])
-def todo_item_complete(project_id):
-    if request.method == "POST":
-        return_endpoint = request.referrer
-        if return_endpoint:
-            if request.is_json:
-                data = request.get_json()
-                if dbo.set_todo_item_completed(escape(data["item_id"]), escape(data["user_id"])):
-                    response = {"success": True, "redirect": return_endpoint}
-                else:
-                    flash("Kunne ikke markere punkt som utført", category="error")
-                    response = {"success": False, "redirect": return_endpoint}
-            
+@project_api_bp.route('/new_todo_item/<user_uuid>/', methods=['POST'])
+def new_todo_item(project_uid, user_uuid):
+    data = request.get_json()
+    print(data)
+    content = escape(data["todo_content"])
+    if dbo.new_todo_item(project_uid, user_uuid, content):
+        response = {"success": "Huskepunkt opprettet"}
+    else:
+        response = {"error": "Kunne ikke opprette huskepunkt"}
+    return jsonify(response)
+
+@jwt_required()
+@project_api_bp.route('/todo_item_complete/<item_uid>/<uuid>/', methods=['PATCH'])
+def todo_item_complete(project_uid, item_uid, uuid):
+    print(f"ITem UID: {item_uid}, UUID: {uuid}")
+    data = request.get_json()
+    if dbo.set_todo_item_completed(item_uid, uuid):
+        response = {"success": "Huskepunkt utført"}
+    else:
+        response = {"error": "Kunne ikke merke huskepunkt utført"}
+        
     return jsonify(response)
 #
 #
@@ -117,6 +114,7 @@ def todo_item_complete(project_id):
 @jwt_required()
 @project_api_bp.route('/buildings/', methods=['GET'])
 def buildings(project_uid):
+    
     buildings = dbo.get_all_project_buildings(project_uid)
     total_rooms = dbo.count_rooms_in_project(project_uid)
     if buildings is None:
@@ -276,7 +274,6 @@ def get_system(project_uid, system_uid):
 @project_api_bp.route('/new_system/', methods=['POST'])
 def new_system(project_uid):
     data = request.get_json()
-    print(f"New system data received: {data}")
     project = dbo.get_project(project_uid)
     system_number = escape(data["systemNumber"].strip())
 
@@ -310,8 +307,6 @@ def new_system(project_uid):
         return jsonify({"success": True})
     else:
         return jsonify({"error", "Kunne ikke opprette nytt system"})
-    
-
 
 @jwt_required()
 @project_api_bp.route('/update_system/<system_uid>/', methods=['PATCH'])
@@ -402,7 +397,7 @@ def ventilation_update_room(project_uid, room_uid):
 
 #
 #               
-#   HEATING AND COOLING
+#   HEATING
 #
 #
 @jwt_required()
@@ -433,7 +428,6 @@ def heating_update_room(project_uid, room_uid):
         processed_data = {}
         for key, value in data.items():
             key = globals.camelcase_to_snake(key)
-            print(f"Key was {key}")
             processed_data[key] = escape(value.strip())
             if key in float_values:
                 try:
@@ -455,7 +449,6 @@ def buildingsettings(project_uid, building_uid):
     building = dbo.get_building(building_uid)
     if building:
         building_data = building.get_json()
-        print(f"Fetched {building_data}")
         return jsonify({"building_data": building_data})
     else:
         return jsonify({"error": "Fant ingen bygg"})
@@ -471,10 +464,10 @@ def update_buildingsettings(project_uid, building_uid):
     if data:
         processed_data = {}
         for key, value in data.items():
-            try:
-                processed_data[key] = globals.replace_and_convert_to_float(value)
-            except ValueError as e:
+            converted_value = globals.replace_and_convert_to_float(value)
+            if converted_value is False:
                 return jsonify({"error": "Innstillinger må kun inne holde tall"})
+            processed_data[key] = globals.replace_and_convert_to_float(converted_value)
         if dbo.update_building_heating_settings(building_uid, processed_data):
             building_rooms = dbo.get_all_rooms_building(building_uid)
             for room in building_rooms:
@@ -496,3 +489,70 @@ def set_heatsource(project_uid, building_uid):
             if update is False:
                 return jsonify({"error": "Kunne ikke sette varmekilde for rom"})
     return jsonify({"message": "Rom oppdatert"})
+#
+#               
+#   COOLING
+#
+#
+@jwt_required()
+@project_api_bp.route('/cooling/get_room/<room_uid>/', methods=['GET'])
+def get_room_cooling(project_uid, room_uid):
+    room = dbo.get_room(room_uid)
+    if room:
+        room_data = room.get_json_room_data()
+        room_cooling_data = room.get_json_cooling_data()
+        room_cooling_data["Airflow"] = room.air_supply
+        return jsonify({"room_data": room_data, "cooling_data": room_cooling_data})
+    else:
+        return ({"error": "Fant ikke rom"})
+
+@jwt_required()
+@project_api_bp.route('/cooling/update_room/<room_uid>/', methods=['PATCH'])
+def update_room_cooling(project_uid, room_uid):
+    data = request.get_json()
+    if data:
+        processed_data = {}
+        for key, value in data.items():
+            key = globals.camelcase_to_snake(key)
+            value_checked = escape(value.strip())
+            converted_value = globals.replace_and_convert_to_float(value_checked)
+            if converted_value is False:
+                return jsonify({"error": f"Celler for kjøledata må kun inneholde tall"})
+            if key == "sun_reduction":
+                if converted_value > 1:
+                    return jsonify({"error": "Solreduksjon kan være maks 1"})
+            processed_data[key] = converted_value                
+
+        if dbo.update_room_data(room_uid, processed_data):
+            if dbo.calculate_total_cooling_for_room(room_uid):
+                return jsonify({"success": True})
+            else:
+                return jsonify({"error": "Kunne ikke beregne nye romdata"})
+        else:
+            return jsonify({"error": "Kunne ikke oppdatere romdata"})
+
+@jwt_required()
+@project_api_bp.route('/cooling/update_all_rooms/<building_uid>/', methods=['PATCH'])
+def update_all_rooms_cooling(project_uid, building_uid):
+    data = request.get_json()
+    if data:
+        processed_data = {}
+        for key, value in data.items():
+            key = globals.camelcase_to_snake(key)
+            value_checked = escape(value.strip())
+            converted_value = globals.replace_and_convert_to_float(value_checked)
+            if converted_value is False:
+                return jsonify({"error": "Kun tall er tillatt i celler."})
+            if key == "sun_reduction":
+                if converted_value > 1:
+                    return jsonify({"error": "Solreduksjon kan være maks 1"})
+            processed_data[key] = converted_value
+        print(processed_data)
+        rooms = dbo.get_all_rooms_building(building_uid)
+        for room in rooms:
+            if dbo.update_room_data(room.uid, processed_data):
+                dbo.calculate_total_cooling_for_room(room.uid)
+            else:
+                return jsonify({"error": "Kunne ikke oppdatere romdata"})
+    return jsonify({"success": "Romdata oppdatert"})
+

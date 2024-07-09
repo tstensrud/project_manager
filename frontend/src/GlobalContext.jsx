@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import useFetch from './hooks/useFetch'
 
 const GlobalContext = createContext();
 
@@ -8,7 +9,7 @@ const GlobalProvider = ({ children }) => {
     const [userName, setUserName] = useState(null);
     const [activeProjectName, setActiveProjectName] = useState(null);
     const [token, setToken] = useState(null);
-    
+
     const value = {
         activeProject,
         setActiveProject,

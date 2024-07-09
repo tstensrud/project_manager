@@ -69,10 +69,6 @@ function Rooms () {
     }, [specId]);
 
     useEffect(() => {
-        setActiveProject(projectId);
-    },[]);  
-
-    useEffect(() => {
         setSortedBuildings(roomData && roomData.room_data !== null && roomData.room_data.filter((room) => room.BuildingUid === buildingUid));
     },[roomData]);
 

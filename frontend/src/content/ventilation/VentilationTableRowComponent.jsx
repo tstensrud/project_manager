@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
+import RoomData from './RoomData';
 import MessageBox from '../../layout/MessageBox';
 import useFetch from '../../hooks/useFetch';
 import useUpdateData from '../../hooks/useUpdateData';
@@ -29,6 +30,9 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index}) {
 
         // Marking a row
         const [markedRow, setMarkedRow] = useState('');
+
+        // Roomdata
+        const [showRoomData, setShowRoomData] = useState(false);
 
         // useEffects
         useEffect(() => {
@@ -60,6 +64,11 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index}) {
         }, [systemResponse]);
         
         // Handlers
+        const handleRoomDataClick = (e) => {
+            e.preventDefault();
+            setShowTodoList(!showTodoList);
+        }
+
         const sendMessageToParent = (msg) => {
             msgToParent(msg);
         }
@@ -123,15 +132,19 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index}) {
             setSystemData(newSystemData);
         };
 
+        const handleOpenRoomData = (e) => {
+            e.preventDefault();
+            setShowRoomData(!showRoomData);
+        }
+        if (showRoomData) return (<><RoomData roomData={roomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData}/></>)
     return (
         <>
         {response && response.error !== null && response.error !== undefined ? (<><MessageBox message={response.error} /></>) : (<></>)}
 
         <tr className={markedRow}>
         <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
-            <td>{roomData ? roomData.room_data.BuildingName : ''}</td>
             <td>{roomData ? roomData.room_data.Floor : ''}</td>
-            <td>{roomData ? roomData.room_data.RoomNumber : ''}</td>
+            <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>{roomData ? roomData.room_data.RoomNumber : ''}</td>
             <td>{roomData ? roomData.room_data.RoomName : ''}</td>
             <td>{ventData ? ventData.vent_data.AirPersonSum : ''}</td>
             <td>{ventData ? ventData.vent_data.AirEmissionSum : ''}</td>
@@ -150,7 +163,10 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index}) {
                     ))}
                 </select>
             </td>
-            <td>Kommentar</td>
+            <td>
+                {ventData && ventData.vent_data.AirDemand > ventData.vent_data.AirSupply ? (<>For lite luft. </>): (<></>)}
+                {ventData && ventData.vent_data.AirSupply !== ventData.vent_data.AirExtract ? (<>Ubalanse i rom</>):(<></>)}
+            </td>
         </tr>
         </>
     );

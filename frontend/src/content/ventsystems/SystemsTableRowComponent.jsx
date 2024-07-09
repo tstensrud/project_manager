@@ -107,10 +107,10 @@ function SystemTableRowComponent({systemId, msgToParent}) {
             )}
         </td>   
         );
-
+        
+        if (response && response.error !== null && response.error !== undefined) return (<><MessageBox message={response.error} /></>);
     return (
         <>
-        {response && response.error !== null&& response.error !== undefined ? (<><MessageBox message={response.error} /></>) : (<></>)}
         <tr className={markedRow}>
         <td className={cellClass}  style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
             <td className={cellClass}>{systemData ? systemData.system_data.SystemName : ''}</td>

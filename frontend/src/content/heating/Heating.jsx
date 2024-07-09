@@ -13,8 +13,6 @@ import ToggleSettingsButton from './ToggleSettingsButton';
 
 function Heating () {
     const {projectId} = useParams();
-    const {setActiveProject} = useContext(GlobalContext);
-    //const history = useHistory();
     const columnTitles = [
         {text: "#"},
         {text: "Romnr"},
@@ -54,10 +52,6 @@ function Heating () {
         const filteredBuildingData = buildingData && buildingData.building_data ? buildingData.building_data.filter((building) => building.uid === activeSortButton) : null;
         setBuildingSummaryData(filteredBuildingData);
     },[activeSortButton, buildingData])
-
-    useEffect(() => {
-        setActiveProject(projectId);
-    },[]);
 
     useEffect(() => {
         setSortedBuildings(roomData && roomData.room_data && roomData.room_data.filter((room) => room.BuildingId === buildingId));
@@ -114,7 +108,6 @@ function Heating () {
                     </div>
 
                     <div className="float-container-bottom-right">
-                        {/*<button name="all" key="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;*/}
                         {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                             <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
                                 {buildingData.building_data[key].BuildingName}</button> &nbsp;</>

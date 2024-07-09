@@ -251,21 +251,21 @@ class Rooms(db.Model):
             "HeatSource": self.heat_source
         }
     def get_json_cooling_data(self):
-            return {
-                "RoomTempSummer": self.room_temp_summer,
-                "InternalLoadPeople": self.internal_heatload_people,
-                "InternalLoadLight": self.internal_heatload_lights,
-                "SunAdition": self.sun_adition,
-                "VentAirTempSummer": self.ventair_temp_summer,
-                "SumInternalHeatloadPeople": self.sum_internal_heatload_people,
-                "SumInternalHeatloadLight": self.sum_internal_heatload_lights,
-                "InternalHeatloadEquipment": self.internal_heatload_equipment,
-                "SunReduction": self.sun_reduction,
-                "SumInternalHeatLoad": self.sum_internal_heatload,
-                "CoolingVentilationAir": self.cooling_ventilationair,
-                "CoolingEquipment": self.cooling_equipment,
-                "CoolingSum": self.cooling_sum
-        }
+        return {
+            "RoomTempSummer": self.room_temp_summer,
+            "InternalHeatloadPeople": self.internal_heatload_people,
+            "InternalHeatloadLights": self.internal_heatload_lights,
+            "SunAdition": self.sun_adition,
+            "VentairTempSummer": self.ventair_temp_summer,
+            "SumInternalHeatloadPeople": self.sum_internal_heatload_people,
+            "SumInternalHeatloadLight": self.sum_internal_heatload_lights,
+            "InternalHeatloadEquipment": self.internal_heatload_equipment,
+            "SunReduction": self.sun_reduction,
+            "SumInternalHeatLoad": self.sum_internal_heatload,
+            "CoolingVentilationAir": self.cooling_ventilationair,
+            "CoolingEquipment": self.cooling_equipment,
+            "CoolingSum": self.cooling_sum
+    }
 
 class VentilationSystems(db.Model):
     __tablename__ = "VentilationSystems"

@@ -65,7 +65,7 @@ function HeatingSettings ({setShowHeatingSettings, buildingUid, onSettingsUpdate
                 <div className="todo-popup-header">
                     <span onClick={(e) => handleClick(e, setShowHeatingSettings)} className="todo-close-btn">&times;</span>
                     <br />
-                    Varmeinnstillinger bygg {data && data.building_data.BuildingName}ff
+                    Varmeinnstillinger bygg {data && data.building_data.BuildingName}
                 </div>
                 <div className="settings-popup-item-container">
                     <form name="building_heating_settings" onSubmit={handleSubmit}>
@@ -100,13 +100,13 @@ function HeatingSettings ({setShowHeatingSettings, buildingUid, onSettingsUpdate
                         </p>
                     </form>
                     <br />
+                    <form onSubmit={handleHeatSourceSubmit}>
                     <p>
                         Sett primærvarmekilde for alle rom: <br />
-                        <form onSubmit={handleHeatSourceSubmit}>
-                            <input name="heat_source" onChange={handleHeatSourceChange} className='input-heating-medium-length' placeholder='Radiator'/> <br></br>
-                            <button className="form-button">Lagre</button>
-                        </form>
+                        <input name="heat_source" onChange={handleHeatSourceChange} className='input-heating-medium-length' placeholder='Radiator'/> <br></br>
+                        <button className="form-button">Lagre</button>
                     </p>
+                    </form>
                 </div>
             </div>
         </>

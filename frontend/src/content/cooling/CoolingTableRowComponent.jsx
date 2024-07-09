@@ -7,16 +7,16 @@ import useFetch from '../../hooks/useFetch';
 import useUpdateData from '../../hooks/useUpdateData';
 
 
-function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, index}) {
+function CoolingTableRowComponent({roomId, msgToParent, settingsUpdateState, index}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
         
         // Initial fetches and refetch
-        const {data: heatingData, loading: heatingLoading, error: heatingError, refetch: heatingRefetch} = useFetch(`/project_api/${projectId}/heating/get_room/${roomId}/`);
+        const {data: coolingData, loading: coolingLoading, error: coolingError, refetch: coolingRefetch} = useFetch(`/project_api/${projectId}/cooling/get_room/${roomId}/`);
         
         // Update data
-        const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomId}/`);
+        const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useUpdateData(`/project_api/${projectId}/cooling/update_room/${roomId}/`);
         
         // Edit of values
         const [editingCell, setEditingCell] = useState(null);
@@ -26,8 +26,8 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
         const [markedRow, setMarkedRow] = useState('');
 
         // useEffects
-        useEffect(() => { // Refetch upon received message theat heating settings has changed
-            heatingRefetch();
+        useEffect(() => { // Refetch upon received message that cooling settings has changed
+            coolingRefetch();
         },[settingsUpdateState]);
 
         useEffect(() => {
@@ -35,10 +35,10 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
         },[]);
 
         useEffect(() => {
-            if(heatingData) {
+            if(coolingData) {
                 setEditedData('');
             }
-        },[heatingData]);
+        },[coolingData]);
         
         // Handlers
         const sendMessageToParent = (msg) => {
@@ -65,7 +65,7 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
                 await updateRoomData(e);
                 handleBlur();
                 setData('');
-                heatingRefetch();
+                coolingRefetch();
                 //sendMessageToParent("updateSummaries");
             } if (e.key == "Escape") {
                 handleBlur();
@@ -83,18 +83,18 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
 
         const renderEditableCell = (cellName) => (
             <td name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
-            {editingCell === cellName && heatingData ? (
+            {editingCell === cellName && coolingData ? (
                 <input
                     type="text"
                     className="table-input"
-                    value={heatingData[cellName]}
+                    value={coolingData[cellName]}
                     onChange={(e) => handleChange(e, cellName)}
                     onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
                     autoFocus
                 />
             ) : (
-                heatingData ? heatingData.heating_data[cellName] : ''
+                coolingData ? coolingData.cooling_data[cellName] : ''
             )}
         </td>   
         );
@@ -103,25 +103,34 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
         <>
         <tr className={markedRow}>
         <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
-            <td>{heatingData ? heatingData.room_data.RoomNumber : ''}</td>
-            {renderEditableCell("RoomHeight")}
-            {renderEditableCell("OuterWallArea")}
-            {renderEditableCell("InnerWallArea")}
-            {renderEditableCell("WindowDoorArea")}
-            {renderEditableCell("RoofArea")}
-            {renderEditableCell("FloorGroundArea")}
-            {renderEditableCell("FloorAirArea")}
-            <td>{heatingData ? heatingData.heating_data.Airflow : ''}</td>
-            <td><strong>{heatingData ? heatingData.heating_data.HeatLossSum : ''}</strong></td>
-            {renderEditableCell("ChosenHeating")}
-            <td>{heatingData && heatingData ? (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1): ''}</td>
-            {renderEditableCell("HeatSource")}
+            <td>{coolingData ? coolingData.room_data.Floor : ''}</td>
+            <td>{coolingData ? coolingData.room_data.RoomNumber : ''}</td>
+            {renderEditableCell("RoomTempSummer")}
+            {renderEditableCell("VentairTempSummer")}
+            {renderEditableCell("InternalHeatloadPeople")}
+            {renderEditableCell("InternalHeatloadLights")}
+            {renderEditableCell("InternalHeatloadEquipment")}
+            {renderEditableCell("SunAdition")}
+            {renderEditableCell("SunReduction")}
+            <td>{coolingData ? coolingData.cooling_data.SumInternalHeatLoad : ''}</td>
+            {renderEditableCell("CoolingEquipment")}           
+            <td>{coolingData ? coolingData.cooling_data.CoolingSum : ''}</td>
+            <td><strong>
+                    {coolingData && (
+                        (() => {
+                            const { SumInternalHeatLoad, CoolingSum, VentairTempSummer, RoomTempSummer } = coolingData.cooling_data;
+                            const calculatedValue = (SumInternalHeatLoad - CoolingSum) / (0.35 * (VentairTempSummer - RoomTempSummer));
+
+                            return calculatedValue < 0 ? calculatedValue.toFixed(0) : null;
+                        })()
+                    )}
+                </strong></td>
             <td>
-                {heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum ? (<><strong>NB!</strong> For lite valgt varme</>) : (<></>)}
+                Kmmentarer
             </td>
         </tr>
         </>
     );
 }
 
-export default HeatingTableRowComponent;
+export default CoolingTableRowComponent;

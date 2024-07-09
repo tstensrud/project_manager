@@ -18,12 +18,6 @@ function Buildings() {
     const [allData, setAllData] = useState();
     const [formInput, setFormInput] = useState('');
 
-    // Use effects
-    
-    useEffect(() => {
-        setActiveProject(projectId);
-    },[]);
-
     // Handlers
     const handleChange = (e) => {
         setData({
@@ -50,14 +44,13 @@ function Buildings() {
                     <p>
                         Legg til nytt bygg i prosjektet
                     </p>
-                    <p>
                         <form className="custom-form profile-form" onSubmit={handleFormSubmit}>
-                            <input onChange={handleChange} type="text" value={formInput} name="buildingName" placeholder="Navn på bygg" />
-                            &nbsp;&nbsp;
-                            <button type="submit" className="form-button">Legg til </button>
-
+                            <p>
+                                <input onChange={handleChange} type="text" value={formInput} name="buildingName" placeholder="Navn på bygg" />
+                                &nbsp;&nbsp;
+                                <button type="submit" className="form-button">Legg til </button>
+                            </p>
                         </form>
-                    </p>
                 </div>
             </div>
             <div className="flex-container-row">

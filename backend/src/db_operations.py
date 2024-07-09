@@ -298,7 +298,7 @@ def update_room_data(room_uid: int, data) -> bool:
     for key in room_columns:
         if key == processed_data_list[0]:
             setattr(room, key, processed_data[key])
-            break
+            #break
     try:
         db.session.commit()
         return True
@@ -792,12 +792,11 @@ Cooling
 def set_standard_cooling_settings(room_uid: int, data) -> bool:
     room = get_room(room_uid)
     room.room_temp_summer = data["room_temp_summer"] if data["room_temp_summer"] != 0 else room.room_temp_summer
-    room.internal_heatload_people = data["internal_load_people"] if data["internal_load_people"] != 0 else room.internal_heatload_people
-    room.internal_heatload_lights = data["internal_load_light"] if data["internal_load_light"] != 0 else room.internal_heatload_lights
+    room.internal_heatload_people = data["internal_heatload_people"] if data["internal_heatload_people"] != 0 else room.internal_heatload_people
+    room.internal_heatload_lights = data["internal_heatload_lights"] if data["internal_heatload_lights"] != 0 else room.internal_heatload_lights
     room.ventair_temp_summer = data["vent_temp_summer"] if data["vent_temp_summer"] != 0 else room.ventair_temp_summer
     room.sun_adition = data["sun_adition"] if data["sun_adition"] != 0 else room.sun_adition
     room.sun_reduction = data["sun_reduction"] if data["sun_reduction"] != 0 else room.sun_reduction
-
 
     try:
         db.session.commit()

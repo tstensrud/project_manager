@@ -34,11 +34,6 @@ function VentSystems () {
     const {data: systemData, response: systemResponse, setData: setSystemData, handleSubmit: submitSystemData} = useSubmitData(`/project_api/${projectId}/new_system/`);
     const [childMessage, setChildMessage] = useState('');
 
-    // Use effects
-    useEffect(() => {
-        setActiveProject(projectId);
-    },[]);
-
     // Handlers
     const handleFormChange = (e) => {
         setSystemData({

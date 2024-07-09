@@ -1,7 +1,37 @@
+import { useParams } from 'react-router-dom';
+import { useEffect, useContext  } from 'react';
+import { GlobalContext } from '../GlobalContext';
+
+import useFetch from '../hooks/useFetch'
+import useSubmitData from '../hooks/useSubmitData'
+import TodoItem from './TodoItem';
+
+
+
 function TodoList ({setShowTodoList}) {
+    const {projectId} = useParams();
+    const { userUuid, activeProject } = useContext(GlobalContext);
+
+    // Hooks
+    const {data: todo, loading, error, refetch} = useFetch(`/project_api/${projectId}/todo/`);
+    const {data: newTodo, setData, handleSubmit} = useSubmitData(`/project_api/${projectId}/new_todo_item/${userUuid}/`);
+    
 
     const handleClick = (e) => {
         setShowTodoList(false);
+    }
+
+    const handleInputChange = (e) => {
+        setData({
+            ...newTodo,
+            [e.target.name]: e.target.value,
+        });
+    }
+
+    const submitTodoItem = async (e) => {
+        e.preventDefault();
+        await handleSubmit(e);
+        refetch();
     }
 
     return(
@@ -13,24 +43,22 @@ function TodoList ({setShowTodoList}) {
                     Huskeliste
                 </div>
                 <div className="todo-popup-item-container" id="todo-popup-item-container">
-                    <form id="todoItem">
-                        <input type="text" id="project_id" value="{{project.id}}" hidden readOnly />
-                        <input type="text" id="user_id" value="{{user.id}}" hidden readOnly />
+                    <form id="todoItem" onSubmit={submitTodoItem}>
                         <div className="todo-popup-listitem-form ">
-                            <input type="text" id="todo_content" className="todo-input" placeholder="Nytt huskepunkt" />
+                            <input name="todo_content" type="text" className="todo-input" placeholder="Nytt huskepunkt" onChange={handleInputChange} />
                         </div>
                         <div className="todo-popup-listitem">
-                            <button className="table-button" id="submitTodoButton">Legg til</button>
+                            <button className="table-button">Legg til</button>
                         </div>
-                        <div key="{{item.id}}" className="todo-popup-listitem" id="todo-popup-listitem">
-                            <input type="text" className="item-id" id="item-id" value="{{item.id}}" hidden readOnly />
-                            <p>DATO - FORFATTER</p>
-                            <p>Kontent</p>
-                            <p><button className="todo-list-button" id="todo-completed">Utført</button></p>
-                        </div>
-                        <div className="todo-popup-listitem">
-                            <p>Ingen huskepunkter</p>
-                        </div>
+                        {
+                            todo && todo.todo === null ? (
+                                <>
+                                <div className="todo-popup-listitem">Ingen huskepunkter</div></>
+                                ) : (
+                                todo && todo.todo && Object.keys(todo.todo).map((key, index) => (
+                                    <TodoItem key={index} user={userUuid} data={todo.todo[key]} /> ))
+                            )
+                        }
                     </form>
                 </div>
             </div>

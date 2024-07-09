@@ -12,17 +12,16 @@ import CoolingSummary from './CoolingSummary';
 
 function Project () {
     const {projectId} = useParams();
-    const { activeProject, setActiveProject, setActiveProjectName, token, setToken } = useContext(GlobalContext);
+    const { activeProject, userUuid, userName, setActiveProject, setActiveProjectName, token, setToken } = useContext(GlobalContext);
     const {data, loading, error} = useFetch(`/project_api/${projectId}/`)
     
     
     useEffect(() => {
-        setActiveProject(projectId);
-    },[]);
-
-    useEffect(() => {
-        setActiveProjectName(data && data.data.ProjectName);
+        const projectName = data && data.data.ProjectName;
+        setActiveProjectName(projectName);
+        localStorage.setItem("projectname", projectName);
     },[data]);
+    
     return (
         <>
             <SubTitleComponent>

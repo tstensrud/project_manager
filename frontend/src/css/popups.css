@@ -1,4 +1,4 @@
-/* Flash box*/
+/* Message box*/
 .popup-hide {
     display: none;
     position: fixed;
@@ -49,7 +49,7 @@
 /* To-do list */
 .todo-container {
     position: fixed;
-    left: 10px;
+    right: 10px;
     top: 15px;
     z-index:1000;
     align-items: center;
@@ -76,12 +76,12 @@
 
 .todo-popup-header {
     display: flex;
-    background-color: #c96072;
-    color: black;
+    background-color: #41787a;
+    color: white;
     padding: 5px;
     position: relative;
     width: 100%;
-    height: 50px;
+    height: 51px;
     align-items: center;
     justify-content: center;
     font-weight: 800;
@@ -122,7 +122,13 @@
 }
 
 .todo-completed {
-    color: grey;
+    text-decoration: line-through;
+    background-color: #e9e9e9;
+    color: black;
+    padding: 5px;
+    position: relative;
+    width: 300px;
+    border-bottom: 1px solid black;
 }
 
 /* Settings window for cooling and heating*/
@@ -134,6 +140,7 @@
     left:0;
     height: 100%;
     background-color: #e9e9e9;
+    color: black;
     justify-content: flex-start;
     flex-direction: column;
     align-items: flex-start;
@@ -145,5 +152,85 @@
 .settings-popup-item-container {
     overflow-y: auto;
     margin-left: 20px;
+    margin-right: 20px;
     margin-top: 20px;
+}
+
+/* Room data window*/
+
+.room-data-table {
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    border: 1px solid black;
+    display: table;
+    font-size: 14px;
+  }
+.room-info-ventilation-container {
+    position: fixed;
+    left: 25%;
+    top: 15%;
+    z-index: 1000;
+    overflow-y: auto;
+}
+.room-info-ventilation-popup {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    position: relative;
+    width: 100%;
+    z-index: 1000;
+    font-size: 14px;
+}
+
+.room-data-close-btn {
+    position: absolute;
+    color: white;
+    top: 0px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.room-data-close-btn:hover {
+    color: black;
+}
+
+ 
+.room-data-row {
+background: #f6f6f6;
+width: 100%;
+}
+
+.room-data-row:nth-of-type(odd) {
+background: #e9e9e9;
+}
+
+.room-data-header {
+font-weight: 500;
+color: #ffffff;
+background: #324960;
+justify-content: center;
+align-items: center;
+}
+
+.room-data-title {
+display: flex;
+height: 100%;
+width: 100%;
+text-align: center;
+align-items: center;
+justify-content: center;
+font-weight: 500;
+color: #ffffff;
+background: #3e6272;
+}
+
+.room-data-cell {
+    align-items: center;
+    padding: 2px 6px;
+    display: table-cell;
+    color: black;
+    width: 50%;
+}
+
+.room-data-cell.white {
+color: white;
 }

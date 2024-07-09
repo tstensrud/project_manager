@@ -8,24 +8,24 @@ import HeaderIcon from '../../assets/svg/dashboardIcon.svg?react';
 
 function Dashboard() {
   
-  const { activeProject, setActiveProject, setActiveProjectName } = useContext(GlobalContext);
+  const { setActiveProject, setActiveProjectName } = useContext(GlobalContext);
 
   const [projectId, setProjectId] = useState('');
   const {data, loading, error} = useFetch('/projects/');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const activeProjectLayout = setActiveProject('0');
+    setActiveProject('0');
     setActiveProjectName('');
+    localStorage.removeItem("projectid");
+    localStorage.removeItem("projectname");
   },[]);
 
   const handleChange = (e) => {
     const projectId = e.target.value;
-    const projectName = e.target.key;
-    setActiveProjectName(projectName);
-    console.log(projectName);
     setProjectId(projectId);
-
+    setActiveProject(projectId);
+    localStorage.setItem("projectid", projectId);
   }
 
   const handleSubmit = () => {
@@ -50,8 +50,8 @@ function Dashboard() {
                 <select onChange={handleChange}>
                   <option>- Velg prosjekt -</option>
                   {Array.isArray(data?.data) ? (
-                    data.data.map((project, index) => (
-                      <option key={index} value={project.uid}>{project.ProjectNumber} {project.ProjectName}</option>
+                    data.data.map((project) => (
+                      <option key={project.ProjectName} value={project.uid}>{project.ProjectNumber} {project.ProjectName}</option>
                     ))
                   ) : (
                     <>{data.data}</>

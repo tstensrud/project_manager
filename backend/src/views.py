@@ -10,6 +10,7 @@ from .models import User
 from . import db_operations as dbo
 from werkzeug.security import check_password_hash
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager, verify_jwt_in_request
+from markupsafe import escape
 
 views = Blueprint("views", __name__)
 
@@ -48,23 +49,41 @@ def verify_token():
 @views.route('/token/', methods=['GET', 'POST'])
 def token():
     if request.method == 'POST':
-        email = request.json.get("email")
-        password =  request.json.get("password")
+        email = escape(request.json.get("email"))
+        password =  escape(request.json.get("password"))
 
         user = User.query.filter_by(email=email).first()
         if user:
+            user_uuid = user.uuid
             if check_password_hash(user.password, password):
-                access_token = create_access_token(identity=email)
+                access_token = create_access_token(identity=user_uuid)
                 response = {"access_token": access_token, "uuid": user.uuid, "username": user.name}
                 user.logged_in = True
                 db.session.commit()
-                return response
+                return jsonify(response)
             else:
-                return jsonify({"Error": "Feil passord eller brukernavn"}), 401
+                return jsonify({"error": "Feil brukernavn eller passord"}), 401
         else:
-            return jsonify({"Error": "Fant ikke bruker"}), 401
+            return jsonify({"error": "Feil brukernavn eller passord"}), 401
     if request.method == "GET":
         return jsonify({"Message": "Nothing here"})
+
+@jwt_required()
+@views.route('/get_user/', methods=['GET'])
+def get_user():
+    verify_jwt_in_request()
+    user_identiy = get_jwt_identity()
+    user = db.session.query(models.User).filter(models.User.uuid == user_identiy).first()
+    user_data = {}
+    user_data["uuid"] = user.uuid
+    user_data["email"] = user.email
+    user_data["name"] = user.name
+    if user:
+        print(user_data)
+        return jsonify({"user": user_data})
+    else:
+        return jsonify({"error": "Could not fetch user data"})
+    
 
 @views.route('/logout/<user_uid>/', methods=["POST"])
 def logout(user_uid):
@@ -195,5 +214,6 @@ def dummy_project():
 
 
     
+
 
 

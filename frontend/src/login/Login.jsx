@@ -7,6 +7,7 @@ function Login(props) {
     const { setUserUuid, setUserName } = useContext(GlobalContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState();
     const navigate = useNavigate();
 
     function logMeIn(e) {
@@ -21,20 +22,19 @@ function Login(props) {
             }
         })
         .then ((response) => {
-            //console.log('Response data:', response.data);
             props.setToken(response.data.access_token);
             setUserUuid(response.data.uuid);
             setUserName(response.data.username);
-            //console.log('UUID and Username set:', { uuid: response.data.uuid, username: response.data.username });
             //localStorage.setItem("user_uuid", response.data.uuid);
             //localStorage.setItem("username", response.data.username);
             navigate("/dashboard");
 
         }).catch((error) => {
             if (error.response) {
-                console.log(error.response)
-                console.log(error.response.status)
-                console.log(error.response.headers)
+                console.log(error.response.data)
+                //console.log(error.response.status)
+                //console.log(error.response.headers)
+                setError(error);
                 }
             });
             setEmail("");
@@ -52,6 +52,7 @@ function Login(props) {
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passord" />
                         <button>Logg inn</button>
                         <p className="message">Kontakt admin hvis du mangler konto<br/>torbjorn.stensrud@structor.no</p>
+                        <p>{error && error.response.data ? (<>{error.response.data.error}</>)  : ('')}</p>
                     </form>
                 </div>
             </div>

@@ -17,7 +17,6 @@ function Ventilation () {
 
     const columnTitles = [  
         {text: "#"},
-        {text: "Bygg"},
         {text: "Etasje"},
         {text: "Romnr"},
         {text: "Romnavn"},
@@ -54,10 +53,6 @@ function Ventilation () {
         : null;
         setBuildingSummaryData(filteredBuildingData);
     },[activeSortButton, buildingData])
-
-    useEffect(() => {
-        setActiveProject(projectId);
-    },[]);  
 
     useEffect(() => {
         setSortedBuildings(roomData && roomData.room_data && roomData.room_data.filter((room) => room.BuildingUid === buildingId));

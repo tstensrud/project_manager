@@ -3,6 +3,7 @@
 	gap: 2.5rem;
 	max-width: 1000px;
 	margin: 2vh;
+	color: black;
 }
 
 .card {
@@ -12,7 +13,7 @@
 }
 
 .information {
-	background-color: white;
+	background-color: #EEEEEE;
 	padding: 1.5rem;
 
 	.card-title {

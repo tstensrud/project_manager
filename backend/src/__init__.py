@@ -1,5 +1,5 @@
 from datetime import timedelta
-from flask import Flask, request
+from flask import Flask, request, session
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
@@ -7,6 +7,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 #from dotenv import load_dotenv
 import os
+import pyrebase
 
 #load_dotenv()
 db = SQLAlchemy()
@@ -21,6 +22,7 @@ def create_app():
     #app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['JWT_SECRET_KEY'] = "ASsaf39834578DJYACDS1234fwec1af521f35f1"
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
+    #app.config['UPLOAD_FOLDER'] = "./src/specifications/templates/"
     db.init_app(app)
 
         
@@ -31,7 +33,8 @@ def create_app():
     from .api import project_api
     from .projects import projects
     from .specifications import specifications
-    
+    #from .admin import admin
+
     #app.register_blueprint(user.user_bp, url_prefix='/user/<username>')
     #app.register_blueprint(admin.admin_bp, url_prefix='/admin')
     app.register_blueprint(projects.projects_bp, url_prefix='/projects')

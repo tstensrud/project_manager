@@ -1,11 +1,4 @@
-{% extends "base.html" %}
-{%block title%}Administrator{% endblock %}
-{% block header %}Administrator{% endblock %}
 
-
-
-{%block page_subtitle %}Administrator{% endblock %}
-{%block content %}  
 <p>
 Legg til ny bruker
     <form class="custom-form profile-form" method="POST" role="form" action="{{url_for('admin.new_user')}}">
@@ -125,4 +118,3 @@ Legg til ny bruker
     document.getElementById(formId).submit();
   }
   </script>
-{% endblock %}

@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, url_for, render_template, flash, request
-from flask_login import current_user
+from flask_login import current_user, login_required
 from .. import models, db
 from .. import db_ops_admin as dboa
 from .. import globals
@@ -13,25 +13,9 @@ from email.mime.text import MIMEText
 
 admin_bp = Blueprint('admin', __name__, template_folder="templates", static_folder="static")
 
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not current_user.is_authenticated or not current_user.admin:
-            globals.log(f"Unauthorized attempt to access admin page by {current_user.name}")
-        return f(*args, **kwargs)
-    return decorated_function
+     
 
-@jwt_required()
-@admin_required
-def send_user_email(subject: str, body: str, to_email: str) -> bool:
-    from_email = "structortsit@gmail.com"
-    password = "blablalba"
-
-    return True
-        
-
-@jwt_required()
-@admin_required
+@login_required
 @admin_bp.route('/', methods=['GET', 'POST'])
 def admin():
     endpoint = request.endpoint
@@ -52,8 +36,8 @@ def admin():
         return redirect(url_for("admin.admin"))
 
 
-@jwt_required()
-@admin_required
+
+@login_required
 @admin_bp.route('/new_user', methods=['POST'])
 def new_user():
     

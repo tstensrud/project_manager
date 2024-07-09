@@ -41,7 +41,7 @@ function NewProject() {
                         <input
                             name="projectNumber"
                             onChange={handleChange}
-                            className="form-control"
+                            className="card-input"
                             type="text"
                             placeholder="Prosjektnummer" />
                     </p>
@@ -50,7 +50,7 @@ function NewProject() {
                         <input
                             name="projectName"
                             onChange={handleChange}
-                            className="form-control"
+                            className="card-input"
                             type="text"
                             placeholder="Navn på prosjekt" />
                     </p>

@@ -1,11 +1,28 @@
 import { useEffect, useState, useContext } from 'react';
-import useFetch from '../../hooks/useFetch'
+import useSubmitData from '../../hooks/useSubmitData'
 import { Link, useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 import SubTitleComponent from "../../layout/SubTitleComponent";
 import HeaderIcon from '../../assets/svg/newSpecIcon.svg?react';
 
 function NewSpec() {
+
+    const {data: newData, setData, loading, response, error, handleSubmit} = useSubmitData('/specifications/new_specification/');
+    
+    
+    const handleInputChange = (e) => {
+        setData ({
+            ...newData,
+            [e.target.name]: e.target.value,
+        });
+    }
+
+    const submitNewSpec = async (e) => {
+        e.preventDefault();
+        await handleSubmit(e);
+        setData('');
+    }
+
     return (
         <>
         
@@ -23,8 +40,13 @@ function NewSpec() {
                             Er det en mer prosjektspesifik kravspesifikasjon bruk et navn som: <br/>
                             - Brekketunet bolig, Obos, 2024
                             </p>
+                            <form onSubmit={submitNewSpec}>
                             <p className="info">
-                                <input type="text"></input> &nbsp; &nbsp; <button className="form-button">Legg til</button>
+                                <input name="spec_name" onChange={handleInputChange} className="card-input" type="text" placeholder="Navn på kravspesifikasjon"></input> &nbsp; &nbsp; <button type="submit" className="form-button">Legg til</button>
+                            </p>
+                            </form>
+                            <p>
+                                {response && response.error ? (<>{response.error}</>) : (<></>)}
                             </p>
                         </div>
                     </div>
