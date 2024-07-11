@@ -45,16 +45,19 @@ function Login(props) {
     return(
         <>
             <div className="login-page">
-                <div className="form">
+
                     <form className="login-form" onSubmit={logMeIn}>
                     <p className="message">Structor TS prosjekter</p>
+                    <p>
                         <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-post" />
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passord" />
-                        <button>Logg inn</button>
+                    </p>
+
+                    <p><button className="form-button">Logg inn</button></p>
                         <p className="message">Kontakt admin hvis du mangler konto<br/>torbjorn.stensrud@structor.no</p>
                         <p>{error && error.response.data ? (<>{error.response.data.error}</>)  : ('')}</p>
                     </form>
-                </div>
+                
             </div>
         </> 
     );

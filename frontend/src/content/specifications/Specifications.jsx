@@ -16,26 +16,28 @@ function Specifications() {
 
     return (
         <>
-        <SubTitleComponent>
-         <HeaderIcon /> Kravspesifikasjoner
-        </SubTitleComponent>
+            <SubTitleComponent>
+                <HeaderIcon /> Kravspesifikasjoner
+            </SubTitleComponent>
             <div className='main-content'>
-                <div className="cards">
-                    <div className="information [ card ]">
-                        <h2 className="card-title">Kravspesifikasjoner i databasen</h2>
-                        <p className="info">Velg kravspesifikasjon fra listen under for å og legge til romtyper.
-                            Du kan opprette en ny for ditt prosjekt dersom de eksisterende i databasen ikke er relevante</p>
-                        <p className="info">
-                            <ul>
-                            {
-                                data && data.data !== null ? (
-                                    data.data.map((spec) => (
-                                        <><li><Link to={`/specifications/${spec.id}/${activeProject}/`}>{spec.name}</Link></li></>
-                                    )
-                                )) : (<>Ingen spesifikasjoner i databasen</>)
-                            }
-                            </ul>
-                        </p>
+                <div className="flex-container-row">
+                    <div className="cards">
+                        <div className="information [ card ]">
+                            <h2 className="card-title">Kravspesifikasjoner i databasen</h2>
+                            <p className="info">Velg kravspesifikasjon fra listen under for å og legge til romtyper.
+                                Du kan opprette en ny for ditt prosjekt dersom de eksisterende i databasen ikke er relevante</p>
+                            <p className="info">
+                                <ul>
+                                    {
+                                        data && data.data !== null ? (
+                                            data.data.map((spec) => (
+                                                <><li><Link to={`/specifications/${spec.id}/${activeProject}/`}>{spec.name}</Link></li></>
+                                            )
+                                            )) : (<>Ingen spesifikasjoner i databasen</>)
+                                    }
+                                </ul>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

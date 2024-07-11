@@ -37,10 +37,11 @@ function Dashboard() {
   return (
     <>
       <SubTitleComponent>
-        <HeaderIcon /> Dashboard
+        <HeaderIcon /> Dashboard - velg prosjekt
       </SubTitleComponent>
       
       <div className="main-content">
+      <div className="flex-container-row">
         <div className="cards">
           <div className="information [ card ]">
             <h2 className="card-title">Velg prosjekt</h2>
@@ -66,8 +67,8 @@ function Dashboard() {
             
             </form>
           </div>
+          </div>
         </div>
-
       </div>
     </>
   );

@@ -33,6 +33,7 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index}) {
 
         // Roomdata
         const [showRoomData, setShowRoomData] = useState(false);
+        const [test, setTest] = useState(false);
 
         // useEffects
         useEffect(() => {
@@ -136,21 +137,24 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index}) {
             e.preventDefault();
             setShowRoomData(!showRoomData);
         }
-        if (showRoomData) return (<><RoomData roomData={roomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData}/></>)
+
     return (
         <>
-        {response && response.error !== null && response.error !== undefined ? (<><MessageBox message={response.error} /></>) : (<></>)}
-
+        {showRoomData ? <RoomData roomData={roomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData}/> : ''}
+        {response && response.error ? <MessageBox message={response.error} /> : null}
         <tr className={markedRow}>
-        <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
+            <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
             <td>{roomData ? roomData.room_data.Floor : ''}</td>
-            <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>{roomData ? roomData.room_data.RoomNumber : ''}</td>
-            <td>{roomData ? roomData.room_data.RoomName : ''}</td>
-            <td>{ventData ? ventData.vent_data.AirPersonSum : ''}</td>
-            <td>{ventData ? ventData.vent_data.AirEmissionSum : ''}</td>
+            <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
+                <strong>{roomData ? roomData.room_data.RoomNumber : ''}</strong>
+                <br />
+                <span className="table-text-grey">{roomData ? roomData.room_data.RoomName : ''}</span>
+            </td>
+            <td>{ventData ? (ventData.vent_data.AirPersonSum).toFixed(0) : ''} </td>
+            <td>{ventData ? (ventData.vent_data.AirEmissionSum).toFixed(0) : ''}</td>
             <td>{ventData ? ventData.vent_data.AirProcess : ''}</td>
             <td>{ventData ? ventData.vent_data.AirMinimum : ''}</td>
-            <td><strong>{ventData ? ventData.vent_data.AirDemand : ''}</strong></td>
+            <td>{ventData ? (ventData.vent_data.AirDemand).toFixed(0) : ''}</td>
             {renderEditableCell("AirSupply", "supplyCell")}
             {renderEditableCell("AirExtract", "extractCell")}
             <td>{ventData ? ventData.vent_data.AirChosen : ''}</td>

@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
+import RoomData from './RoomData';
 import MessageBox from '../../layout/MessageBox';
 import useFetch from '../../hooks/useFetch';
 import useUpdateData from '../../hooks/useUpdateData';
@@ -24,6 +25,9 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
 
         // Marking a row
         const [markedRow, setMarkedRow] = useState('');
+
+        // Room data
+        const [showRoomData, setShowRoomData] = useState(false);
 
         // useEffects
         useEffect(() => { // Refetch upon received message theat heating settings has changed
@@ -81,6 +85,11 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
             }   
         }
 
+        const handleOpenRoomData = (e) => {
+            e.preventDefault();
+            setShowRoomData(!showRoomData);
+        }
+
         const renderEditableCell = (cellName) => (
             <td name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && heatingData ? (
@@ -96,14 +105,20 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
             ) : (
                 heatingData ? heatingData.heating_data[cellName] : ''
             )}
-        </td>   
-        );
-        if (response && response.error !== null && response.error !== undefined) return (<><MessageBox message={response.error} /></>);
+        </td>);
+
     return (
         <>
+        {showRoomData ? <RoomData heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData}/> : ''}
+        {response && response.error !== null && response.error !== undefined ? <MessageBox message={response.error} /> : ''}
         <tr className={markedRow}>
         <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
-            <td>{heatingData ? heatingData.room_data.RoomNumber : ''}</td>
+            <td>{heatingData ? heatingData.room_data.Floor : ''}</td>
+            <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
+                <strong>{heatingData ? heatingData.room_data.RoomNumber : ''}</strong>
+                <br/>
+                <span className="table-text-grey">{heatingData ? heatingData.room_data.RoomName : ''}</span>
+            </td>
             {renderEditableCell("RoomHeight")}
             {renderEditableCell("OuterWallArea")}
             {renderEditableCell("InnerWallArea")}
@@ -111,9 +126,8 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
             {renderEditableCell("RoofArea")}
             {renderEditableCell("FloorGroundArea")}
             {renderEditableCell("FloorAirArea")}
-            <td>{heatingData ? heatingData.heating_data.Airflow : ''}</td>
-            <td><strong>{heatingData ? heatingData.heating_data.HeatLossSum : ''}</strong></td>
-            {renderEditableCell("ChosenHeating")}
+            <td><strong>{heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}</strong></td>
+            <td>{heatingData ? heatingData.heating_data.ChosenHeating : ''}</td>
             <td>{heatingData && heatingData ? (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1): ''}</td>
             {renderEditableCell("HeatSource")}
             <td>

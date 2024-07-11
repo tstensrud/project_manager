@@ -3,30 +3,30 @@ import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
 import useFetch from '../../hooks/useFetch'
-
 import HeatingIcon from '../../assets/svg/heatingIcon.svg?react'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import TableHeaderComponent from "../../tables/TableHeaderComponent";
 import HeatingTableRowComponent from './HeatingTableRowComponent';
 import MessageBox from '../../layout/MessageBox';
 import ToggleSettingsButton from './ToggleSettingsButton';
+import BuildingSummary from './BuildingSummary';
 
 function Heating () {
     const {projectId} = useParams();
     const columnTitles = [
         {text: "#"},
+        {text: "Etg"},
         {text: "Romnr"},
-        {text: "Høyde m"},
-        {text: "Yttervegg m&sup2;"},
-        {text: "Innervegg m&sup2;"},
-        {text: "Vindu/dør m&sup2;"},
-        {text: "Tak m&sup2;"},
-        {text: "Gulv grunn m&sup2;"},
-        {text: "Gulv fritt m&sup2;"},
-        {text: "Vent m&sup3;/h"},
-        {text: "&#8721; varmetap"},
-        {text: "Valgt varme W"},
-        {text: "W/m&sup2;"},
+        {text: <>Høyde <br/>m</>},
+        {text: <>Yttervegg <br/> m<sup>2</sup></>},
+        {text: <>Innervegg <br/>m<sup>2</sup></>},
+        {text: <>Vindu/dør <br/>m<sup>2</sup></>},
+        {text: <>Tak <br/>m<sup>2</sup></>},
+        {text: <>Gulv grunn <br/>m<sup>2</sup></>},
+        {text: <>Gulv fritt <br/>m<sup>2</sup></>},
+        {text: <>&#8721; varmetap<br/> W</>},
+        {text: <>Valgt varme<br/> W</>},
+        {text: <>W/m<sup>2</sup></>},
         {text: "Varmekilde"},
         {text: "Kommentar"}
     ];
@@ -85,7 +85,6 @@ function Heating () {
         } else {
             setBuildingId(selectedBuildingUid);
             setSortedBuildings(roomData.room_data.filter((room) => room.BuildingUid === selectedBuildingUid));
-            //history.push(`/projects/${projectId}/heating?building=${selectedBuildingUid}`);
         }
         
     }
@@ -99,15 +98,14 @@ function Heating () {
             </SubTitleComponent>
             <div className='main-content'>
                 <div className="text-container-above-tables">
-
-                    <div className="float-container">
-                        <div className='float-container-bottom'>
-                            {activeSortButton !== null && activeSortButton !== "all" ? <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate}  msgToParent={handleChildMessage} buildingUid={activeSortButton} /> : ''}
-                        </div>
-
+                    
+                    <div className="float-container">                   
+                        {buildingSummaryData && <BuildingSummary data={buildingSummaryData[0]}/>}
                     </div>
 
                     <div className="float-container-bottom-right">
+                    {activeSortButton !== null && activeSortButton !== "all" ? <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate}  msgToParent={handleChildMessage} buildingUid={activeSortButton} /> : ''}
+                        &nbsp;
                         {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                             <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
                                 {buildingData.building_data[key].BuildingName}</button> &nbsp;</>

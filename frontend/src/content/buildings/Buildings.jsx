@@ -39,20 +39,17 @@ function Buildings() {
             <HeaderIcon />  Bygg
         </SubTitleComponent>
         <div className="main-content">
-            <div className="text-container-above-tables">
-                <div className="float-container">
-                    <p>
-                        Legg til nytt bygg i prosjektet
-                    </p>
-                        <form className="custom-form profile-form" onSubmit={handleFormSubmit}>
-                            <p>
-                                <input onChange={handleChange} type="text" value={formInput} name="buildingName" placeholder="Navn på bygg" />
-                                &nbsp;&nbsp;
-                                <button type="submit" className="form-button">Legg til </button>
-                            </p>
-                        </form>
-                </div>
+
+            <div className="container-above-table-rooms-top">
+                <form className="custom-form profile-form" onSubmit={handleFormSubmit}>
+
+                    <input onChange={handleChange} type="text" value={formInput} name="buildingName" placeholder="Navn på bygg. Eks.: A, Hovedbygg" />
+                    &nbsp;&nbsp;
+                    <button type="submit" className="form-button">Legg til </button>
+
+                </form>
             </div>
+
             <div className="flex-container-row">
                 {
                     data && data.building_data === null ? (

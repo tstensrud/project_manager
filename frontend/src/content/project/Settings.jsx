@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import useFetch from '../../hooks/useFetch'
-import useSubmitData from '../../hooks/useSubmitData'
+import useUpdateData from '../../hooks/useUpdateData'
 import { useParams, useNavigate } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 import SubTitleComponent from '../../layout/SubTitleComponent';
@@ -11,7 +11,7 @@ function Settings () {
     const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
     const {data, loading, error} = useFetch(`/project_api/${projectId}/settings/`);
     const {data: specData, loading: specLoading, error: specError} = useFetch(`/specifications/get_specifications/`);
-    const {data: changeSpecData, setData: setSpecData, error: changeSpecError, handleSubmit: changeSpecSubmit} = useSubmitData(`/project_api/${projectId}/settings/update_project/`);
+    const {data: changeSpecData, setData: setSpecData, error: changeSpecError, handleSubmit: changeSpecSubmit} = useUpdateData(`/project_api/${projectId}/settings/update_project/`);
 
     const [chosenSpec, setChosenSpec] = useState();
     const navigate = useNavigate();
@@ -22,9 +22,10 @@ function Settings () {
 
     const handleOnSpecChange = (e) => {
         e.preventDefault();
-        const spec = e.target.value;
-        setSpecData(spec);
-        console.log(spec);
+        setSpecData({
+            ...changeSpecData,
+            [e.target.name]:e.target.value,
+        });
     }
 
     const handleOnSubmit = (e) => {

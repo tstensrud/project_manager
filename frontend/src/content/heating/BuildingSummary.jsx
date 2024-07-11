@@ -2,13 +2,13 @@ import React from 'react';
 import FloorSummary from './FloorSummary';
 
 function BuildingSummary({data}) {
-    const summaries = data && data.floor_summaries
-    //console.log(summaries)
+    const summaries = data && data.floor_summaries_heating;
+    const safety = data && data.Safety;
     return(
         <>
             {
                 summaries && Object.keys(summaries).map((key, index) => (
-                    <><FloorSummary key={index} floor={key} supply={summaries[key].supply} extract={summaries[key].extract} />&nbsp;</>
+                    <FloorSummary key={index} floor={key} demand={summaries[key].demand} chosen={summaries[key].chosen} safety={safety} />
                 ))
             }
         </>

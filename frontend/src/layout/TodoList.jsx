@@ -48,7 +48,7 @@ function TodoList ({setShowTodoList}) {
                             <input name="todo_content" type="text" className="todo-input" placeholder="Nytt huskepunkt" onChange={handleInputChange} />
                         </div>
                         <div className="todo-popup-listitem">
-                            <button className="table-button">Legg til</button>
+                            <button className="todo-list-button">Legg til</button>
                         </div>
                         {
                             todo && todo.todo === null ? (

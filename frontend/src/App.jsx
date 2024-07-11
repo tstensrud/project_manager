@@ -14,6 +14,7 @@ import NewProject from './content/projects/NewProject';
 import Buildings from "./content/buildings/Buildings";
 import Specifications from './content/specifications/Specifications';
 import Specification from './content/specifications/Specification';
+import NewRoomSpec from './content/specifications/NewRoomSpec';
 import NewSpec from './content/specifications/NewSpec';
 import UserProfile from "./content/userprofile/UserProfile";
 import Admin from "./admin/Admin";
@@ -40,6 +41,7 @@ function App() {
                 <Route path="dashboard" element={<ProtectedRoute element={<Dashboard />}/>} />
                 <Route path="specifications/:projectId" element={<ProtectedRoute element={<Specifications />}/>} />
                 <Route path="specifications/:suid/:projectId" element={<ProtectedRoute element={<Specification />}/>} />
+                <Route path="specifications/:suid/new_room" element={<ProtectedRoute element={<NewRoomSpec />}/>}/>
                 <Route path="newspecification" element={<ProtectedRoute element={<NewSpec />}/>} />
                 <Route path="userprofile/:uuid" element={<ProtectedRoute element={<UserProfile/>}/>} />
                 <Route path="admin" element={<ProtectedRoute element={<Admin/>}/>}/>

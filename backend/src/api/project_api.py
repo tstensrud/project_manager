@@ -62,11 +62,11 @@ def reports(project_id):
     pass
 
 @jwt_required()
-@project_api_bp.route('/settings/update_project/', methods=['POST'])
+@project_api_bp.route('/settings/update_project/', methods=['PATCH'])
 def set_spec(project_uid):
     data = request.get_json()
-    #print(f"Specdata: {data}")
-    if dbo.set_project_specification(project_uid, data):
+    spec_uid = escape(data["project_specification"].strip())
+    if dbo.set_project_specification(project_uid, spec_uid):
         return jsonify({"message": "Success"})
     else:
         return jsonify({"message": "Failed to set specification"})
@@ -114,7 +114,6 @@ def todo_item_complete(project_uid, item_uid, uuid):
 @jwt_required()
 @project_api_bp.route('/buildings/', methods=['GET'])
 def buildings(project_uid):
-    
     buildings = dbo.get_all_project_buildings(project_uid)
     total_rooms = dbo.count_rooms_in_project(project_uid)
     if buildings is None:
@@ -149,7 +148,7 @@ def rooms(project_uid):
     specification = project.specification
 
     if request.method == "GET":
-        project_rooms = dbo.get_all_project_rooms(project.uid)
+        project_rooms = dbo.get_all_project_rooms(project_uid)
         if project_rooms:
             project_room_data = list(map(lambda x: x.get_json_room_data(), project_rooms))
             return jsonify({"room_data": project_room_data, "spec": specification})
@@ -159,14 +158,13 @@ def rooms(project_uid):
     if request.method == "POST":
         project_specification = project.specification
         data = request.get_json()
-        print(data)
         building_uid = escape(data["buildingUid"])
         room_type_id = escape(data["roomType"])
         floor = escape(data["floor"].strip())
         name = escape(data["roomName"].strip())
         room_number = escape(data["roomNumber"].strip())
         
-        if dbo.check_if_roomnumber_exists(project.id, building_uid, room_number):
+        if dbo.check_if_roomnumber_exists(building_uid, room_number):
             return jsonify({"error": "Romnummer finnes allerede for dette bygget"})
         
         area = escape(data["roomArea"].strip())
@@ -211,6 +209,11 @@ def udpate_room(project_uid, room_uid):
         for key, value in data.items():
             key = globals.camelcase_to_snake(key)
             processed_data[key] = escape(value.strip())
+            if key == "room_number":
+                print(f"Key is {key}. BuildingUID {room.building_uid}")
+                if dbo.check_if_roomnumber_exists(room.building_uid, processed_data[key]):
+                    print("Checking for existing room number")
+                    return ({"error": "Romnummer finnes allerede"})
             if key == "area":
                 try:
                     converted_value = float(value)
@@ -369,32 +372,38 @@ def ventilation_update_room(project_uid, room_uid):
     data = request.get_json()
     current_room_system_uid = room.system_uid
     processed_data = {}
+
     for key, value in data.items():
         key = globals.camelcase_to_snake(key)
         processed_data[key] = escape(value.strip())
-        if key == "air_supply":
+
+        if key == "air_supply" or key == "air_extract":
             try:
                 converted_value = float(value)
             except ValueError as e:
-                return jsonify({"error": "Tilluft må kun inneholde tall"})
+                return jsonify({"error": "Tilluft og avtrekk må kun inneholde tall"})
             globals.replace_and_convert_to_float(value)
-        elif key == "air_extract":
-            try:
-                converted_value = int(value)
-            except ValueError as e:
-                return jsonify({"error": "Avtrekk må kun inneholde tall"})
-            globals.replace_and_convert_to_float(value)
-    if dbo.update_room_data(room_uid, processed_data):
-        dbo.update_ventilation_calculations(room_uid)
+            if dbo.update_room_data(room_uid, processed_data):
+                dbo.update_ventilation_calculations(room_uid)
+            if current_room_system_uid is not None:
+                dbo.update_system_airflows(current_room_system_uid)
+            return jsonify({"success": "Luftmengde oppdatert"})
+        
         if key == "system_uid":
             if current_room_system_uid is None:
-                dbo.update_system_airflows(value)
+                print("Current system id is None. Setting system")
+                if dbo.update_room_data(room_uid, processed_data):
+                    return jsonify({"success": "System satt"})
             else:
-                dbo.update_airflow_changed_system(value, current_room_system_uid)
-    else:
-        return jsonify({"error": "Kunne ikke oppdatere rom-data"})
-    return jsonify({"success": True})
-
+                if dbo.update_room_data(room_uid, processed_data):
+                    print(f"Changing system from {current_room_system_uid} to {value}")
+                    if dbo.update_airflow_changed_system(value, current_room_system_uid):
+                        print("Changed system successfully")
+                        return jsonify({"success": "Byttet system"})
+                    else:
+                        return jsonify({"error": "kunne ikke bytte system"})
+        else:
+            return jsonify({"error": "Kunne ikke oppdatere rom-data"})
 #
 #               
 #   HEATING
@@ -410,11 +419,13 @@ def heating(project_uid):
 @project_api_bp.route('/heating/get_room/<room_uid>/', methods=['GET'])
 def heating_room_data(project_uid, room_uid):
     room = dbo.get_room(room_uid)
+    building = dbo.get_building(room.building_uid)
+    building_data = building.get_json()
     if room:
         room_data = room.get_json_room_data()
         room_heating_data = room.get_json_heating_data()
         room_heating_data["Airflow"] = room.air_supply
-        return jsonify({"room_data": room_data, "heating_data": room_heating_data})
+        return jsonify({"room_data": room_data, "heating_data": room_heating_data, "building_data": building_data})
     else:
         return ({"error": "Fant ikke rom"})
 
@@ -422,19 +433,22 @@ def heating_room_data(project_uid, room_uid):
 @project_api_bp.route('/heating/update_room/<room_uid>/', methods=['PATCH'])
 def heating_update_room(project_uid, room_uid):
     data = request.get_json()
+    print(f"Data received {data}")
     if data:
         float_values = ["room_height", "outer_wall_area", "inner_wall_area", "window_door_area",
                         "roof_area", "floor_ground_area", "floor_air_area", "chosen_heating"]
         processed_data = {}
         for key, value in data.items():
             key = globals.camelcase_to_snake(key)
-            processed_data[key] = escape(value.strip())
+            processed_value = escape(value.strip())
             if key in float_values:
-                try:
-                    converted_value = float(value)
-                except ValueError as e:
-                    return jsonify({"error": f"Arealer, høyder og valgt varme må kun inneholde tall"})
-            globals.replace_and_convert_to_float(value)
+                float_value = globals.replace_and_convert_to_float(processed_value)
+                if float_value is False:
+                    return jsonify({"error": f"Arealer, høyder og valgt varme må kun inneholde tall"})                    
+                processed_data[key] = float_value
+            else:
+                processed_data[key] = processed_value
+            
         if dbo.update_room_data(room_uid, processed_data):
             if dbo.calculate_total_heat_loss_for_room(room_uid):
                 return jsonify({"success": True})
@@ -467,7 +481,7 @@ def update_buildingsettings(project_uid, building_uid):
             converted_value = globals.replace_and_convert_to_float(value)
             if converted_value is False:
                 return jsonify({"error": "Innstillinger må kun inne holde tall"})
-            processed_data[key] = globals.replace_and_convert_to_float(converted_value)
+            processed_data[key] = converted_value
         if dbo.update_building_heating_settings(building_uid, processed_data):
             building_rooms = dbo.get_all_rooms_building(building_uid)
             for room in building_rooms:

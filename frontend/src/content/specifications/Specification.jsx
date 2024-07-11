@@ -1,5 +1,5 @@
 import { GlobalContext } from '../../GlobalContext';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import useSubmitFile from '../../hooks/useSubmitFile'
 import useFetch from '../../hooks/useFetch'
@@ -16,17 +16,15 @@ function Specification() {
 
     // Hooks
     const {data, loading, error, refetch} = useFetch(`/specifications/get_spec_room_data/${suid}/`);
-    const {file, response, setData, handleSubmit} = useSubmitFile(`/specifications/new_rooms/${suid}/`);
-    
-    const [selectedFile, setSelectedFile] = useState();
+    const {file, response, error: fileError, setFile, handleSubmit} = useSubmitFile(`/specifications/new_rooms/${suid}/`);
     const [warning, setWarning] = useState('')
 
     const columnTitles = [
         {text: "Romtype"},
-        {text: "Luft per person"},
-        {text: "Emisjon"},
-        {text: "Prosess"},
-        {text: "Luft minimum"},
+        {text: <>Luft per person<br/>m<sup>3</sup>/h/pers</>},
+        {text: <>Emisjon<br/>m<sup>3</sup>/m<sup>2</sup>/h</>},
+        {text: <>Prosess<br/>m<sup>3</sup>/h</>},
+        {text: <>Luft minimum<br/>m<sup>3</sup>/h</>},
         {text: "Vent.prinsipp"},
         {text: "Gjenvinner"},
         {text: "Styring"},
@@ -38,43 +36,38 @@ function Specification() {
 ];
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
-        setSelectedFile(selectedFile);
-        console.log(file);
+        setFile(selectedFile);
+        
     }
 
     const handleFileSubmit = async (e) => {
         e.preventDefault();
         
-        if (!selectedFile) {
-            console.log("Handle file submit")
+        if (!file && file === "") {
             setWarning('Ingen fil valgt.')
             return;
         } else {
-            console.log("Handle file submit")
-            const formData = new FormData();
-            formData.append('file', selectedFile);
-            setData(formData)
-            await handleFileSubmit(e)
+            await handleSubmit(e);
+            setFile('');
         }
     }
 
     return (
     <>
-        <SubTitleComponent>
-         <HeaderIcon/>   Kravspesifikasjon: {data && data.spec_name}
-        </SubTitleComponent>
-            <div className="main-content">
-            <div className="text-container-above-tables">
-            <div className='container-flex-column'>
-            <form onSubmit={handleFileSubmit}>
-            <p>
-                Last opp csv-fil med rom data. {warning} <br />
-                <input type="file" accept='.csv' onChange={handleFileChange} /> &nbsp; &nbsp; <button type="submit" class="form-button">Last opp</button>
-            </p>
-            </form>
-            </div>
+            <SubTitleComponent>
 
-            </div>
+                    <HeaderIcon />Kravspesifikasjon: {data && data.spec_name}
+ 
+            </SubTitleComponent>
+            <div className="main-content">
+                <div className="text-container-above-tables-spec">
+                    <div className='container-flex-column-spec'>
+                        <form onSubmit={handleFileSubmit}>
+                                Last opp csv-fil med rom data. <Link to={`/specifications/${suid}/new_room`}>Eller legg inn enkeltrom her.</Link><br />
+                                <input type="file" accept='.csv' onChange={handleFileChange} disabled={loading} /> &nbsp; &nbsp; <button type="submit" class="form-button">Last opp</button>
+                        </form>
+                    </div>
+                </div>
                 <div className="table-wrapper">
                     <table className="fl-table">
                         <thead>
@@ -86,18 +79,18 @@ function Specification() {
                                     data.data.map((rowData, index) =>
                                         <>
                                             <tr key={index}>
-                                                <td>{rowData ? rowData.name : ''}</td>
+                                                <td style={{textAlign: "left", paddingLeft: "15px"}}>{rowData ? rowData.name : ''}</td>
                                                 <td>{rowData ? rowData.air_per_person : ''}</td>
                                                 <td>{rowData ? rowData.air_emission : ''}</td>
                                                 <td>{rowData ? rowData.air_process : ''}</td>
                                                 <td>{rowData ? rowData.air_minimum : ''}</td>
                                                 <td>{rowData ? rowData.ventilation_principle : ''}</td>
                                                 <td>{rowData ? rowData.heat_exchange : ''}</td>
-                                                <td>{rowData ? rowData.control : ''}</td>
-                                                <td>{rowData ? rowData.notes : ''}</td>
+                                                <td>{rowData ? rowData.room_control : ''}</td>
+                                                <td style={{textAlign: "left", paddingLeft: "15px", wordWrap: "break-word", wordBreak: "break-all", whiteSpace: "normal"}}>{rowData ? rowData.notes : ''}</td>
                                                 <td>{rowData ? rowData.db_technical : ''}</td>
                                                 <td>{rowData ? rowData.db_neighbour : ''}</td>
-                                                <td>{rowData ? rowData.db__corridor : ''}</td>
+                                                <td>{rowData ? rowData.db_corridor : ''}</td>
                                                 <td>{rowData ? rowData.comments : ''}</td>
                                             </tr>
                                         </>)

@@ -19,6 +19,7 @@ def create_app():
     jwt = JWTManager(app)
     app.config['SECRET_KEY'] = "9UE5CwQRIJqM5O2SbDifX"
     app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}"
+    #app.config['SQLALCHEMY_ECHO'] = True
     #app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['JWT_SECRET_KEY'] = "ASsaf39834578DJYACDS1234fwec1af521f35f1"
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)

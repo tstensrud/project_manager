@@ -104,7 +104,12 @@ function CoolingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
         <tr className={markedRow}>
         <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
             <td>{coolingData ? coolingData.room_data.Floor : ''}</td>
-            <td>{coolingData ? coolingData.room_data.RoomNumber : ''}</td>
+            <td>
+                {coolingData ? coolingData.room_data.RoomNumber : ''}
+                <br />
+                <span className="table-text-grey">{coolingData ? coolingData.room_data.RoomName : ''}</span>
+
+            </td>
             {renderEditableCell("RoomTempSummer")}
             {renderEditableCell("VentairTempSummer")}
             {renderEditableCell("InternalHeatloadPeople")}
@@ -114,8 +119,8 @@ function CoolingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
             {renderEditableCell("SunReduction")}
             <td>{coolingData ? coolingData.cooling_data.SumInternalHeatLoad : ''}</td>
             {renderEditableCell("CoolingEquipment")}           
-            <td>{coolingData ? coolingData.cooling_data.CoolingSum : ''}</td>
-            <td><strong>
+            <td><strong>{coolingData ? (coolingData.cooling_data.CoolingSum).toFixed(0) : ''}</strong></td>
+            <td>
                     {coolingData && (
                         (() => {
                             const { SumInternalHeatLoad, CoolingSum, VentairTempSummer, RoomTempSummer } = coolingData.cooling_data;
@@ -124,9 +129,9 @@ function CoolingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
                             return calculatedValue < 0 ? calculatedValue.toFixed(0) : null;
                         })()
                     )}
-                </strong></td>
+                </td>
             <td>
-                Kmmentarer
+                
             </td>
         </tr>
         </>

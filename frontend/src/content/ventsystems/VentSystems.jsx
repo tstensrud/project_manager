@@ -20,10 +20,10 @@ function VentSystems () {
         {text: "Systemnr"},
         {text: "Plassering"},
         {text: "Betjeningsområde"},
-        {text: "Viftekapasitet m&sup3;/h"},
+        {text: <>Viftekapasitet<br/> m<sup>3</sup>/h</>},
         {text: "Gjenvinner"},
-        {text: "Prosjektert tilluft m&sup3;/h"},
-        {text: "Prosjektert avtrekk m&sup3;/h"},
+        {text: <>Prosjektert tilluft<br/> m<sup>3</sup>/h</>},
+        {text: <>Prosjektert avtrekk<br/> m<sup>3</sup>/h</>},
         {text: "Spesialsystem"},
         {text: "Kommentar"},
         {text: "Slett system"}

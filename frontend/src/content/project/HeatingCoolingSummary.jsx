@@ -7,7 +7,7 @@ function HeatingSummary({projectId}) {
         <>
             <div className="cards">
                 <div className="information [ card ]">
-                    <h2 className="card-title">Varmedata</h2>
+                    <h2 className="card-title">Varmedata- og kjøledata</h2>
                     <h4>Prosjektbeskrivelse</h4>
                     <p className="info">Tekst</p>
 

@@ -10,7 +10,6 @@ import AccountIcon from '../assets/svg/accountIcon.svg?react';
 
 function Navbar() {
     const { activeProject, setActiveProject, userUuid, setUserUuid, userName, setUserName, activeProjectName, setActiveProjectName } = useContext(GlobalContext);
-    const [projectMenuActive, setProjectMenuActive] = useState(false);
     const [navButtonClass, setNavButtonClass] = useState('dropdown-content-disabled');
     const {data: userData, loading, error, refetch: refetchUserInfo} = useFetch(`/get_user/`);
 
@@ -70,6 +69,14 @@ function Navbar() {
                         <div className="dropdown-content">
                             <Link to={'dashboard'}>Velg prosjekt</Link>
                             <Link to={'newproject'}>Nytt prosjekt</Link>
+                        </div>
+                    </div>
+
+                    <div className="dropdown">
+                        <button className="dropbtn">Kravspesifikasjoner
+                            <i className="fa fa-caret-down"></i>
+                        </button>
+                        <div className="dropdown-content">
                             <Link to={`specifications/${activeProject}`}>Kravspesifikasjoner</Link>
                             <Link to={'newspecification'}>Ny kravspesifikasjon</Link>
                         </div>

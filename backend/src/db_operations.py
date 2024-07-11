@@ -129,27 +129,48 @@ def set_todo_item_completed(item_uid: int, user_uid: int) -> bool:
 Building methods
 '''
 
-def get_building(building_uid: int) -> models.Buildings:
+def get_building(building_uid: str) -> models.Buildings:
     building = db.session.query(models.Buildings).filter(models.Buildings.uid == building_uid).first()
     return building
 
-def get_building_data(building_uid: int) -> dict:
+def get_building_data(building_uid: str) -> dict:
     building = db.session.query(models.Buildings).filter(models.Buildings.uid == building_uid).first()
     building_data = building.get_json()
+
+    floors = get_building_floors(building_uid)
+    floor_summaries = {}
+    floor_summaries_heating = {}
+    
+    for floor in floors:
+        floor_summaries[floor] = {"supply": sum_airflow_supply_floor_building(building_uid, floor),
+                                  "extract": sum_airflow_extract_floor_building(building_uid, floor)}
+        floor_summaries_heating[floor] = {"demand": sum_heatloss_demand_building_floor(building_uid, floor),
+                                          "chosen": sum_heatloss_chosen_building_floor(building_uid, floor)}
+
     area = summarize_building_area(building_uid)
     supply_air = summarize_supply_air_building(building_uid)
     extract_air = summarize_extract_air_building(building_uid)
+    heating_demand = sum_heat_loss_building(building_uid)
     heating = sum_heat_loss_chosen_building(building_uid)
     demand = summarize_demand_building(building_uid)
     building_data["area"] = area
     building_data["supplyAir"] = supply_air
     building_data["extractAir"] = extract_air
     building_data["heating"] = heating
+    building_data["heatingDemand"] = heating_demand
     building_data["demand"] = demand
+    building_data["floor_summaries"] = floor_summaries
+    building_data["floor_summaries_heating"] = floor_summaries_heating
+
     return building_data
 
+def get_building_floors(building_uid: str) -> list[str]:
+    floors = db.session.query(models.Rooms.floor).filter(models.Rooms.building_uid == building_uid).distinct().all()
+    floors.sort()
+    cleaned_floors = [floor[0] for floor in floors]
+    return cleaned_floors
 
-def new_building(project_uid: int, building_name: str) -> bool:
+def new_building(project_uid: str, building_name: str) -> bool:
     uid = globals.encode_uid_base64(uuid4())
     new_building = models.Buildings(uid=uid,project_uid=project_uid,
                                     building_name=building_name,
@@ -160,7 +181,7 @@ def new_building(project_uid: int, building_name: str) -> bool:
                                     u_value_window_doors = 0.18,
                                     u_value_floor_ground = 0.18,
                                     u_value_floor_air = 0.18,
-                                    u_value_roof = .018,
+                                    u_value_roof = 0.18,
                                     cold_bridge_value = 0.06,
                                     year_mid_temp = 5.0,
                                     temp_floor_air = -22,
@@ -277,8 +298,9 @@ def delete_room(room_uid: int) -> bool:
         return False
 
 
-def check_if_roomnumber_exists(project_uid, building_uid, room_number) -> bool:
-    room = db.session.query(models.Rooms).join(models.Buildings).join(models.Projects).filter(and_(models.Projects.uid == project_uid, models.Buildings.uid == building_uid, models.Rooms.room_number == room_number)).first()
+def check_if_roomnumber_exists(building_uid, room_number) -> bool:
+    room = db.session.query(models.Rooms.room_number).join(models.Buildings).filter(and_(models.Buildings.uid == building_uid, models.Rooms.room_number == room_number)).first()
+    print(room)
     if room:
         return True
     else:
@@ -291,18 +313,19 @@ def update_room_data(room_uid: int, data) -> bool:
 
     for key, value in data.items():
         processed_data[key] = value
-
     processed_data_list = list(processed_data.keys())
 
     room_columns = {column.key for column in inspect(models.Rooms).mapper.column_attrs}
     for key in room_columns:
         if key == processed_data_list[0]:
+            print(f"Setting {processed_data[key]} into {key} for room {room}")
             setattr(room, key, processed_data[key])
             #break
     try:
         db.session.commit()
         return True
     except Exception as e:
+        print("Commit failed")
         db.session.rollback()
         globals.log(f"update_room_data(): {e}")
         return False
@@ -557,7 +580,15 @@ def update_system_info(system_uid: int, data: dict) -> bool:
         globals.log(f"update_system_info: {e}")
         return False
 
+def sum_airflow_supply_floor_building(building_uid: str, floor: str) -> float:
+    supply_air = db.session.query(func.sum(models.Rooms.air_supply)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
+    return supply_air if supply_air is not None else 0.0
 
+def sum_airflow_extract_floor_building(building_uid: str, floor: str) -> float:
+    extract_air = db.session.query(func.sum(models.Rooms.air_extract)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
+    return extract_air if extract_air is not None else 0.0
+
+    
 '''
 Specifications
 '''
@@ -762,6 +793,15 @@ def get_all_rooms_building(building_uid: int) -> list[models.Rooms]:
     else:
         print(f"Found {len(rooms)} rooms for building_uid: {building_uid}")
     return rooms
+
+def sum_heatloss_demand_building_floor(building_uid: str, floor: str) -> float:
+    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
+    return heat_loss
+
+def sum_heatloss_chosen_building_floor(building_uid: str, floor: str) -> float:
+    heat_loss = db.session.query(func.sum(models.Rooms.chosen_heating)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
+    return heat_loss
+
 
 
 def sum_heat_loss_building(building_uid: int) -> float:

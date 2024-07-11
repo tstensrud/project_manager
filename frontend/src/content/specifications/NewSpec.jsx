@@ -42,7 +42,7 @@ function NewSpec() {
                             </p>
                             <form onSubmit={submitNewSpec}>
                             <p className="info">
-                                <input name="spec_name" onChange={handleInputChange} className="card-input" type="text" placeholder="Navn på kravspesifikasjon"></input> &nbsp; &nbsp; <button type="submit" className="form-button">Legg til</button>
+                                <input name="spec_name" onChange={handleInputChange} type="text" placeholder="Navn på kravspesifikasjon"></input> &nbsp; &nbsp; <button type="submit" className="form-button">Legg til</button>
                             </p>
                             </form>
                             <p>

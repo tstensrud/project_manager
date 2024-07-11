@@ -3,11 +3,11 @@ import MinusIcon from '../../assets/svg/minusIcon.svg?react';
 
 function BuildingSummary({buildingData}) {
 
-    const buildingName = buildingData.BuildingName;
-    const area = buildingData.area;
-    const supplyAir = buildingData.supplyAir;
-    const extractAir = buildingData.extractAir;
-    const heating = buildingData.heating;
+    const buildingName = buildingData.BuildingName || '';
+    const area = buildingData.area || '';
+    const supplyAir = buildingData.supplyAir || '';
+    const extractAir = buildingData.extractAir || '';
+    const heating = buildingData.heating || '';
 
 
     return (<>

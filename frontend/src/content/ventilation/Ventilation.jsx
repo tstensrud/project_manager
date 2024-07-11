@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
@@ -18,17 +18,16 @@ function Ventilation () {
     const columnTitles = [  
         {text: "#"},
         {text: "Etasje"},
-        {text: "Romnr"},
-        {text: "Romnavn"},
-        {text: "Sum personer m&sup3;/h"},
-        {text: "Sum emisjon m&sup3;/h"},
-        {text: "Prosess m&sup3;/h"},
-        {text: "Minimum m&sup3;/h"},
-        {text: "Dimensjonert m&sup3;/h"},
-        {text: "Tilluft"},
-        {text: "Avtrekk"},
-        {text: "m&sup3;/m&sup2;"},
-        {text: "Min mm&sup3;/h"},
+        {text: "Rom"},
+        {text: <>Sum personer <br/> m<sup>3</sup>/h</>},
+        {text: <>Sum emisjon <br/> m<sup>3</sup>/h</>},
+        {text: <>Prosess <br/> m<sup>3</sup>/h</>},
+        {text: <>Minimum <br/> m<sup>3</sup>/h</>},
+        {text: <>Dimensjonert <br/> m<sup>3</sup>/h</>},
+        {text: <>Tilluft<br/> m<sup>3</sup>/h</>},
+        {text: <>Avtrekk<br/> m<sup>3</sup>/h</>},
+        {text: <>m<sup>3</sup>/m<sup>2</sup></>},
+        {text: <>Min <br/>m<sup>3</sup>/h</>},
         {text: "System"},
         {text: "Kommentar"}
     ];
@@ -79,7 +78,6 @@ function Ventilation () {
         } else {
             setBuildingId(sortBy);
             setSortedBuildings(roomData.room_data.filter((room) => room.BuildingUid === sortBy));
-            //setBuildingSummaryData(buildingData.building_data.filter((building_data) => building_data.uid === sortBy));
         }
     }
 
@@ -93,12 +91,12 @@ function Ventilation () {
             <div className='main-content'>
                 <div className="text-container-above-tables">
 
-                    <div className="float-container">
-                        {buildingSummaryData && <BuildingSummary data={buildingSummaryData[0]}/>}
-                    </div>
+                <div className="float-container"> 
+                    {buildingSummaryData && <BuildingSummary data={buildingSummaryData[0]}/>}
+                </div>
+
 
                     <div className="float-container-bottom-right">
-                        {/*<button name="all" key="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;*/}
                         {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                             <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
                                 {buildingData.building_data[key].BuildingName}</button> &nbsp;</>
@@ -116,26 +114,38 @@ function Ventilation () {
                                         <TableHeaderComponent headers={columnTitles} />
                                     </thead>
                                     <tbody>
-
                                         {
                                             sortedBuildings && sortedBuildings.length > 0 ? (
                                                 sortedBuildings.map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} roomId={room.uid} systems={ventSystemData}/>)
-                                            ) : (
-                                                <>
-                                                    <tr>
-                                                        <td>
-                                                            <>Velg bygg</>
-                                                        </td>
-                                                    </tr>
-                                                </>
-                                            )
+                                            ) : (<><tr><td><>Velg bygg</></td></tr></>)
                                         }
-                                        <tr>
-                                            <td>
-
-                                            </td>
-                                        </tr>
                                     </tbody>
+                                    <tfoot>
+                                    <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>
+                                                <strong>Sum</strong>
+                                            </th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>
+                                                <strong>{ buildingSummaryData && buildingSummaryData[0] ? <>{(buildingSummaryData[0].demand.toFixed(0)).toLocaleString()} <br/> m<sup>3</sup>/h</> : (<></>) }</strong>
+                                            </th>
+                                            <th>
+                                                <strong>{ buildingSummaryData && buildingSummaryData[0] ? <>{(buildingSummaryData[0].supplyAir.toFixed(0)).toLocaleString()} <br/> m<sup>3</sup>/h</> : (<></>) }</strong>
+                                            </th>
+                                            <th>
+                                                <strong>{ buildingSummaryData && buildingSummaryData[0] ? <>{(buildingSummaryData[0].extractAir.toFixed(0)).toLocaleString()} <br/> m<sup>3</sup>/h</>: (<></>) }</strong>
+                                            </th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         )

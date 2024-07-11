@@ -37,6 +37,15 @@ def refresh_expiring_jwts(response):
 def index():
     return jsonify({"Nothing": "here"})
 
+""" @views.route('/test/', methods=['GET'])
+def test():
+    #test = dbo.sum_airflow_supply_floor_building("8dLbgOmLRqmNEjB5_8Esmw", "01")
+    floors = dbo.get_building_floors("8dLbgOmLRqmNEjB5_8Esmw")
+    for floor in floors:
+        supply = dbo.sum_airflow_supply_floor_building("8dLbgOmLRqmNEjB5_8Esmw", floor)
+        print(f"Supply for floor {floor} is {supply}")
+    return jsonify({"8dLbgOmLRqmNEjB5_8Esmw": "test"}) """
+
 @views.route('/verify-token/', methods=['GET'])
 def verify_token():
     try:

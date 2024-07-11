@@ -1,13 +1,22 @@
 /* Room lists */
 .table-wrapper{
-  margin: 0px 10px 100px 20px;
+  margin: 0px 20px 100px 20px;
   box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
   overflow: auto;
   height: 81%;
+  border-radius: 5px;
+}
+
+.table-wrapper-tiny{
+  margin: 20px 1px 0px 0px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: 100%;
+  width: 300px;
 }
 
 .fl-table {
-  color: black;
+  color: white;
   border-radius: 5px;
   font-size: 13px;
   font-weight: normal;
@@ -16,7 +25,7 @@
   width: 100%;
   max-width: 100%;
   white-space: nowrap;
-  background-color: white;
+  background-color: var(--table-background-color);
 }
 
 .fl-table td, .fl-table th {
@@ -28,7 +37,8 @@
 
 
 .fl-table td {
-  border-right: 1px solid #f8f8f8;
+  border-top: var(--table-border);
+  border-bottom: var(--table-border);
   font-size: 13px;
   max-width: 150px;
   overflow: hidden;
@@ -37,43 +47,58 @@
 
 
 .fl-table thead th {
-  color: #ffffff;
-  background: #324960;
+  
+  color: var(--app-content-main-color);
+  background-color: var(--table-header);
   top: 0;
   height: 25px;
   position: sticky;
   z-index: 1;
 }
 
-.marked-row {
-  background-color: #af2911 !important;
-  color: white;
-}
-
-.deleted-row {
-  color: #b9b9b9;
-  text-decoration: line-through;
-}
-
-.fl-table thead th:nth-child(odd) {
-  color: #ffffff;
-  background: #324960;
-}
-
-.fl-table tr:nth-child(even) {
-  background: #e9e9e9;
+.fl-table tfoot {
+  bottom: 0;
+  height: 25px;
+  position: sticky;
+  z-index: 1;
+  background-color: var(--table-header);
+  color: var(--app-content-main-color);
 }
 
 .fl-table tr:hover {
-  background-color: #324960;
-  color: white;
+  background-color: var(--table-hover);
+  color: var(--app-content-main-color);
 }
 
 .fl-table td:hover {
-  background-color: #426180;
-  color: white;
+  color: var(--svg-icon-color)
 }
 
+.marked-row {
+  background-color: #49494959 !important;
+  color: var(--app-content-main-color);
+}
+
+.deleted-row {
+  color: #aa4444;
+  text-decoration: line-through;
+}
+
+.table-text-grey {
+  color: grey;
+}
+
+.supplyCell {
+  background-color: #3ea578;
+  color: black;
+  font-weight: 500;
+}
+
+.extractCell {
+  background-color: #c96072;
+  color: black;
+  font-weight: 500;
+}
 
 /* Responsive */
 
@@ -142,94 +167,6 @@
 }
 
 /* Summaries */
-.summaries-wrapper {
-  margin-top: 25px;
-  max-width: 500px;
-}
-
-.summary-container {
-  display: grid; 
-  grid-template-columns: 0.6fr 1.4fr; 
-  grid-template-rows: 1fr 1fr 1fr; 
-  gap: 0px 0px; 
-  grid-template-areas: 
-    "left top"
-    "left mid"
-    "left bot"; 
-}
-.mid { grid-area: mid; }
-.bot { grid-area: bot; }
-.left { grid-area: left; }
-.top { grid-area: top; }
-
-.summaries-table {
-  width: 100%;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  display: table;
-  font-size: 14px;
-}
-
-.summaries-row {
-  background: #f6f6f6;
-}
-
-.summaries-row:nth-of-type(odd) {
-  background: #e9e9e9;
-}
-
-.summaries-row.header {
-  font-weight: 500;
-  color: #ffffff;
-  background: #3e6272;
-}
-
-.summaries-title {
-  display: flex;
-  height: 100%;
-  width: 100%;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  color: #ffffff;
-  background: #3e6272;
-}
-
-.summaries-row.blue {
-  background: #324960;
-}
-
-.summaries-row.green {
-  background: #27ae60;
-}
-
-.summaries-cell {
-  padding: 2px 6px;
-  display: table-cell;
-  color: black;
-  width: 140px;
-}
-
-.summaries-cell.white {
-  color: white;
-}
-
-
-.hidden-text {
-  display: none;
-}
-
-.supplyCell {
-  background-color: #3ea578;
-  color: black;
-  font-weight: 500;
-}
-
-.extractCell {
-  background-color: #c96072;
-  color: black;
-  font-weight: 500;
-}
 
 .popup {
   position: absolute;
@@ -241,18 +178,138 @@
   z-index: 10;
 }
 
-.room-data-cell {
-  width: 250px;
-  flex: 1;
-  padding: 4px 8px;
+.fl-table-summary {
   color: var(--app-content-main-color);
-  font-size: 14px;
-  display: flex;
-  align-items: center;
+  font-size: 13px;
+  font-weight: normal;
+  border-radius: 5px;
+  border-collapse: collapse;
+  width: 250px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  position: relative;
-  margin-right: 100px;
+  background-color: var(--table-background-color);
 }
 
+.fl-table-summary td, .fl-table-summary th {
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 20px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+
+.fl-table-summary td {
+  border-top: var(--default-border);
+  font-size: 13px;
+  max-width: 150px;
+  overflow: hidden;
+  position: relative;
+}
+
+.fl-table-summary-sub-title {
+  background-color: var(--table-hover);
+}
+
+
+.fl-table-summary thead th {
+  color: #ffffff;
+  background-color: var(--table-hover);
+  top: 0;
+  height: 25px;
+  position: sticky;
+  z-index: 1;
+}
+
+.fl-table-summary td:nth-child(odd) {
+  width: 20%;
+}
+
+.fl-table-summary tr:hover {
+  background-color: var(--table-hover);
+  color: white;
+}
+
+/* Room data table*/
+.fl-table-room-data {
+  color: var(--app-content-main-color);
+  font-size: 13px;
+  font-weight: normal;
+  border-radius: 5px;
+  border-collapse: collapse;
+  width: 100%;
+  white-space: nowrap;
+  background-color: var(--table-background-color);
+}
+
+.fl-table-room-data td, .fl-table-room-data th {
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 20px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+
+.fl-table-room-data td {
+  border-top: var(--default-border);
+  font-size: 13px;
+  max-width: 150px;
+  overflow: hidden;
+  position: relative;
+}
+
+.fl-table-room-data-sub-title {
+  background-color: var(--table-hover);
+}
+
+
+.fl-table-room-data thead th {
+  color: #ffffff;
+  background-color: var(--table-hover);
+  top: 0;
+  height: 25px;
+  position: sticky;
+  z-index: 1;
+}
+
+.fl-table-room-data td:nth-child(odd) {
+  width: 20%;
+}
+
+.fl-table-room-data tr:hover {
+  background-color: var(--table-hover);
+  color: white;
+}
+
+
+.room-info-ventilation-container {
+  position: fixed;
+  box-shadow: 5px 1px 20px   black;
+  border: var(--default-border);
+  left: 25%;
+  top: 15%;
+  z-index: 1000;
+  width: 600px;
+  overflow-y: auto;
+}
+
+.room-info-ventilation-popup {
+  position: relative;
+  width: 100%;
+  font-size: 14px;
+}
+
+.room-data-close-btn {
+  position: absolute;
+  color: white;
+  top: 0px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.room-data-close-btn:hover {
+  color: var(--svg-icon-color);
+}

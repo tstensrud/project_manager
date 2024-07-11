@@ -23,7 +23,7 @@ function Rooms () {
         {text: "Romnr"},
         {text: "Romtype"},
         {text: "Romnavn"},
-        {text: "Areal m&sup2;"},
+        {text: <>Areal <br/> m<sup>2</sup></>},
         {text: "Personer"},
         {text: "Kommentarer"},
         {text: "Slett rom"}
@@ -55,6 +55,9 @@ function Rooms () {
     const [buildingUid, setBuildingUid] = useState(null);
     const [activeSortButton, setActivesortButton] = useState(null);
 
+    // New room
+    const [showNewRoomContainer, setShowNewRoomContainer] = useState(true);
+
     useEffect(() => {
         if (roomData && roomData.spec) {
             setSpecId(roomData.spec);
@@ -73,6 +76,7 @@ function Rooms () {
     },[roomData]);
 
     const handleChildMessage = (msg) => {
+        setChildMessage('');
         if (msg !== undefined) {
             setChildMessage(msg);
         }
@@ -90,7 +94,6 @@ function Rooms () {
             setBuildingUid(sortBy);
             setSortedBuildings(roomData.room_data.filter((room) => room.BuildingUid === sortBy));
         }
-        console.log(sortBy);
     }
 
     const handleFormChange = (e) => {
@@ -110,7 +113,6 @@ function Rooms () {
         inputAreaRef.current.value = '';
         inputPopRef.current.value = '';
         roomTypeRef.current.value = roomTypeRef.current.options[0].value;
-        setData('');
     }
   
     return (
@@ -121,40 +123,36 @@ function Rooms () {
         <SubTitleComponent>
            <RoomIcon/> Romskjema
         </SubTitleComponent>
+        
             <div className='main-content'>
-                <div className="text-container-above-tables">
-
-                    <div className="float-container">
-                        <form id="new_room" onSubmit={handleOnSubmit}>
-                            <p>Legg til nytt rom</p>
-                            <p>
-
-                                <select ref={roomTypeRef} onChange={handleFormChange} name="roomType">
-                                    <option key="0" value="">- Velg romtype -</option>
-                                    {roomTypeData && roomTypeData.spec_room_type_data !== undefined && roomTypeData.spec_room_type_data.map(type => (<option key={type.uid} value={type.uid}>{type.name}</option>))};
-                                </select>
-                                &nbsp; &nbsp;
-                                <select name="buildingUid" onChange={handleFormChange}>
-                                    <option key="0" value="">- Velg bygg -</option>
-                                    {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (<option key={index} value={buildingData.building_data[key].uid}>{buildingData.building_data[key].BuildingName}</option>))}
-                                </select>
-                                &nbsp; &nbsp;
-                                <input className="input-short" type="text" name="floor" onChange={handleFormChange} placeholder="Etasje" tabIndex="1" required /> &nbsp; &nbsp;
-                                <input ref={inputRoomNumberRef} className="input-short" type="text" name="roomNumber" onChange={handleFormChange} placeholder="Romnr." tabIndex="2" required /> &nbsp; &nbsp;
-                                <input ref={inputRoomNameRef} type="text" name="roomName" onChange={handleFormChange} placeholder="Romnavn" tabIndex="3" required /> &nbsp; &nbsp;
-                                <input ref={inputAreaRef} className="input-short" type="text" name="roomArea" onChange={handleFormChange} placeholder="Areal" tabIndex="4" required /> &nbsp; &nbsp;
-                                <input ref={inputPopRef} className="input-short" type="text" name="roomPeople" onChange={handleFormChange} placeholder="Personer" tabIndex="5" required /> &nbsp; &nbsp;
-                                <button className="form-button" type="submit" tabIndex="6">Legg til</button>
-                            </p>
-                        </form>
-                    </div>
-                    <div className="float-container-bottom-right">
+                
+                <div className="container-above-table-rooms-top">
+                <form id="new_room" onSubmit={handleOnSubmit}>
+                    <select ref={roomTypeRef} onChange={handleFormChange} name="roomType">
+                        <option key="0" value="">- Velg romtype -</option>
+                        {roomTypeData && roomTypeData.spec_room_type_data !== undefined && roomTypeData.spec_room_type_data.map(type => (<option key={type.uid} value={type.uid}>{type.name}</option>))};
+                    </select>
+                    &nbsp; &nbsp;
+                    <select name="buildingUid" onChange={handleFormChange}>
+                        <option key="0" value="">- Velg bygg -</option>
+                        {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (<option key={index} value={buildingData.building_data[key].uid}>{buildingData.building_data[key].BuildingName}</option>))}
+                    </select>
+                    &nbsp; &nbsp;
+                    <input className="input-short" type="text" name="floor" onChange={handleFormChange} placeholder="Etasje" tabIndex="1" required /> &nbsp; &nbsp;
+                    <input ref={inputRoomNumberRef} className="input-short" type="text" name="roomNumber" onChange={handleFormChange} placeholder="Romnr." tabIndex="2" required /> &nbsp; &nbsp;
+                    <input ref={inputRoomNameRef} type="text" name="roomName" onChange={handleFormChange} placeholder="Romnavn" tabIndex="3" required /> &nbsp; &nbsp;
+                    <input ref={inputAreaRef} className="input-short" type="text" name="roomArea" onChange={handleFormChange} placeholder="Areal" tabIndex="4" required /> &nbsp; &nbsp;
+                    <input ref={inputPopRef} className="input-short" type="text" name="roomPeople" onChange={handleFormChange} placeholder="Personer" tabIndex="5" required /> &nbsp; &nbsp;
+                    <button className="form-button" type="submit" tabIndex="6">Legg til</button>
+                </form>
+                </div>
+                <div className="container-above-table-rooms-bottom">                    
                     {/*<button key="all" name="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;*/}
                     {buildingData && buildingData.building_data !== undefined && Object.keys(buildingData.building_data).map((key, index) => (
                             <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
                                 {buildingData.building_data[key].BuildingName}</button> &nbsp;</>
                             ))}
-                    </div>
+                   
                 </div>
     {
         roomData ? (
@@ -181,11 +179,6 @@ function Rooms () {
                                 </>
                             )
                         }
-                        <tr>
-                            <td>
-
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>

@@ -1,13 +1,32 @@
 import os
+import json
+from datetime import datetime, timezone, timedelta
+import pandas as pd
 from flask import Blueprint, redirect, url_for, render_template, flash, jsonify, request
 from flask_login import current_user
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
 from flask_jwt_extended import jwt_required
 from .. import db_operations as dbo
 from ..globals import replace_and_convert_to_float
 from markupsafe import escape
 
 specifications_bp = Blueprint('specifications',__name__, static_folder='static', template_folder='templates')
-
+@specifications_bp.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            data = response.get_json()
+            if type(data) is dict:
+                data["access_token"] = access_token
+                response.data = json.dumps(data)
+        return response
+    except (RuntimeError, KeyError):
+        return response
+    
 @jwt_required()
 @specifications_bp.route('/', methods=['GET'])
 def specifications():
@@ -32,7 +51,6 @@ def get_specifications():
 @jwt_required()
 @specifications_bp.route('/get_spec_room_data/<spec_uid>/', methods=['GET'])
 def get_spec(spec_uid):
-    print(spec_uid)
     specification = dbo.get_specification_room_data(spec_uid)
     spec = dbo.get_specification(spec_uid)
     spec_name = spec.name
@@ -56,30 +74,27 @@ def get_specification_room_types(spec_uid):
 @jwt_required()
 @specifications_bp.route('/new_rooms/<spec_uid>/', methods=['POST'])
 def new_room(spec_uid):
-    print("New spec")
-    spec = dbo.get_specification_by_name(spec_uid)
-    if 'file' not in request.files:
-        print("No file 1")
-        return jsonify({"error": "Ingen fil lagt ved"})
     file = request.files['file']
-    print(f"File: {file}")
+    #spec = dbo.get_specification_by_name(spec_uid)
+    if 'file' not in request.files:
+        return jsonify({"error": "Ingen fil lagt ved"})
     if file.filename == '':
-        print("No file 2")
         return jsonify({"error": "Ingen fil mottatt"})
     
-    print(f"File received: {file}")
+    df = pd.read_csv(file, sep=";")
+    file_columns = []
+    for index, row in df.iterrows():
+        for column in df.columns:
+            value = row[column]
+            print(f"Value in column {column}: {value}")
     
-    file.save(os.path.join('./templates/', file.filename))
     return jsonify({"message": "Fil mottatt"})
-
-    
 
 
 @jwt_required()
 @specifications_bp.route('/new_specification/', methods=['POST'])
 def new_specification():
     data = request.get_json()
-    print(data)
     spec_name = escape(data["spec_name"])
     if dbo.find_specification_name(spec_name):
         return jsonify({"error", f"Kravspesifikasjon {spec_name} finnes allerede i databasen"})

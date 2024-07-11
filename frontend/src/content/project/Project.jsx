@@ -2,13 +2,14 @@ import { useEffect, useState, useContext } from 'react';
 import useFetch from '../../hooks/useFetch'
 import { Link, useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
+
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import BuildingRoomData from './BuildingRoomData';
 import HeaderIcon from '../../assets/svg/projectIcon.svg?react';
 import ProjectSummary from './ProjectSummary';
 import VentilationSummary from './VentilationSummary';
-import HeatingSummary from './HeatingSummary';
-import CoolingSummary from './CoolingSummary';
+import HeatingCoolingSummary from './HeatingCoolingSummary';
+
 
 function Project () {
     const {projectId} = useParams();
@@ -36,8 +37,8 @@ function Project () {
                 </div>
 
                 <div className="flex-container-row">
-                    <HeatingSummary projectId={projectId} />
-                    <CoolingSummary projectId={projectId} />
+                    <HeatingCoolingSummary projectId={projectId} />
+                    
                 </div>
             </div>
         </>

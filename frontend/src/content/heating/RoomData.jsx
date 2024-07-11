@@ -1,44 +1,32 @@
-import { useState } from 'react';
 import Draggable from 'react-draggable';
 
-function RoomData({roomData, ventData, setShowRoomData}) {
+function RoomData({heatingData, setShowRoomData}) {
     
-  const [isHovered, setIsHovered] = useState(false);
+    const handleClick = (e) => {
+        setShowRoomData(false);
+    }
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
-  const handleClick = (e) => {
-      setShowRoomData(false);
-  };
-    
   return (
     <>
       <Draggable>
         <div className="room-info-ventilation-container" style={{ cursor: 'move' }}>
           <table className="fl-table-room-data">
             <thead>
-              <tr>
-                <th>
-                  <strong>{roomData.room_data.RoomNumber} - <span className="table-text-grey">{roomData.room_data.RoomName}</span></strong>
-                </th>
-                <th>
-                  <span onClick={(e) => handleClick(e, setShowRoomData)} className="room-data-close-btn">&times;</span>
-                </th>
-              </tr>
+              <th>
+                <strong>{heatingData.room_data.RoomNumber} - {heatingData.room_data.RoomName}</strong>
+              </th>
+              <th>
+                <span onClick={(e) => handleClick(e, setShowRoomData)} className="room-data-close-btn">&times;</span>
+              </th>
             </thead>
             <tbody>
+
               <tr>
                 <td>
                   Romtype
                 </td>
                 <td>
-                  {roomData.room_data.RoomTypeName}
+                  {heatingData.room_data.RoomTypeName}
                 </td>
               </tr>
 
@@ -47,7 +35,7 @@ function RoomData({roomData, ventData, setShowRoomData}) {
                   Bygg
                 </td>
                 <td>
-                  {roomData.room_data.BuildingName}
+                  {heatingData.building_data.BuildingName}
                 </td>
               </tr>
 
@@ -56,7 +44,52 @@ function RoomData({roomData, ventData, setShowRoomData}) {
                   Areal
                 </td>
                 <td>
-                  {roomData.room_data.Area} m<sup>2</sup>
+                  {heatingData.room_data.Area} m<sup>2</sup>
+                </td>
+              </tr>
+
+              <tr>
+                <td className='fl-table-summary-sub-title'>
+                  Grunnlagsdata varme
+                </td>
+                <td className='fl-table-summary-sub-title'>
+
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Temp. ventilasjon
+                </td>
+                <td>
+                  {heatingData.building_data.VentTemp} C&#176;
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Luftmengde
+                </td>
+                <td>
+                  {heatingData.heating_data.Airflow} m<sup>3</sup>/h
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  DUT
+                </td>
+                <td>
+                  {heatingData.building_data.Dut} C&#176;
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Årsmiddeltemp
+                </td>
+                <td>
+                  {heatingData.building_data.YearMidTemp} C&#176;
                 </td>
               </tr>
 
@@ -65,7 +98,160 @@ function RoomData({roomData, ventData, setShowRoomData}) {
                   Antall personer
                 </td>
                 <td>
-                  {roomData.room_data.RoomPopulation} stk.
+                  {heatingData.room_data.RoomPopulation} stk.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Areal yttervegg
+                </td>
+                <td>
+                  {heatingData.heating_data.OuterWallArea} m<sup>2</sup>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Romhøyde
+                </td>
+                <td>
+                  {heatingData.heating_data.RoomHeight} m
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Areal vindu/dører
+                </td>
+                <td>
+                  {heatingData.heating_data.WindowDoorArea} m<sup>2</sup>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Areal innervegger
+                </td>
+                <td>
+                  {heatingData.heating_data.InnerWallArea} m<sup>2</sup>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Areal tak
+                </td>
+                <td>
+                  {heatingData.heating_data.RoofArea} m<sup>2</sup>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Gulv på grunn
+                </td>
+                <td>
+                  {heatingData.heating_data.FloorGroundArea} m<sup>2</sup>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Gulv mot friluft
+                </td>
+                <td>
+                  {heatingData.heating_data.FloorAirArea} m<sup>2</sup>
+                </td>
+              </tr>
+
+              <tr>
+              <td className='fl-table-summary-sub-title'>
+                  Varmetap
+                </td>
+                <td className='fl-table-summary-sub-title'>
+                  
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Varmetap kuldebroer
+                </td>
+                <td>
+                  {heatingData.heating_data.HeatLossColdBridge} W
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Varmetap transmisjon
+                </td>
+                <td>
+                  {heatingData.heating_data.HeatLossTransmission} W
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Varmetap infiltrasjon
+                </td>
+                <td>
+                  {heatingData.heating_data.HeatLossInfiltration} W
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Varmetap ventilasjon
+                </td>
+                <td>
+                  {heatingData.heating_data.HeatLossVentilation} W
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Varmetap totalt
+                </td>
+                <td>
+                  {heatingData.heating_data.HeatLossSum} W
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Prosjektert varme
+                </td>
+                <td>
+                  {heatingData.heating_data.ChosenHeating} W
+                </td>
+              </tr>
+
+              <tr>
+              <td className='fl-table-summary-sub-title'>
+                  Annet
+                </td>
+                <td className='fl-table-summary-sub-title'>
+                  
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Sikkerhet
+                </td>
+                <td>
+                  {heatingData.building_data.Safety} %
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Varmekilde
+                </td>
+                <td>
+                  {heatingData.heating_data.HeatSource}
                 </td>
               </tr>
 
@@ -74,185 +260,7 @@ function RoomData({roomData, ventData, setShowRoomData}) {
                   Kommentar
                 </td>
                 <td>
-                  - Ingen kommentar
-                </td>
-              </tr>
 
-              <tr>
-                <td className='fl-table-summary-sub-title'>
-                  Ventilasjonsdata oppsummert
-                </td>
-                <td className='fl-table-summary-sub-title'>
-
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  System
-                </td>
-                <td>
-                  {ventData.vent_data.SystemName}
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Beregnet luftmengde
-                </td>
-                <td>
-                  {ventData.vent_data.AirDemand} m<sup>3</sup>/h
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Valgt tilluft
-                </td>
-                <td>
-                  {ventData.vent_data.AirSupply} m<sup>3</sup>/h
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Valgt avtrekk
-                </td>
-                <td>
-                  {ventData.vent_data.AirExtract} m<sup>3</sup>/h
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Summert personbelastning
-                </td>
-                <td>
-                  {ventData.vent_data.AirPersonSum} m<sup>3</sup>/h
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Summert emisjonsbelastning
-                </td>
-                <td>
-                  {ventData.vent_data.AirEmissionSum} m<sup>3</sup>/h
-                </td>
-              </tr>
-              <tr>
-              <td className='fl-table-summary-sub-title'>
-                  Grunnlagsdata ventilasjon
-                </td>
-                <td className='fl-table-summary-sub-title'>
-
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Luft per person
-                </td>
-                <td>
-                  {ventData.vent_data.AirPerPerson} m<sup>3</sup>/pers
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Emisjonsbelastning
-                </td>
-                <td>
-                  {ventData.vent_data.AirEmission} m<sup>3</sup>/m<sup>2</sup>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Prosessventilasjon
-                </td>
-                <td>
-                  {ventData.vent_data.AirProcess} m<sup>3</sup>/h
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Minimum ventilasjon
-                </td>
-                <td>
-                  {ventData.vent_data.AirMinimum} m<sup>3</sup>/h
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Ventilasjonsprinsipp
-                </td>
-                <td>
-                  {ventData.vent_data.VentilationPrinciple}
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Varmeveksler
-                </td>
-                <td>
-                  {ventData.vent_data.HeatExchange}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Styring
-                </td>
-                <td>
-                  {ventData.vent_data.RoomControl}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Presiseringer
-                </td>
-                <td style={{wordWrap: "break-word", wordBreak: "break-all", whiteSpace: "normal"}}>
-                  {ventData.vent_data.Notes}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  dB teknisk utstyr
-                </td>
-                <td>
-                  {ventData.vent_data.DbTechnical}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  dB korridor naborom
-                </td>
-                <td>
-                  {ventData.vent_data.DbNeighbour}
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  dB korridor naborom
-                </td>
-                <td>
-                  {ventData.vent_data.DbNeighbour}
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  dB mot korridor
-                </td>
-                <td>
-                  {ventData.vent_data.DbCorridor}
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Kommentarer
-                </td>
-                <td>
                 </td>
               </tr>
             </tbody>
