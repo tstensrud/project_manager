@@ -1,6 +1,6 @@
 function TableHeaderComponent({headers}) {
 
-    const columnTitles = headers.map((item, index) =><th key={index}>{item.text}</th>);
+    const columnTitles = headers.map((item, index) =><th key={index}><span className="table-text-grey">{item.text}</span></th>);
 
     return (
         <>

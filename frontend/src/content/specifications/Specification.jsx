@@ -1,6 +1,7 @@
 import { GlobalContext } from '../../GlobalContext';
 import { useParams, Link } from 'react-router-dom';
 import { useState, useContext } from 'react';
+
 import useSubmitFile from '../../hooks/useSubmitFile'
 import useFetch from '../../hooks/useFetch'
 import TableHeaderComponent from '../../tables/TableHeaderComponent';
@@ -17,6 +18,8 @@ function Specification() {
     // Hooks
     const {data, loading, error, refetch} = useFetch(`/specifications/get_spec_room_data/${suid}/`);
     const {file, response, error: fileError, setFile, handleSubmit} = useSubmitFile(`/specifications/new_rooms/${suid}/`);
+    
+
     const [warning, setWarning] = useState('')
 
     const columnTitles = [

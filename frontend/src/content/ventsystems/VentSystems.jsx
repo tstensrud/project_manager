@@ -10,6 +10,7 @@ import HeaderIcon from '../../assets/svg/ventSystemIcon.svg?react';
 import TableHeaderComponent from "../../tables/TableHeaderComponent";
 import SystemsTableRowComponent from "./SystemsTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
+import TableTop from '../../layout/TableTop';
 
 function VentSystems () {
     const {projectId} = useParams();
@@ -25,7 +26,7 @@ function VentSystems () {
         {text: <>Prosjektert tilluft<br/> m<sup>3</sup>/h</>},
         {text: <>Prosjektert avtrekk<br/> m<sup>3</sup>/h</>},
         {text: "Spesialsystem"},
-        {text: "Kommentar"},
+        {text: "Merknad"},
         {text: "Slett system"}
     ]
 
@@ -112,7 +113,9 @@ function VentSystems () {
                         receivedSystemsData.systems_data === null ? (
                             <>Ingen ssytemer lagt til</>
                         
-                    ) : (               
+                    ) : (
+                        <>
+                        <TableTop />
                     <div className="table-wrapper">
                         <table className="fl-table">
                             <thead>
@@ -129,6 +132,7 @@ function VentSystems () {
                             </tbody>
                         </table>
                     </div>
+                    </>
                     )
                 ) : (<>Loading...</>)
                 }

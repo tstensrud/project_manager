@@ -50,16 +50,16 @@ function TodoList ({setShowTodoList}) {
                         <div className="todo-popup-listitem">
                             <button className="todo-list-button">Legg til</button>
                         </div>
+                    </form>
                         {
                             todo && todo.todo === null ? (
                                 <>
                                 <div className="todo-popup-listitem">Ingen huskepunkter</div></>
                                 ) : (
                                 todo && todo.todo && Object.keys(todo.todo).map((key, index) => (
-                                    <TodoItem key={index} user={userUuid} data={todo.todo[key]} /> ))
+                                    <TodoItem key={index} user={userUuid} itemData={todo.todo[key]} /> ))
                             )
                         }
-                    </form>
                 </div>
             </div>
         </>

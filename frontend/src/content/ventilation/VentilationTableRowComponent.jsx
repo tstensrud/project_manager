@@ -9,13 +9,13 @@ import useUpdateData from '../../hooks/useUpdateData';
 import useUpdateSystem from '../../hooks/useUpdateSystem';
 
 
-function RoomTableRowComponent({roomId, msgToParent, systems, index}) {
+function RoomTableRowComponent({roomId, msgToParent, systems, index, allRoomData}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+        //console.log(allRoomData);
 
         
         // Initial fetches and refetch
-        const {data: roomData, loading: roomLoading, error: roomError} = useFetch(`/project_api/${projectId}/rooms/get_room/${roomId}/`);
         const {data: ventData, loading: ventLoading, error: ventError, refetch: ventRefetch} = useFetch(`/project_api/${projectId}/ventilation/get_room/${roomId}/`);
         
         // Update data
@@ -33,7 +33,6 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index}) {
 
         // Roomdata
         const [showRoomData, setShowRoomData] = useState(false);
-        const [test, setTest] = useState(false);
 
         // useEffects
         useEffect(() => {
@@ -138,27 +137,54 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index}) {
             setShowRoomData(!showRoomData);
         }
 
+        const calculateMinAirFlow = () => {
+            let minimumAir = 0;
+            const supply = ventData && ventData.vent_data.AirSupply;
+            const extract = ventData && ventData.vent_data.AirExtract;
+            const min = ventData && ventData.vent_data.AirMinimum;
+            const area = allRoomData && allRoomData.Area;
+            const emission = ventData && ventData.vent_data.AirEmissionSum;
+            const controlls = ventData && ventData.vent_data.RoomControl;
+            const roomControll = ventData && controlls.slice(0,3).toUpperCase();
+        
+            if (roomControll === "CAV") {
+              if (supply !== 0) {
+                minimumAir = supply;
+              } else {
+                minimumAir = extract;
+              }
+            }
+        
+            if (roomControll === "VAV") {
+              if (emission > (min*area)) {
+                minimumAir = emission;
+              } else {
+                minimumAir = min*area;
+              }
+            }
+            return minimumAir.toFixed(0);
+          }
+
     return (
         <>
-        {showRoomData ? <RoomData roomData={roomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData}/> : ''}
+        {showRoomData ? <RoomData roomData={allRoomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData}/> : ''}
         {response && response.error ? <MessageBox message={response.error} /> : null}
         <tr className={markedRow}>
-            <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
-            <td>{roomData ? roomData.room_data.Floor : ''}</td>
-            <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
-                <strong>{roomData ? roomData.room_data.RoomNumber : ''}</strong>
+            <td style={{ cursor: 'pointer', width: "30px" }} onClick={handleOnMarkedRow}>#</td>
+            <td style={{width: "50px"}}>{allRoomData ? allRoomData.Floor : ''}</td>
+            <td  onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer', textTransform: 'uppercase' }}>
+                <strong>{allRoomData ? allRoomData.RoomNumber : ''}</strong>
                 <br />
-                <span className="table-text-grey">{roomData ? roomData.room_data.RoomName : ''}</span>
+                <span className="table-text-grey">{allRoomData ? allRoomData.RoomName : ''}</span>
             </td>
             <td>{ventData ? (ventData.vent_data.AirPersonSum).toFixed(0) : ''} </td>
             <td>{ventData ? (ventData.vent_data.AirEmissionSum).toFixed(0) : ''}</td>
             <td>{ventData ? ventData.vent_data.AirProcess : ''}</td>
-            <td>{ventData ? ventData.vent_data.AirMinimum : ''}</td>
             <td>{ventData ? (ventData.vent_data.AirDemand).toFixed(0) : ''}</td>
             {renderEditableCell("AirSupply", "supplyCell")}
             {renderEditableCell("AirExtract", "extractCell")}
             <td>{ventData ? ventData.vent_data.AirChosen : ''}</td>
-            <td>{(ventData && roomData) ? (ventData.vent_data.AirMinimum * roomData.room_data.Area).toFixed(0) : '' }</td>
+            <td>{calculateMinAirFlow()}</td>
             <td>
                 <select value={currentSystemName} name="systemUid" className="table-select" onChange={handleSystemChange}>
                     {currentSystemName && currentSystemName !== null ? (<option key="0">{currentSystemName}</option>) : ''}

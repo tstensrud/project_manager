@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
+import useSubmitData from '../../hooks/useSubmitData'
 import useFetch from '../../hooks/useFetch'
 import useUpdateData from '../../hooks/useUpdateData'
 import useDeleteData from '../../hooks/useDeleteData'
@@ -28,6 +29,10 @@ function RoomTableRowComponent({roomId, msgToParent, index}) {
         // Row marking
         const [markedRow, setMarkedRow] = useState('');
 
+        // Undo
+        const [undoButton, setUndoButton] = useState(false);
+        const {data: undoDelete, response: undoDeleteResponse, setData: setUndoDeleteData, handleSubmit} = useSubmitData(`/project_api/${projectId}/rooms/undo_delete/${roomId}/`);
+
         // Use effects
         useEffect(() => {
             setActiveProject(projectId);
@@ -40,7 +45,6 @@ function RoomTableRowComponent({roomId, msgToParent, index}) {
             }
         },[roomData]);
 
-        
         // Handlers
         const sendMessageToParent = (msg) => {
             msgToParent(msg);
@@ -62,6 +66,8 @@ function RoomTableRowComponent({roomId, msgToParent, index}) {
             setDisabledDeleteButton(true);
             setRowClass("deleted-row")
             sendMessageToParent("deleted");
+            setUndoButton(true);
+            setUndoDeleteData({"undo": true});
             
         }
 
@@ -87,7 +93,7 @@ function RoomTableRowComponent({roomId, msgToParent, index}) {
             } else {
                 setMarkedRow('');
             }   
-        }
+        };
 
         const renderEditableCell = (cellName) => (
             <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
@@ -106,12 +112,19 @@ function RoomTableRowComponent({roomId, msgToParent, index}) {
             )}
         </td>   
         );
-        
+
+        const handleUndo = async (e) => {
+            await handleSubmit(e);
+            setUndoButton(false);
+            setRowClass("");
+
+        }
+
     return (
         <>
         {response && response.error ? <MessageBox message={response.error} /> : null}
         <tr className={markedRow}>
-        <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
+        <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
             <td className={cellClass}>{roomData ? roomData.room_data.BuildingName : ''}</td>
             <td className={cellClass}>{roomData ? roomData.room_data.Floor : ''}</td>
             {renderEditableCell("RoomNumber")}
@@ -119,9 +132,12 @@ function RoomTableRowComponent({roomId, msgToParent, index}) {
             {renderEditableCell("RoomName")}
             {renderEditableCell("Area")}
             {renderEditableCell("RoomPopulation")}
-            {renderEditableCell("Comment")}
+            {renderEditableCell("Comments")}
             <td className={cellClass}>
-                <button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button>
+                
+                {
+                    undoButton ? <><button onClick={handleUndo} className="table-button">Angre</button></> : <><button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button></>
+                }
             </td>
         </tr>
         </>

@@ -43,7 +43,7 @@ function App() {
                 <Route path="specifications/:suid/:projectId" element={<ProtectedRoute element={<Specification />}/>} />
                 <Route path="specifications/:suid/new_room" element={<ProtectedRoute element={<NewRoomSpec />}/>}/>
                 <Route path="newspecification" element={<ProtectedRoute element={<NewSpec />}/>} />
-                <Route path="userprofile/:uuid" element={<ProtectedRoute element={<UserProfile/>}/>} />
+                <Route path="userprofile/" element={<ProtectedRoute element={<UserProfile/>}/>} />
                 <Route path="admin" element={<ProtectedRoute element={<Admin/>}/>}/>
                 <Route path="newproject" element={<ProtectedRoute element={<NewProject />}/>} />
                 <Route path="project/:projectId" element={<ProtectedRoute element={<Project />}/>} />

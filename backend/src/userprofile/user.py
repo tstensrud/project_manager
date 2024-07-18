@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, render_template, flash, request
+from flask import Blueprint, redirect, url_for, render_template, flash, jsonify, request
 from flask_login import current_user
 from flask_jwt_extended import jwt_required
 from .. import db_ops_users as dbo
@@ -10,11 +10,14 @@ user_bp = Blueprint('user',__name__, static_folder='static', template_folder='te
 
 @user_bp.route('/', methods=['GET'])
 @jwt_required()
-def user_profile(username: str):
-    endpoint=request.endpoint
-    return render_template('user_profile.html',
-                           user=current_user,
-                           endpoint=endpoint)
+def user_profile(uuid: str):
+    user = dbo.get_user(uuid)
+    user_data = user.get_json()
+    print(uuid)
+    if user:
+        return jsonify({"user": user_data})
+    else:
+        return jsonify({"error": "Fant ikke bruker"})
 
 
 @user_bp.route('/update_password', methods=['POST'])

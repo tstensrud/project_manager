@@ -140,10 +140,10 @@ def get_building_data(building_uid: str) -> dict:
     floors = get_building_floors(building_uid)
     floor_summaries = {}
     floor_summaries_heating = {}
-    
     for floor in floors:
         floor_summaries[floor] = {"supply": sum_airflow_supply_floor_building(building_uid, floor),
-                                  "extract": sum_airflow_extract_floor_building(building_uid, floor)}
+                                  "extract": sum_airflow_extract_floor_building(building_uid, floor),
+                                  "demand": sum_airflow_demand_floor_building(building_uid, floor)}
         floor_summaries_heating[floor] = {"demand": sum_heatloss_demand_building_floor(building_uid, floor),
                                           "chosen": sum_heatloss_chosen_building_floor(building_uid, floor)}
 
@@ -153,14 +153,25 @@ def get_building_data(building_uid: str) -> dict:
     heating_demand = sum_heat_loss_building(building_uid)
     heating = sum_heat_loss_chosen_building(building_uid)
     demand = summarize_demand_building(building_uid)
+    system_uids = systems_in_building(building_uid)
+    if None in system_uids:
+        system_uids.pop(system_uids.index(None))
+    systems = []
+    for uid in system_uids:
+        system = get_system(uid)
+        systems.append(system.system_name)
+    systems.sort()
+
     building_data["area"] = area
     building_data["supplyAir"] = supply_air
     building_data["extractAir"] = extract_air
     building_data["heating"] = heating
     building_data["heatingDemand"] = heating_demand
     building_data["demand"] = demand
+    building_data["floors"] = floors
     building_data["floor_summaries"] = floor_summaries
     building_data["floor_summaries_heating"] = floor_summaries_heating
+    building_data["systems"] = systems
 
     return building_data
 
@@ -278,21 +289,43 @@ def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str
         return False
     
 
-def get_room(room_uid: int) -> models.Rooms:
+def get_room(room_uid: str) -> models.Rooms:
     room = db.session.query(models.Rooms).filter(models.Rooms.uid == room_uid).first()
     return room
 
 
-def delete_room(room_uid: int) -> bool:   
+def delete_room(room_uid: str) -> bool:   
     room = db.session.query(models.Rooms).filter(models.Rooms.uid == room_uid).first()
     if room:
+        room_dict = room.__dict__.copy()
+        room_dict.pop('_sa_instance_state')
+        deleted_room = models.DeletedRooms(**room_dict)
         try:
+            db.session.add(deleted_room)
             db.session.delete(room)
             db.session.commit()
             return True
         except Exception as e:
             db.session.rollback()
             globals.log(f"delete_room() second try/except block: {e}")
+            return False
+    else:
+        return False
+
+def undo_delete_room(room_uid: str) -> bool:
+    room = db.session.query(models.DeletedRooms).filter(models.DeletedRooms.uid == room_uid).first()
+    if room:
+        room_dict = room.__dict__.copy()
+        room_dict.pop('_sa_instance_state')
+        undo_room = models.Rooms(**room_dict)
+        try:
+            db.session.add(undo_room)
+            db.session.delete(room)
+            db.session.commit()
+            return True
+        except Exception as e:
+            globals.log(f"Failure to undo deletion of room: {e}")
+            db.session.rollback()
             return False
     else:
         return False
@@ -475,6 +508,9 @@ def new_ventilation_system(project_uid: int, system_number: str, placement: str,
         db.session.rollback()
         return False
 
+def systems_in_building(building_uid) -> list[str]:
+    systems = db.session.query(models.Rooms.system_uid).filter(and_(models.Rooms.building_uid == building_uid)).distinct().all()
+    return [system[0] for system in systems]
 
 def delete_system(system_uid: int) -> bool:
     rooms = db.session.query(models.Rooms).join(models.VentilationSystems).filter(models.VentilationSystems.uid==system_uid).all()
@@ -580,6 +616,10 @@ def update_system_info(system_uid: int, data: dict) -> bool:
         globals.log(f"update_system_info: {e}")
         return False
 
+def sum_airflow_demand_floor_building(building_uid: str, floor: str) -> float:
+    demand_air = db.session.query(func.sum(models.Rooms.air_demand)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
+    return demand_air if demand_air is not None else 0.0
+
 def sum_airflow_supply_floor_building(building_uid: str, floor: str) -> float:
     supply_air = db.session.query(func.sum(models.Rooms.air_supply)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
     return supply_air if supply_air is not None else 0.0
@@ -645,6 +685,13 @@ def get_room_type_name(specification: str, room_uid: int) -> str:
     room_type_name = db.session.query(models.RoomTypes.name).join(models.Specifications).filter(models.Specifications.name == specification, models.RoomTypes.uid == room_uid).first()
     return room_type_name
 
+def find_room_type_for_specification(spec_uid: str, room_type_name: str) -> bool:
+    room_type = db.session.query(models.RoomTypes.name).filter(and_(models.RoomTypes.specification_uid == spec_uid, models.RoomTypes.name == room_type_name)).first()
+    if room_type:
+        return True
+    else:
+        return False
+
 # Get name of all room types for a specific specification
 #
 def get_specification_room_types(specification_uid: str):
@@ -661,35 +708,35 @@ def get_specification_room_data(specification_uid: str):
 
 def new_specification_room_type(specification_uid: int, data) -> bool:
     room_control = ""
-    if data["control_vav"] == "1":
+    if data["vav"] == "1":
         room_control = room_control + "VAV, "
     else:
         room_control = room_control + "CAV, "
-    if data["control_co2"] == "True":
+    if data["co2"] == "True":
         room_control = room_control + "CO2, "
-    if data["control_temp"] == "True":
+    if data["temp"] == "True":
         room_control = room_control + "T, "
-    if data["control_movement"] == "True":
+    if data["movement"] == "True":
         room_control = room_control + "B, "
-    if data["control_moisture"] == "True":
+    if data["moisture"] == "True":
         room_control = room_control + "F, "
-    if data["control_time"] == "True":
+    if data["time"] == "True":
         room_control = room_control + "Tid"
     uid = globals.encode_uid_base64(uuid4())
     room = models.RoomTypes(uid=uid,
                             specification_uid=specification_uid,
                             name=data["room_type"],
-                            air_per_person=data["air_p_p"],
+                            air_per_person=data["air_per_person"],
                             air_emission=data["air_emission"],
                             air_process=data["air_process"],
                             air_minimum=data["air_minimum"],
-                            ventilation_principle=data["vent_princ"],
+                            ventilation_principle=data["ventilation_principle"],
                             heat_exchange=data["heat_ex"],
                             room_control=room_control,
                             notes=data["notes"],
-                            db_technical=data["db_t"],
-                            db_neighbour=data["db_n"],
-                            db_corridor=data["db_c"],
+                            db_technical=data["db_technical"],
+                            db_neighbour=data["db_neighbour"],
+                            db_corridor=data["db_corridor"],
                             comments="")
     try:
         db.session.add(room)
@@ -699,6 +746,11 @@ def new_specification_room_type(specification_uid: int, data) -> bool:
         globals.log(f"create new room type {e}")
         db.session.rollback()
         return False
+
+
+'''
+Heating and cooling
+'''
 
 def update_building_heating_settings(building_uid: str, updated_data) -> bool:
     building = db.session.query(models.Buildings).filter(models.Buildings.uid == building_uid).first()

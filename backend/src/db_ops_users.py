@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash
 
 
 def get_user(user_uuid) -> models.User:
-    user = db.session.query(models.User).filter(models.User.id == user_uuid).first()
+    user = db.session.query(models.User).filter(models.User.uuid == user_uuid).first()
     return user
 
 def update_password(user_uuid: int, password: str) -> bool:

@@ -3,7 +3,17 @@
 	gap: 2.5rem;
 	max-width: 1000px;
 	margin: 2vh;
-	color: white;
+	color: var(--app-content-main-color);
+}
+
+.cards-large {
+	display: flex;
+	gap: 2.5rem;
+	max-width: 1000px;
+	margin-top: 2vh;
+	margin-bottom: 10vh;
+	margin-left: 2vh;
+	color: var(--app-content-main-color);
 }
 
 .card {

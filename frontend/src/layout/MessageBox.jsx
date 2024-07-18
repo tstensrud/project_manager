@@ -15,7 +15,7 @@ function MessageBox({message}) {
         <>
         <div className={errorPopUpClass}>
         <span className="popup-close" onClick={closeMessagePopUp}>×</span>
-        <p>Feil: {message}</p>
+        <p>{message}</p>
         </div> 
         </>
     );

@@ -10,6 +10,7 @@ import SubTitleComponent from '../../layout/SubTitleComponent';
 import TableHeaderComponent from "../../tables/TableHeaderComponent";
 import RoomTableRowComponent from "./RoomTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
+import TableTop from '../../layout/TableTop';
 
 
 function Rooms () {
@@ -154,6 +155,7 @@ function Rooms () {
                             ))}
                    
                 </div>
+                <TableTop />
     {
         roomData ? (
             roomData.room_data === null ? (

@@ -8,13 +8,13 @@ import useFetch from '../../hooks/useFetch';
 import useUpdateData from '../../hooks/useUpdateData';
 
 
-function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, index}) {
+function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState }) {
         const {projectId} = useParams();
-        const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+        const { setActiveProject } = useContext(GlobalContext);
 
         
         // Initial fetches and refetch
-        const {data: heatingData, loading: heatingLoading, error: heatingError, refetch: heatingRefetch} = useFetch(`/project_api/${projectId}/heating/get_room/${roomId}/`);
+        const {data: heatingData, refetch: heatingRefetch} = useFetch(`/project_api/${projectId}/heating/get_room/${roomId}/`);
         
         // Update data
         const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomId}/`);
@@ -70,7 +70,7 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
                 handleBlur();
                 setData('');
                 heatingRefetch();
-                //sendMessageToParent("updateSummaries");
+                sendMessageToParent("updateSummaries");
             } if (e.key == "Escape") {
                 handleBlur();
                 return;
@@ -112,7 +112,7 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
         {showRoomData ? <RoomData heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData}/> : ''}
         {response && response.error !== null && response.error !== undefined ? <MessageBox message={response.error} /> : ''}
         <tr className={markedRow}>
-        <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
+        <td style={{ cursor: 'pointer', width: "30px" }} onClick={handleOnMarkedRow}>#</td>
             <td>{heatingData ? heatingData.room_data.Floor : ''}</td>
             <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
                 <strong>{heatingData ? heatingData.room_data.RoomNumber : ''}</strong>

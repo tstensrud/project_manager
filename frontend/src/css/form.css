@@ -13,6 +13,7 @@ select{
     background-position: left 10px center;
     transition: 0.2s;
     max-width: 190px;
+    border-radius: var(--form-elements-border-radius);
 }
 
 select:hover {
@@ -31,6 +32,7 @@ select:hover {
     background-repeat: no-repeat;
     background-position: left 10px center;
     transition: 0.2s;
+    border-radius: var(--form-elements-border-radius);
 }
 
 .form-button{
@@ -45,6 +47,7 @@ select:hover {
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
     cursor: pointer;
+    border-radius: var(--form-elements-border-radius);
 }
 
 .form-button:hover {
@@ -61,6 +64,8 @@ select:hover {
     border-left:  var(--default-border);
     border-right:  var(--default-border);
     border-bottom: 0;
+    border-top-left-radius: var(--form-elements-border-radius);
+    border-top-right-radius: var(--form-elements-border-radius);
     padding: 10px;
     color: var(--app-content-main-color);;
     font-size: 14px;
@@ -71,7 +76,7 @@ select:hover {
 
 .table-sorting-button:hover {
     background-color: var(--table-header);
-    color: white;
+    color: var(--app-content-main-color);
 }
 
 .table-sorting-button-active{
@@ -84,8 +89,10 @@ select:hover {
     border-left:  var(--default-border);
     border-right:  var(--default-border);
     border-bottom: 0;
+    border-top-left-radius: var(--form-elements-border-radius);
+    border-top-right-radius: var(--form-elements-border-radius);
     padding: 10px;
-    color: #FFFFFF;
+    color: var(--app-content-main-color);
     font-size: 14px;
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
@@ -103,6 +110,11 @@ select:hover {
     font-size: 14px;
     cursor: pointer;
     transition-duration: 0.25s;
+    border-radius: var(--form-elements-border-radius);
+}
+
+.table-button:hover {
+  border-color: var(--navbar-active-link);
 }
 
 .todo-list-button{
@@ -117,6 +129,7 @@ select:hover {
     font-size: 14px;
     cursor: pointer;
     transition-duration: 0.25s;
+    border-radius: var(--form-elements-border-radius);
 }
 
 .todo-list-button:hover {
@@ -134,11 +147,13 @@ select:hover {
     font-size: 14px;
     cursor: pointer;
     transition-duration: 0.25s;
+    border-radius: var(--form-elements-border-radius);
 }
 
 .form-text-area {
     background-color: var(--app-content-secondary-color);
     border: var(--default-border);
+    border-radius: var(--form-elements-border-radius);
     color: var(--app-content-main-color);
     font-size: 15px;
     line-height: 20px;
@@ -206,12 +221,13 @@ input {
     outline: 0;
     background-color: var(--app-content-secondary-color);
     width: 500px;
-    border: 1px solid rgb(43, 53, 64);
+    border: var(--default-border);
     color: var(--app-content-main-color);
     margin: 0 0 15px;
     padding: 10px;
     box-sizing: border-box;
     font-size: 14px;
+    border-radius: var(--form-elements-border-radius);
   }
 
 .input-short {
@@ -219,12 +235,13 @@ input {
     outline: 0;
     background-color: var(--app-content-secondary-color);
     width: 100px;
-    border: 1px solid rgb(43, 53, 64);
+    border: var(--default-border);
     color: var(--app-content-main-color);
     margin: 0 0 15px;
     padding: 10px;
     box-sizing: border-box;
     font-size: 14px;
+    border-radius: var(--form-elements-border-radius);
 }
 
 .input-medium {
@@ -232,16 +249,24 @@ input {
     outline: 0;
     background-color: var(--app-content-secondary-color);
     width: 200px;
-    border: 1px solid rgb(43, 53, 64);
+    border: var(--default-border);
     margin: 0 0 15px;
     padding: 10px;
     box-sizing: border-box;
     font-size: 14px;
+    border-radius: var(--form-elements-border-radius);
 }
+  
+input:focus,
+.input-short:focus,
+.input-medium:focus {
+    border-color: var(--svg-icon-color);
+  }
+
   .form {
     position: relative;
     z-index: 1;
-    background: #FFFFFF;
+    background: var(--app-content-main-color);
     max-width: 360px;
     margin: 0 auto 100px;
     padding: 45px;
@@ -262,6 +287,7 @@ input {
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
     cursor: pointer;
+    border-radius: var(--form-elements-border-radius);
   }
   
   .form button:hover,.form button:active,.form button:focus {
@@ -279,16 +305,18 @@ input {
   .form .register-form {
     display: none;
   }
+
 .card-input {
     font-family: "Roboto", sans-serif;
     outline: 0;
-    background: #ffffff;
+    background: var(--app-content-main-color);
     width: 500px;
     border: 1px solid black;
     margin: 0 0 15px;
     padding: 10px;
     box-sizing: border-box;
     font-size: 14px;
+    border-radius: var(--form-elements-border-radius);
   }
 
 .spec-button{
@@ -298,16 +326,17 @@ input {
     padding:3px 8px;
     outline: none;
     border: 1px solid white;
-    border-radius:0px;
+    border-radius: var(--form-elements-border-radius);
     background-color: var(--app-content-secondary-color);
     font-size: 14px;
     cursor: pointer;
     transition-duration: 0.25s;
+
 }
 
 .input-spec {
     background-color: var(--app-content-secondary-color);
-    border: 1px solid white;
+    border: var(--default-border);
     color: var(--app-content-main-color);
     font-size: 14px;
     line-height: 24px;
@@ -316,6 +345,7 @@ input {
     border-radius: 0px;
     max-width: 150px;
     transition: 0.2s;
+    border-radius: var(--form-elements-border-radius);
   }
 
 .input-heating {
@@ -327,23 +357,30 @@ input {
     border-radius: 0px;
     margin-top: 2px;
     transition: 0.2s;
+    border-radius: var(--form-elements-border-radius);
   }
 
   .input-heating-medium-length {
     background-color: var(--app-content-secondary-color);
     color: var(--app-content-main-color);
+    border: var(--default-border);
+    border-radius: var(--form-elements-border-radius);
     font-size: 14px;
     height: 35px;
     margin-top: 5px;
-    border-radius: 0px;
     max-width: 150px;
     transition: 0.2s;
+  }
+
+  .input-heating:focus,
+  .input-heating-medium-length:focus {
+    border-color: var(--navbar-active-link);
   }
 
 .spec-select{
     padding:1px 10px;
     background-color: var(--app-content-secondary-color);
-    border: 1px solid white;
+    border: var(--default-border);
     color: var(--app-content-main-color);
     font-size: 12px;
     line-height: 20px;
@@ -354,6 +391,7 @@ input {
     background-repeat: no-repeat;
     background-position: left 10px center;
     transition: 0.2s;
+    border-radius: var(--form-elements-border-radius);
 }
 
 input:placeholder {

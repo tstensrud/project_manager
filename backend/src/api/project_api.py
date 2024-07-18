@@ -1,8 +1,7 @@
 from datetime import datetime, timezone, timedelta
-import os
 import json
-from flask import Blueprint, render_template, jsonify, flash, request
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
+from flask import Blueprint, jsonify, request
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
 from .. import db_operations as dbo
 from .. import globals
 from markupsafe import escape
@@ -42,6 +41,7 @@ def project(project_uid):
         project_data = project.get_json()
         if specification is not None:
             project_data["SpecificationName"] = specification.name
+            project_data["SpecUid"] = specification.uid
         else:
             project_data["SpecificationName"] = None
         project_data["area"] = total_area
@@ -96,15 +96,15 @@ def new_todo_item(project_uid, user_uuid):
     return jsonify(response)
 
 @jwt_required()
-@project_api_bp.route('/todo_item_complete/<item_uid>/<uuid>/', methods=['PATCH'])
-def todo_item_complete(project_uid, item_uid, uuid):
-    print(f"ITem UID: {item_uid}, UUID: {uuid}")
+@project_api_bp.route('/todo_item_complete/', methods=['PATCH'])
+def todo_item_complete(project_uid):
     data = request.get_json()
+    item_uid = escape(data["item_id"])
+    uuid = escape(data["completed_by"])
     if dbo.set_todo_item_completed(item_uid, uuid):
         response = {"success": "Huskepunkt utført"}
     else:
         response = {"error": "Kunne ikke merke huskepunkt utført"}
-        
     return jsonify(response)
 #
 #
@@ -150,7 +150,7 @@ def rooms(project_uid):
     if request.method == "GET":
         project_rooms = dbo.get_all_project_rooms(project_uid)
         if project_rooms:
-            project_room_data = list(map(lambda x: x.get_json_room_data(), project_rooms))
+            project_room_data = list(map(lambda room: room.get_json_room_data(), project_rooms))
             return jsonify({"room_data": project_room_data, "spec": specification})
         else:
             return jsonify({"room_data": None, "spec": specification})
@@ -203,6 +203,7 @@ def get_room(project_uid, room_uid):
 @project_api_bp.route('/rooms/update_room/<room_uid>/', methods=['PATCH'])
 def udpate_room(project_uid, room_uid):
     data = request.get_json()
+    print(data)
     if data:
         room = dbo.get_room(room_uid)
         processed_data = {}
@@ -246,8 +247,23 @@ def delete_room(project_uid, room_uid):
         response = {"message": "Rom slettet"}
     else:
         response = {"message": "Kunne ikke slette rom"}
-    return jsonify({"message": "Rom slettet"})
+    return jsonify(response)
 
+@jwt_required()
+@project_api_bp.route('/rooms/undo_delete/<room_uid>/', methods=['POST'])
+def undo_delete(project_uid, room_uid):
+    data = request.get_json()
+    print(f"Data from undo delete: {data}")
+    if data:
+        if data["undo"] is True:
+            if dbo.undo_delete_room(room_uid):
+                return jsonify({"success": "Sletting av rom angret"})
+            else:
+                return jsonify({"error": "Kunne ikke angre på sletting"})
+        else:
+            return jsonify({"error": "Feil i mottatt data"})
+    else:
+        return jsonify({"error": "Fant ikke slettet rom"})
 #
 #               
 #   VENTILATIONSYSTEMS
@@ -393,6 +409,7 @@ def ventilation_update_room(project_uid, room_uid):
             if current_room_system_uid is None:
                 print("Current system id is None. Setting system")
                 if dbo.update_room_data(room_uid, processed_data):
+                    dbo.update_system_airflows(value)
                     return jsonify({"success": "System satt"})
             else:
                 if dbo.update_room_data(room_uid, processed_data):

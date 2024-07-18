@@ -17,7 +17,7 @@ function HeatingSettingsWindow({buildingUid, onSettingsButtonUpdate}) {
     return (
         <>
             <a className="todo-link" href="#" onClick={(e) => handleClick(e, setShowHeatingSettings)}>
-                <button className="table-sorting-button" type="submit">Varmeinnstillinger</button>
+                <button className="table-sorting-button" type="submit">Varmedata</button>
             </a>
             {showHeatingSettings && <HeatingSettings onSettingsUpdate={handleSettingsUpdate} key={buildingUid} buildingUid={buildingUid} showHeatingSettings={showHeatingSettings} setShowHeatingSettings={setShowHeatingSettings} />}
         </>

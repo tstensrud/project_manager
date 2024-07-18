@@ -16,6 +16,35 @@ function RoomData({roomData, ventData, setShowRoomData}) {
   const handleClick = (e) => {
       setShowRoomData(false);
   };
+
+  const calculateMinAirFlow = () => {
+    let minimumAir = 0;
+    const supply = ventData.vent_data.AirSupply;
+    const extract = ventData.vent_data.AirExtract;
+    const min = ventData.vent_data.AirMinimum;
+    const area = roomData.Area;
+    const emission = ventData.vent_data.AirEmissionSum;
+    const controlls = ventData.vent_data.RoomControl;
+    const roomControll = controlls.slice(0,3).toUpperCase();
+
+    if (roomControll === "CAV") {
+      if (supply !== 0) {
+        minimumAir = supply;
+      } else {
+        minimumAir = extract;
+      }
+      return minimumAir;
+    }
+
+    if (roomControll === "VAV") {
+      if (emission > (min*area)) {
+        minimumAir = emission;
+      } else {
+        minimumAir = min*area;
+      }
+      return minimumAir;
+    }
+  }
     
   return (
     <>
@@ -25,7 +54,7 @@ function RoomData({roomData, ventData, setShowRoomData}) {
             <thead>
               <tr>
                 <th>
-                  <strong>{roomData.room_data.RoomNumber} - <span className="table-text-grey">{roomData.room_data.RoomName}</span></strong>
+                  <strong>{roomData.RoomNumber} - <span className="table-text-grey">{roomData.RoomName}</span></strong>
                 </th>
                 <th>
                   <span onClick={(e) => handleClick(e, setShowRoomData)} className="room-data-close-btn">&times;</span>
@@ -38,7 +67,7 @@ function RoomData({roomData, ventData, setShowRoomData}) {
                   Romtype
                 </td>
                 <td>
-                  {roomData.room_data.RoomTypeName}
+                  {roomData.RoomTypeName}
                 </td>
               </tr>
 
@@ -47,7 +76,7 @@ function RoomData({roomData, ventData, setShowRoomData}) {
                   Bygg
                 </td>
                 <td>
-                  {roomData.room_data.BuildingName}
+                  {roomData.BuildingName}
                 </td>
               </tr>
 
@@ -56,7 +85,7 @@ function RoomData({roomData, ventData, setShowRoomData}) {
                   Areal
                 </td>
                 <td>
-                  {roomData.room_data.Area} m<sup>2</sup>
+                  {roomData.Area} m<sup>2</sup>
                 </td>
               </tr>
 
@@ -65,7 +94,7 @@ function RoomData({roomData, ventData, setShowRoomData}) {
                   Antall personer
                 </td>
                 <td>
-                  {roomData.room_data.RoomPopulation} stk.
+                  {roomData.RoomPopulation} stk.
                 </td>
               </tr>
 
@@ -74,7 +103,7 @@ function RoomData({roomData, ventData, setShowRoomData}) {
                   Kommentar
                 </td>
                 <td>
-                  - Ingen kommentar
+                {roomData.Comments}
                 </td>
               </tr>
 
@@ -107,10 +136,19 @@ function RoomData({roomData, ventData, setShowRoomData}) {
 
               <tr>
                 <td>
+                  Beregnet luftmengde min.
+                </td>
+                <td>
+                  {calculateMinAirFlow()} m<sup>3</sup>/h
+                </td>
+              </tr>
+
+              <tr>
+                <td>
                   Valgt tilluft
                 </td>
                 <td>
-                  {ventData.vent_data.AirSupply} m<sup>3</sup>/h
+                <span className="supply-text">{ventData.vent_data.AirSupply}</span> m<sup>3</sup>/h
                 </td>
               </tr>
 
@@ -119,7 +157,7 @@ function RoomData({roomData, ventData, setShowRoomData}) {
                   Valgt avtrekk
                 </td>
                 <td>
-                  {ventData.vent_data.AirExtract} m<sup>3</sup>/h
+                <span className="extract-text">{ventData.vent_data.AirExtract}</span> m<sup>3</sup>/h
                 </td>
               </tr>
 

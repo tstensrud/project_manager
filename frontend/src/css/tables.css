@@ -1,10 +1,11 @@
 /* Room lists */
 .table-wrapper{
   margin: 0px 20px 100px 20px;
-  box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
   overflow: auto;
   height: 81%;
-  border-radius: 5px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: var(--table-background-color);
 }
 
 .table-wrapper-tiny{
@@ -15,9 +16,22 @@
   width: 300px;
 }
 
+.table-wrapper-tiny:hover{
+  margin: 10px 1px 0px 0px;
+}
+
+.table-top-options {
+  background-color: var(--table-background-color);
+  position: sticky;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
 .fl-table {
-  color: white;
-  border-radius: 5px;
+  color: var(--app-content-main-color);
   font-size: 13px;
   font-weight: normal;
   border: none;
@@ -47,7 +61,6 @@
 
 
 .fl-table thead th {
-  
   color: var(--app-content-main-color);
   background-color: var(--table-header);
   top: 0;
@@ -61,7 +74,7 @@
   height: 25px;
   position: sticky;
   z-index: 1;
-  background-color: var(--table-header);
+  background-color: var(--table-background-color);
   color: var(--app-content-main-color);
 }
 
@@ -70,12 +83,8 @@
   color: var(--app-content-main-color);
 }
 
-.fl-table td:hover {
-  color: var(--svg-icon-color)
-}
-
 .marked-row {
-  background-color: #49494959 !important;
+  background-color: var(--marked-row) !important;
   color: var(--app-content-main-color);
 }
 
@@ -85,85 +94,25 @@
 }
 
 .table-text-grey {
-  color: grey;
+  color: var(--grey-text);
+}
+
+.summary-row {
+  background-color: var(--table-hover);
 }
 
 .supplyCell {
   background-color: #3ea578;
   color: black;
   font-weight: 500;
+  width: 200px;
 }
 
 .extractCell {
   background-color: #c96072;
   color: black;
   font-weight: 500;
-}
-
-/* Responsive */
-
-@media (max-width: 767px) {
-  .fl-table {
-      display: block;
-      width: 100%;
-  }
-  .table-wrapper:before{
-      content: "Scroll horizontally >";
-      display: block;
-      text-align: right;
-      font-size: 11px;
-      color: white;
-      padding: 0 0 10px;
-  }
-  .fl-table thead, .fl-table tbody, .fl-table thead th {
-      display: block;
-  }
-  .fl-table thead th:last-child{
-      border-bottom: none;
-  }
-  .fl-table thead {
-      float: left;
-  }
-  .fl-table tbody {
-      width: auto;
-      position: relative;
-      overflow-x: auto;
-  }
-  .fl-table td, .fl-table th {
-      padding: 20px .625em .625em .625em;
-      height: 60px;
-      vertical-align: middle;
-      box-sizing: border-box;
-      overflow-x: hidden;
-      overflow-y: auto;
-      width: 120px;
-      font-size: 13px;
-      text-overflow: ellipsis;
-  }
-  .fl-table thead th {
-      text-align: left;
-      border-bottom: 1px solid #f7f7f9;
-  }
-  .fl-table tbody tr {
-      display: table-cell;
-  }
-  .fl-table tbody tr:nth-child(odd) {
-      background: none;
-  }
-  .fl-table tr:nth-child(even) {
-      background: transparent;
-  }
-  .fl-table tr td:nth-child(odd) {
-      background: #F8F8F8;
-      border-right: 1px solid #E6E4E4;
-  }
-  .fl-table tr td:nth-child(even) {
-      border-right: 1px solid #E6E4E4;
-  }
-  .fl-table tbody td {
-      display: block;
-      text-align: center;
-  }
+  width: 150px;
 }
 
 /* Summaries */
@@ -171,7 +120,7 @@
 .popup {
   position: absolute;
   background: #333;
-  color: #fff;
+  color: var(--app-content-main-color);
   padding: 5px;
   border-radius: 5px;
   white-space: nowrap;
@@ -184,7 +133,6 @@
   font-weight: normal;
   border-radius: 5px;
   border-collapse: collapse;
-  width: 250px;
   white-space: nowrap;
   background-color: var(--table-background-color);
 }
@@ -213,7 +161,7 @@
 
 
 .fl-table-summary thead th {
-  color: #ffffff;
+  color: var(--app-content-main-color);
   background-color: var(--table-hover);
   top: 0;
   height: 25px;
@@ -227,7 +175,7 @@
 
 .fl-table-summary tr:hover {
   background-color: var(--table-hover);
-  color: white;
+  color: var(--app-content-main-color);
 }
 
 /* Room data table*/
@@ -255,7 +203,7 @@
 .fl-table-room-data td {
   border-top: var(--default-border);
   font-size: 13px;
-  max-width: 150px;
+  max-width: 190px;
   overflow: hidden;
   position: relative;
 }
@@ -266,7 +214,7 @@
 
 
 .fl-table-room-data thead th {
-  color: #ffffff;
+  color: var(--app-content-main-color);
   background-color: var(--table-hover);
   top: 0;
   height: 25px;
@@ -280,7 +228,7 @@
 
 .fl-table-room-data tr:hover {
   background-color: var(--table-hover);
-  color: white;
+  color: var(--app-content-main-color);
 }
 
 
@@ -303,7 +251,7 @@
 
 .room-data-close-btn {
   position: absolute;
-  color: white;
+  color: var(--app-content-main-color);
   top: 0px;
   right: 15px;
   font-size: 20px;

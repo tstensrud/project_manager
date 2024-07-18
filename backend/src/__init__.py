@@ -34,9 +34,10 @@ def create_app():
     from .api import project_api
     from .projects import projects
     from .specifications import specifications
+    from .userprofile import user
     #from .admin import admin
 
-    #app.register_blueprint(user.user_bp, url_prefix='/user/<username>')
+    app.register_blueprint(user.user_bp, url_prefix='/user/<uuid>')
     #app.register_blueprint(admin.admin_bp, url_prefix='/admin')
     app.register_blueprint(projects.projects_bp, url_prefix='/projects')
     app.register_blueprint(specifications.specifications_bp, url_prefix='/specifications')

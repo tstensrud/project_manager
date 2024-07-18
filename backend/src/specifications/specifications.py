@@ -90,6 +90,35 @@ def new_room(spec_uid):
     
     return jsonify({"message": "Fil mottatt"})
 
+@jwt_required()
+@specifications_bp.route('/new_room/<spec_uid>/', methods=['POST'])
+def new_room_for_spec(spec_uid):
+    data = request.get_json()
+    if data:
+        float_values = ["air_per_person", "air_emission", "air_minimum", "air_process"]
+        processed_data = {}
+        for key, value in data.items():
+            if key == "room_type":
+                room_type = dbo.find_room_type_for_specification(spec_uid, value)
+                if room_type is True:
+                    return jsonify({f"error_{key}": "Romtype finnes allerede"})
+                else:
+                    processed_data[key] = escape(value).strip()
+            if key in float_values:
+                cleansed_value = escape(value).strip()
+                converted_value = replace_and_convert_to_float(cleansed_value)
+                if converted_value is False:
+                    print(f"Could not convert value: {value}")
+                    return jsonify({f"error_{key}": "Luftmengder må kun inneholde tall"})
+                else:
+                    processed_data[key] = converted_value
+            else:
+                processed_data[key] = escape(value).strip()
+        print(f"Data: {processed_data}.")
+        if dbo.new_specification_room_type(spec_uid, processed_data):
+            return jsonify({"success": "Rom lagt til"})
+    return jsonify({"error", "Kunne ikke legge til nytt rom."})
+
 
 @jwt_required()
 @specifications_bp.route('/new_specification/', methods=['POST'])

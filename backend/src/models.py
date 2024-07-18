@@ -355,3 +355,75 @@ class RoomTypes(db.Model):
             "db_corridor": self.db_corridor,
             "comments": self.comments
         }
+    
+class DeletedRooms(db.Model):
+    __tablename__ = "DeletedRooms"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    uid = db.Column(db.String(250), unique=True)
+
+    # Foreign keys
+    project_uid = db.Column(db.String(250), db.ForeignKey('Projects.uid'), nullable=False)
+    building_uid = db.Column(db.String(250), db.ForeignKey('Buildings.uid'), nullable=False)
+    room_type_uid = db.Column(db.String(250), db.ForeignKey('RoomTypes.uid'), nullable=False)
+    system_uid = db.Column(db.String(250), db.ForeignKey('VentilationSystems.uid', ondelete="SET NULL"), nullable=True)
+
+    # Basic room data
+    floor = db.Column(db.String(100), nullable=False)
+    room_number = db.Column(db.String(100), nullable=False)
+    room_name = db.Column(db.String(100), nullable=False)
+    area = db.Column(db.Float, nullable=False)
+    room_population = db.Column(db.Integer, nullable=False)
+    comments = db.Column(db.String(250))
+
+    # Ventilation properties
+    air_per_person = db.Column(db.Float)
+    air_person_sum = db.Column(db.Integer)
+    air_mission = db.Column(db.Float)
+    air_emission_sum = db.Column(db.Float)
+    air_process = db.Column(db.Float)
+    air_minimum = db.Column(db.Float)
+    air_demand = db.Column(db.Float)
+    air_supply = db.Column(db.Float)
+    air_extract = db.Column(db.Float)
+    air_chosen = db.Column(db.Float)
+    vent_principle = db.Column(db.String(50))
+    heat_exchange = db.Column(db.String(50))
+    room_control = db.Column(db.String(50))
+    notes = db.Column(db.String(100))
+    db_technical = db.Column(db.String(50))
+    db_neighbour = db.Column(db.String(50))
+    db_corridor = db.Column(db.String(50))
+
+    # Heating properties
+    
+    outer_wall_area = db.Column(db.Float)
+    room_height = db.Column(db.Float)
+    window_door_area = db.Column(db.Float)
+    inner_wall_area = db.Column(db.Float)
+    roof_area = db.Column(db.Float)
+    floor_ground_area = db.Column(db.Float)
+    floor_air_area = db.Column(db.Float)
+    room_volume = db.Column(db.Float)
+    heatloss_cold_bridge = db.Column(db.Float)
+    heatloss_transmission = db.Column(db.Float)
+    heatloss_infiltration = db.Column(db.Float)
+    heatloss_ventilation = db.Column(db.Float)
+    heatloss_sum = db.Column(db.Float)
+    chosen_heating = db.Column(db.Float)
+    heat_source = db.Column(db.String(50))
+    
+    # Cooling properties
+    room_temp_summer = db.Column(db.Float)
+    internal_heatload_people = db.Column(db.Float)
+    internal_heatload_lights = db.Column(db.Float)
+    sun_adition = db.Column(db.Float)
+    ventair_temp_summer = db.Column(db.Float)
+    sum_internal_heatload_people = db.Column(db.Float)
+    sum_internal_heatload_lights = db.Column(db.Float)
+    internal_heatload_equipment = db.Column(db.Float)
+    sun_adition = db.Column(db.Float)
+    sun_reduction = db.Column(db.Float)
+    sum_internal_heatload = db.Column(db.Float)
+    cooling_ventilationair = db.Column(db.Float)
+    cooling_equipment = db.Column(db.Float)
+    cooling_sum = db.Column(db.Float)

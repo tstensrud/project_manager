@@ -26,19 +26,20 @@ function Project () {
     return (
         <>
             <SubTitleComponent>
-              <HeaderIcon /> &nbsp; Prosjektoversikt - {data && data.data.ProjectNumber} {data && data.data.ProjectName}
+                <HeaderIcon /> &nbsp; Prosjektoversikt - {data && data.data.ProjectNumber} {data && data.data.ProjectName}
             </SubTitleComponent>
             <div className="main-content">
 
                 <div className="flex-container-row">
                     <ProjectSummary projectId={projectId} />
                     <BuildingRoomData projectId={projectId} />
-                    <VentilationSummary projectId={projectId} />
+
                 </div>
 
                 <div className="flex-container-row">
+                    <VentilationSummary projectId={projectId} />
                     <HeatingCoolingSummary projectId={projectId} />
-                    
+
                 </div>
             </div>
         </>

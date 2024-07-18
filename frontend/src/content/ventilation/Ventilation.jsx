@@ -1,19 +1,20 @@
-import { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
 
 import useFetch from '../../hooks/useFetch'
+import { customSortFloors } from '../../utils/customSortFloors.js'
 
-import VentilationIcon from '../../assets/svg/ventilationIcon.svg?react'
+import VentilationIcon from '../../assets/svg/ventilationIcon.svg?react';
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import TableHeaderComponent from "../../tables/TableHeaderComponent";
 import VentilationTableRowComponent from "./VentilationTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
-import BuildingSummary from './BuildingSummary';
+import TableTop from '../../layout/TableTop';
+
+//import BuildingSummary from './BuildingSummary';
 
 function Ventilation () {
     const {projectId} = useParams();
-    const {setActiveProject} = useContext(GlobalContext);
 
     const columnTitles = [  
         {text: "#"},
@@ -22,21 +23,20 @@ function Ventilation () {
         {text: <>Sum personer <br/> m<sup>3</sup>/h</>},
         {text: <>Sum emisjon <br/> m<sup>3</sup>/h</>},
         {text: <>Prosess <br/> m<sup>3</sup>/h</>},
-        {text: <>Minimum <br/> m<sup>3</sup>/h</>},
         {text: <>Dimensjonert <br/> m<sup>3</sup>/h</>},
         {text: <>Tilluft<br/> m<sup>3</sup>/h</>},
         {text: <>Avtrekk<br/> m<sup>3</sup>/h</>},
         {text: <>m<sup>3</sup>/m<sup>2</sup></>},
         {text: <>Min <br/>m<sup>3</sup>/h</>},
         {text: "System"},
-        {text: "Kommentar"}
+        {text: "Merknad"}
     ];
 
     // Initial fetch of data
-    const {data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch} = useFetch(`/project_api/${projectId}/rooms/`);
-    const {data: buildingData, loading: buildingDataLoading, error: buildingDataError, refetch: buildingReFetch} = useFetch(`/project_api/${projectId}/buildings/`);
-    const {data: ventSystemData, loading: ventsSystemLoading, error: ventSystemError, refetch: ventSystemRefect} = useFetch(`/project_api/${projectId}/systems/`);
-    
+    const {data: roomData} = useFetch(`/project_api/${projectId}/rooms/`);
+    const {data: buildingData, refetch: buildingReFetch} = useFetch(`/project_api/${projectId}/buildings/`);
+    const {data: ventSystemData } = useFetch(`/project_api/${projectId}/systems/`);
+
     // Error messages from child component
     const [childMessage, setChildMessage] = useState('');
 
@@ -45,18 +45,31 @@ function Ventilation () {
     const [buildingId, setBuildingId] = useState(null);
     const [activeSortButton, setActivesortButton] = useState(null);
     const [buildingSummaryData, setBuildingSummaryData] = useState(null);
+    const [floors, setFloors] = useState([]);
 
+    console.log(buildingSummaryData)
+
+    // useEffects
     useEffect(() => {
         const filteredBuildingData = buildingData && buildingData.building_data
         ? buildingData.building_data.filter((building) => building.uid === activeSortButton)
         : null;
         setBuildingSummaryData(filteredBuildingData);
-    },[activeSortButton, buildingData])
+    },[activeSortButton, buildingData]);
 
     useEffect(() => {
         setSortedBuildings(roomData && roomData.room_data && roomData.room_data.filter((room) => room.BuildingUid === buildingId));
     },[roomData]);
 
+    useEffect(() => {
+        if (buildingSummaryData && buildingSummaryData[0] && buildingSummaryData[0].floor_summaries) {
+            const floorSummaryKeys = Object.keys(buildingSummaryData[0].floor_summaries);
+            const sortedKeys = customSortFloors(floorSummaryKeys);
+            setFloors(sortedKeys);
+        }
+    },[buildingSummaryData]);
+
+    // Handlers
     const handleChildMessage = (msg) => {
          if (msg !== undefined) {
             if (msg === "updateSummaries") {
@@ -86,39 +99,83 @@ function Ventilation () {
             {childMessage.error && <MessageBox message={childMessage.error} />}
 
             <SubTitleComponent>
-                <VentilationIcon /> Luftmengdetabell
+                <VentilationIcon /> Luftmengdetabeller
             </SubTitleComponent>
             <div className='main-content'>
-                <div className="text-container-above-tables">
+                <div className="text-container-above-tables no-print">
 
-                <div className="float-container"> 
-                    {buildingSummaryData && <BuildingSummary data={buildingSummaryData[0]}/>}
-                </div>
-
-
-                    <div className="float-container-bottom-right">
+               
                         {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                             <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
                                 {buildingData.building_data[key].BuildingName}</button> &nbsp;</>
                             ))}
-                    </div>
+                    
                 </div>
+                <TableTop />
                 {
                     roomData ? (
                         roomData.room_data === null ? (
                             <p>Ingen rom lagt til</p>
                         ) : (
+                            
                             <div className="table-wrapper">
                                 <table className="fl-table">
                                     <thead>
                                         <TableHeaderComponent headers={columnTitles} />
                                     </thead>
                                     <tbody>
-                                        {
-                                            sortedBuildings && sortedBuildings.length > 0 ? (
-                                                sortedBuildings.map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} roomId={room.uid} systems={ventSystemData}/>)
-                                            ) : (<><tr><td><>Velg bygg</></td></tr></>)
-                                        }
+                                            {
+                                                floors && floors.map(floor => (
+                                                    <React.Fragment key={floor}>
+                                                        {
+                                                            sortedBuildings && sortedBuildings.length > 0 ? (
+                                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} allRoomData={room} roomId={room.uid} systems={ventSystemData} />)
+                                                            ) : (<></>)
+                                                        }
+                                                        <tr className="summary-row">
+                                                        <td><br/><br/></td><td></td><td></td><td></td><td></td><td></td>
+                                                        <td>
+                                                        {
+                                                                    buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
+                                                                    Object.keys(buildingSummaryData[0].floor_summaries)
+                                                                        .filter(key => key === floor)
+                                                                        .map(key => (
+                                                                            <React.Fragment key={key}>
+                                                                                <strong>{Number(buildingSummaryData[0].floor_summaries[key].demand.toFixed(0)).toLocaleString()}</strong>
+                                                                            </React.Fragment>
+                                                                        ))
+                                                                }
+
+                                                        </td>
+                                                            <td>
+                                                                {
+                                                                    buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
+                                                                    Object.keys(buildingSummaryData[0].floor_summaries)
+                                                                        .filter(key => key === floor)
+                                                                        .map(key => (
+                                                                            <React.Fragment key={key}>
+                                                                            <span className="supply-text">{Number(buildingSummaryData[0].floor_summaries[key].supply.toFixed(0)).toLocaleString()}</span>
+                                                                            </React.Fragment>
+                                                                        ))
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                            {
+                                                                    buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
+                                                                    Object.keys(buildingSummaryData[0].floor_summaries)
+                                                                        .filter(key => key === floor)
+                                                                        .map(key => (
+                                                                            <React.Fragment key={key}>
+                                                                                <span className="extract-text">{Number(buildingSummaryData[0].floor_summaries[key].extract.toFixed(0)).toLocaleString()}</span>
+                                                                            </React.Fragment>
+                                                                        ))
+                                                                }
+                                                                
+                                                            </td>
+                                                            <td></td><td></td><td></td><td></td>
+                                                        </tr>
+                                                    </React.Fragment>
+                                                ))}
                                     </tbody>
                                     <tfoot>
                                     <tr>
@@ -130,16 +187,17 @@ function Ventilation () {
                                             <th></th>
                                             <th></th>
                                             <th></th>
+                                            
+                                            <th>
+                                                <strong>{ buildingSummaryData?.[0]?.demand != null ? <>{Number((buildingSummaryData[0]).demand.toFixed(0)).toLocaleString()} <br/> m<sup>3</sup>/h</> : (<></>) }</strong>
+                                            </th>
+                                            <th>
+                                                <strong>{ buildingSummaryData?.[0]?.supplyAir != null ? <>{Number((buildingSummaryData[0].supplyAir).toFixed(0)).toLocaleString()} <br/> m<sup>3</sup>/h</> : (<></>) }</strong>
+                                            </th>
+                                            <th>
+                                                <strong>{ buildingSummaryData?.[0]?.extractAir ? <>{Number((buildingSummaryData[0].extractAir).toFixed(0)).toLocaleString()} <br/> m<sup>3</sup>/h</>: (<></>) }</strong>
+                                            </th>
                                             <th></th>
-                                            <th>
-                                                <strong>{ buildingSummaryData && buildingSummaryData[0] ? <>{(buildingSummaryData[0].demand.toFixed(0)).toLocaleString()} <br/> m<sup>3</sup>/h</> : (<></>) }</strong>
-                                            </th>
-                                            <th>
-                                                <strong>{ buildingSummaryData && buildingSummaryData[0] ? <>{(buildingSummaryData[0].supplyAir.toFixed(0)).toLocaleString()} <br/> m<sup>3</sup>/h</> : (<></>) }</strong>
-                                            </th>
-                                            <th>
-                                                <strong>{ buildingSummaryData && buildingSummaryData[0] ? <>{(buildingSummaryData[0].extractAir.toFixed(0)).toLocaleString()} <br/> m<sup>3</sup>/h</>: (<></>) }</strong>
-                                            </th>
                                             <th></th>
                                             <th></th>
                                             <th></th>

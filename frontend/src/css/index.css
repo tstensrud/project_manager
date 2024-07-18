@@ -7,16 +7,21 @@
   --app-content-secondary-color: rgb(12, 18, 25);
   --app-content-main-color: white;
   --default-border: 1px solid rgb(43, 53, 64);
+  --link: #78D3F8;
+  --link-hover: #3C697C;
   --table-header: rgb(18, 28, 38);
+  --table-footer: #161F29;
   --table-background-color: rgb(18, 28, 38);
   --table-button-border: #1f1c2e;
   --table-button-background: rgb(18, 28, 38);
   --table-border:1px solid rgb(43, 53, 64);
   --table-hover: #49494910;
   --navbar-active-link: #24633c;
-  /*--navbar-main-color: rgb(12, 18, 25);*/
   --navbar-main-color: rgb(18, 28, 38);
   --svg-icon-color: #00FFA7;
+  --marked-row: #49494959;
+  --form-elements-border-radius: 6px;
+  --grey-text: rgba(212, 212, 212, 0.473);
 }
 
 body, html {
@@ -41,9 +46,6 @@ body {
   color: var(--app-content-main-color);
 }
 
-.header, .sub-header {
-  flex: 0 1 4%; 
-}
 
 .main-content {
   flex: 1 0 92%; 
@@ -54,33 +56,24 @@ body {
   width: 100%;
 }
 .header {
-  padding-left: 50px;
-  background-color: rgb(12, 18, 25);
-  color: white;
+  background-color: var(--app-content-secondary-color);
+  color: var(--app-content-main-color);
+  display: flex;
 }
 .sub-header {
   display: flex;
   align-items: center;
   border-top: var(--default-border);
   border-bottom: var(--default-border);
-  background-color: rgb(12, 18, 25);
-  color: white;
+  background-color: var(--app-content-secondary-color);
+  color: var(--app-content-main-color);
   padding-left: 50px;
 }
 .main-content {
-  /*background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);*/
-  background-color: rgb(12, 18, 25);
-  color: #EEEEEE;
+  background-color: var(--app-content-secondary-color);
+  color: var(--app-content-main-color);
   
 }
-.footer {
-  display: flex;
-  background-color: #31363F;
-  justify-content: center;
-  align-items: center;
-}
-
-
 
 .app-content-header {
   display: flex;
@@ -197,6 +190,8 @@ body {
 .text-container-above-tables {
   overflow-y: hidden;
   display: flex;
+  justify-content: center;
+  align-items: end;
   margin-right: 20px;
   height: 120px;
   margin-left: 20px;
@@ -215,8 +210,8 @@ body {
   display: flex;
   margin-right: 20px;
   height: 50px;
-  margin-left: 20px;
-  justify-content: end;
+  margin-right: 40px;
+  justify-content: center;
   align-items: end;
 }
 
@@ -237,6 +232,11 @@ body {
 .extract-text {
   color: #a92b3c;
 }
+
+.heating-text {
+  color: #FF7F27;
+}
+
 
 .p-description {
   color: var(--app-content-main-color);
@@ -271,7 +271,7 @@ body {
   display: flex;
   float: left;
   height: 100%;
-  width: 75%;
+  width: 80%;
   overflow-y: hidden;
   overflow-x: auto;
 }
@@ -305,7 +305,8 @@ body {
   align-items: end;
   justify-content: flex-end;
   height: 100%;
-  width: 25%;
+  width: 20%;
+  margin-right: 10px;
 }
 
 .float-container-bottom-smaller {
@@ -334,10 +335,10 @@ body {
 
 a {
   text-decoration: none;
-  color: var(--navbar-active-link);
+  color: var(--link);
 }
 a:hover {
-  color: var(--app-content-main-color);
+  color: var(--link-hover);
 }
 
 
@@ -371,13 +372,21 @@ a:hover {
   text-align: center;
   align-content: center;
   font-size: 20px;
+  flex: 1;
 }
 .navbar-button-container {
-  float: left;
-  width: 15%;
+  min-width: 380px;
+  flex: 0 0 15%;
   height: 100%;
-  text-align: center;
-  align-content: center;
+  font-size: 20px;
+}
+
+.navbar-button-container-right {
+  min-width: 380px;
+  display: flex;
+  flex: 0 0 15%;
+  height: 100%;
+  justify-content: end;
   font-size: 20px;
 }
 
@@ -443,6 +452,12 @@ a:hover {
   color: var(--app-content-main-color);
 }
 
+/* Header text */
+
+h3 {
+  display: inline-block;
+  line-height: 0;
+}
 
 /* SVG stuff*/
 
@@ -456,6 +471,14 @@ a:hover {
 svg.feather {
   vertical-align: middle;
   display: inline-block;
+  line-height: 0;
   stroke: var(--svg-icon-color);
   fill: none;
+}
+
+svg.delete {
+  vertical-align: middle;
+  display: inline-block;
+  stroke: var(--app-content-main-color);
+  fill: none
 }

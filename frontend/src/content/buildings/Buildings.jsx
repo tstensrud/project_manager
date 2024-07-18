@@ -1,6 +1,5 @@
-import { GlobalContext } from '../../GlobalContext';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState, useContext } from 'react';
+import { useState} from 'react';
 
 import useFetch from '../../hooks/useFetch'
 import SubTitleComponent from '../../layout/SubTitleComponent';
@@ -10,12 +9,10 @@ import HeaderIcon from '../../assets/svg/buildingIcon.svg?react';
 
 function Buildings() {
     const {projectId} = useParams();
-    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
     // Hooks
-    const {data, loading, error, refetch} = useFetch(`/project_api/${projectId}/buildings/`);
+    const {data, refetch} = useFetch(`/project_api/${projectId}/buildings/`);
     const {buildingData, setData, handleSubmit} = useSubmitData(`/project_api/${projectId}/buildings/new_building/`);
-    const [allData, setAllData] = useState();
     const [formInput, setFormInput] = useState('');
 
     // Handlers

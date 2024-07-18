@@ -66,7 +66,7 @@ function CoolingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
                 handleBlur();
                 setData('');
                 coolingRefetch();
-                //sendMessageToParent("updateSummaries");
+                sendMessageToParent("updateSummaries");
             } if (e.key == "Escape") {
                 handleBlur();
                 return;
@@ -102,7 +102,7 @@ function CoolingTableRowComponent({roomId, msgToParent, settingsUpdateState, ind
     return (
         <>
         <tr className={markedRow}>
-        <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>{index + 1}</td>
+        <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
             <td>{coolingData ? coolingData.room_data.Floor : ''}</td>
             <td>
                 {coolingData ? coolingData.room_data.RoomNumber : ''}
