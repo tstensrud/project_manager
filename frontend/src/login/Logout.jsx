@@ -13,7 +13,7 @@ function Logout(props) {
       axios({
         method: "POST",
         //url:`http://127.0.0.1:5000/logout/${userUuid}/`,
-        url: `https://project-manager-rust.vercel.app/backend/logout/${userUuid}/`,
+        url: `https://project-manager-rust.vercel.app/api/logout/${userUuid}/`,
       })
       .then((response) => {
          props.token()

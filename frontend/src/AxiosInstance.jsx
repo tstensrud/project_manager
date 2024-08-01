@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AxiosInstance = axios.create({
   //baseURL: 'http://127.0.0.1:5000',
-  baseUrl: "https://project-manager-rust.vercel.app/backend/"
+  baseUrl: "https://project-manager-rust.vercel.app/api/"
 });
 
 AxiosInstance.interceptors.request.use((config) => {
