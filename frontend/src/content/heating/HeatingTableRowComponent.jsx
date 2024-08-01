@@ -8,13 +8,13 @@ import useFetch from '../../hooks/useFetch';
 import useUpdateData from '../../hooks/useUpdateData';
 
 
-function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState }) {
+function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, totalColumns }) {
         const {projectId} = useParams();
         const { setActiveProject } = useContext(GlobalContext);
 
         
         // Initial fetches and refetch
-        const {data: heatingData, refetch: heatingRefetch} = useFetch(`/project_api/${projectId}/heating/get_room/${roomId}/`);
+        const {data: heatingData, loading: heatingLoading, refetch: heatingRefetch} = useFetch(`/project_api/${projectId}/heating/get_room/${roomId}/`);
         
         // Update data
         const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomId}/`);
@@ -112,7 +112,19 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState }) {
         {showRoomData ? <RoomData heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData}/> : ''}
         {response && response.error !== null && response.error !== undefined ? <MessageBox message={response.error} /> : ''}
         <tr className={markedRow}>
-        <td style={{ cursor: 'pointer', width: "30px" }} onClick={handleOnMarkedRow}>#</td>
+
+            {
+                heatingLoading && heatingLoading === true ? (
+                    <>
+                    {
+                        Array.from({length: totalColumns}).map((_, index) => (
+                            <td className="loading-text" key={index}>####</td>
+                        ))
+                    }
+                    </>
+                ) : (
+                    <>
+                            <td style={{ cursor: 'pointer', width: "30px" }} onClick={handleOnMarkedRow}>#</td>
             <td>{heatingData ? heatingData.room_data.Floor : ''}</td>
             <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
                 <strong>{heatingData ? heatingData.room_data.RoomNumber : ''}</strong>
@@ -133,6 +145,10 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState }) {
             <td>
                 {heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum ? (<><strong>NB!</strong> For lite valgt varme</>) : (<></>)}
             </td>
+                    </>
+                )
+            }
+
         </tr>
         </>
     );

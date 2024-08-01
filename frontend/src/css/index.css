@@ -483,3 +483,29 @@ svg.delete {
   stroke: var(--app-content-main-color);
   fill: none
 }
+
+/* Loading stuff */
+
+.loading-container {
+  display: flex;
+}
+
+.loading-text {
+  filter: blur(3px);
+  opacity: 0.5;
+}
+
+.loading-spinner {
+  border: 4px solid var(--table-background-color);
+  border-radius: 50%;
+  border-top-color: var(--svg-icon-color);
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

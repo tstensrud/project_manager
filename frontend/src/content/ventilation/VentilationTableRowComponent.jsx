@@ -9,7 +9,7 @@ import useUpdateData from '../../hooks/useUpdateData';
 import useUpdateSystem from '../../hooks/useUpdateSystem';
 
 
-function RoomTableRowComponent({roomId, msgToParent, systems, index, allRoomData}) {
+function RoomTableRowComponent({roomId, msgToParent, systems, index, allRoomData, totalColumns}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
         //console.log(allRoomData);
@@ -170,6 +170,17 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index, allRoomData
         {showRoomData ? <RoomData roomData={allRoomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData}/> : ''}
         {response && response.error ? <MessageBox message={response.error} /> : null}
         <tr className={markedRow}>
+            {
+                ventLoading && ventLoading === true ? (
+                <>
+                {
+                    Array.from({length: totalColumns}).map((_, index) => (
+                        <td className="loading-text" key={index}>####</td>
+                    ))
+                }
+                </>
+                ) : (
+                <>
             <td style={{ cursor: 'pointer', width: "30px" }} onClick={handleOnMarkedRow}>#</td>
             <td style={{width: "50px"}}>{allRoomData ? allRoomData.Floor : ''}</td>
             <td  onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer', textTransform: 'uppercase' }}>
@@ -197,6 +208,10 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index, allRoomData
                 {ventData && ventData.vent_data.AirDemand > ventData.vent_data.AirSupply ? (<>For lite luft. </>): (<></>)}
                 {ventData && ventData.vent_data.AirSupply !== ventData.vent_data.AirExtract ? (<>Ubalanse i rom</>):(<></>)}
             </td>
+                </>
+                )
+            }
+
         </tr>
         </>
     );

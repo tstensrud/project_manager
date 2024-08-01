@@ -33,7 +33,7 @@ function Ventilation () {
     ];
 
     // Initial fetch of data
-    const {data: roomData} = useFetch(`/project_api/${projectId}/rooms/`);
+    const {data: roomData, loading} = useFetch(`/project_api/${projectId}/rooms/`);
     const {data: buildingData, refetch: buildingReFetch} = useFetch(`/project_api/${projectId}/buildings/`);
     const {data: ventSystemData } = useFetch(`/project_api/${projectId}/systems/`);
 
@@ -129,7 +129,7 @@ function Ventilation () {
                                                     <React.Fragment key={floor}>
                                                         {
                                                             sortedBuildings && sortedBuildings.length > 0 ? (
-                                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} allRoomData={room} roomId={room.uid} systems={ventSystemData} />)
+                                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} allRoomData={room} totalColumns={columnTitles.length} roomId={room.uid} systems={ventSystemData} />)
                                                             ) : (<></>)
                                                         }
                                                         <tr className="summary-row">

@@ -1,18 +1,19 @@
 import { useParams } from 'react-router-dom';
-import { useState} from 'react';
+import { useState } from 'react';
 
 import useFetch from '../../hooks/useFetch'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import BuildingSummary from './BuildingSummary';
 import useSubmitData from '../../hooks/useSubmitData'
 import HeaderIcon from '../../assets/svg/buildingIcon.svg?react';
+import LoadingSpinner from '../../layout/LoadingSpinner';
 
 function Buildings() {
-    const {projectId} = useParams();
+    const { projectId } = useParams();
 
     // Hooks
-    const {data, refetch} = useFetch(`/project_api/${projectId}/buildings/`);
-    const {buildingData, setData, handleSubmit} = useSubmitData(`/project_api/${projectId}/buildings/new_building/`);
+    const { data, loading, refetch } = useFetch(`/project_api/${projectId}/buildings/`);
+    const { buildingData, setData, handleSubmit } = useSubmitData(`/project_api/${projectId}/buildings/new_building/`);
     const [formInput, setFormInput] = useState('');
 
     // Handlers
@@ -31,7 +32,7 @@ function Buildings() {
         setFormInput('');
     }
 
-    return(<>
+    return (<>
         <SubTitleComponent>
             <HeaderIcon />  Bygg
         </SubTitleComponent>
@@ -49,14 +50,27 @@ function Buildings() {
 
             <div className="flex-container-row">
                 {
-                    data && data.building_data === null ? (
-                        <p className="p-description">{data.error}</p>
+                    loading && loading === true ? (
+                        <>
+                            <span className="loading-text">####</span>
+                            <br />
+                            <LoadingSpinner />
+                        </>
                     ) : (
-                        data && data.building_data && Object.keys(data.building_data).map((key, index) => (
-                            <BuildingSummary key={index} buildingData={data.building_data[key]} />
-                        ))
+                        <>
+                            {
+                                data && data.building_data === null ? (
+                                    <p className="p-description">{data.error}</p>
+                                ) : (
+                                    data && data.building_data && Object.keys(data.building_data).map((key, index) => (
+                                        <BuildingSummary key={index} buildingData={data.building_data[key]} />
+                                    ))
+                                )
+                            }
+                        </>
                     )
                 }
+
 
             </div>
         </div>

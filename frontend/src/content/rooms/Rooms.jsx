@@ -169,7 +169,7 @@ function Rooms () {
                     <tbody>
                         {
                             sortedBuildings && sortedBuildings.length > 0 ? (
-                            sortedBuildings.map((room, index) => <RoomTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} roomId={room.uid}/>)
+                            sortedBuildings.map((room, index) => <RoomTableRowComponent index={index} msgToParent={handleChildMessage} totalColumns={columnTitles.length} key={room.uid} roomId={room.uid}/>)
                         ) : (
                                 <>
                                 <tr>

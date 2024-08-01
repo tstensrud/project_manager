@@ -11,7 +11,7 @@ import MessageBox from '../../layout/MessageBox';
 
 
 
-function SystemTableRowComponent({systemId, msgToParent}) {
+function SystemTableRowComponent({systemId, msgToParent, totalColumns}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
@@ -111,25 +111,42 @@ function SystemTableRowComponent({systemId, msgToParent}) {
         if (response && response.error !== null && response.error !== undefined) return (<><MessageBox message={response.error} /></>);
     return (
         <>
-        <tr className={markedRow}>
-        <td className={cellClass}  style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
-            <td className={cellClass}>{systemData ? systemData.system_data.SystemName : ''}</td>
-            {renderEditableCell("Location")}
-            {renderEditableCell("ServiceArea")}
-            {renderEditableCell("AirFlow")}
-            {renderEditableCell("HeatExchange")}
-            <td className={cellClass}>{systemData ? systemData.system_data.AirFlowSupply : ''}</td>
-            <td className={cellClass}>{systemData ? systemData.system_data.AirFlowExtract : ''}</td>
-            <td className={cellClass}>{systemData ? systemData.system_data.SpecialSystem : ''}</td>
-            <td className={cellClass}>
-                {systemData && systemData.system_data.AirFlowSupply !== systemData.system_data.AirFlowExtract ? (<>Ubalanse på system. </>) : (<></>)}
-                {systemData && systemData.system_data.AirFlowSupply > systemData.system_data.AirFlow ? (<>For mye tilluft. </>) : (<></>)}
-                {systemData && systemData.system_data.AirFlowExtract > systemData.system_data.AirFlow ? (<>For mye avtrekk. </>) : (<></>)}
-            </td>
-            <td className={cellClass}>
-                <button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button>
-            </td>
-        </tr>
+            <tr className={markedRow}>
+
+                {
+                    systemLoading && systemLoading === true ? (
+                        <>
+                            {
+                                Array.from({length: totalColumns}).map((_, index) => (
+                                    <td className="loading-text">###</td>
+                                ))
+                            }
+                        </>
+                    ) : (
+                        <>
+
+                            <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+                            <td className={cellClass}>{systemData ? systemData.system_data.SystemName : ''}</td>
+                            {renderEditableCell("Location")}
+                            {renderEditableCell("ServiceArea")}
+                            {renderEditableCell("AirFlow")}
+                            {renderEditableCell("HeatExchange")}
+                            <td className={cellClass}>{systemData ? systemData.system_data.AirFlowSupply : ''}</td>
+                            <td className={cellClass}>{systemData ? systemData.system_data.AirFlowExtract : ''}</td>
+                            <td className={cellClass}>{systemData ? systemData.system_data.SpecialSystem : ''}</td>
+                            <td className={cellClass}>
+                                {systemData && systemData.system_data.AirFlowSupply !== systemData.system_data.AirFlowExtract ? (<>Ubalanse på system. </>) : (<></>)}
+                                {systemData && systemData.system_data.AirFlowSupply > systemData.system_data.AirFlow ? (<>For mye tilluft. </>) : (<></>)}
+                                {systemData && systemData.system_data.AirFlowExtract > systemData.system_data.AirFlow ? (<>For mye avtrekk. </>) : (<></>)}
+                            </td>
+                            <td className={cellClass}>
+                                <button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button>
+                            </td>
+                        </>
+                    )
+
+                }
+            </tr>
         </>
     );
 }

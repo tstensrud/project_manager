@@ -9,7 +9,7 @@ import useDeleteData from '../../hooks/useDeleteData'
 import MessageBox from '../../layout/MessageBox';
 
 
-function RoomTableRowComponent({roomId, msgToParent, index}) {
+function RoomTableRowComponent({roomId, msgToParent, totalColumns, index}) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
@@ -124,21 +124,36 @@ function RoomTableRowComponent({roomId, msgToParent, index}) {
         <>
         {response && response.error ? <MessageBox message={response.error} /> : null}
         <tr className={markedRow}>
-        <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
-            <td className={cellClass}>{roomData ? roomData.room_data.BuildingName : ''}</td>
-            <td className={cellClass}>{roomData ? roomData.room_data.Floor : ''}</td>
-            {renderEditableCell("RoomNumber")}
-            <td className={cellClass}>{roomData ? roomData.room_data.RoomTypeName : ''}</td>
-            {renderEditableCell("RoomName")}
-            {renderEditableCell("Area")}
-            {renderEditableCell("RoomPopulation")}
-            {renderEditableCell("Comments")}
-            <td className={cellClass}>
-                
-                {
-                    undoButton ? <><button onClick={handleUndo} className="table-button">Angre</button></> : <><button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button></>
-                }
-            </td>
+            {
+                roomLoading && roomLoading === true ? (
+                <>
+                    {
+                        Array.from({length: totalColumns}).map((_, index) => (
+                            <td className="loading-text" key={index}>####</td>
+                        ))
+                    }
+                </>
+            ) : (
+                <>
+                    <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+                    <td className={cellClass}>{roomData ? roomData.room_data.BuildingName : ''}</td>
+                    <td className={cellClass}>{roomData ? roomData.room_data.Floor : ''}</td>
+                    {renderEditableCell("RoomNumber")}
+                    <td className={cellClass}>{roomData ? roomData.room_data.RoomTypeName : ''}</td>
+                    {renderEditableCell("RoomName")}
+                    {renderEditableCell("Area")}
+                    {renderEditableCell("RoomPopulation")}
+                    {renderEditableCell("Comments")}
+                    <td className={cellClass}>
+                        
+                        {
+                            undoButton ? <><button onClick={handleUndo} className="table-button">Angre</button></> : <><button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button></>
+                        }
+                    </td>
+                </>
+                )
+            }
+
         </tr>
         </>
     );

@@ -132,7 +132,7 @@ function Cooling () {
                                     <React.Fragment key={floor}>
                                         {
                                             sortedBuildings && sortedBuildings.length > 0 ? (
-                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} key={room.uid} roomId={room.uid} />)
+                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={columnTitles.length} key={room.uid} roomId={room.uid} />)
                                             ) : (<></>)
                                         }
                                         <tr className="summary-row">
