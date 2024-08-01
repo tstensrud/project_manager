@@ -172,12 +172,7 @@ function Rooms () {
                             sortedBuildings.map((room, index) => <RoomTableRowComponent index={index} msgToParent={handleChildMessage} totalColumns={columnTitles.length} key={room.uid} roomId={room.uid}/>)
                         ) : (
                                 <>
-                                <tr>
-                                    <td>
-                                    <>Velg bygg</>
-                                    </td>
-                                </tr>
-                              
+                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                                 </>
                             )
                         }
