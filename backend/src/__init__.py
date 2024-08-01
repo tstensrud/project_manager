@@ -7,7 +7,6 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 #from dotenv import load_dotenv
 import os
-import pyrebase
 
 #load_dotenv()
 db = SQLAlchemy()

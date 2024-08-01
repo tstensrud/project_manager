@@ -136,6 +136,16 @@ def new_building(project_uid):
             return jsonify({"building_data": "Success"})
         else:
             return jsonify({"building_data": "Could not add new building"})
+
+@jwt_required()
+@project_api_bp.route('/buildings/delete/<buid>/', methods=['DELETE'])
+def delete_building(project_uid, buid):
+    data = request.get_json()
+    if data:
+        return jsonify({"success": "Bygg slettet"})
+    else:
+        return jsonify({"error": "Kunne ikke slette bygg"})
+
 #
 #               
 #   ROOMS

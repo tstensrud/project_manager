@@ -1,5 +1,6 @@
 import PlusIcon from '../../assets/svg/plusIcon.svg?react';
 import MinusIcon from '../../assets/svg/minusIcon.svg?react';
+import DeleteIcon from '../../assets/svg/deleteIcon.svg?react';
 
 function BuildingSummary({buildingData}) {
 
@@ -38,6 +39,9 @@ function BuildingSummary({buildingData}) {
 
                         <p className="info">Prosjektert varme<br/>
                         {Number((heating / 1000).toFixed(1)).toLocaleString()} kW
+                        </p>
+                        <p>
+                         <DeleteIcon /> &nbsp; Slett bygg
                         </p>
                     </div>
                 </div>
