@@ -121,7 +121,10 @@ def initialize():
     else:
         return jsonify({"error": "Failed to initialize app"})
     return jsonify({"success": "App initialized"})
-        
+
+@views.route('/test', methods=['GET'])
+def test():
+    return jsonify({"message": "Hello"})
 
 '''
 Set up default specifications
