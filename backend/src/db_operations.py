@@ -183,7 +183,8 @@ def get_building_floors(building_uid: str) -> list[str]:
 
 def new_building(project_uid: str, building_name: str) -> bool:
     uid = globals.encode_uid_base64(uuid4())
-    new_building = models.Buildings(uid=uid,project_uid=project_uid,
+    new_building = models.Buildings(uid=uid,
+                                    project_uid=project_uid,
                                     building_name=building_name,
                                     inside_temp = 20.0,
                                     vent_temp = 18.0,
