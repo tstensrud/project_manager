@@ -204,7 +204,7 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index, allRoomData
                     ))}
                 </select>
             </td>
-            <td>
+            <td className="comments-cell">
                 {ventData && ventData.vent_data.AirDemand > ventData.vent_data.AirSupply ? (<>For lite luft. </>): (<></>)}
                 {ventData && ventData.vent_data.AirSupply !== ventData.vent_data.AirExtract ? (<>Ubalanse i rom</>):(<></>)}
             </td>

@@ -7,7 +7,6 @@ import useSubmitData from '../../hooks/useSubmitData'
 
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeaderIcon from '../../assets/svg/ventSystemIcon.svg?react';
-import TableHeaderComponent from "../../tables/TableHeaderComponent";
 import SystemsTableRowComponent from "./SystemsTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 import TableTop from '../../layout/TableTop';
@@ -15,20 +14,6 @@ import TableTop from '../../layout/TableTop';
 function VentSystems () {
     const {projectId} = useParams();
     const {setActiveProject} = useContext(GlobalContext);
-    
-    const columnTitles = [
-        {text: "#"},
-        {text: "Systemnr"},
-        {text: "Plassering"},
-        {text: "Betjeningsområde"},
-        {text: <>Viftekapasitet<br/> m<sup>3</sup>/h</>},
-        {text: "Gjenvinner"},
-        {text: <>Prosjektert tilluft<br/> m<sup>3</sup>/h</>},
-        {text: <>Prosjektert avtrekk<br/> m<sup>3</sup>/h</>},
-        {text: "Spesialsystem"},
-        {text: "Merknad"},
-        {text: "Slett system"}
-    ]
 
     // Hooks
     const {data: receivedSystemsData, loading: systemsLoading, error: systemsError, refetch: systemsRefetch} = useFetch(`/project_api/${projectId}/systems/`);
@@ -119,7 +104,17 @@ function VentSystems () {
                     <div className="table-wrapper">
                         <table className="fl-table">
                             <thead>
-                                <TableHeaderComponent headers={columnTitles} />
+                                 <th width="2%">#</th>
+                                 <th width="5%">Systemnr</th>
+                                 <th width="10%">Plassering</th>
+                                 <th width="10%">Betjeningsområde</th>
+                                 <th width="7%">Viftekapasitet<br/> m<sup>3</sup>/h</th>
+                                 <th width="5%">Gjenvinner</th>
+                                 <th width="7%">Prosjektert tilluft<br/> m<sup>3</sup>/h</th>
+                                 <th width="7%">Prosjektert avtrekk<br/> m<sup>3</sup>/h</th>
+                                 <th width="5%">Spesialsystem</th>
+                                 <th width="32%">Merknad</th>
+                                 <th width="10%">Slett system</th>
                             </thead>
                             <tbody>
                                 {                           

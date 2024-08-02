@@ -6,7 +6,6 @@ import { customSortFloors } from '../../utils/customSortFloors.js'
 
 import HeatingIcon from '../../assets/svg/heatingIcon.svg?react'
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import TableHeaderComponent from "../../tables/TableHeaderComponent";
 import HeatingTableRowComponent from './HeatingTableRowComponent';
 import MessageBox from '../../layout/MessageBox';
 import ToggleSettingsButton from './ToggleSettingsButton';
@@ -15,23 +14,6 @@ import TableTop from '../../layout/TableTop.jsx';
 
 function Heating () {
     const {projectId} = useParams();
-    const columnTitles = [
-        {text: "#"},
-        {text: "Etg"},
-        {text: "Romnr"},
-        {text: <>Høyde <br/>m</>},
-        {text: <>Yttervegg <br/> m<sup>2</sup></>},
-        {text: <>Innervegg <br/>m<sup>2</sup></>},
-        {text: <>Vindu/dør <br/>m<sup>2</sup></>},
-        {text: <>Tak <br/>m<sup>2</sup></>},
-        {text: <>Gulv grunn <br/>m<sup>2</sup></>},
-        {text: <>Gulv fritt <br/>m<sup>2</sup></>},
-        {text: <>&#8721; varmetap<br/> W</>},
-        {text: <>Valgt varme<br/> W</>},
-        {text: <>W/m<sup>2</sup></>},
-        {text: "Varmekilde"},
-        {text: "Merknad"}
-    ];
 
     // Error messages from child component
     const [childMessage, setChildMessage] = useState('');
@@ -129,7 +111,21 @@ function Heating () {
                 <div className="table-wrapper">
                     <table className="fl-table">
                         <thead>
-                            <TableHeaderComponent headers={columnTitles} />
+                            <th width="2%">#</th>
+                            <th width="2%">Etg</th>
+                            <th width="5%">Romnr</th>
+                            <th width="5%">Høyde <br/>m</th>
+                            <th width="5%">Yttervegg <br/> m<sup>2</sup></th>
+                            <th width="5%">Innervegg <br/>m<sup>2</sup></th>
+                            <th width="5%">Vindu/dør <br/>m<sup>2</sup></th>
+                            <th width="5%">Tak <br/>m<sup>2</sup></th>
+                            <th width="5%">Gulv grunn <br/>m<sup>2</sup></th>
+                            <th width="5%">Gulv fritt <br/>m<sup>2</sup></th>
+                            <th width="5%">&#8721; varmetap<br/> W</th>
+                            <th width="5%">Valgt varme<br/> W</th>
+                            <th width="5%">W/m<sup>2</sup></th>
+                            <th width="8%">Varmekilde</th>
+                            <th width="8%">Merknad</th>
                         </thead>
                         <tbody>
                             {
@@ -137,7 +133,7 @@ function Heating () {
                                     <React.Fragment key={floor}>
                                         {
                                             sortedBuildings && sortedBuildings.length > 0 ? (
-                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <HeatingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={columnTitles.length} key={room.uid} roomId={room.uid} />)
+                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <HeatingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={15} key={room.uid} roomId={room.uid} />)
                                             ) : (<></>)
                                         }
                                         <tr className="summary-row">

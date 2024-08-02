@@ -7,7 +7,6 @@ import useSubmitData from '../../hooks/useSubmitData'
 
 import RoomIcon from '../../assets/svg/roomsIcon.svg?react'
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import TableHeaderComponent from "../../tables/TableHeaderComponent";
 import RoomTableRowComponent from "./RoomTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 import TableTop from '../../layout/TableTop';
@@ -16,20 +15,6 @@ import TableTop from '../../layout/TableTop';
 function Rooms () {
     const {projectId} = useParams();
     const {setActiveProject} = useContext(GlobalContext);
-    
-    const columnTitles = [  
-        {text: "#"},
-        {text: "Bygg"},
-        {text: "Etasje"},
-        {text: "Romnr"},
-        {text: "Romtype"},
-        {text: "Romnavn"},
-        {text: <>Areal <br/> m<sup>2</sup></>},
-        {text: "Personer"},
-        {text: "Kommentarer"},
-        {text: "Slett rom"}
-        
-    ];
     
     // Form fields
     const roomTypeRef = useRef(null);
@@ -164,12 +149,21 @@ function Rooms () {
             <div className="table-wrapper">
                 <table className="fl-table" id="roomsTableVentilation">
                     <thead>
-                        <TableHeaderComponent headers={columnTitles} />
+                         <th width="2%">#</th>
+                         <th width="4%">Bygg</th>
+                         <th width="4%">Etasje</th>
+                         <th width="4%">Romnr</th>
+                         <th width="10%">Romtype</th>
+                         <th width="10%">Romnavn</th>
+                         <th width="5%">Areal <br/> m<sup>2</sup></th>
+                         <th width="5%">Personer</th>
+                         <th width="45%">Kommentarer</th>
+                         <th width="10%">Slett Rom</th>
                     </thead>
                     <tbody>
                         {
                             sortedBuildings && sortedBuildings.length > 0 ? (
-                            sortedBuildings.map((room, index) => <RoomTableRowComponent index={index} msgToParent={handleChildMessage} totalColumns={columnTitles.length} key={room.uid} roomId={room.uid}/>)
+                            sortedBuildings.map((room, index) => <RoomTableRowComponent index={index} msgToParent={handleChildMessage} totalColumns={10} key={room.uid} roomId={room.uid}/>)
                         ) : (
                                 <>
                                     <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>

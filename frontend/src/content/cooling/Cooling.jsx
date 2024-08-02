@@ -6,7 +6,6 @@ import { customSortFloors } from '../../utils/customSortFloors.js'
 
 import CoolingIcon from '../../assets/svg/coolingIcon.svg?react'
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import TableHeaderComponent from "../../tables/TableHeaderComponent";
 import CoolingTableRowComponent from './CoolingTableRowComponent';
 import MessageBox from '../../layout/MessageBox';
 import ToggleSettingsButton from './ToggleSettingsButton';
@@ -14,23 +13,7 @@ import TableTop from '../../layout/TableTop.jsx';
 
 function Cooling () {
     const {projectId} = useParams();
-    const columnTitles = [
-        {text: "#"},
-        {text: "Etasje"},
-        {text: "Romnr"},
-        {text: <>Romtemp <br/> &#176;C</>},
-        {text: <>Temp vent<br/> &#176;C</>},
-        {text: "W/pers"},
-        {text: <>Lys<br/> W/m<sup>2</sup></>},
-        {text: <>Ustyr<br/> W/m<sup>2</sup></>},
-        {text: <>Soltilskudd<br/> W/m<sup>2</sup></>},
-        {text: <>Solreduksjon<br/> (0-1,0)</>},
-        {text: <>&#8721; Internlast<br/> W</>},
-        {text: <>Kjøling utstyr<br/> W</>},
-        {text: <>&#8721; kjøling<br/> W</>},
-        {text: <>Ekstra vent. <br />m<sup>3</sup>/h</>},
-        {text: "Merknad"}
-    ];
+
     // Error messages from child component
     const [childMessage, setChildMessage] = useState('');
 
@@ -124,7 +107,21 @@ function Cooling () {
                 <div className="table-wrapper">
                     <table className="fl-table">
                         <thead>
-                            <TableHeaderComponent headers={columnTitles} />
+                            <th width="2%">#</th>
+                            <th width="5%">Etasje</th>
+                            <th width="5%">Romnr</th>
+                            <th width="5%">Romtemp <br/> &#176;C</th>
+                            <th width="5%">Temp vent<br/> &#176;C</th>
+                            <th width="5%">W/Pers</th>
+                            <th width="5%">Lys<br/> W/m<sup>2</sup></th>
+                            <th width="5%">Ustyr<br/> W/m<sup>2</sup></th>
+                            <th width="5%">Soltilskudd<br/> W/m<sup>2</sup></th>
+                            <th width="5%">Solreduksjon<br/> (0-1,0)</th>
+                            <th width="5%">&#8721; Internlast<br/> W</th>
+                            <th width="5%">Kjøling utstyr<br/> W</th>
+                            <th width="5%">&#8721; kjøling<br/> W</th>
+                            <th width="5%">Ekstra vent. <br />m<sup>3</sup>/h</th>
+                            <th width="32%">Merknad</th>
                         </thead>
                         <tbody>
                             {
@@ -132,7 +129,7 @@ function Cooling () {
                                     <React.Fragment key={floor}>
                                         {
                                             sortedBuildings && sortedBuildings.length > 0 ? (
-                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={columnTitles.length} key={room.uid} roomId={room.uid} />)
+                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={15} key={room.uid} roomId={room.uid} />)
                                             ) : (<></>)
                                         }
                                         <tr className="summary-row">

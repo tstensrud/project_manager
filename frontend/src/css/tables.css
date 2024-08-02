@@ -40,6 +40,7 @@
   max-width: 100%;
   white-space: nowrap;
   background-color: var(--table-background-color);
+  table-layout: fixed;
 }
 
 .fl-table td, .fl-table th {
@@ -54,11 +55,15 @@
   border-top: var(--table-border);
   border-bottom: var(--table-border);
   font-size: 13px;
-  max-width: 150px;
   overflow: hidden;
   position: relative;
 }
 
+.comments-cell {
+  text-align: end !important;
+  justify-content: end !important;
+  padding-right: 20px;
+}
 
 .fl-table thead th {
   color: var(--app-content-main-color);

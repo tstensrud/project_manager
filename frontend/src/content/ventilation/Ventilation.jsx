@@ -6,7 +6,6 @@ import { customSortFloors } from '../../utils/customSortFloors.js'
 
 import VentilationIcon from '../../assets/svg/ventilationIcon.svg?react';
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import TableHeaderComponent from "../../tables/TableHeaderComponent";
 import VentilationTableRowComponent from "./VentilationTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 import TableTop from '../../layout/TableTop';
@@ -15,22 +14,6 @@ import TableTop from '../../layout/TableTop';
 
 function Ventilation () {
     const {projectId} = useParams();
-
-    const columnTitles = [  
-        {text: "#"},
-        {text: "Etasje"},
-        {text: "Rom"},
-        {text: <>Sum personer <br/> m<sup>3</sup>/h</>},
-        {text: <>Sum emisjon <br/> m<sup>3</sup>/h</>},
-        {text: <>Prosess <br/> m<sup>3</sup>/h</>},
-        {text: <>Dimensjonert <br/> m<sup>3</sup>/h</>},
-        {text: <>Tilluft<br/> m<sup>3</sup>/h</>},
-        {text: <>Avtrekk<br/> m<sup>3</sup>/h</>},
-        {text: <>m<sup>3</sup>/m<sup>2</sup></>},
-        {text: <>Min <br/>m<sup>3</sup>/h</>},
-        {text: "System"},
-        {text: "Merknad"}
-    ];
 
     // Initial fetch of data
     const {data: roomData, loading} = useFetch(`/project_api/${projectId}/rooms/`);
@@ -121,7 +104,20 @@ function Ventilation () {
                             <div className="table-wrapper">
                                 <table className="fl-table">
                                     <thead>
-                                        <TableHeaderComponent headers={columnTitles} />
+                                        {/* <TableHeaderComponent headers={columnTitles} />*/}
+                                        <th width="2%">#</th>
+                                        <th width="2%">Etasje</th>
+                                        <th width="10%">Rom</th>
+                                        <th width="6%">Sum personer <br/> m<sup>3</sup>/h</th>
+                                        <th width="6%">Sum emisjon <br/> m<sup>3</sup>/h</th>
+                                        <th width="6%">Prosess <br/> m<sup>3</sup>/h</th>
+                                        <th width="6%">Dimensjonert <br/> m<sup>3</sup>/h</th>
+                                        <th width="6%">Tilluft<br/> m<sup>3</sup>/h</th>
+                                        <th width="6%">Avtrekk<br/> m<sup>3</sup>/h</th>
+                                        <th width="6%">m<sup>3</sup>/m<sup>2</sup></th>
+                                        <th width="6%">Min <br/>m<sup>3</sup>/h</th>
+                                        <th width="6%">System</th>
+                                        <th width="31%">Merknad</th>
                                     </thead>
                                     <tbody>
                                             {
@@ -129,7 +125,7 @@ function Ventilation () {
                                                     <React.Fragment key={floor}>
                                                         {
                                                             sortedBuildings && sortedBuildings.length > 0 ? (
-                                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} allRoomData={room} totalColumns={columnTitles.length} roomId={room.uid} systems={ventSystemData} />)
+                                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} allRoomData={room} totalColumns={13} roomId={room.uid} systems={ventSystemData} />)
                                                             ) : (<></>)
                                                         }
                                                         <tr className="summary-row">
