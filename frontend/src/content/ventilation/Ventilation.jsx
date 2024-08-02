@@ -104,7 +104,6 @@ function Ventilation () {
                             <div className="table-wrapper">
                                 <table className="fl-table">
                                     <thead>
-                                        {/* <TableHeaderComponent headers={columnTitles} />*/}
                                         <th width="2%">#</th>
                                         <th width="2%">Etasje</th>
                                         <th width="10%">Rom</th>

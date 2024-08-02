@@ -4,7 +4,6 @@ import { useState, useContext } from 'react';
 
 import useSubmitFile from '../../hooks/useSubmitFile'
 import useFetch from '../../hooks/useFetch'
-import TableHeaderComponent from '../../tables/TableHeaderComponent';
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeaderIcon from '../../assets/svg/specificationsIcon.svg?react';
 
