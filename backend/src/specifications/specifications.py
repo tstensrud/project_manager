@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, timezone, timedelta
-import pandas as pd
+#import pandas as pd
 from flask import Blueprint, jsonify, request
 from flask_login import current_user
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
@@ -70,7 +70,7 @@ def get_specification_room_types(spec_uid):
     room_types_list = [{"uid": key, "name": value} for key, value in room_uid_type.items()]
     return jsonify({"spec_room_type_data": room_types_list})
 
-@jwt_required()
+""" @jwt_required()
 @specifications_bp.route('/new_rooms/<spec_uid>/', methods=['POST'])
 def new_room(spec_uid):
     file = request.files['file']
@@ -87,7 +87,7 @@ def new_room(spec_uid):
             value = row[column]
             print(f"Value in column {column}: {value}")
     
-    return jsonify({"message": "Fil mottatt"})
+    return jsonify({"message": "Fil mottatt"}) """
 
 @jwt_required()
 @specifications_bp.route('/new_room/<spec_uid>/', methods=['POST'])
