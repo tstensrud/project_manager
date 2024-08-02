@@ -22,21 +22,6 @@ function Specification() {
 
     const [warning, setWarning] = useState('')
 
-    const columnTitles = [
-        {text: "Romtype"},
-        {text: <>Luft per person<br/>m<sup>3</sup>/h/pers</>},
-        {text: <>Emisjon<br/>m<sup>3</sup>/m<sup>2</sup>/h</>},
-        {text: <>Prosess<br/>m<sup>3</sup>/h</>},
-        {text: <>Luft minimum<br/>m<sup>3</sup>/h</>},
-        {text: "Vent.prinsipp"},
-        {text: "Gjenvinner"},
-        {text: "Styring"},
-        {text: "Presiseringer"},
-        {text: "dB teknisk"},
-        {text: "dB naborom"},
-        {text: "dB korridor"},
-        {text: "Kommentar"}
-];
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
@@ -74,7 +59,19 @@ function Specification() {
                 <div className="table-wrapper">
                     <table className="fl-table">
                         <thead>
-                            <TableHeaderComponent headers={columnTitles} />
+                            <th>Romtype</th>
+                            <th>Luft per person<br/>m<sup>3</sup>/h/pers</th>
+                            <th>Emisjon<br/>m<sup>3</sup>/m<sup>2</sup>/h</th>
+                            <th>Prosess<br/>m<sup>3</sup>/h</th>
+                            <th>Luft minimum<br/>m<sup>3</sup>/h</th>
+                            <th>Vent.prinsipp</th>
+                            <th>Gjenvinner</th>
+                            <th>Styring</th>
+                            <th>Presiseringer</th>
+                            <th>dB teknisk</th>
+                            <th>dB naborom</th>
+                            <th>dB korridor</th>
+                            <th>Kommentar</th>
                         </thead>
                         <tbody>
                             {
