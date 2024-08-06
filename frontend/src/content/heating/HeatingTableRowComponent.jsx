@@ -127,7 +127,7 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, tot
                             <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
             <td>{heatingData ? heatingData.room_data.Floor : ''}</td>
             <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
-                <strong>{heatingData ? heatingData.room_data.RoomNumber : ''}</strong>
+                <strong><span className="table-link">{heatingData ? heatingData.room_data.RoomNumber : ''}</span></strong>
                 <br/>
                 <span className="table-text-grey">{heatingData ? heatingData.room_data.RoomName : ''}</span>
             </td>

@@ -453,8 +453,15 @@ a:hover {
   color: var(--app-content-main-color);
 }
 
-/* Header text */
+.table-link {
+  color: var(--link);
+}
 
+.table-link:hover {
+  color: var(--link-hover);
+}
+
+/* Header text */
 h3 {
   display: inline-block;
   line-height: 0;

@@ -152,12 +152,12 @@ function Rooms () {
                          <th width="2%">#</th>
                          <th width="4%">Bygg</th>
                          <th width="4%">Etasje</th>
-                         <th width="4%">Romnr</th>
-                         <th width="10%">Romtype</th>
+                         <th width="6%">Romnr</th>
+                         <th width="15%">Romtype</th>
                          <th width="10%">Romnavn</th>
                          <th width="5%">Areal <br/> m<sup>2</sup></th>
                          <th width="5%">Personer</th>
-                         <th width="45%">Kommentarer</th>
+                         <th width="38%">Kommentarer</th>
                          <th width="10%">Slett Rom</th>
                     </thead>
                     <tbody>

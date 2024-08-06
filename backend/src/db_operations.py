@@ -215,7 +215,21 @@ def get_all_project_buildings(project_uid: int) -> list[models.Buildings]:
         return None
     else:
         return buildings
-    
+
+def delete_building(building_uid: str) -> bool:
+    rooms = db.session.query(models.Rooms).filter(models.Rooms.building_uid == building_uid).all()
+    if rooms is not None:
+        return False
+    building = get_building(building_uid)
+    try:
+        db.session.delete(building)
+        db.session.commit()
+        return True
+    except Exception as e:
+        globals.log(f"Error deleting building: {e}")
+        db.session.rollback()
+        return False
+
 
 '''
 Rooms methods

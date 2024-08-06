@@ -208,7 +208,7 @@
 .fl-table-room-data td {
   border-top: var(--default-border);
   font-size: 13px;
-  max-width: 190px;
+  max-width: 200px;
   overflow: hidden;
   position: relative;
 }

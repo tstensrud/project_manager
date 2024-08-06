@@ -184,7 +184,7 @@ function RoomTableRowComponent({roomId, msgToParent, systems, index, allRoomData
             <td style={{ cursor: 'pointer', width: "30px" }} onClick={handleOnMarkedRow}>#</td>
             <td style={{width: "50px"}}>{allRoomData ? allRoomData.Floor : ''}</td>
             <td  onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer', textTransform: 'uppercase' }}>
-                <strong>{allRoomData ? allRoomData.RoomNumber : ''}</strong>
+                <strong><span className="table-link">{allRoomData ? allRoomData.RoomNumber : ''}</span></strong>
                 <br />
                 <span className="table-text-grey">{allRoomData ? allRoomData.RoomName : ''}</span>
             </td>
