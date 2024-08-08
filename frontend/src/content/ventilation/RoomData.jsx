@@ -109,7 +109,7 @@ function RoomData({roomData, ventData, setShowRoomData}) {
 
               <tr>
                 <td className='fl-table-summary-sub-title'>
-                  Ventilasjonsdata oppsummert
+                  <strong>Ventilasjonsdata oppsummert</strong>
                 </td>
                 <td className='fl-table-summary-sub-title'>
 
@@ -180,7 +180,7 @@ function RoomData({roomData, ventData, setShowRoomData}) {
               </tr>
               <tr>
               <td className='fl-table-summary-sub-title'>
-                  Grunnlagsdata ventilasjon
+                  <strong>Grunnlagsdata ventilasjon</strong>
                 </td>
                 <td className='fl-table-summary-sub-title'>
 

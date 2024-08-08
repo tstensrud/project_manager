@@ -50,7 +50,7 @@ function RoomData({heatingData, setShowRoomData}) {
 
               <tr>
                 <td className='fl-table-summary-sub-title'>
-                  Grunnlagsdata varme
+                  <strong>Grunnlagsdata varme</strong>
                 </td>
                 <td className='fl-table-summary-sub-title'>
 
@@ -167,7 +167,7 @@ function RoomData({heatingData, setShowRoomData}) {
 
               <tr>
               <td className='fl-table-summary-sub-title'>
-                  Varmetap
+                  <strong>Varmetap</strong>
                 </td>
                 <td className='fl-table-summary-sub-title'>
                   
@@ -230,7 +230,7 @@ function RoomData({heatingData, setShowRoomData}) {
 
               <tr>
               <td className='fl-table-summary-sub-title'>
-                  Annet
+                  <strong>Annet</strong>
                 </td>
                 <td className='fl-table-summary-sub-title'>
                   
