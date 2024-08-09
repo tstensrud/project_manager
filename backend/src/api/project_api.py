@@ -597,3 +597,40 @@ def update_all_rooms_cooling(project_uid, building_uid):
                 return jsonify({"error": "Kunne ikke oppdatere romdata"})
     return jsonify({"success": "Romdata oppdatert"})
 
+#
+#               
+#   SANITARY
+#
+#
+@jwt_required()
+@project_api_bp.route('/sanitary/get_room/<room_uid>/', methods=['GET'])
+def get_sanitary_room(project_uid, room_uid):
+    room = dbo.get_room(room_uid)
+    if room:
+        room_data = room.get_json_room_data()
+        room_sanitary_data = room.get_json_sanitary_data()
+        return jsonify({"room_data": room_data, "sanitary_data": room_sanitary_data})
+    else:
+        return jsonify({"error": "Fant ikke rom"})
+
+@jwt_required()
+@project_api_bp.route('/sanitary/update_room/<room_uid>/', methods=['PATCH'])
+def update_room_sanitary(project_uid, room_uid):
+    data = request.get_json()
+    if data:
+        processed_data = {}
+        for key, value in data.items():
+            if key == "shaft":
+                processed_data[key] = escape(value)
+            else:
+                value_checked = escape(value.strip())
+                converted_value = globals.replace_and_convert_to_float(value_checked)
+                if converted_value is False:
+                    return jsonify({"error": f"Antall utsyr må kun inneholde tall"})
+                processed_data[key] = converted_value
+        if dbo.update_room_data(room_uid, processed_data):
+            return jsonify({"message": "Romdata oppdatert"})
+        else:   
+            return jsonify({"message": "Kunne ikke oppdatere romdata"})
+    else:
+        return jsonify({"message": "Fant ikke rom"})

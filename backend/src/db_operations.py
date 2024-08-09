@@ -140,6 +140,7 @@ def get_building_data(building_uid: str) -> dict:
     floors = get_building_floors(building_uid)
     floor_summaries = {}
     floor_summaries_heating = {}
+    sanitary_summary = summarize_sanitary_equipment_building(building_uid)
     for floor in floors:
         floor_summaries[floor] = {"supply": sum_airflow_supply_floor_building(building_uid, floor),
                                   "extract": sum_airflow_extract_floor_building(building_uid, floor),
@@ -172,8 +173,40 @@ def get_building_data(building_uid: str) -> dict:
     building_data["floor_summaries"] = floor_summaries
     building_data["floor_summaries_heating"] = floor_summaries_heating
     building_data["systems"] = systems
+    building_data["sanitary_summary"] = sanitary_summary
 
     return building_data
+
+def summarize_sanitary_equipment_building(building_uid: str) -> dict:
+    sink_1_14_inch = db.session.query(func.sum(models.Rooms.sink_1_14_inch)).filter(models.Rooms.building_uid == building_uid).scalar()
+    sink_large = db.session.query(func.sum(models.Rooms.sink_large)).filter(models.Rooms.building_uid == building_uid).scalar()
+    wc = db.session.query(func.sum(models.Rooms.wc)).filter(models.Rooms.building_uid == building_uid).scalar()
+    urinal = db.session.query(func.sum(models.Rooms.urinal)).filter(models.Rooms.building_uid == building_uid).scalar()
+    dishwasher = db.session.query(func.sum(models.Rooms.dishwasher)).filter(models.Rooms.building_uid == building_uid).scalar()
+    shower = db.session.query(func.sum(models.Rooms.shower)).filter(models.Rooms.building_uid == building_uid).scalar()
+    tub = db.session.query(func.sum(models.Rooms.tub)).filter(models.Rooms.building_uid == building_uid).scalar()
+    washing_machine = db.session.query(func.sum(models.Rooms.washing_machine)).filter(models.Rooms.building_uid == building_uid).scalar()
+    tap_water_outlet_inside = db.session.query(func.sum(models.Rooms.tap_water_outlet_inside)).filter(models.Rooms.building_uid == building_uid).scalar()
+    tap_water_outlet_outside = db.session.query(func.sum(models.Rooms.tap_water_outlet_outside)).filter(models.Rooms.building_uid == building_uid).scalar()
+    firehose = db.session.query(func.sum(models.Rooms.firehose)).filter(models.Rooms.building_uid == building_uid).scalar()
+    drain_75_mm = db.session.query(func.sum(models.Rooms.drain_75_mm)).filter(models.Rooms.building_uid == building_uid).scalar()
+    drain_110_mm = db.session.query(func.sum(models.Rooms.drain_110_mm)).filter(models.Rooms.building_uid == building_uid).scalar()
+
+    return {
+            "sink_1_14_inch": sink_1_14_inch,
+            "sink_large": sink_large,
+            "wc": wc,
+            "urinal": urinal,
+            "shower": shower,
+            "tub": tub,
+            "dishwasher": dishwasher,
+            "washing_machine": washing_machine,
+            "tap_water_outlet_inside": tap_water_outlet_inside,
+            "tap_water_outlet_outside": tap_water_outlet_outside,
+            "firehose": firehose,
+            "drain_75_mm": drain_75_mm,
+            "drain_110_mm": drain_110_mm
+    }
 
 def get_building_floors(building_uid: str) -> list[str]:
     floors = db.session.query(models.Rooms.floor).filter(models.Rooms.building_uid == building_uid).distinct().all()
@@ -290,7 +323,21 @@ def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str
         sum_internal_heatload=val,
         cooling_ventilationair=val,
         cooling_equipment=val,
-        cooling_sum=val
+        cooling_sum=val,
+        shaft="",
+        sink_1_14_inch = 0,
+        sink_large = 0,
+        wc = 0,
+        urinal=0,
+        dishwasher=0,
+        shower=0,
+        tub=0,
+        washing_machine=0,
+        tap_water_outlet_outside=0,
+        tap_water_outlet_inside=0,
+        firehose=0,
+        drain_75_mm=0,
+        drain_110_mm=0
     )
     
     
@@ -951,6 +998,8 @@ def calculate_total_cooling_for_room(room_uid: int) -> bool:
             return False
     else:
         return False
+
+
 
 '''
 

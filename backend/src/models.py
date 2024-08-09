@@ -195,6 +195,22 @@ class Rooms(db.Model):
     cooling_equipment = db.Column(db.Float)
     cooling_sum = db.Column(db.Float)
 
+    # Sanitary
+    shaft = db.Column(db.String(50))
+    sink_1_14_inch = db.Column(db.Float)
+    sink_large = db.Column(db.Float)
+    dishwasher = db.Column(db.Float)
+    wc = db.Column(db.Float)
+    urinal = db.Column(db.Float)
+    shower = db.Column(db.Float)
+    tub = db.Column(db.Float)
+    washing_machine = db.Column(db.Float)
+    tap_water_outlet_outside = db.Column(db.Float)
+    tap_water_outlet_inside = db.Column(db.Float)
+    firehose = db.Column(db.Float)
+    drain_75_mm = db.Column(db.Float)
+    drain_110_mm = db.Column(db.Float)
+
 
     def get_json_room_data(self):
         return {
@@ -266,7 +282,24 @@ class Rooms(db.Model):
             "CoolingEquipment": self.cooling_equipment,
             "CoolingSum": self.cooling_sum
     }
-
+    def get_json_sanitary_data(self):
+        return {
+            "shaft": self.shaft,
+            "sink_1_14_inch": self.sink_1_14_inch,
+            "sink_large": self.sink_large,
+            "wc": self.wc,
+            "urinal": self.urinal,
+            "shower": self.shower,
+            "tub": self.tub,
+            "dishwasher": self.dishwasher,
+            "washing_machine": self.washing_machine,
+            "tap_water_outlet_inside": self.tap_water_outlet_inside,
+            "tap_water_outlet_outside": self.tap_water_outlet_outside,
+            "firehose": self.firehose,
+            "drain_75_mm": self.drain_75_mm,
+            "drain_110_mm": self.drain_110_mm
+        }
+    
 class VentilationSystems(db.Model):
     __tablename__ = "VentilationSystems"
     uid = db.Column(db.String(250), unique=True)
