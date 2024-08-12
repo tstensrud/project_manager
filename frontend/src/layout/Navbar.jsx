@@ -56,7 +56,8 @@ function Navbar() {
                             <Link to={`ventilation/${activeProject}`}>Luftmengdeskjema</Link>
                             <Link to={`heating/${activeProject}`}>Varmeberegninger</Link>
                             <Link to={`cooling/${activeProject}`}>Kjøleberegninger</Link>
-                            <Link to={`sanitary/${activeProject}`}>Sanitærutstyr</Link>
+                            <Link to={`sanitary/equipment/${activeProject}`}>Sanitærutstyr</Link>
+                            <Link to={`sanitary/shafts/${activeProject}`}>Sanitærsjakter</Link>
                             <Link to={``}>Rapporter</Link>
                             <Link to={`settings/${activeProject}`}>Prosjektinnstillinger</Link>
                         </div>

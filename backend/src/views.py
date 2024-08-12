@@ -8,6 +8,7 @@ from flask import Blueprint, request, jsonify
 from . import models, db, globals
 from .models import User
 from . import db_operations as dbo
+from . import sanitary_calculations as sc
 from werkzeug.security import check_password_hash
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager, verify_jwt_in_request
 from markupsafe import escape
@@ -118,13 +119,18 @@ def initialize():
         print("Admin account created")
     if spec_rooms_setup():
         dummy_project()
+        set_sanitary_equipment_data()
     else:
         return jsonify({"error": "Failed to initialize app"})
     return jsonify({"success": "App initialized"})
 
 @views.route('/test', methods=['GET'])
 def test():
-    return jsonify({"message": "Hello"})
+    uid = "uqeiBus0TVGucDRaV2WcLQ"
+    type = "sink_1_14_inch"
+    buid = "SZdIXRWtS2a5xtkPehlIkQ"
+    value = dbo.shaft_summaries(buid, "A", "A")
+    return jsonify({"message": f"{value}"})
 
 '''
 Set up default specifications
@@ -217,9 +223,40 @@ def dummy_project():
                      room_type.notes, room_type.db_technical, room_type.db_neighbour, room_type.db_corridor)
         dbo.initial_ventilation_calculations(new_room)
     
+'''
+Sanitary equipment data
+'''
+def set_sanitary_equipment_data():
+    equipment = [
+        ["drinking_fountain", 0.1, 0.0, 0.1],
+        ["sink_1_14_inch", 0.1, 0.1, 0.3],
+        ["sink_large", 0.1, 0.1, 0.4],
+        ["wc", 0.1, 0.0, 1.8],
+        ["urinal", 0.4, 0.0, 0.4],
+        ["shower", 0.2, 0.2, 0.4],
+        ["tub", 0.3, 0.3, 0.9],
+        ["dishwasher", 0.2, 0.0, 0.6],
+        ["washing_machine", 0.2, 0.2, 0.6],
+        ["tap_water_outlet_inside", 0.2, 0.2, 0.0],
+        ["tap_water_outlet_outside", 0.2, 0.2, 0.0],
+        ["sink_utility", 0.2, 0.2, 0.9],
+        ["firehose", 0.2, 0.2, 0.0],
+        ["drain_75_mm", 0.0, 0.0, 1.2],
+        ["drain_110_mm", 0.0, 0.0, 2.0],
+    ]
+    
+    for i in range(len(equipment)):
+        equipment_type = models.SanitaryEquipmentWaterData(equipment_type=equipment[i][0],
+                                                      water_flow_cold_water = equipment[i][1],
+                                                      water_flow_warm_water = equipment[i][2],
+                                                      water_flow_drainage = equipment[i][3])
+        db.session.add(equipment_type)
+    db.session.commit()
         
 
+            
 
+    
     
 
 

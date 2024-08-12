@@ -138,6 +138,8 @@ function SanitaryTableRowComponent({roomId, msgToParent, index, allRoomData, tot
             {renderEditableCell("shaft")}
             {renderEditableCell("sink_1_14_inch")}
             {renderEditableCell("sink_large")}
+            {renderEditableCell("drinking_fountain")}
+            {renderEditableCell("sink_utility")}
             {renderEditableCell("wc")}
             {renderEditableCell("urinal")}
             {renderEditableCell("dishwasher")}

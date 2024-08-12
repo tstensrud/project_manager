@@ -197,6 +197,7 @@ class Rooms(db.Model):
 
     # Sanitary
     shaft = db.Column(db.String(50))
+    drinking_fountain = db.Column(db.Float)
     sink_1_14_inch = db.Column(db.Float)
     sink_large = db.Column(db.Float)
     dishwasher = db.Column(db.Float)
@@ -207,6 +208,7 @@ class Rooms(db.Model):
     washing_machine = db.Column(db.Float)
     tap_water_outlet_outside = db.Column(db.Float)
     tap_water_outlet_inside = db.Column(db.Float)
+    sink_utility = db.Column(db.Float)
     firehose = db.Column(db.Float)
     drain_75_mm = db.Column(db.Float)
     drain_110_mm = db.Column(db.Float)
@@ -285,6 +287,7 @@ class Rooms(db.Model):
     def get_json_sanitary_data(self):
         return {
             "shaft": self.shaft,
+            "drinking_fountain": self.drinking_fountain,
             "sink_1_14_inch": self.sink_1_14_inch,
             "sink_large": self.sink_large,
             "wc": self.wc,
@@ -295,6 +298,7 @@ class Rooms(db.Model):
             "washing_machine": self.washing_machine,
             "tap_water_outlet_inside": self.tap_water_outlet_inside,
             "tap_water_outlet_outside": self.tap_water_outlet_outside,
+            "sink_utility": self.sink_utility,
             "firehose": self.firehose,
             "drain_75_mm": self.drain_75_mm,
             "drain_110_mm": self.drain_110_mm
@@ -460,3 +464,11 @@ class DeletedRooms(db.Model):
     cooling_ventilationair = db.Column(db.Float)
     cooling_equipment = db.Column(db.Float)
     cooling_sum = db.Column(db.Float)
+
+class SanitaryEquipmentWaterData(db.Model):
+    __tablename__ = "SanitaryEquipmentWaterData"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    equipment_type = db.Column(db.String(255), nullable=False)
+    water_flow_cold_water = db.Column(db.Float)
+    water_flow_warm_water = db.Column(db.Float)
+    water_flow_drainage = db.Column(db.Float)

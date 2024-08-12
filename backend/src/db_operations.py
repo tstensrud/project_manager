@@ -5,6 +5,8 @@ from sqlalchemy import func, and_
 from uuid import uuid4
 from . import models, db
 from . import globals
+from . import sanitary_calculations as sc
+import json
 
 '''
 Project methods
@@ -325,6 +327,7 @@ def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str
         cooling_equipment=val,
         cooling_sum=val,
         shaft="",
+        drinking_fountain = 0,
         sink_1_14_inch = 0,
         sink_large = 0,
         wc = 0,
@@ -335,6 +338,7 @@ def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str
         washing_machine=0,
         tap_water_outlet_outside=0,
         tap_water_outlet_inside=0,
+        sink_utility=0,
         firehose=0,
         drain_75_mm=0,
         drain_110_mm=0
@@ -974,8 +978,6 @@ def calculate_heat_loads_for_room(room_uid: int) -> bool:
         globals.log(f"Calculate heat lods for room: {e}")
         return False
 
-
-
 def calculate_total_cooling_for_room(room_uid: int) -> bool:
     if calculate_heat_loads_for_room(room_uid):
         room = get_room(room_uid)   
@@ -999,6 +1001,58 @@ def calculate_total_cooling_for_room(room_uid: int) -> bool:
     else:
         return False
 
+'''
+Sanitary
+'''
+def get_largest_cold_water_outlet(building_uid: str) -> float:
+    equipment_types = sc.get_all_sanitary_equipment_types()
+    installed_equipment = []
+    
+    for equipment in equipment_types:
+        column = getattr(models.Rooms, equipment)
+        installed = db.session.query(column).filter(column > 0).first()
+        if installed:
+            installed_equipment.append(equipment)
+    print(installed_equipment)
+    return installed_equipment
+    
+
+
+
+
+def shaft_summaries(building_uid: str, shaft: str, graph_curve: str):
+    floors = get_building_floors(building_uid)
+    shaft_summaries = {}
+    cumulative_sum_drainage = 0
+    cumulative_sum_coldwater = 0
+    cumulative_sum_hotwater = 0
+    
+    get_largest_cold_water_outlet(building_uid)
+    
+    for floor in floors[::-1]:
+        shaft_summary = {}
+
+        # Drainage
+        floor_sum_drainage = sc.sum_drainage_floor(building_uid, floor, shaft)
+        floor_sum_drainage_simul = sc.simultanius_drainage(floor_sum_drainage, graph_curve)
+
+        #Cold water
+        floor_sum_cold_water = sc.sum_cold_hot_floor(building_uid, floor, shaft)
+        #floor_sum_cold_water_simul = sc.simultanius_tap_water(floor_sum_cold_water)
+        
+
+        #Warm water
+        pipe_size_vertical = sc.pipesize_drainage_vertical(floor_sum_drainage_simul)
+        pipe_size_1_60 = sc.pipesize_drainage_1_60(floor_sum_drainage_simul)
+        cumulative_sum_drainage = cumulative_sum_drainage + floor_sum_drainage_simul        
+        
+        shaft_summary["cumulative_sum_drainage"] = cumulative_sum_drainage
+        shaft_summary["pipe_size_vertical"] = pipe_size_vertical
+        shaft_summary["pipe_size_1_60"] = pipe_size_1_60
+
+        shaft_summaries[floor] = shaft_summary
+    
+    return shaft_summaries
 
 
 '''
