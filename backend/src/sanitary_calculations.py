@@ -68,9 +68,10 @@ def sum_cold_water_floor(building_uid: str, floor: str, shaft: str) -> float:
         if sum is not None:
             sanitary_values =  get_sanitary_equipment_values(e_type)
             total_cold_water = total_cold_water + (sum * sanitary_values.water_flow_cold_water)
+    #print(f"Total cold water: {total_cold_water}")
     return total_cold_water
 
-def sum_cold_hot_floor(building_uid: str, floor: str, shaft: str) -> float:
+def sum_warm_water_floor(building_uid: str, floor: str, shaft: str) -> float:
     equipment_types = get_all_sanitary_equipment_types()
     total_hot_water = 0
     for e_type in equipment_types:
@@ -80,6 +81,7 @@ def sum_cold_hot_floor(building_uid: str, floor: str, shaft: str) -> float:
         if sum is not None:
             sanitary_values =  get_sanitary_equipment_values(e_type)
             total_hot_water = total_hot_water + (sum * sanitary_values.water_flow_warm_water)
+    #print(f"Total warm water: {total_hot_water}")
     return total_hot_water
 
 def get_all_sanitary_equipment_types() -> list[str]:
@@ -104,10 +106,31 @@ def sum_drainage_shaft(project_uid: str, shaft: str) -> float:
         sum = sum + sum_drainage_equipment_shaft(project_uid, type, shaft)
     return sum
 
+# water_type is either "cw" for cold water or "ww" for warm water
+def get_largest_water_outlet(building_uid: str, shaft: str, water_type: str) -> float:
+    equipment_types = get_all_sanitary_equipment_types()
+    installed_equipment = []
+    largest_outlet = 0
+    for equipment in equipment_types:
+        column = getattr(models.Rooms, equipment)
+        installed = db.session.query(column).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.shaft == shaft, column > 0)).first()
+        if installed:
+            installed_equipment.append(equipment)
+    for item in installed_equipment:
+        item_value = get_sanitary_equipment_values(item)
+        if water_type == "cw":
+            if item_value.water_flow_cold_water > largest_outlet:
+                largest_outlet = item_value.water_flow_cold_water
+        elif water_type == "ww":
+            if item_value.water_flow_warm_water > largest_outlet:
+                largest_outlet = item_value.water_flow_warm_water
+    return largest_outlet
+
 '''
 Simultaneity calculations
 '''
 def simultanius_drainage(sum: float, graph_curve: str) -> float:
+    #print(f"Calculating simultanious draining. Sum drainage: {sum}. Graph curve: {graph_curve}")
     graph_curve_value = 0
     if graph_curve == "A":
         graph_curve_value = 0.26
@@ -120,16 +143,18 @@ def simultanius_drainage(sum: float, graph_curve: str) -> float:
 
 # Same formula for cold and hot water
 def simultanius_tap_water(sum: float, largest_outlet: float) -> float:
-    flow = largest_outlet + 0.015 * (sum - largest_outlet) + 0.17 * math.sqrt(sum - largest_outlet)
-    return flow
+    #print(f"Calculating simultanious tap water. Sum water: {sum}. Largest outlet: {largest_outlet}")
+    if largest_outlet > sum:
+        return largest_outlet
+    else:
+        flow = largest_outlet + 0.015 * (sum - largest_outlet) + 0.17 * math.sqrt(sum - largest_outlet)
+        return flow
 
 '''
 Pipe size calculations
 '''
 def pipesize_drainage_vertical(flow: float) -> str:
     #pipe_sizes_iron = ["75", "110", "135", "160", "210", "275"]
-    if flow > 80.0:
-        return "Flow too high"
     
     if 0 < flow <= 2.4:
         return "75"
@@ -143,24 +168,36 @@ def pipesize_drainage_vertical(flow: float) -> str:
         return "210"
     elif 40.0 < flow <= 80.0:
         return "275"
+    elif flow > 80:
+        return "NB! Over 80L/s"
+    else:
+        return "0"
 
 def pipesize_drainage_1_60(flow: float) -> str:
     #pipe_sizes_iron = ["75", "110", "135", "160", "210", "275"]
-    if flow > 40.0:
-        return "Flow too high"
-    
+    #print(f"Flow for drainage pipe size check 1:60: {flow}")
     if 0 < flow <= 0.9:
+        #print(f"Flow is {flow}, pipe-size: 75")
         return "75"
     elif 0.9 < flow <= 3.2:
+        #print(f"Flow is {flow}, pipe-size: 110")
         return "110"
     elif 3.2 < flow <= 5.5:
+        #print(f"Flow is {flow}, pipe-size: 135")
         return "135"
     elif 5.5 < flow <= 9.0:
+        #print(f"Flow is {flow}, pipe-size: 160")
         return "160"
     elif 9.0 < flow <= 20.0:
+        #print(f"Flow is {flow}, pipe-size: 210")
         return "210"
     elif 20.0 < flow <= 40.0:
+        #print(f"Flow is {flow}, pipe-size: 275")
         return "275"
+    elif flow > 40:
+        return "NB! Over 40L/s"
+    else:
+        return "0"
     
 # Same formula for cold and hot water
 def pipesize_tap_water(flow: float) -> str:
@@ -188,7 +225,3 @@ def pipesize_tap_water(flow: float) -> str:
         return "150"
     elif flow > 15:
         return "200"
-
-'''
-Shaft summaries
-'''

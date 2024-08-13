@@ -634,3 +634,4 @@ def update_room_sanitary(project_uid, room_uid):
             return jsonify({"message": "Kunne ikke oppdatere romdata"})
     else:
         return jsonify({"message": "Fant ikke rom"})
+    

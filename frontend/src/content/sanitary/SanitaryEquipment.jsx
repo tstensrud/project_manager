@@ -56,7 +56,6 @@ function SanitaryEquipment () {
          if (msg !== undefined) {
             if (msg === "updateSummaries") {
                 buildingReFetch();
-                console.log("Building refetch called")
             }
             setChildMessage(msg);
         }
@@ -190,9 +189,10 @@ function SanitaryEquipment () {
                                             <th></th>
                                             <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.wc != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.wc)} <br/> stk</> : (<></>) }</strong></th>
                                             <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.urinal != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.urinal)} <br/> stk</> : (<></>) }</strong></th>
+                                            <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.dishwasher != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.dishwasher)} <br/> stk</> : (<></>) }</strong></th>
                                             <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.shower != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.shower)} <br/> stk</> : (<></>) }</strong></th>
                                             <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.tub != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.tub)} <br/> stk</> : (<></>) }</strong></th>
-                                            <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.dishwasher != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.dishwasher)} <br/> stk</> : (<></>) }</strong></th>
+                                            
                                             <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.washing_machine != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.washing_machine)} <br/> stk</> : (<></>) }</strong></th>
                                             <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.tap_water_outlet_inside != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.tap_water_outlet_inside)} <br/> stk</> : (<></>) }</strong></th>
                                             <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.tap_water_outlet_outside != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.tap_water_outlet_outside)} <br/> stk</> : (<></>) }</strong></th>

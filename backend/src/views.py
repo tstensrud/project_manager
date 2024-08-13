@@ -129,8 +129,11 @@ def test():
     uid = "uqeiBus0TVGucDRaV2WcLQ"
     type = "sink_1_14_inch"
     buid = "SZdIXRWtS2a5xtkPehlIkQ"
-    value = dbo.shaft_summaries(buid, "A", "A")
-    return jsonify({"message": f"{value}"})
+    #shaft = {}
+    value = dbo.shaft_summary_shaft_building(buid, "A", "A")
+    #value = dbo.get_building_shafts(buid)
+    #shaft["A"] = value
+    return jsonify({"message": value})
 
 '''
 Set up default specifications

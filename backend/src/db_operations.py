@@ -1,7 +1,7 @@
 import math
 import datetime
 from sqlalchemy.inspection import inspect
-from sqlalchemy import func, and_
+from sqlalchemy import func, and_, distinct, select
 from uuid import uuid4
 from . import models, db
 from . import globals
@@ -165,6 +165,15 @@ def get_building_data(building_uid: str) -> dict:
         systems.append(system.system_name)
     systems.sort()
 
+    # Drainage and tap water
+    building_shafts = get_building_shafts(building_uid)
+    graph_curve = "A"
+    shaft_list = {}
+    if building_shafts:
+        for shaft in building_shafts:
+            summary = shaft_summary_shaft_building(building_uid, shaft, graph_curve)
+            shaft_list[shaft] = summary
+
     building_data["area"] = area
     building_data["supplyAir"] = supply_air
     building_data["extractAir"] = extract_air
@@ -176,6 +185,7 @@ def get_building_data(building_uid: str) -> dict:
     building_data["floor_summaries_heating"] = floor_summaries_heating
     building_data["systems"] = systems
     building_data["sanitary_summary"] = sanitary_summary
+    building_data["shaft_summaries"] = shaft_list
 
     return building_data
 
@@ -326,7 +336,7 @@ def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str
         cooling_ventilationair=val,
         cooling_equipment=val,
         cooling_sum=val,
-        shaft="",
+        shaft=None,
         drinking_fountain = 0,
         sink_1_14_inch = 0,
         sink_large = 0,
@@ -1004,55 +1014,103 @@ def calculate_total_cooling_for_room(room_uid: int) -> bool:
 '''
 Sanitary
 '''
-def get_largest_cold_water_outlet(building_uid: str) -> float:
-    equipment_types = sc.get_all_sanitary_equipment_types()
-    installed_equipment = []
+
+def get_building_shafts(building_uid: str) -> list[str]:
+    shafts = db.session.query(distinct(models.Rooms.shaft)).filter(models.Rooms.building_uid == building_uid).all()
+    shaft_list = [shaft[0] for shaft in shafts if shaft[0] is not None]
+    sorted_list = sorted(shaft_list)
+    #print(sorted_list)
+    return sorted_list
     
-    for equipment in equipment_types:
-        column = getattr(models.Rooms, equipment)
-        installed = db.session.query(column).filter(column > 0).first()
-        if installed:
-            installed_equipment.append(equipment)
-    print(installed_equipment)
-    return installed_equipment
-    
-
-
-
-
-def shaft_summaries(building_uid: str, shaft: str, graph_curve: str):
+def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str):
     floors = get_building_floors(building_uid)
     shaft_summaries = {}
     cumulative_sum_drainage = 0
     cumulative_sum_coldwater = 0
     cumulative_sum_hotwater = 0
-    
-    get_largest_cold_water_outlet(building_uid)
-    
-    for floor in floors[::-1]:
+    largest_cold_water_outlet = sc.get_largest_water_outlet(building_uid, shaft, "cw")
+    largest_warm_water_outlet = sc.get_largest_water_outlet(building_uid, shaft, "ww")
+
+    for i,floor in enumerate(floors[::-1]):
         shaft_summary = {}
 
         # Drainage
         floor_sum_drainage = sc.sum_drainage_floor(building_uid, floor, shaft)
-        floor_sum_drainage_simul = sc.simultanius_drainage(floor_sum_drainage, graph_curve)
+        if floor_sum_drainage > 0:
+            #print(f"Sum drainage for floor {floor} in building: {building_uid}: {floor_sum_drainage}")
+            floor_sum_drainage_simul = sc.simultanius_drainage(floor_sum_drainage, graph_curve)
+            if i == 0:
+                cumulative_sum_drainage = floor_sum_drainage_simul
+            else:
+                cumulative_sum_drainage = cumulative_sum_drainage + floor_sum_drainage_simul
+        pipe_size_vertical = sc.pipesize_drainage_vertical(cumulative_sum_drainage)
+        pipe_size_1_60 = sc.pipesize_drainage_1_60(cumulative_sum_drainage)
+            
 
         #Cold water
-        floor_sum_cold_water = sc.sum_cold_hot_floor(building_uid, floor, shaft)
-        #floor_sum_cold_water_simul = sc.simultanius_tap_water(floor_sum_cold_water)
-        
+        floor_sum_cold_water = sc.sum_cold_water_floor(building_uid, floor, shaft)
+        if floor_sum_cold_water > 0:
+            floor_sum_cold_water_simul = sc.simultanius_tap_water(floor_sum_cold_water, largest_cold_water_outlet)
+            if i == 0:
+                cumulative_sum_coldwater = floor_sum_cold_water_simul
+            else:
+                cumulative_sum_coldwater = cumulative_sum_coldwater + floor_sum_cold_water_simul
+        pipe_size_cold_water = sc.pipesize_tap_water(cumulative_sum_coldwater)
 
+        
         #Warm water
-        pipe_size_vertical = sc.pipesize_drainage_vertical(floor_sum_drainage_simul)
-        pipe_size_1_60 = sc.pipesize_drainage_1_60(floor_sum_drainage_simul)
-        cumulative_sum_drainage = cumulative_sum_drainage + floor_sum_drainage_simul        
+        floor_sum_warm_water = sc.sum_warm_water_floor(building_uid, floor, shaft)
+        if floor_sum_warm_water > 0:
+            floor_sum_warm_water_simul = sc.simultanius_tap_water(floor_sum_warm_water, largest_warm_water_outlet)
+            if i == 0:
+                cumulative_sum_hotwater = floor_sum_warm_water_simul
+            else:
+                cumulative_sum_hotwater = cumulative_sum_hotwater + floor_sum_warm_water_simul
+        pipe_size_warm_water = sc.pipesize_tap_water(cumulative_sum_hotwater)
+
+        
         
         shaft_summary["cumulative_sum_drainage"] = cumulative_sum_drainage
         shaft_summary["pipe_size_vertical"] = pipe_size_vertical
         shaft_summary["pipe_size_1_60"] = pipe_size_1_60
+        shaft_summary["cumulative_sum_cold_water"] = cumulative_sum_coldwater
+        shaft_summary["pipe_size_cold_water"] = pipe_size_cold_water
+        shaft_summary["cumulative_sum_hot_water"] = cumulative_sum_hotwater
+        shaft_summary["pipe_size_warm_water"] = pipe_size_warm_water
 
         shaft_summaries[floor] = shaft_summary
     
     return shaft_summaries
+
+
+def shaft_summaries(project_uid: str):
+    buildings = get_all_project_buildings(project_uid)
+    if buildings:
+        building_list = {}
+        building_uids = []
+        building_names = []
+
+        # Extract UIDs
+        for building in buildings:
+            building_uids.append(building.uid)
+            building_names.append(building.building_name)
+        
+        # Get shaft summaries for each building
+        for building_uid, building_name in zip(building_uids, building_names):
+            building_shafts = get_building_shafts(building_uid)
+            #print(f"Building shafts: {building_shafts}")
+
+            if building_shafts:
+                shaft_list = {}
+                for shaft in building_shafts:
+                    summary = shaft_summaries(building_uid, shaft, "A")
+                    shaft_list[shaft] = summary
+            else:
+                #return jsonify({"success": False, "message": "No shafts for building"})
+                continue
+            
+            building_list[building_uid] = shaft_list
+    return building_list
 
 
 '''

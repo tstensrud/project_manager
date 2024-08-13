@@ -99,6 +99,7 @@ class Buildings(db.Model):
     temp_floor_air = db.Column(db.Float)
     dut = db.Column(db.Float)
     safety = db.Column(db.Integer)
+    graph_curve = db.Column(db.String(2))
 
     rooms = db.relationship('Rooms', backref='building', lazy=True)
 
@@ -120,7 +121,8 @@ class Buildings(db.Model):
             "YearMidTemp": self.year_mid_temp,
             "TempFloorAir": self.temp_floor_air,
             "Dut": self.dut,
-            "Safety": self.safety
+            "Safety": self.safety,
+            "GraphCurve": self.graph_curve
         }
 
 class Rooms(db.Model):

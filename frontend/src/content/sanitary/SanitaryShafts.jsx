@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import useFetch from '../../hooks/useFetch.jsx'
@@ -6,40 +6,83 @@ import useFetch from '../../hooks/useFetch.jsx'
 import TapwaterIcon from '../../assets/svg/tapWaterIcon.svg?react';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
 import TableTop from '../../layout/TableTop.jsx';
+import SanitaryShaftTableRowComponent from './SanitaryShaftTableRowComponent.jsx';
+import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 
 function SanitaryShafts() {
-    const {projectId} = useParams();
+    const { projectId } = useParams();
 
+    // Initial fetch of data
+    const { data: buildingData, loading: buildingDataLoading } = useFetch(`/project_api/${projectId}/buildings/`);
 
+    console.log(buildingData);
     return (
         <>
             <SubTitleComponent>
                 <TapwaterIcon /> Sanitærsjakter
             </SubTitleComponent>
             <div className='main-content'>
-            <div className="text-container-above-tables no-print">
+                <div className="text-container-above-tables no-print">
 
-            </div>
-            <TableTop />
-            <div className="table-wrapper">
-                <table className="fl-table">
-                    <thead>
-                        <th width="2%">#</th>
-                        <th width="10%">Sjakt</th>
-                        <th width="10%">Etasje</th>
-                        <th width="10%">KV <br/>Noralvannmengde</th>
-                        <th width="10%">VV <br/>Noralvannmengde</th>
-                        <th width="10%">SPV <br/>Noralvannmengde</th>
-                        <th width="10%">KV Cu <br/>mm</th>
-                        <th width="10%">VV Cu <br/> mm</th>
-                        <th width="10%">SPV 1:60 <br/>mm</th>
-                        <th width="10%">SPV Stående <br/>mm</th>
-                    </thead>
-                    <tbody>
-                        <td>Hey</td>
-                    </tbody>
-                </table>
-            </div>
+                </div>
+                
+                {
+                    buildingDataLoading && buildingDataLoading === true ? (
+                        <>
+                        <div className="flex-container-center">
+                            <LoadingSpinner />
+                        </div>
+                        </>
+                    ) : (
+                        <>
+                        <TableTop />
+                            <div className="table-wrapper">
+                                <table className="fl-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%">Bygg</th>
+                                            <th width="10%">Sjakt</th>
+                                            <th width="10%">Etasje</th>
+                                            <th width="10%">Kaldtvann <br />(L/s)</th>
+                                            <th width="10%">Varmtvann <br />(L/s)</th>
+                                            <th width="10%">Spillvann<br />(L/s)</th>
+                                            <th width="10%">KV Cu <br />mm</th>
+                                            <th width="10%">VV Cu <br /> mm</th>
+                                            <th width="10%">SPV 1:60 <br />mm</th>
+                                            <th width="10%">SPV Stående <br />mm</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            <>
+                                                {
+                                                    buildingData && buildingData.building_data.map((building, buildingIndex) => (
+                                                        Object.keys(building.shaft_summaries).map((shaft, shaftIndex) => (
+                                                            <>
+                                                                {building.floors.map((floor, floorIndex) => {
+                                                                    const summary = building.shaft_summaries[shaft][floor] || {};
+
+                                                                    return (
+                                                                        <>
+                                                                            <SanitaryShaftTableRowComponent key={`${buildingIndex}-${shaftIndex}-${floorIndex}`} data={summary} shaft={shaft} floor={floor} name={building.BuildingName} />
+                                                                        </>
+                                                                    );
+                                                                })}
+                                                                <tr>
+                                                                    <td style={{ height: "30px" }}></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                                                </tr>
+                                                            </>
+                                                        ))
+                                                    ))}
+
+                                            </>
+                                        }
+                                    </tbody >
+                                </table>
+                            </div>
+                        </>
+                    )}
+
             </div>
 
         </>

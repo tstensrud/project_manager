@@ -93,6 +93,14 @@ body {
   width: 100%;
 }
 
+.flex-container-center {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 .action-button {
   border-radius: 4px;
   height: 32px;
@@ -496,6 +504,8 @@ svg.delete {
 .loading-container {
   display: flex;
 }
+
+
 
 .loading-text {
   filter: blur(3px);

@@ -23,6 +23,7 @@ import Logout from './login/Logout';
 import ProtectedRoute from './login/ProtectedRoute';
 import SanitaryEquipment from './content/sanitary/SanitaryEquipment';
 import SanitaryShafts from './content/sanitary/SanitaryShafts';
+import Sanitary from './content/sanitary/Sanitary';
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
                 <Route path="ventsystems/:projectId" element={<ProtectedRoute element={<VentSystems/>}/>} />
                 <Route path="heating/:projectId" element={<ProtectedRoute element={<Heating/>}/>}/>
                 <Route path="cooling/:projectId" element={<ProtectedRoute element={<Cooling/>}/>} />
+                <Route path="sanitary/:projectId" element={<ProtectedRoute element={<Sanitary />}/>}/>
                 <Route path="sanitary/equipment/:projectId" element={<ProtectedRoute element={<SanitaryEquipment />}/>}/>
                 <Route path="sanitary/shafts/:projectId" element={<ProtectedRoute element={<SanitaryShafts />}/>}/>
             </Route>
