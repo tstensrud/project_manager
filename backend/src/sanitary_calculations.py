@@ -46,6 +46,24 @@ def sum_hot_water_building(building_uid: str) -> float:
             total_hot_water = total_hot_water + (sum * sanitary_values.water_flow_warm_water)
     return total_hot_water
 
+def sum_flows_building(building_uid: str, graph_curve: str) -> list[float]:
+    sums = []
+    drainage = sum_drainage_building(building_uid)
+    cold_water = sum_cold_water_building(building_uid)
+    hot_water = sum_hot_water_building(building_uid)
+    largest_cold_water_outlet = get_largest_water_outlet(building_uid, "", "cw")
+    largest_hot_water_outlet = get_largest_water_outlet(building_uid, "", "ww")
+    
+    drainage_simul = simultanius_drainage(drainage, graph_curve)
+    cold_water_simul = simultanius_tap_water(cold_water, largest_cold_water_outlet)
+    warm_water_simul = simultanius_tap_water(hot_water, largest_hot_water_outlet)
+    sums.append(drainage_simul)
+    sums.append(cold_water_simul)
+    sums.append(warm_water_simul)
+
+    return sums
+
+
 def sum_drainage_floor(building_uid: str, floor: str, shaft: str) -> float:
     equipment_types = get_all_sanitary_equipment_types()
     total_drainage = 0
@@ -113,7 +131,10 @@ def get_largest_water_outlet(building_uid: str, shaft: str, water_type: str) -> 
     largest_outlet = 0
     for equipment in equipment_types:
         column = getattr(models.Rooms, equipment)
-        installed = db.session.query(column).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.shaft == shaft, column > 0)).first()
+        if shaft == "":
+            installed = db.session.query(column).filter(and_(models.Rooms.building_uid == building_uid, column > 0)).first()
+        else:
+            installed = db.session.query(column).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.shaft == shaft, column > 0)).first()
         if installed:
             installed_equipment.append(equipment)
     for item in installed_equipment:
@@ -131,6 +152,8 @@ Simultaneity calculations
 '''
 def simultanius_drainage(sum: float, graph_curve: str) -> float:
     #print(f"Calculating simultanious draining. Sum drainage: {sum}. Graph curve: {graph_curve}")
+    if sum == 0:
+        return 0
     graph_curve_value = 0
     if graph_curve == "A":
         graph_curve_value = 0.26
@@ -143,6 +166,8 @@ def simultanius_drainage(sum: float, graph_curve: str) -> float:
 
 # Same formula for cold and hot water
 def simultanius_tap_water(sum: float, largest_outlet: float) -> float:
+    if sum == 0:
+        return 0
     #print(f"Calculating simultanious tap water. Sum water: {sum}. Largest outlet: {largest_outlet}")
     if largest_outlet > sum:
         return largest_outlet

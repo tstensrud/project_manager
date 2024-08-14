@@ -13,9 +13,9 @@ function SanitaryShafts() {
     const { projectId } = useParams();
 
     // Initial fetch of data
-    const { data: buildingData, loading: buildingDataLoading } = useFetch(`/project_api/${projectId}/buildings/`);
+    const { data: buildingData, loading: buildingDataLoading } = useFetch(`/project_api/${projectId}/sanitary/buildings/`);
 
-    console.log(buildingData);
+    //console.log(buildingData);
     return (
         <>
             <SubTitleComponent>

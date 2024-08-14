@@ -149,16 +149,18 @@ function Rooms () {
             <div className="table-wrapper">
                 <table className="fl-table" id="roomsTableVentilation">
                     <thead>
-                         <th width="2%">#</th>
-                         <th width="4%">Bygg</th>
-                         <th width="4%">Etasje</th>
-                         <th width="6%">Romnr</th>
-                         <th width="15%">Romtype</th>
-                         <th width="10%">Romnavn</th>
-                         <th width="5%">Areal <br/> m<sup>2</sup></th>
-                         <th width="5%">Personer</th>
-                         <th width="38%">Kommentarer</th>
-                         <th width="10%">Slett Rom</th>
+                        <tr>
+                            <th width="2%">#</th>
+                            <th width="4%">Bygg</th>
+                            <th width="4%">Etasje</th>
+                            <th width="6%">Romnr</th>
+                            <th width="15%">Romtype</th>
+                            <th width="10%">Romnavn</th>
+                            <th width="5%">Areal <br/> m<sup>2</sup></th>
+                            <th width="5%">Personer</th>
+                            <th width="38%">Kommentarer</th>
+                            <th width="10%">Slett Rom</th>
+                         </tr>
                     </thead>
                     <tbody>
                         {
@@ -166,7 +168,9 @@ function Rooms () {
                             sortedBuildings.map((room, index) => <RoomTableRowComponent index={index} msgToParent={handleChildMessage} totalColumns={10} key={room.uid} roomId={room.uid}/>)
                         ) : (
                                 <>
+                                <th>
                                     <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                </th>
                                 </>
                             )
                         }

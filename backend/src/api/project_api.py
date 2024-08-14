@@ -3,6 +3,7 @@ import json
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
 from .. import db_operations as dbo
+from .. import sanitary_calculations as sc
 from .. import globals
 from markupsafe import escape
 
@@ -121,7 +122,7 @@ def buildings(project_uid):
     else:
         building_data = []
         for building in buildings:
-            building_data.append(dbo.get_building_data(building.uid))
+            building_data.append(dbo.get_building_data(building.uid, True, True, False))
         return jsonify({"building_data": building_data, "rooms": total_rooms})
 
 @jwt_required()
@@ -377,6 +378,18 @@ def ventilation(project_uid):
     return jsonify({"ventdata": total_air_flow})
 
 @jwt_required()
+@project_api_bp.route('/ventilation/buildings/', methods=['GET'])
+def get_ventilation_buildings(project_uid):
+    buildings = dbo.get_all_project_buildings(project_uid)
+    if buildings is None:
+        return jsonify({"error": "Ingen bygg lagt til enda"})
+    else:
+        building_data = []
+        for building in buildings:
+            building_data.append(dbo.get_building_data(building.uid, True, False, False))
+        return jsonify({"building_data": building_data})
+    
+@jwt_required()
 @project_api_bp.route('/ventilation/get_room/<room_uid>/', methods=['GET'])
 def ventilation_get_room(project_uid, room_uid):
     room = dbo.get_room(room_uid)
@@ -441,6 +454,18 @@ def ventilation_update_room(project_uid, room_uid):
 def heating(project_uid):
     total_heating = dbo.sum_heat_loss_project(project_uid)
     return jsonify({"heating_data": total_heating})
+
+@jwt_required()
+@project_api_bp.route('/heating/buildings/', methods=['GET'])
+def get_heating_buildings(project_uid):
+    buildings = dbo.get_all_project_buildings(project_uid)
+    if buildings is None:
+        return jsonify({"error": "Ingen bygg lagt til enda"})
+    else:
+        building_data = []
+        for building in buildings:
+            building_data.append(dbo.get_building_data(building.uid, False, True, False))
+        return jsonify({"building_data": building_data})
 
 @jwt_required()
 @project_api_bp.route('/heating/get_room/<room_uid>/', methods=['GET'])
@@ -548,6 +573,18 @@ def get_room_cooling(project_uid, room_uid):
         return ({"error": "Fant ikke rom"})
 
 @jwt_required()
+@project_api_bp.route('/cooling/buildings/', methods=['GET'])
+def get_cooling_buildings(project_uid):
+    buildings = dbo.get_all_project_buildings(project_uid)
+    if buildings is None:
+        return jsonify({"error": "Ingen bygg lagt til enda"})
+    else:
+        building_data = []
+        for building in buildings:
+            building_data.append(dbo.get_building_data(building.uid, False, False, False))
+        return jsonify({"building_data": building_data})
+    
+@jwt_required()
 @project_api_bp.route('/cooling/update_room/<room_uid>/', methods=['PATCH'])
 def update_room_cooling(project_uid, room_uid):
     data = request.get_json()
@@ -614,6 +651,18 @@ def get_sanitary_room(project_uid, room_uid):
         return jsonify({"error": "Fant ikke rom"})
 
 @jwt_required()
+@project_api_bp.route('/sanitary/buildings/', methods=['GET'])
+def get_buildings_sanitary(project_uid):
+    buildings = dbo.get_all_project_buildings(project_uid)
+    if buildings is None:
+        return jsonify({"error": "Ingen bygg lagt til enda"})
+    else:
+        building_data = []
+        for building in buildings:
+            building_data.append(dbo.get_building_data(building.uid, False, False, True))
+        return jsonify({"building_data": building_data})
+
+@jwt_required()
 @project_api_bp.route('/sanitary/update_room/<room_uid>/', methods=['PATCH'])
 def update_room_sanitary(project_uid, room_uid):
     data = request.get_json()
@@ -634,4 +683,42 @@ def update_room_sanitary(project_uid, room_uid):
             return jsonify({"message": "Kunne ikke oppdatere romdata"})
     else:
         return jsonify({"message": "Fant ikke rom"})
-    
+
+@jwt_required()
+@project_api_bp.route('/sanitary/building_summary/<building_uid>/', methods=['GET'])
+def get_sanitary_building_summary(project_uid, building_uid):
+    building = dbo.get_building(building_uid)
+    if building:
+        curve = building.graph_curve
+        building_sanitary_totals = sc.sum_flows_building(building_uid, curve)
+        totals = {
+            "drainage": {
+                "pipe_size_vertical": sc.pipesize_drainage_vertical(building_sanitary_totals[0]),
+                "pipe_siz_1_60": sc.pipesize_drainage_1_60(building_sanitary_totals[0]),
+                "total":  building_sanitary_totals[0],
+            },
+            "cw": {
+                "pipe_size": sc.pipesize_tap_water(building_sanitary_totals[1]),
+                "total": building_sanitary_totals[1]
+            },
+            "ww": {
+                "pipe_size": sc.pipesize_tap_water(building_sanitary_totals[2]),
+                "total": building_sanitary_totals[2]
+            }
+        }
+        building_data = dbo.get_building_data(building_uid, False, False, True)
+        return jsonify({"success": True, "message": "Building data fetched", "building_data": building_data, "totals": totals})
+    else:
+        return jsonify({"success": False, "message": "No building found"})
+
+
+@jwt_required()
+@project_api_bp.route('/sanitary/update_curve/<building_uid>/', methods=["PATCH"])
+def update_curve(project_uid, building_uid):
+    data = request.get_json()
+    if data:
+        curve = escape(data["curve"])
+        dbo.update_building_graph_curve(building_uid, curve)
+        return jsonify({"success": True, "message": "curve received"})
+    else:
+        return jsonify({"success": False, "message": "No curve data received"})

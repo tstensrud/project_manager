@@ -135,60 +135,85 @@ def get_building(building_uid: str) -> models.Buildings:
     building = db.session.query(models.Buildings).filter(models.Buildings.uid == building_uid).first()
     return building
 
-def get_building_data(building_uid: str) -> dict:
+def get_building_data(building_uid: str, include_ventilation: bool, include_heating: bool, include_sanitary: bool) -> dict:
     building = db.session.query(models.Buildings).filter(models.Buildings.uid == building_uid).first()
     building_data = building.get_json()
 
     floors = get_building_floors(building_uid)
-    floor_summaries = {}
-    floor_summaries_heating = {}
-    sanitary_summary = summarize_sanitary_equipment_building(building_uid)
-    for floor in floors:
-        floor_summaries[floor] = {"supply": sum_airflow_supply_floor_building(building_uid, floor),
-                                  "extract": sum_airflow_extract_floor_building(building_uid, floor),
-                                  "demand": sum_airflow_demand_floor_building(building_uid, floor)}
-        floor_summaries_heating[floor] = {"demand": sum_heatloss_demand_building_floor(building_uid, floor),
-                                          "chosen": sum_heatloss_chosen_building_floor(building_uid, floor)}
-
     area = summarize_building_area(building_uid)
-    supply_air = summarize_supply_air_building(building_uid)
-    extract_air = summarize_extract_air_building(building_uid)
-    heating_demand = sum_heat_loss_building(building_uid)
-    heating = sum_heat_loss_chosen_building(building_uid)
-    demand = summarize_demand_building(building_uid)
-    system_uids = systems_in_building(building_uid)
-    if None in system_uids:
-        system_uids.pop(system_uids.index(None))
-    systems = []
-    for uid in system_uids:
-        system = get_system(uid)
-        systems.append(system.system_name)
-    systems.sort()
-
-    # Drainage and tap water
-    building_shafts = get_building_shafts(building_uid)
-    graph_curve = "A"
-    shaft_list = {}
-    if building_shafts:
-        for shaft in building_shafts:
-            summary = shaft_summary_shaft_building(building_uid, shaft, graph_curve)
-            shaft_list[shaft] = summary
 
     building_data["area"] = area
-    building_data["supplyAir"] = supply_air
-    building_data["extractAir"] = extract_air
-    building_data["heating"] = heating
-    building_data["heatingDemand"] = heating_demand
-    building_data["demand"] = demand
     building_data["floors"] = floors
+    
+    floor_summaries = {}
+
+    # Ventilation
+    if include_ventilation is True:
+        supply_air = summarize_supply_air_building(building_uid)
+        extract_air = summarize_extract_air_building(building_uid)
+
+        demand = summarize_demand_building(building_uid)
+        system_uids = systems_in_building(building_uid)
+        if None in system_uids:
+            system_uids.pop(system_uids.index(None))
+        systems = []
+        for uid in system_uids:
+            system = get_system(uid)
+            systems.append(system.system_name)
+        systems.sort()
+        for floor in floors:
+            floor_summaries[floor] = {"supply": sum_airflow_supply_floor_building(building_uid, floor),
+                                    "extract": sum_airflow_extract_floor_building(building_uid, floor),
+                                    "demand": sum_airflow_demand_floor_building(building_uid, floor)}
+        building_data["supplyAir"] = supply_air
+        building_data["extractAir"] = extract_air
+        building_data["systems"] = systems
+        building_data["demand"] = demand
+    else:
+        for floor in floors:
+            floor_summaries[floor] = {"supply": "",
+                                    "extract": "",
+                                    "demand": ""}
     building_data["floor_summaries"] = floor_summaries
-    building_data["floor_summaries_heating"] = floor_summaries_heating
-    building_data["systems"] = systems
-    building_data["sanitary_summary"] = sanitary_summary
-    building_data["shaft_summaries"] = shaft_list
+
+    # Heating
+    if include_heating is True:
+        floor_summaries_heating = {}
+        for floor in floors:
+            floor_summaries_heating[floor] = {"demand": sum_heatloss_demand_building_floor(building_uid, floor),
+                                            "chosen": sum_heatloss_chosen_building_floor(building_uid, floor)}
+        heating_demand = sum_heat_loss_building(building_uid)
+        heating = sum_heat_loss_chosen_building(building_uid)
+        building_data["heating"] = heating
+        building_data["heatingDemand"] = heating_demand
+        building_data["floor_summaries_heating"] = floor_summaries_heating
+
+    # Drainage and tap water
+    if include_sanitary is True:
+        sanitary_summary = summarize_sanitary_equipment_building(building_uid)
+        building_shafts = get_building_shafts(building_uid)
+        graph_curve = building_data["GraphCurve"]
+        shaft_list = {}
+        if building_shafts:
+            for shaft in building_shafts:
+                summary = shaft_summary_shaft_building(building_uid, shaft, graph_curve)
+                shaft_list[shaft] = summary
+        building_data["sanitary_summary"] = sanitary_summary
+        building_data["shaft_summaries"] = shaft_list
 
     return building_data
 
+def update_building_graph_curve(building_uid: str, curve: str) -> bool:
+    building = get_building(building_uid)
+    building.graph_curve = curve
+    try:
+        db.session.commit()
+        return True
+    except Exception as e:
+        globals.log(f"Could not update graph curve: {e}")
+        db.session.rollback()
+        return False
+    
 def summarize_sanitary_equipment_building(building_uid: str) -> dict:
     sink_1_14_inch = db.session.query(func.sum(models.Rooms.sink_1_14_inch)).filter(models.Rooms.building_uid == building_uid).scalar()
     sink_large = db.session.query(func.sum(models.Rooms.sink_large)).filter(models.Rooms.building_uid == building_uid).scalar()
@@ -203,6 +228,8 @@ def summarize_sanitary_equipment_building(building_uid: str) -> dict:
     firehose = db.session.query(func.sum(models.Rooms.firehose)).filter(models.Rooms.building_uid == building_uid).scalar()
     drain_75_mm = db.session.query(func.sum(models.Rooms.drain_75_mm)).filter(models.Rooms.building_uid == building_uid).scalar()
     drain_110_mm = db.session.query(func.sum(models.Rooms.drain_110_mm)).filter(models.Rooms.building_uid == building_uid).scalar()
+    sink_utility = db.session.query(func.sum(models.Rooms.sink_utility)).filter(models.Rooms.building_uid == building_uid).scalar()
+    drinking_fountain = db.session.query(func.sum(models.Rooms.drinking_fountain)).filter(models.Rooms.building_uid == building_uid).scalar()
 
     return {
             "sink_1_14_inch": sink_1_14_inch,
@@ -217,7 +244,9 @@ def summarize_sanitary_equipment_building(building_uid: str) -> dict:
             "tap_water_outlet_outside": tap_water_outlet_outside,
             "firehose": firehose,
             "drain_75_mm": drain_75_mm,
-            "drain_110_mm": drain_110_mm
+            "drain_110_mm": drain_110_mm,
+            "sink_utility": sink_utility,
+            "drinking_fountain": drinking_fountain
     }
 
 def get_building_floors(building_uid: str) -> list[str]:
@@ -243,7 +272,8 @@ def new_building(project_uid: str, building_name: str) -> bool:
                                     year_mid_temp = 5.0,
                                     temp_floor_air = -22,
                                     dut= -22.0,
-                                    safety= 10.0)
+                                    safety= 10.0,
+                                    graph_curve="A")
     try:
         db.session.add(new_building)
         db.session.commit()
@@ -1067,8 +1097,6 @@ def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str
             else:
                 cumulative_sum_hotwater = cumulative_sum_hotwater + floor_sum_warm_water_simul
         pipe_size_warm_water = sc.pipesize_tap_water(cumulative_sum_hotwater)
-
-        
         
         shaft_summary["cumulative_sum_drainage"] = cumulative_sum_drainage
         shaft_summary["pipe_size_vertical"] = pipe_size_vertical
@@ -1081,36 +1109,6 @@ def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str
         shaft_summaries[floor] = shaft_summary
     
     return shaft_summaries
-
-
-def shaft_summaries(project_uid: str):
-    buildings = get_all_project_buildings(project_uid)
-    if buildings:
-        building_list = {}
-        building_uids = []
-        building_names = []
-
-        # Extract UIDs
-        for building in buildings:
-            building_uids.append(building.uid)
-            building_names.append(building.building_name)
-        
-        # Get shaft summaries for each building
-        for building_uid, building_name in zip(building_uids, building_names):
-            building_shafts = get_building_shafts(building_uid)
-            #print(f"Building shafts: {building_shafts}")
-
-            if building_shafts:
-                shaft_list = {}
-                for shaft in building_shafts:
-                    summary = shaft_summaries(building_uid, shaft, "A")
-                    shaft_list[shaft] = summary
-            else:
-                #return jsonify({"success": False, "message": "No shafts for building"})
-                continue
-            
-            building_list[building_uid] = shaft_list
-    return building_list
 
 
 '''

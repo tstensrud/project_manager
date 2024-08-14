@@ -20,7 +20,7 @@ function Heating () {
 
     // Fetches
     const {data: roomData, error: roomError, refetch: roomRefetch} = useFetch(`/project_api/${projectId}/rooms/`);
-    const {data: buildingData, error: buildingDataError, refetch: buildingReFetch} = useFetch(`/project_api/${projectId}/buildings/`);
+    const {data: buildingData, error: buildingDataError, refetch: buildingReFetch} = useFetch(`/project_api/${projectId}/heating/buildings/`);
 
     // State changes between child components
     const [settingsUpdatedState, setSettingsUpdatedState] = useState(false);
@@ -55,7 +55,7 @@ function Heating () {
 
     // Handlers
     const handleChildMessage = (msg) => {
-        console.log("Child message received:", msg);
+        //console.log("Child message received:", msg);
          if (msg !== undefined) {
             if (msg === "update") {
                 roomRefetch();

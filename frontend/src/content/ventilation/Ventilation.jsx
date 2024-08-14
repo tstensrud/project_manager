@@ -17,7 +17,7 @@ function Ventilation () {
 
     // Initial fetch of data
     const {data: roomData, loading} = useFetch(`/project_api/${projectId}/rooms/`);
-    const {data: buildingData, refetch: buildingReFetch} = useFetch(`/project_api/${projectId}/buildings/`);
+    const {data: buildingData, refetch: buildingReFetch} = useFetch(`/project_api/${projectId}/ventilation/buildings/`);
     const {data: ventSystemData } = useFetch(`/project_api/${projectId}/systems/`);
 
     // Error messages from child component
@@ -30,7 +30,7 @@ function Ventilation () {
     const [buildingSummaryData, setBuildingSummaryData] = useState(null);
     const [floors, setFloors] = useState([]);
 
-    console.log(buildingSummaryData)
+    //console.log(buildingSummaryData)
 
     // useEffects
     useEffect(() => {

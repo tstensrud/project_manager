@@ -17,7 +17,7 @@ function SanitaryEquipment () {
 
     // Initial fetch of data
     const {data: roomData, loading} = useFetch(`/project_api/${projectId}/rooms/`);
-    const {data: buildingData, refetch: buildingReFetch} = useFetch(`/project_api/${projectId}/buildings/`);
+    const {data: buildingData, refetch: buildingReFetch} = useFetch(`/project_api/${projectId}/sanitary/buildings/`);
     
     // Error messages from child component
     const [childMessage, setChildMessage] = useState('');
@@ -103,25 +103,27 @@ function SanitaryEquipment () {
                             <div className="table-wrapper">
                                 <table className="fl-table">
                                     <thead>
-                                        <th width="2%">#</th>
-                                        <th width="2%">Etasje</th>
-                                        <th width="10%">Rom</th>
-                                        <th width="5%">Sjakt</th>
-                                        <th width="5%">1/14" servant</th>
-                                        <th width="5%">1" servant</th>
-                                        <th width="5%">Drikkefontene</th>
-                                        <th width="5%">Utslagsvask</th>
-                                        <th width="5%">WC</th>                                        
-                                        <th width="5%">Urinal</th>
-                                        <th width="5%">Oppvaskmaskin</th>
-                                        <th width="5%">Dusjbatteri</th>
-                                        <th width="5%">Badekar</th>
-                                        <th width="5%">Vaskemaskin</th>
-                                        <th width="5%">Tappekran <br/>inne</th>
-                                        <th width="5%">Tappekran <br/>ute</th>
-                                        <th width="5%">Brannskap</th>
-                                        <th width="5%">Sluk<br/>75mm</th>
-                                        <th width="5%">Sluk<br/>110mm</th>
+                                        <tr>
+                                            <th width="2%">#</th>
+                                            <th width="2%">Etasje</th>
+                                            <th width="10%">Rom</th>
+                                            <th width="5%">Sjakt</th>
+                                            <th width="5%">1/14" servant</th>
+                                            <th width="5%">1" servant</th>
+                                            <th width="5%">Drikkefontene</th>
+                                            <th width="5%">Utslagsvask</th>
+                                            <th width="5%">WC</th>                                        
+                                            <th width="5%">Urinal</th>
+                                            <th width="5%">Oppvaskmaskin</th>
+                                            <th width="5%">Dusjbatteri</th>
+                                            <th width="5%">Badekar</th>
+                                            <th width="5%">Vaskemaskin</th>
+                                            <th width="5%">Tappekran <br/>inne</th>
+                                            <th width="5%">Tappekran <br/>ute</th>
+                                            <th width="5%">Brannskap</th>
+                                            <th width="5%">Sluk<br/>75mm</th>
+                                            <th width="5%">Sluk<br/>110mm</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                             {
@@ -183,10 +185,10 @@ function SanitaryEquipment () {
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.sink_1_14_inch != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.sink_1_14_inch)} <br/> stk</> : (<></>) }</strong></th>
+                                            <th><strong>{buildingSummaryData && buildingSummaryData?.[0]?.sanitary_summary.sink_1_14_inch != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.sink_1_14_inch)} <br/> stk</> : (<></>) }</strong></th>
                                             <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.sink_large != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.sink_large)} <br/> stk</> : (<></>) }</strong></th>
-                                            <th></th>
-                                            <th></th>
+                                            <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.drinking_fountain != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.drinking_fountain)} <br/> stk</> : (<></>) }</strong></th>
+                                            <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.sink_utility != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.sink_utility)} <br/> stk</> : (<></>) }</strong></th>
                                             <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.wc != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.wc)} <br/> stk</> : (<></>) }</strong></th>
                                             <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.urinal != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.urinal)} <br/> stk</> : (<></>) }</strong></th>
                                             <th><strong>{ buildingSummaryData?.[0]?.sanitary_summary.dishwasher != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.dishwasher)} <br/> stk</> : (<></>) }</strong></th>

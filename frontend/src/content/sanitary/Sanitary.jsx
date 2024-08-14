@@ -1,46 +1,43 @@
+import { useParams } from 'react-router-dom';
+
+import useFetch from '../../hooks/useFetch'
 import TapwaterIcon from '../../assets/svg/tapWaterIcon.svg?react';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
+import BuildingSummary from './BuildingSummary';
 
 function Sanitary() {
+    const { projectId } = useParams();
+
+    // Hooks
+    const { data, loading, refetch } = useFetch(`/project_api/${projectId}/sanitary/buildings/`);
+
+    // Handlers
+    const handleChildMessage = (msg) => {
+        //console.log("Child message received:", msg);
+        if (msg !== undefined) {
+            if (msg === "curve") {
+                refetch();
+                console.log("Update curve")
+            }
+        }
+    }
     return (
         <>
             <SubTitleComponent>
                 <TapwaterIcon /> Sanitæranlegg - oppsummering
             </SubTitleComponent>
-            
+
             <div className='main-content'>
-                <div className="cards">
-                    <div className="information [ card ]">
-                        <h2 className="card-title"></h2>
-                        <p className="info">Prosjektert areal<br />
-
-                        </p>
-
-                        <p className="info">Prosjektert luftmengde<br />
-
-                            <span className="supply-text"> </span> m<sup>3</sup>/h
-                            <br />
-
-                            <span className="extract-text"> </span> m<sup>3</sup>/h
-                        </p>
-
-                        <p>
-                            Betjenes av ventilasjonssystem: <br />
-                            <ul>
-
-                            </ul>
-                        </p>
-
-                        <p className="info">Prosjektert varme<br />
-
-                        </p>
-                        <p style={{ textAlign: "end" }}>
-
-                        </p>
-                    </div>
+                <div className="flex-container-row">
+                    {
+                        data && data.building_data === null ? (
+                            <p className="p-description">{data.error}</p>
+                        ) : (
+                            data && data.building_data && Object.keys(data.building_data).map((key, index) => (
+                                <BuildingSummary buildingUid={data.building_data[key].uid} msgToParent={handleChildMessage} projectId={projectId} key={index}/>
+                            )))
+                    }
                 </div>
-
-
             </div>
         </>
     );
