@@ -1,5 +1,5 @@
 import AxiosInstance from '../AxiosInstance';
-import BASE_URL from '../utils/globals.js'
+import {BASE_URL} from '../utils/globals.js'
 
 export const verifyToken = async () => {
   try {

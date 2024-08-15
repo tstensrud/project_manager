@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from '../GlobalContext';
-import BASE_URL from '../utils/globals.js'
+import {BASE_URL} from '../utils/globals.js'
 
 function Login(props) {
     const { setUserUuid, setUserName } = useContext(GlobalContext);

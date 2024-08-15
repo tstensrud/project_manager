@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from '../GlobalContext';
-import BASE_URL from '../utils/globals.js'
+import {BASE_URL} from '../utils/globals.js'
 
 function Logout(props) {
 
