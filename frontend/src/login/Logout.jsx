@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from '../GlobalContext';
+import BASE_URL from '../utils/globals.js'
 
 function Logout(props) {
 
@@ -12,8 +13,7 @@ function Logout(props) {
     function logMeOut() {
       axios({
         method: "POST",
-        url:`http://127.0.0.1:5000/logout/${userUuid}/`,
-        //url: `https://project-manager-rust.vercel.app/api/logout/${userUuid}/`,
+        url:`${BASE_URL}/logout/${userUuid}/`,
       })
       .then((response) => {
          props.token()

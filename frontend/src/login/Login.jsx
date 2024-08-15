@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from '../GlobalContext';
+import BASE_URL from '../utils/globals.js'
 
 function Login(props) {
     const { setUserUuid, setUserName } = useContext(GlobalContext);
@@ -15,8 +16,7 @@ function Login(props) {
 
         axios({
             method: "POST",
-            url: "http://127.0.0.1:5000/token/",
-            //url: "https://project-manager-rust.vercel.app/api/token/",
+            url: `${BASE_URL}/token/`,
             data: {
                 email: email,
                 password: password

@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from './utils/globals.js'
 
 const AxiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:5000',
+  baseURL: {BASE_URL},
   //baseUrl: "https://project-manager-rust.vercel.app/api/"
 });
 
