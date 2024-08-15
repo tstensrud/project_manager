@@ -37,7 +37,6 @@ function App() {
         {!token ? ( <Route path="/" element={<Login setToken={setToken}/>} />
         ) : (
           <>
-          
             <Route path="/" element={<Layout />}>
                 <Route path="dashboard" element={<ProtectedRoute element={<Dashboard />}/>} />
                 <Route path="specifications/:projectId" element={<ProtectedRoute element={<Specifications />}/>} />
@@ -60,7 +59,7 @@ function App() {
                 <Route path="sanitary/shafts/:projectId" element={<ProtectedRoute element={<SanitaryShafts />}/>}/>
             </Route>
             </> )}
-        <Route path="*" element={<NoAccess />} />
+        <Route path="*" element={<Login setToken={setToken}/>} />
       </Routes>
     </Router>
 
