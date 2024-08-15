@@ -3,17 +3,20 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from '../GlobalContext';
 import {BASE_URL} from '../utils/globals.js'
+import LoadingSpinner from '../layout/LoadingSpinner.jsx';
 
 function Login(props) {
     const { setUserUuid, setUserName } = useContext(GlobalContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState();
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     function logMeIn(e) {
         e.preventDefault();
-
+        setLoading(true);
+        
         axios({
             method: "POST",
             url: `${BASE_URL}/token/`,
@@ -37,7 +40,12 @@ function Login(props) {
                 //console.log(error.response.headers)
                 setError(error);
                 }
+            })
+            .finally(() => {
+                setLoading(false);
             });
+
+            
             setEmail("");
             setPassword("");
             
@@ -46,7 +54,9 @@ function Login(props) {
     return(
         <>
             <div className="login-page">
-
+                {
+                    loading && loading === true ? (<><LoadingSpinner /></>):(
+                    <>
                     <form className="login-form" onSubmit={logMeIn}>
                     <p className="message">Structor TS prosjekter</p>
                     <p>
@@ -58,6 +68,10 @@ function Login(props) {
                         <p className="message">Kontakt admin hvis du mangler konto<br/>torbjorn.stensrud@structor.no</p>
                         <p>{error && error.response.data ? (<>{error.response.data.error}</>)  : ('')}</p>
                     </form>
+                    </>
+                    )
+                }
+
                 
             </div>
         </> 
