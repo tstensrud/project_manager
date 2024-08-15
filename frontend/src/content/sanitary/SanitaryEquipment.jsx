@@ -80,9 +80,7 @@ function SanitaryEquipment () {
         <>
             {childMessage.error && <MessageBox message={childMessage.error} />}
 
-            <SubTitleComponent>
-                <TapwaterIcon /> Sanitærutstyr
-            </SubTitleComponent>
+            <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitærutstyr"} projectName={""} projectNumber={""} />
             <div className='main-content'>
                 <div className="text-container-above-tables no-print">
 

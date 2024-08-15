@@ -33,9 +33,7 @@ function Buildings() {
     }
 
     return (<>
-        <SubTitleComponent>
-            <HeaderIcon />  Bygg
-        </SubTitleComponent>
+        <SubTitleComponent svg={<HeaderIcon />} headerText={"Bygg"} projectName={""} projectNumber={""} />
         <div className="main-content">
 
             <div className="container-above-table-rooms-top">

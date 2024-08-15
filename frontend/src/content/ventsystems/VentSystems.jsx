@@ -51,9 +51,7 @@ function VentSystems () {
     }
     return (
 <>
-    <SubTitleComponent>
-        <HeaderIcon /> Ventilasjonssytemer
-    </SubTitleComponent>
+    <SubTitleComponent svg={<HeaderIcon />} headerText={"Ventilasjonssytemer"} projectName={""} projectNumber={""} />
     
     <div className="main-content">
             {systemResponse && systemResponse.error && systemResponse.error !== null ? (<MessageBox message={systemResponse.error} /> ) : (<></>)}

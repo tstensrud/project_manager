@@ -50,8 +50,6 @@
 /* To-do list */
 .todo-container {
     position: fixed;
-    right: 20px;
-    top: 72px;
     z-index:1000;
 }
 

@@ -81,9 +81,7 @@ function Ventilation () {
         <>
             {childMessage.error && <MessageBox message={childMessage.error} />}
 
-            <SubTitleComponent>
-                <VentilationIcon /> Luftmengdetabeller
-            </SubTitleComponent>
+            <SubTitleComponent svg={<VentilationIcon />} headerText={"Luftmengdetabeller"} projectName={""} projectNumber={""} />
             <div className='main-content'>
                 <div className="text-container-above-tables no-print">
 

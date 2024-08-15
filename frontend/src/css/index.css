@@ -7,8 +7,8 @@
   --app-content-secondary-color: rgb(12, 18, 25);
   --app-content-main-color: white;
   --default-border: 1px solid rgb(43, 53, 64);
-  --link: #78D3F8;
-  --link-hover: #3C697C;
+  --link: #00FFA7;
+  --link-hover: #00FFA7;
   --table-header: rgb(18, 28, 38);
   --table-footer: #161F29;
   --table-background-color: rgb(18, 28, 38);
@@ -347,7 +347,7 @@ a {
   color: var(--link);
 }
 a:hover {
-  color: var(--link-hover);
+  text-decoration: underline;
 }
 
 
@@ -495,18 +495,21 @@ h3 {
   width: 100%;
   cursor: pointer;
   padding: 2px;
+  border-radius: 6px;
 }
 
 .sanitary-building-summary-equipment-header {
   display: flex;
   width: 100%;
   cursor: pointer;
-  padding: 2px;
-  background-color: var(--app-content-secondary-color);
+  padding: 3px;
+  color: var(--grey-text);
+  border-radius: 6px;
+  margin-top: 10px;
 }
 
 .sanitary-building-summary-equipment-container:hover {
-  background-color: var(--marked-row);
+  background-color: var(--navbar-active-link);
 }
 
 /* SVG stuff*/

@@ -24,10 +24,8 @@ function Project () {
     },[data]);
     
     return (
-        <>
-            <SubTitleComponent>
-                <HeaderIcon /> &nbsp; Prosjektoversikt - {data && data.data.ProjectNumber} {data && data.data.ProjectName}
-            </SubTitleComponent>
+        <>  
+            <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektoversikt"} projectName={data && data.data.ProjectName} projectNumber={data && data.data.ProjectNumber} />
             <div className="main-content">
 
                 <div className="flex-container-row">

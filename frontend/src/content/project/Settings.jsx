@@ -39,9 +39,7 @@ function Settings () {
 
     return (
         <>
-            <SubTitleComponent>
-              <HeaderIcon />  Prosjektinnstillinger - {data && data.data.ProjectName} - {data && data.data.ProjectNumber}
-            </SubTitleComponent>
+            <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektinnstillinger"} projectName={data && data.data.ProjectName} projectNumber={data && data.data.ProjectNumber} />
             <div className="main-content">
 
                 <div className="flex-container-row">

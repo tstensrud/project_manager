@@ -36,18 +36,12 @@ function Navbar() {
 
     return (
         <>
-            {
-                (activeProject && activeProject !== "0") ? (
-                    <TodoButton />
-                ) : (<></>)
-            }
+
 
             <div className="header no-print">
                 <div className="navbar-button-container">
                     <div className="dropdown">
-                        <button className='dropbtn'>Prosjekt
-                            <i className="fa fa-caret-down"></i>
-                        </button>
+                        <button className='dropbtn'>Prosjekt</button>
                         <div className={navButtonClass}>
                             <Link to={`project/${activeProject}`}>Forside</Link>
                             <Link to={`buildings/${activeProject}`}>Bygg</Link>
@@ -65,9 +59,7 @@ function Navbar() {
                     </div>
 
                     <div className="dropdown">
-                        <button className="dropbtn">Dashboard
-                            <i className="fa fa-caret-down"></i>
-                        </button>
+                        <button className="dropbtn">Dashboard</button>
                         <div className="dropdown-content">
                             <Link to={'dashboard'}>Velg prosjekt</Link>
                             <Link to={'newproject'}>Nytt prosjekt</Link>
@@ -84,18 +76,14 @@ function Navbar() {
                 <div className="navbar-button-container-right">
                     <div className="logout-dropdown">
                         <div className="dropdown">
-                            <button className="dropbtn">Kravspesifikasjoner
-                                <i className="fa fa-caret-down"></i>
-                            </button>
+                            <button className="dropbtn">Kravspesifikasjoner</button>
                             <div className="dropdown-content">
                                 <Link to={`specifications/${activeProject}`}>Kravspesifikasjoner</Link>
                                 <Link to={'newspecification'}>Ny kravspesifikasjon</Link>
                             </div>
                         </div>
                         <div className="dropdown">
-                            <button className="dropbtn">{userName}&nbsp;&nbsp;<AccountIcon />
-                                <i className="fa fa-caret-down"></i>
-                            </button>
+                            <button className="dropbtn">{userName}&nbsp;&nbsp;</button>
                             <div className="dropdown-content">
                                 <Link to={'userprofile/'}>Brukerkonto</Link>
                                 <Link to={`logout/${userUuid}`}>Logg ut</Link>

@@ -16,9 +16,8 @@ function Specifications() {
 
     return (
         <>
-            <SubTitleComponent>
-                <HeaderIcon /> Kravspesifikasjoner
-            </SubTitleComponent>
+            
+            <SubTitleComponent svg={<HeaderIcon />} headerText={"Kravspesifikasjoner"} projectName={""} projectNumber={""} />
             <div className='main-content'>
                 <div className="flex-container-row">
                     <div className="cards">

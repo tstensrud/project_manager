@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch'
+import StarIcon from '../../assets/svg/starIcon.svg?react';
+import CardTitle from '../../layout/CardTitle';
 
-function ProjectSummary({projectId}) {
-    const {data, loading, error} = useFetch(`/project_api/${projectId}/`)
+function ProjectSummary({ projectId }) {
+    const { data, loading, error } = useFetch(`/project_api/${projectId}/`)
     return (
         <>
             <div className="cards">
@@ -10,7 +12,8 @@ function ProjectSummary({projectId}) {
                     {
                         data && data.data.area ? (
                             <>
-                                <h2 className="card-title">{data && data.data.ProjectName} oppsummert</h2>
+                            <CardTitle svg={<StarIcon />} title={<>{data && data.data.ProjectName} oppsummert</>} />
+
                                 <h4>Prosjektbeskrivelse</h4>
                                 <p className="info">{data && data.data.ProjectDescription} </p>
                                 <h4>Kravspesifikasjon</h4>
@@ -23,7 +26,7 @@ function ProjectSummary({projectId}) {
                                 </p>
                             </>
                         ) : (
-                            <>Ingen data lagt til. <br/>{data && data.error}</>
+                            <>Ingen data lagt til. <br />{data && data.error}</>
                         )
                     }
                 </div>

@@ -24,9 +24,7 @@ function NewProject() {
 
     return (
         <>
-            <SubTitleComponent>
-                <HeaderIcon /> Opprett nytt prosjekt
-            </SubTitleComponent>
+            <SubTitleComponent svg={<HeaderIcon />} headerText={"Opprett nytt prosjekt"} projectName={""} projectNumber={""} />
             <div className="main-content">
                 <div className="flex-container-row">
                     {loading && <p>Loading...</p>}

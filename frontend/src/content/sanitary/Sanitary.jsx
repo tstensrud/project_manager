@@ -23,9 +23,7 @@ function Sanitary() {
     }
     return (
         <>
-            <SubTitleComponent>
-                <TapwaterIcon /> Sanitæranlegg - oppsummering
-            </SubTitleComponent>
+            <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitæranlegg - oppsummering"} projectName={""} projectNumber={""} />
 
             <div className='main-content'>
                 <div className="flex-container-row">

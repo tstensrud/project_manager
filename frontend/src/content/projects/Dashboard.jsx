@@ -36,9 +36,7 @@ function Dashboard() {
   if (error) return <>Error: {error.message}</>;
   return (
     <>
-      <SubTitleComponent>
-        <HeaderIcon /> Dashboard - velg prosjekt
-      </SubTitleComponent>
+      <SubTitleComponent svg={<HeaderIcon />} headerText={"Dashboard - velg prosjekt"} projectName={""} projectNumber={""} />
       
       <div className="main-content">
       <div className="flex-container-row">

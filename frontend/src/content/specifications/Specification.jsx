@@ -41,11 +41,8 @@ function Specification() {
 
     return (
     <>
-            <SubTitleComponent>
-
-                    <HeaderIcon />Kravspesifikasjon: {data && data.spec_name}
- 
-            </SubTitleComponent>
+            <SubTitleComponent svg={<HeaderIcon />} headerText={"Ny kravspesifikasjon"} projectName={data && data.spec_name} projectNumber={""} />
+            
             <div className="main-content">
                 <div className="text-container-above-tables-spec">
                     <div className='container-flex-column-spec'>

@@ -11,11 +11,11 @@ function ToDo() {
     }
     return (
         <>
-        <div className="todo-container">
+
             <a className="todo-link" href="#" onClick={(e) => handleClick(e, setShowTodoList)}>
                 {TodoListIcon && <TodoListIcon />}
             </a>
-        </div>
+
         {showTodoList && <TodoList showTodoList={showTodoList} setShowTodoList={setShowTodoList} />}
     </>
     );

@@ -106,9 +106,7 @@ function Rooms () {
 
         {response && response.error && response.error !== null ? (<MessageBox message={response.error} /> ) : (<></>)}
 
-        <SubTitleComponent>
-           <RoomIcon/> Romskjema
-        </SubTitleComponent>
+        <SubTitleComponent svg={<RoomIcon />} headerText={"Romskjema"} projectName={""} projectNumber={""} />
         
             <div className='main-content'>
                 

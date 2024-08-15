@@ -90,9 +90,7 @@ function Cooling () {
         <>
             {roomError && roomError.error && roomError.error !== null ? (<MessageBox message={roomError.error} /> ) : (<></>)}
             {buildingDataError && buildingDataError.error && buildingDataError.error !== null ? (<MessageBox message={buildingDataError.error} /> ) : (<></>)}
-            <SubTitleComponent>
-                <CoolingIcon /> Kjølebehovsberegninger
-            </SubTitleComponent>
+            <SubTitleComponent svg={<CoolingIcon />} headerText={"Kjølebehovsberegninger"} projectName={""} projectNumber={""} />
             <div className='main-content'>
                 <div className="text-container-above-tables">
 

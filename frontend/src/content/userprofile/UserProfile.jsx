@@ -13,9 +13,7 @@ function UserProfile () {
 
     return (
         <>
-            <SubTitleComponent>
-                <AccountIcon /> Brukerkonto
-            </SubTitleComponent>
+            <SubTitleComponent svg={<AccountIcon />} headerText={"Brukerkonto"} projectName={""} projectNumber={""} />
             <div className='main-content'>
                 <div className="flex-container-row">
 

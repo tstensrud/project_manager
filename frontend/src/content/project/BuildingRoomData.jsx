@@ -1,5 +1,7 @@
 import useFetch from '../../hooks/useFetch';
 import LoadingSpinner from '../../layout/LoadingSpinner';
+import BuildingIcon from '../../assets/svg/buildingIcon.svg?react';
+import CardTitle from '../../layout/CardTitle';
 
 function BuildingRoomData({ projectId }) {
     const { data, loading, error } = useFetch(`/project_api/${projectId}/buildings/`)
@@ -7,7 +9,7 @@ function BuildingRoomData({ projectId }) {
         <>
             <div className="cards">
                 <div className="information [ card ]">
-                    <h2 className="card-title">Bygnings- og romdata</h2>
+                    <CardTitle svg={<BuildingIcon />} title="Bygnings- og romdata" />
                     {
                         loading && loading === true ? (
                             <>

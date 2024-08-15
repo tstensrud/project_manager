@@ -18,9 +18,7 @@ function SanitaryShafts() {
     //console.log(buildingData);
     return (
         <>
-            <SubTitleComponent>
-                <TapwaterIcon /> Sanitærsjakter
-            </SubTitleComponent>
+            <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitærsjakter"} projectName={""} projectNumber={""} />
             <div className='main-content'>
                 <div className="text-container-above-tables no-print">
 

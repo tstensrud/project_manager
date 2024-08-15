@@ -3,6 +3,7 @@ import { useState } from 'react';
 import useFetch from '../../hooks/useFetch'
 import useUpdateData from '../../hooks/useUpdateData'
 import LoadingSpinner from '../../layout/LoadingSpinner';
+import BuildingIcon from '../../assets/svg/building.svg?react';
 
 function BuildingSummary({ buildingUid, projectId }) {
 
@@ -65,7 +66,15 @@ function BuildingSummary({ buildingUid, projectId }) {
         <>
             <div className="cards">
                 <div className="information [ card ]">
-                    <h2 className="card-title"> {buildingSummaryData && buildingSummaryData.building_data.BuildingName}</h2>
+                    <div style={{display: "flex", width: "100%", marginBottom: "20px"}}>
+                        <div style={{display: "flex", width: "40%"}}>
+                            <BuildingIcon />
+                        </div>
+                        <div style={{display: "flex", width: "60%", textAlign: "center", alignItems: "center", justifyContent: "end", fontSize: "25px"}}>
+                            {buildingSummaryData && buildingSummaryData.building_data.BuildingName}
+                        </div>
+                    </div>
+                 
                     {
                         buildingSummaryDataLoading && buildingSummaryDataLoading === true ? (
                             <>
@@ -103,7 +112,7 @@ function BuildingSummary({ buildingUid, projectId }) {
 
                                     <div className="sanitary-building-summary-equipment-container">
                                         <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                            Rørdimensjon 1:60
+                                            Rørdim. (MA) 1:60
                                         </div>
                                         <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
                                             {buildingSummaryData && buildingSummaryData.totals.drainage.pipe_siz_1_60} mm
@@ -112,7 +121,7 @@ function BuildingSummary({ buildingUid, projectId }) {
 
                                     <div className="sanitary-building-summary-equipment-container">
                                         <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                            Rørdimensjon vertikal
+                                            Rørdim. (MA) vertikal
                                         </div>
                                         <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
                                             {buildingSummaryData && buildingSummaryData.totals.drainage.pipe_size_vertical} mm
@@ -136,7 +145,7 @@ function BuildingSummary({ buildingUid, projectId }) {
 
                                     <div className="sanitary-building-summary-equipment-container">
                                         <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                            Rørdimenjson
+                                            Rørdim. (Cu)
                                         </div>
                                         <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
                                         {buildingSummaryData && buildingSummaryData.totals.cw.pipe_size} mm
@@ -160,7 +169,7 @@ function BuildingSummary({ buildingUid, projectId }) {
 
                                     <div className="sanitary-building-summary-equipment-container">
                                         <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                            Rørdimensjon
+                                            Rørdim. (Cu)
                                         </div>
                                         <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
                                         {buildingSummaryData && buildingSummaryData.totals.ww.pipe_size} mm

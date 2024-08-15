@@ -26,9 +26,7 @@ function NewSpec() {
     return (
         <>
         
-            <SubTitleComponent>
-               <HeaderIcon /> Ny kravspesifikasjon
-            </SubTitleComponent>
+            <SubTitleComponent svg={<HeaderIcon />} headerText={"Ny kravspesifikasjon"} projectName={""} projectNumber={""} />
             <div className="main-content">
             <div className="flex-container-row">
                     <div className="cards">
