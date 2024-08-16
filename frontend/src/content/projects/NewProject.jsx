@@ -19,7 +19,7 @@ function NewProject() {
     const submitProject = async (e) => {
         await handleSubmit(e);
         setData('');
-        navigate(`dashboard/`);
+        navigate(`/project_manager/dashboard`);
     }
 
     return (
@@ -27,7 +27,6 @@ function NewProject() {
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Opprett nytt prosjekt"} projectName={""} projectNumber={""} />
             <div className="main-content">
                 <div className="flex-container-row">
-                    {loading && <p>Loading...</p>}
                     {error && <p>Error: {error.message}</p>}
 
                     <div className="cards">

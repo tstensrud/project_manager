@@ -62,7 +62,8 @@ function NewRoomSpec() {
 
     const submitNewData = async (e) => {
         e.preventDefault();
-        console.log(newData);
+
+        //console.log(newData);
         setData('');
         setSubmitted(!submitted)
         await handleSubmit(e);
@@ -84,9 +85,8 @@ function NewRoomSpec() {
         moistureRef.current.checked = false;
         timeRef.current.checked = false;
         notesRef.current.value = '';
-
-        
     }
+
 
     return (
         <>
@@ -100,7 +100,7 @@ function NewRoomSpec() {
                     <div className="flex-container-row">
                         <div className="cards-large">
                             <div className="information [ card ]">
-                                <h2 className="card-title">Fyll inn romdata - <Link to={`specifications/${suid}/${activeProject}/`} >{data && data.spec_name}</Link></h2>
+                                <h2 className="card-title">Fyll inn romdata - <Link to={`/specifications/${suid}/${activeProject}/`} >{data && data.spec_name}</Link></h2>
 
                                 <p className="info">
                                     Romtype <br />
@@ -140,11 +140,11 @@ function NewRoomSpec() {
                                 </p>
                                 <p className="info">
                                     dB-teknisk<br />
-                                    <input ref={dbTechnicalRef} type="text" onChange={handleInputChange} className="form-input" name="db_technical" placeholder="32dB" tabIndex="8" /> <br />
-                                    dB-naborom<br />
-                                    <input ref={dbNeighbourRef} type="text" onChange={handleInputChange} className="form-input" name="db_neighbour" placeholder="44dB" tabIndex="9" /> <br />
-                                    dB-korridor<br />
-                                    <input ref={dbCorridorRef} type="text" onChange={handleInputChange} className="form-input" name="db_corridor" placeholder="28dB" tabIndex="10" />
+                                    <input ref={dbTechnicalRef} type="text" onChange={handleInputChange} className="form-input" name="db_technical" placeholder="dB" tabIndex="8" /> <br />
+                                    dB-naborom <br />
+                                    <input ref={dbNeighbourRef} type="text" onChange={handleInputChange} className="form-input" name="db_neighbour" placeholder="dB" tabIndex="9" /> <br />
+                                    dB-korridor <br />
+                                    <input ref={dbCorridorRef} type="text" onChange={handleInputChange} className="form-input" name="db_corridor" placeholder="dB" tabIndex="10" />
                                 </p>
                             </div>
                         </div>

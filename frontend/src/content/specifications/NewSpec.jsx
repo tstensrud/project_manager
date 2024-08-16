@@ -7,14 +7,15 @@ import HeaderIcon from '../../assets/svg/newSpecIcon.svg?react';
 
 function NewSpec() {
 
-    const {data: newData, setData, loading, response, error, handleSubmit} = useSubmitData('/specifications/new_specification/');
-    
-    
+    const { data: newData, setData, loading, response, error, handleSubmit } = useSubmitData('/specifications/new_specification/');
+    const [specName, setSpecName] = useState("");
+
     const handleInputChange = (e) => {
-        setData ({
+        setData({
             ...newData,
             [e.target.name]: e.target.value,
         });
+        setSpecName(e.target.value);
     }
 
     const submitNewSpec = async (e) => {
@@ -22,29 +23,32 @@ function NewSpec() {
         await handleSubmit(e);
         setData('');
     }
-
+    //console.log(response && response.response)
     return (
         <>
-        
+
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Ny kravspesifikasjon"} projectName={""} projectNumber={""} />
             <div className="main-content">
-            <div className="flex-container-row">
+                <div className="flex-container-row">
                     <div className="cards">
                         <div className="information [ card ]">
                             <h2 className="card-title">Opprett ny kravspesifikasjon</h2>
                             <p className="info">Skriv inn navnet på kravspesifikasjonen du vil opprette. Gi den et beskrivende navn slik at det er lett å forstå hva det gjelder.<br />
-                            Er det en generell kravspesfikasjon bruk for eksempel et navn som: <br/>
-                            SKOK - omsorgsboliger. <br/>
-                            Er det en mer prosjektspesifik kravspesifikasjon bruk et navn som: <br/>
-                            - Brekketunet bolig, Obos, 2024
+                                Er det en generell kravspesfikasjon bruk for eksempel et navn som: <br />
+                                SKOK - omsorgsboliger. <br />
+                                Er det en mer prosjektspesifik kravspesifikasjon bruk et navn som: <br />
+                                - Brekketunet bolig, Obos, 2024
                             </p>
                             <form onSubmit={submitNewSpec}>
-                            <p className="info">
-                                <input name="spec_name" onChange={handleInputChange} type="text" placeholder="Navn på kravspesifikasjon"></input> &nbsp; &nbsp; <button type="submit" className="form-button" disabled>Legg til</button>
-                            </p>
+                                <p className="info">
+                                    <input name="spec_name" onChange={handleInputChange} type="text" placeholder="Navn på kravspesifikasjon"></input> &nbsp; &nbsp; <button type="submit" className="form-button">Legg til</button>
+                                </p>
                             </form>
                             <p>
                                 {response && response.error ? (<>{response.error}</>) : (<></>)}
+                            </p>
+                            <p>
+                                {response && response.response !== null ? (<>{response.response}: <Link to={`/specifications/${response.data}`}>{specName}</Link></>) : (<></>)}
                             </p>
                         </div>
                     </div>

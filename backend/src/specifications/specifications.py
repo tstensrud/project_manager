@@ -113,7 +113,7 @@ def new_room_for_spec(spec_uid):
                     processed_data[key] = converted_value
             else:
                 processed_data[key] = escape(value).strip()
-        print(f"Data: {processed_data}.")
+        #print(f"Data: {processed_data}.")
         if dbo.new_specification_room_type(spec_uid, processed_data):
             return jsonify({"success": "Rom lagt til"})
     return jsonify({"error", "Kunne ikke legge til nytt rom."})
@@ -127,5 +127,38 @@ def new_specification():
     if dbo.find_specification_name(spec_name):
         return jsonify({"error", f"Kravspesifikasjon {spec_name} finnes allerede i databasen"})
     else:
-        dbo.new_specifitaion(spec_name)
-        return jsonify({"response": "Kravspesfikasjon opprettet"})
+        new_spec = dbo.new_specifitaion(spec_name)
+        if new_spec is not None:
+            return jsonify({"response": "Kravspesfikasjon opprettet", "data": new_spec})
+        else:
+            return jsonify({"success": False, "error": "Kunne ikke opprette ny kravspesifikasjon"})
+
+@jwt_required
+@specifications_bp.route('/delete_spec_room_type/<room_type_uid>/', methods=['DELETE'])
+def delete_spec_room_type(room_type_uid):
+    room = dbo.get_room_type(room_type_uid)
+    if room:
+        if dbo.delete_room_type_from_spec(room_type_uid):
+            return jsonify({"success": True, "message": f"Romtype {room.name} slettet"})
+        else:
+            return jsonify({"success": False, "message": f"Kunne ikke slette romtype {room.name}"})
+    else:
+        return jsonify({"success": False, "message": f"Fant ikke romtype {room.name}"})
+
+
+@jwt_required
+@specifications_bp.route('/delete_spec/<spec_uid>/', methods=['DELETE'])
+def delete_spec(spec_uid):
+    spec = dbo.get_specification(spec_uid)
+    if spec:
+        if dbo.delete_all_room_types_spec(spec_uid):
+            if dbo.delete_specification(spec_uid):
+                return jsonify({"success": True, "message": "Spesifikasjon og tilhørende romtyper slettet"})
+            else:
+                return jsonify({"success": False, "message": f"Kunne ikke slette kravspesifikasjon {spec.name}"})
+        else:
+            return jsonify({"success": False, "message": f"Kunne ikke slette romtyper for {spec.name} "})
+    else:
+        return jsonify({"success": False, "message": f"Fant ingen kravspesifikasjon med id {spec_uid}"})
+
+

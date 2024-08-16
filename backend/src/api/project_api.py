@@ -190,7 +190,7 @@ def rooms(project_uid):
         except ValueError:
             return jsonify({"error": "Persontantall må kun inneholde tall"})
     
-        vent_props = dbo.get_room_type_data(room_type_id, project_specification)
+        vent_props = dbo.get_room_type(room_type_id, project_specification)
         new_room_id = dbo.new_room(project.uid, building_uid, room_type_id, floor, room_number, name, area, people, 
                                     vent_props.air_per_person, vent_props.air_emission,
                                     vent_props.air_process, vent_props.air_minimum,

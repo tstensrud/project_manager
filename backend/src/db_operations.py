@@ -739,13 +739,13 @@ def sum_airflow_extract_floor_building(building_uid: str, floor: str) -> float:
 Specifications
 '''
 
-def new_specifitaion(name: str) -> bool:
+def new_specifitaion(name: str):
     uid = globals.encode_uid_base64(uuid4())
     specification = models.Specifications(uid=uid, name=name)
     try:
         db.session.add(specification)
         db.session.commit()
-        return True
+        return uid
     except Exception as e:
         globals.log(f"new specification: {e}")
         db.session.rollback()
@@ -779,11 +779,25 @@ def find_specification_name(name: str) -> bool:
         return True
     else:
         return False
+
+def delete_specification(spec_uid: str) -> bool:
+    spec = get_specification(spec_uid)
+    if spec:
+        try:
+            db.session.delete(spec)
+            db.session.commit()
+            return True
+        except Exception as e:
+            globals.log(f"Could not delete specification: {e}")
+            db.session.rollback()
+            return False
+    else:
+        return False
     
 # Get data for a specific roomtype in a specification
 
-def get_room_type_data(room_type_uid: int, specification: str):
-    room_data_object = db.session.query(models.RoomTypes).join(models.Specifications).filter(and_(models.Specifications.uid == specification, models.RoomTypes.uid == room_type_uid)).first()
+def get_room_type(room_type_uid: int, specification: str) -> models.RoomTypes:
+    room_data_object = db.session.query(models.RoomTypes).filter(and_(models.RoomTypes.specification_uid == specification, models.RoomTypes.uid == room_type_uid)).first()
     return room_data_object
 
 
@@ -798,6 +812,32 @@ def find_room_type_for_specification(spec_uid: str, room_type_name: str) -> bool
     else:
         return False
 
+def delete_room_type_from_spec(room_uid) -> bool:
+    room = get_room_type()
+    try:
+        db.session.delete(room)
+        db.session.commit()
+        return True
+    except Exception as e:
+        globals.log(f"Failed to delete room type: {e}")
+        db.session.rollback()
+        return False
+
+def delete_all_room_types_spec(spec_uid: str) -> bool:
+    room_types = db.session.query(models.RoomTypes).filter(models.RoomTypes.specification_uid == spec_uid).all()
+    if room_types:
+        try:
+            for room in room_types:
+                db.session.delete(room)
+            db.session.commit()
+            return True
+        except Exception as e:
+            globals.log(f"Could not delete all roomtype sfor spec: {e}")
+            db.session.rollback()
+            return False
+    else:
+        return False
+    
 # Get name of all room types for a specific specification
 #
 def get_specification_room_types(specification_uid: str):
@@ -828,6 +868,18 @@ def new_specification_room_type(specification_uid: int, data) -> bool:
         room_control = room_control + "F, "
     if data["time"] == "True":
         room_control = room_control + "Tid"
+    
+    db_technical = ""
+    db_neighbour = ""
+    db_corridor = ""
+
+    if db_technical in data:
+        db_technical = data["db_technical"]
+    if db_neighbour in data:
+        db_neighbour = data["db_neighbour"]
+    if db_corridor in data:
+        db_corridor = data["db_corridor"]
+
     uid = globals.encode_uid_base64(uuid4())
     room = models.RoomTypes(uid=uid,
                             specification_uid=specification_uid,
@@ -840,9 +892,9 @@ def new_specification_room_type(specification_uid: int, data) -> bool:
                             heat_exchange=data["heat_ex"],
                             room_control=room_control,
                             notes=data["notes"],
-                            db_technical=data["db_technical"],
-                            db_neighbour=data["db_neighbour"],
-                            db_corridor=data["db_corridor"],
+                            db_technical=db_technical,
+                            db_neighbour=db_neighbour,
+                            db_corridor=db_corridor,
                             comments="")
     try:
         db.session.add(room)

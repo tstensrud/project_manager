@@ -31,7 +31,7 @@ function Login(props) {
                 setUserName(response.data.username);
                 //localStorage.setItem("user_uuid", response.data.uuid);
                 //localStorage.setItem("username", response.data.username);
-                navigate("/project_manager/dashboard");
+                navigate("/dashboard");
 
             }).catch((error) => {
                 if (error.response) {

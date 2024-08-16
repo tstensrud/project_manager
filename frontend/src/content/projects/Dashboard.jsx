@@ -30,7 +30,7 @@ function Dashboard() {
   }
 
   const handleSubmit = () => {
-    navigate(`/project_manager/project/${projectId}`);
+    navigate(`/project/${projectId}`);
   }
 
   if (error) return <>Error: {error.message}</>;

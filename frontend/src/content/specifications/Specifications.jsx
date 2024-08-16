@@ -38,7 +38,7 @@ function Specifications() {
                                                 {
                                                     data && data.data !== null ? (
                                                         data.data.map((spec) => (
-                                                            <><li><Link to={`specifications/${spec.id}/${activeProject}/`}>{spec.name}</Link></li></>
+                                                            <><li><Link to={`/specifications/${spec.id}/${activeProject}/`}>{spec.name}</Link></li></>
                                                         )
                                                         )) : (<>Ingen spesifikasjoner i databasen</>)
                                                 }

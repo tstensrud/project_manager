@@ -12,6 +12,7 @@ import Rooms from "./content/rooms/Rooms";
 import Dashboard from "./content/projects/Dashboard";
 import NewProject from './content/projects/NewProject';
 import Buildings from "./content/buildings/Buildings";
+import EditSpecification from './content/specifications/EditSpecification';
 import Specifications from './content/specifications/Specifications';
 import Specification from './content/specifications/Specification';
 import NewRoomSpec from './content/specifications/NewRoomSpec';
@@ -32,13 +33,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="logout/:uuid" element={<Logout token={removeToken} />} />
-        <Route path="/noaccess" element={<NoAccess />} />
+        <Route path="/logout/:uuid" element={<Logout token={removeToken} />} />
+        <Route path="noaccess" element={<NoAccess />} />
         {!token ? (<Route path="/" element={<Login setToken={setToken} />} />
         ) : (
           <>
-            <Route path="project_manager" element={<Layout />}>
+            <Route path="/" element={<Layout />}>
               <Route path="dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
+              <Route path="specifications/edit/:suid" element={<ProtectedRoute element={<EditSpecification />}/>}/>
               <Route path="specifications/:projectId" element={<ProtectedRoute element={<Specifications />} />} />
               <Route path="specifications/:suid/:projectId" element={<ProtectedRoute element={<Specification />} />} />
               <Route path="specifications/:suid/new_room" element={<ProtectedRoute element={<NewRoomSpec />} />} />

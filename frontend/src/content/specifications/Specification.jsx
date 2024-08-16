@@ -6,6 +6,7 @@ import useSubmitFile from '../../hooks/useSubmitFile'
 import useFetch from '../../hooks/useFetch'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeaderIcon from '../../assets/svg/specificationsIcon.svg?react';
+import EditIcon from '../../assets/svg/editIcon.svg?react';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 
 
@@ -55,9 +56,12 @@ function Specification() {
                             <div className="text-container-above-tables-spec">
                                 <div className='container-flex-column-spec'>
                                     <form onSubmit={handleFileSubmit}>
-                                        Last opp csv-fil med rom data. <Link to={`specifications/${suid}/new_room`}>Eller legg inn enkeltrom her.</Link><br />
-                                        <input type="file" accept='.csv' onChange={handleFileChange} disabled={true} /> &nbsp; &nbsp; <button type="submit" class="form-button">Last opp</button>
+                                        Last opp csv-fil med rom data. <Link to={`/specifications/${suid}/new_room`}>Eller legg inn enkeltrom her.</Link><br />
+                                        <input type="file" accept='.csv' onChange={handleFileChange} disabled={true} /> &nbsp; &nbsp; <button type="submit" class="form-button" disabled>Last opp</button>
                                     </form>
+                                </div>
+                                <div style={{ display: "flex", flex: "1", justifyContent: "end", alignItems: "center", marginRight: "20px", cursor: "pointer" }}>
+                                    <Link to={`/specifications/edit/${suid}`}>Rediger kravspesifikasjon</Link>  &nbsp; <EditIcon />
                                 </div>
                             </div>
                             <div className="table-wrapper">
@@ -110,7 +114,6 @@ function Specification() {
                         </>
                     )
                 }
-
             </div>
 
         </>

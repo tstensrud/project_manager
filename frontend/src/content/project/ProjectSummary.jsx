@@ -26,7 +26,7 @@ function ProjectSummary({ projectId }) {
                                             <p className="info">{data && data.data.ProjectDescription} </p>
                                             <h4>Kravspesifikasjon</h4>
                                             <p className="info">
-                                                <Link to={`specifications/${data.data.SpecUid}/${projectId}`}>{data && data.data.SpecificationName}</Link>
+                                                <Link to={`/specifications/${data.data.SpecUid}/${projectId}`}>{data && data.data.SpecificationName}</Link>
                                             </p>
                                             <h4>Prosjektert areal</h4>
                                             <p className="info">
