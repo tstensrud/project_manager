@@ -30,7 +30,7 @@ function Settings () {
 
     const handleOnSubmit = (e) => {
         changeSpecSubmit(e);
-        navigate(`/project/${projectId}/`);
+        navigate(`project/${projectId}`);
 
     }
 

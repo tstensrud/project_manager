@@ -85,7 +85,7 @@ function Navbar() {
                         <div className="dropdown">
                             <button className="dropbtn">{userName}&nbsp;&nbsp;</button>
                             <div className="dropdown-content">
-                                <Link to={'userprofile/'}>Brukerkonto</Link>
+                                <Link to={'userprofile'}>Brukerkonto</Link>
                                 <Link to={`logout/${userUuid}`}>Logg ut</Link>
                             </div>
                         </div>

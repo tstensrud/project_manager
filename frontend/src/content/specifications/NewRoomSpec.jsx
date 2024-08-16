@@ -100,7 +100,7 @@ function NewRoomSpec() {
                     <div className="flex-container-row">
                         <div className="cards-large">
                             <div className="information [ card ]">
-                                <h2 className="card-title">Fyll inn romdata - <Link to={`/specifications/${suid}/${activeProject}/`} >{data && data.spec_name}</Link></h2>
+                                <h2 className="card-title">Fyll inn romdata - <Link to={`specifications/${suid}/${activeProject}/`} >{data && data.spec_name}</Link></h2>
 
                                 <p className="info">
                                     Romtype <br />

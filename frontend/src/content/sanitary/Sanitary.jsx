@@ -4,6 +4,7 @@ import useFetch from '../../hooks/useFetch'
 import TapwaterIcon from '../../assets/svg/tapWaterIcon.svg?react';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
 import BuildingSummary from './BuildingSummary';
+import LoadingSpinner from '../../layout/LoadingSpinner';
 
 function Sanitary() {
     const { projectId } = useParams();
@@ -24,18 +25,26 @@ function Sanitary() {
     return (
         <>
             <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitæranlegg - oppsummering"} projectName={""} projectNumber={""} />
-
             <div className='main-content'>
-                <div className="flex-container-row">
-                    {
-                        data && data.building_data === null ? (
-                            <p className="p-description">{data.error}</p>
-                        ) : (
-                            data && data.building_data && Object.keys(data.building_data).map((key, index) => (
-                                <BuildingSummary buildingUid={data.building_data[key].uid} msgToParent={handleChildMessage} projectId={projectId} key={index}/>
-                            )))
-                    }
-                </div>
+                {
+                    loading && loading === true ? (
+                        <>
+                            <LoadingSpinner />
+                        </>
+                    ) : (
+                        <>
+                            <div className="flex-container-row">
+                                {
+                                    data && data.building_data === null ? (
+                                        <p className="p-description">{data.error}</p>
+                                    ) : (
+                                        data && data.building_data && Object.keys(data.building_data).map((key, index) => (
+                                            <BuildingSummary buildingUid={data.building_data[key].uid} msgToParent={handleChildMessage} projectId={projectId} key={index} />
+                                        )))
+                                }
+                            </div>
+                        </>)
+                }
             </div>
         </>
     );

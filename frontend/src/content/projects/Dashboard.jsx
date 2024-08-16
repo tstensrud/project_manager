@@ -5,13 +5,14 @@ import { GlobalContext } from '../../GlobalContext';
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import useFetch from '../../hooks/useFetch'
 import HeaderIcon from '../../assets/svg/dashboardIcon.svg?react';
+import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 
 function Dashboard() {
-  
+
   const { setActiveProject, setActiveProjectName } = useContext(GlobalContext);
 
   const [projectId, setProjectId] = useState('');
-  const {data, loading, error} = useFetch('/projects/');
+  const { data, loading, error } = useFetch('/projects/');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,7 +20,7 @@ function Dashboard() {
     setActiveProjectName('');
     localStorage.removeItem("projectid");
     localStorage.removeItem("projectname");
-  },[]);
+  }, []);
 
   const handleChange = (e) => {
     const projectId = e.target.value;
@@ -29,44 +30,52 @@ function Dashboard() {
   }
 
   const handleSubmit = () => {
-    navigate(`/project/${projectId}/`);
-  } 
-  
-  if (loading) return <>Loading</>;
+    navigate(`/project_manager/project/${projectId}`);
+  }
+
   if (error) return <>Error: {error.message}</>;
   return (
     <>
       <SubTitleComponent svg={<HeaderIcon />} headerText={"Dashboard - velg prosjekt"} projectName={""} projectNumber={""} />
-      
+
       <div className="main-content">
-      <div className="flex-container-row">
-        <div className="cards">
-          <div className="information [ card ]">
-            <h2 className="card-title">Velg prosjekt</h2>
-            <form className="custom-form profile-form" onSubmit={handleSubmit}>
-            <p className="info">Velg prosjekt å jobbe på fra menyen under, eller opprett nytt prosjekt fra menyen over: Dashboard - Nytt prosjekt</p>
-            <p className="info">
-                <select onChange={handleChange}>
-                  <option>- Velg prosjekt -</option>
-                  {Array.isArray(data?.data) ? (
-                    data.data.map((project) => (
-                      <option key={project.ProjectName} value={project.uid}>{project.ProjectNumber} {project.ProjectName}</option>
-                    ))
-                  ) : (
-                    <>{data.data}</>
-                  )}
-                </select>
-                </p>
-                <p>
-                <button type="submit" className="form-button">
-                  Gå til valgt prosjekt
-                </button>
-                </p>
-            
-            </form>
-          </div>
-          </div>
-        </div>
+        {
+          loading && loading === true ? (
+            <>
+              <LoadingSpinner />
+            </>
+          ) : (
+            <>
+              <div className="flex-container-row">
+                <div className="cards">
+                  <div className="information [ card ]">
+                    <h2 className="card-title">Velg prosjekt</h2>
+                    <form className="custom-form profile-form" onSubmit={handleSubmit}>
+                      <p className="info">Velg prosjekt å jobbe på fra menyen under, eller opprett nytt prosjekt fra menyen over: Dashboard - Nytt prosjekt</p>
+                      <p className="info">
+                        <select onChange={handleChange}>
+                          <option>- Velg prosjekt -</option>
+                          {Array.isArray(data?.data) ? (
+                            data.data.map((project) => (
+                              <option key={project.ProjectName} value={project.uid}>{project.ProjectNumber} {project.ProjectName}</option>
+                            ))
+                          ) : (
+                            <>{data.data}</>
+                          )}
+                        </select>
+                      </p>
+                      <p>
+                        <button type="submit" className="form-button">
+                          Gå til valgt prosjekt
+                        </button>
+                      </p>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </>
+          )
+        }
       </div>
     </>
   );
