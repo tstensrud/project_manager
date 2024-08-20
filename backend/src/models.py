@@ -147,7 +147,7 @@ class Rooms(db.Model):
     # Ventilation properties
     air_per_person = db.Column(db.Float)
     air_person_sum = db.Column(db.Integer)
-    air_mission = db.Column(db.Float)
+    air_emission = db.Column(db.Float)
     air_emission_sum = db.Column(db.Float)
     air_process = db.Column(db.Float)
     air_minimum = db.Column(db.Float)
@@ -164,7 +164,6 @@ class Rooms(db.Model):
     db_corridor = db.Column(db.String(50))
 
     # Heating properties
-    
     outer_wall_area = db.Column(db.Float)
     room_height = db.Column(db.Float)
     window_door_area = db.Column(db.Float)
@@ -217,11 +216,14 @@ class Rooms(db.Model):
 
 
     def get_json_room_data(self):
+        building = db.session.query(Buildings).filter(Buildings.uid == self.building_uid).first()
+        building_name = building.building_name
         return {
+            
             "id": self.id,
             "uid": self.uid,
             "BuildingUid": self.building_uid,
-            #"BuildingName": self.building.building_name,
+            "BuildingName": building_name,
             "RoomTypeId": self.room_type_uid,
             "RoomTypeName": self.room_type.name,
             "Floor": self.floor,
@@ -232,25 +234,32 @@ class Rooms(db.Model):
             "Comments": self.comments
         }
     def get_json_ventilation_data(self):
+            system = db.session.query(VentilationSystems).filter(VentilationSystems.uid == self.system_uid).first()
+            if system:
+                system_name = system.system_name
+            else:
+                system_name = ""
+
             return {
-            "SystemId": self.system_uid,
-            "AirPerPerson": self.air_per_person,
-            "AirPersonSum": self.air_person_sum,
-            "AirEmission": self.air_mission,
-            "AirEmissionSum": self.air_emission_sum,
-            "AirProcess": self.air_process,
-            "AirMinimum": self.air_minimum,
-            "AirDemand": self.air_demand,
-            "AirSupply": self.air_supply,
-            "AirExtract": self.air_extract,
-            "AirChosen": self.air_chosen,
-            "VentilationPrinciple": self.vent_principle,
-            "HeatExchange": self.heat_exchange,
-            "RoomControl": self.room_control,
-            "Notes": self.notes,
-            "DbTechnical": self.db_technical,
-            "DbNeighbour": self.db_neighbour,
-            "DbCorridor": self.db_corridor
+                "SystemId": self.system_uid,
+                "SystemName": system_name,
+                "AirPerPerson": self.air_per_person,
+                "AirPersonSum": self.air_person_sum,
+                "AirEmission": self.air_emission,
+                "AirEmissionSum": self.air_emission_sum,
+                "AirProcess": self.air_process,
+                "AirMinimum": self.air_minimum,
+                "AirDemand": self.air_demand,
+                "AirSupply": self.air_supply,
+                "AirExtract": self.air_extract,
+                "AirChosen": self.air_chosen,
+                "VentilationPrinciple": self.vent_principle,
+                "HeatExchange": self.heat_exchange,
+                "RoomControl": self.room_control,
+                "Notes": self.notes,
+                "DbTechnical": self.db_technical,
+                "DbNeighbour": self.db_neighbour,
+                "DbCorridor": self.db_corridor
             }
     def get_json_heating_data(self):
         return {
@@ -417,7 +426,7 @@ class DeletedRooms(db.Model):
     # Ventilation properties
     air_per_person = db.Column(db.Float)
     air_person_sum = db.Column(db.Integer)
-    air_mission = db.Column(db.Float)
+    air_emission = db.Column(db.Float)
     air_emission_sum = db.Column(db.Float)
     air_process = db.Column(db.Float)
     air_minimum = db.Column(db.Float)
@@ -466,6 +475,24 @@ class DeletedRooms(db.Model):
     cooling_ventilationair = db.Column(db.Float)
     cooling_equipment = db.Column(db.Float)
     cooling_sum = db.Column(db.Float)
+
+    #Sanitary equipment
+    shaft = db.Column(db.String(50))
+    drinking_fountain = db.Column(db.Float)
+    sink_1_14_inch = db.Column(db.Float)
+    sink_large = db.Column(db.Float)
+    dishwasher = db.Column(db.Float)
+    wc = db.Column(db.Float)
+    urinal = db.Column(db.Float)
+    shower = db.Column(db.Float)
+    tub = db.Column(db.Float)
+    washing_machine = db.Column(db.Float)
+    tap_water_outlet_outside = db.Column(db.Float)
+    tap_water_outlet_inside = db.Column(db.Float)
+    sink_utility = db.Column(db.Float)
+    firehose = db.Column(db.Float)
+    drain_75_mm = db.Column(db.Float)
+    drain_110_mm = db.Column(db.Float)
 
 class SanitaryEquipmentWaterData(db.Model):
     __tablename__ = "SanitaryEquipmentWaterData"

@@ -12,9 +12,7 @@ function HeatingSummary({ projectId }) {
                 <div className="information [ card ]">
                     {
                         loading && loading === true ? (
-                            <>
-                                <LoadingSpinner />
-                            </>
+                            <LoadingSpinner />
                         ) : (
                             <>
                                 <CardTitle svg={<HeatingIcon />} title="Varme- og kjøledata" />

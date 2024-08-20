@@ -56,8 +56,12 @@ def get_all_project_names():
     return project_names
 
 
-def get_all_project_rooms(project_uid: str) -> list:
+def get_all_project_rooms(project_uid: str) -> list[models.Rooms]:
     rooms = db.session.query(models.Rooms).filter(models.Rooms.project_uid == project_uid).order_by(models.Rooms.floor, models.Rooms.room_number).all()
+    return rooms
+
+def get_all_project_rooms_excel(project_uid: str) -> list[models.Rooms]:
+    rooms = db.session.query(models.Rooms).join(models.Buildings, models.Rooms.building_uid == models.Buildings.uid).filter(models.Rooms.project_uid == project_uid).order_by(models.Buildings.building_name, models.Rooms.floor, models.Rooms.room_number).all()
     return rooms
 
 def count_rooms_in_project(project_uid) -> int:
@@ -326,7 +330,7 @@ def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str
         area=area,
         room_population=room_pop,
         air_per_person=air_per_person,
-        air_mission=air_emission,
+        air_emission=air_emission,
         air_process=air_process,
         air_minimum=air_minimum,
         air_supply=0.0,
@@ -405,6 +409,7 @@ def delete_room(room_uid: str) -> bool:
     if room:
         room_dict = room.__dict__.copy()
         room_dict.pop('_sa_instance_state')
+        room_dict.pop('id')
         deleted_room = models.DeletedRooms(**room_dict)
         try:
             db.session.add(deleted_room)
@@ -423,6 +428,7 @@ def undo_delete_room(room_uid: str) -> bool:
     if room:
         room_dict = room.__dict__.copy()
         room_dict.pop('_sa_instance_state')
+        room_dict.pop('id')
         undo_room = models.Rooms(**room_dict)
         try:
             db.session.add(undo_room)
@@ -476,7 +482,7 @@ def initial_ventilation_calculations(room_uid: int) -> bool:
     #print(f"Room ID received: {room_uid}")
     room = get_room(room_uid)
     room.air_person_sum = round((room.room_population * room.air_per_person),1)
-    room.air_emission_sum = round((room.area * room.air_mission), 1)
+    room.air_emission_sum = round((room.area * room.air_emission), 1)
     room.air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process), 1)
     #print(f"AIR DEMAND: {room.air_demand}")
     room.air_supply = round((math.ceil(room.air_demand / 10) * 10), 1)
@@ -498,7 +504,7 @@ def initial_ventilation_calculations(room_uid: int) -> bool:
 def update_ventilation_calculations(room_uid: int) -> bool:
     room = get_room(room_uid)
     room.air_person_sum = round((room.room_population * room.air_per_person),1)
-    room.air_emission_sum = round((room.area * room.air_mission), 1)
+    room.air_emission_sum = round((room.area * room.air_emission), 1)
     room.air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process),1)
     if room.area > 0:
         room.air_chosen = round((room.air_supply / room.area), 1)
@@ -534,7 +540,6 @@ def update_ventilation_table(room_uid: int, new_supply: float, new_extract: floa
         db.session.rollback()
         globals.log(f"update_ventilation_table: {e}")
         return False
-    
 
 
 def set_system_for_room(room_uid: int, system_uid: int) -> bool:
@@ -671,15 +676,13 @@ def update_system_airflows(system_uid: int) -> bool:
     if system:
         system.air_flow_supply = summarize_system_supply(system_uid)
         system.air_flow_extract = summarize_system_extract(system_uid)
-    else:
-        print("no system found")
-    try:
-        db.session.commit()
-        return True
-    except Exception as e:
-        globals.log(f"update_system_air_flows: {e}")
-        db.session.rollback()
-        return False
+        try:
+            db.session.commit()
+            return True
+        except Exception as e:
+            globals.log(f"update_system_air_flows: {e}")
+            db.session.rollback()
+            return False
 
 
 def update_airflow_changed_system(system_uid_new: int, system_uid_old: int) -> bool:
@@ -764,7 +767,6 @@ def get_specification_by_name(name: str) -> models.Specifications:
     return spec
 
 # Get list of all specifications in database
-
 def get_specifications() -> list:
     spec_list = []
     specifications = models.Specifications.query.all()
@@ -800,6 +802,37 @@ def get_room_type(room_type_uid: int, specification: str) -> models.RoomTypes:
     room_data_object = db.session.query(models.RoomTypes).filter(and_(models.RoomTypes.specification_uid == specification, models.RoomTypes.uid == room_type_uid)).first()
     return room_data_object
 
+def update_room_type_data(data, room_uid: str) -> bool:
+    room = db.session.query(models.RoomTypes).filter(models.RoomTypes.uid == room_uid).first()
+    
+
+    processed_data = {}
+
+    for key, value in data.items():
+        processed_data[key] = value
+    processed_data_list = list(processed_data.keys())
+
+    room_columns = {column.key for column in inspect(models.RoomTypes).mapper.column_attrs}
+    for key in room_columns:
+        if key == processed_data_list[0]:
+            print(f"Setting {processed_data[key]} into {key} for room {room}")
+            setattr(room, key, processed_data[key])
+            
+            project_rooms_with_room_type = db.session.query(models.Rooms).filter(models.Rooms.room_type_uid == room_uid).all()
+            for project_room in project_rooms_with_room_type:
+                print("Changing project rooms")
+                setattr(project_room, key, processed_data[key])
+                update_ventilation_calculations(project_room.uid)
+            break
+    try:
+        db.session.commit()
+        return True
+    except Exception as e:
+        print("Commit failed")
+        db.session.rollback()
+        globals.log(f"update_room_type_data(): {e}")
+        return False
+
 
 def get_room_type_name(specification: str, room_uid: int) -> str:
     room_type_name = db.session.query(models.RoomTypes.name).join(models.Specifications).filter(models.Specifications.name == specification, models.RoomTypes.uid == room_uid).first()
@@ -813,7 +846,7 @@ def find_room_type_for_specification(spec_uid: str, room_type_name: str) -> bool
         return False
 
 def delete_room_type_from_spec(room_uid) -> bool:
-    room = get_room_type()
+    room = db.session.query(models.RoomTypes).filter(models.RoomTypes.uid == room_uid).first()
     try:
         db.session.delete(room)
         db.session.commit()
@@ -836,10 +869,9 @@ def delete_all_room_types_spec(spec_uid: str) -> bool:
             db.session.rollback()
             return False
     else:
-        return False
+        return None
     
 # Get name of all room types for a specific specification
-#
 def get_specification_room_types(specification_uid: str):
     room_types = db.session.query(models.RoomTypes).join(models.Specifications).filter(models.Specifications.uid == specification_uid).all()
     #print(f"Found room types: {room_types} for specid {specification_uid}")
@@ -851,6 +883,14 @@ def get_specification_room_data(specification_uid: str):
     data = db.session.query(models.RoomTypes).join(models.Specifications).filter(models.Specifications.uid == specification_uid).all()
     return data
 
+def get_spec_room_type_data(room_uid: str) -> dict:
+    room = db.session.query(models.RoomTypes).filter(models.RoomTypes.uid == room_uid).first()
+    if room:
+        room_data = room.get_json()
+        return room_data
+    else:
+        return None
+    
 
 def new_specification_room_type(specification_uid: int, data) -> bool:
     room_control = ""
@@ -873,11 +913,11 @@ def new_specification_room_type(specification_uid: int, data) -> bool:
     db_neighbour = ""
     db_corridor = ""
 
-    if db_technical in data:
+    if "db_technical" in data:
         db_technical = data["db_technical"]
-    if db_neighbour in data:
+    if "db_neighbour" in data:
         db_neighbour = data["db_neighbour"]
-    if db_corridor in data:
+    if "db_corridor" in data:
         db_corridor = data["db_corridor"]
 
     uid = globals.encode_uid_base64(uuid4())

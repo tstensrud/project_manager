@@ -15,11 +15,11 @@
   --table-button-border: #1f1c2e;
   --table-button-background: rgb(18, 28, 38);
   --table-border:1px solid rgb(43, 53, 64);
-  --table-hover: #49494910;
+  --table-hover: #4949492a;
   --navbar-active-link: #24633c;
   --navbar-main-color: rgb(18, 28, 38);
   --svg-icon-color: #00FFA7;
-  --marked-row: #49494959;
+  --marked-row: #1e7e3659;
   --form-elements-border-radius: 6px;
   --grey-text: rgba(212, 212, 212, 0.473);
 }

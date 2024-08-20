@@ -14,9 +14,7 @@ function VentilationSummary({ projectId }) {
                     <CardTitle svg={<VentIcon />} title="Ventilasjonsdata" />
                     {
                         loading && loading === true ? (
-                            <>
-                                <LoadingSpinner />
-                            </>
+                            <LoadingSpinner />
                         ) : (
                             <>
                                 {

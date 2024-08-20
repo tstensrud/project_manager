@@ -36,8 +36,6 @@ function Navbar() {
 
     return (
         <>
-
-
             <div className="header no-print">
                 <div className="navbar-button-container">
                     <div className="dropdown">
@@ -53,7 +51,7 @@ function Navbar() {
                             <Link to={`sanitary/${activeProject}`}>Sanitæranlegg</Link>
                             <Link to={`sanitary/equipment/${activeProject}`}>Sanitærutstyr</Link>
                             <Link to={`sanitary/shafts/${activeProject}`}>Sanitærsjakter</Link>
-                            <Link to={``}>Rapporter</Link>
+                            <Link to={`reports/${activeProject}`}>Rapporter</Link>
                             <Link to={`settings/${activeProject}`}>Prosjektinnstillinger</Link>
                         </div>
                     </div>
@@ -65,8 +63,6 @@ function Navbar() {
                             <Link to={'newproject'}>Nytt prosjekt</Link>
                         </div>
                     </div>
-
-
                 </div>
 
                 <div className="active-project-title-container">
@@ -78,7 +74,7 @@ function Navbar() {
                         <div className="dropdown">
                             <button className="dropbtn">Kravspesifikasjoner</button>
                             <div className="dropdown-content">
-                                <Link to={`specifications/${activeProject}`}>Kravspesifikasjoner</Link>
+                                <Link to={`specifications/`}>Kravspesifikasjoner</Link>
                                 <Link to={'newspecification'}>Ny kravspesifikasjon</Link>
                             </div>
                         </div>

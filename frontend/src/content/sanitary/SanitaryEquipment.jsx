@@ -85,15 +85,14 @@ function SanitaryEquipment() {
             <div className='main-content'>
                 {
                     roomDataLoading === true || buildingDataLoading === true ? (
-                        <>
-                            <LoadingSpinner />
-                        </>
+                        <LoadingSpinner />
                     ) : (
                         <>
                             <div className="text-container-above-tables no-print">
                                 {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
-                                    <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
-                                        {buildingData.building_data[key].BuildingName}</button> &nbsp;</>
+                                    <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
+                                        {buildingData.building_data[key].BuildingName}
+                                    </button>
                                 ))}
 
                             </div>

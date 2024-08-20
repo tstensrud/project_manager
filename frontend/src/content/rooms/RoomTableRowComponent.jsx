@@ -9,7 +9,7 @@ import useDeleteData from '../../hooks/useDeleteData'
 import MessageBox from '../../layout/MessageBox';
 
 
-function RoomTableRowComponent({roomId, msgToParent, totalColumns, index}) {
+function RoomTableRowComponent({roomId, msgToParent, totalColumns }) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
@@ -68,7 +68,6 @@ function RoomTableRowComponent({roomId, msgToParent, totalColumns, index}) {
             sendMessageToParent("deleted");
             setUndoButton(true);
             setUndoDeleteData({"undo": true});
-            
         }
 
         const handleBlur = () => {
@@ -137,7 +136,7 @@ function RoomTableRowComponent({roomId, msgToParent, totalColumns, index}) {
                 <>
                     <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
                     <td className={cellClass}>{roomData ? roomData.room_data.BuildingName : ''}</td>
-                    <td className={cellClass}>{roomData ? roomData.room_data.Floor : ''}</td>
+                    {renderEditableCell("Floor")}
                     {renderEditableCell("RoomNumber")}
                     <td className={cellClass}>{roomData ? roomData.room_data.RoomTypeName : ''}</td>
                     {renderEditableCell("RoomName")}

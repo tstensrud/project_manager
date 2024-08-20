@@ -31,9 +31,7 @@ function Logout(props) {
   }, [props, navigate]);
 
     return(
-      <>
       <h1>Du har logget ut</h1>
-      </>
     )
 }
 

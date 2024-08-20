@@ -154,4 +154,34 @@
     margin-top: 20px;
 }
 
+.delete-confirmation-wrapper {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    justify-content: center; 
+    align-items: center;
+    z-index: 1000;
+    background-color: rgba(131, 0, 0, 0.295);
+  }
+  
+  .delete-confirmation-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
+  .delete-confirmation-card {
+    background-color: var(--app-content-secondary-color);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    height: 400px;
+    justify-content: center;
+    align-items: center;
+    text-align: center; 
+  }

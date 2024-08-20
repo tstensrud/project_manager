@@ -23,17 +23,15 @@ function SanitaryShafts() {
                 <div className="text-container-above-tables no-print">
 
                 </div>
-                
+
                 {
                     buildingDataLoading && buildingDataLoading === true ? (
-                        <>
                         <div className="flex-container-center">
                             <LoadingSpinner />
                         </div>
-                        </>
                     ) : (
                         <>
-                        <TableTop />
+                            <TableTop />
                             <div className="table-wrapper">
                                 <table className="fl-table">
                                     <thead>
@@ -52,28 +50,21 @@ function SanitaryShafts() {
                                     </thead>
                                     <tbody>
                                         {
-                                            <>
-                                                {
-                                                    buildingData && buildingData.building_data.map((building, buildingIndex) => (
-                                                        Object.keys(building.shaft_summaries).map((shaft, shaftIndex) => (
-                                                            <>
-                                                                {building.floors.map((floor, floorIndex) => {
-                                                                    const summary = building.shaft_summaries[shaft][floor] || {};
-
-                                                                    return (
-                                                                        <>
-                                                                            <SanitaryShaftTableRowComponent key={`${buildingIndex}-${shaftIndex}-${floorIndex}`} data={summary} shaft={shaft} floor={floor} name={building.BuildingName} />
-                                                                        </>
-                                                                    );
-                                                                })}
-                                                                <tr>
-                                                                    <td style={{ height: "30px" }}></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                                                </tr>
-                                                            </>
-                                                        ))
-                                                    ))}
-
-                                            </>
+                                            buildingData && buildingData.building_data.map((building, buildingIndex) => (
+                                                Object.keys(building.shaft_summaries).map((shaft, shaftIndex) => (
+                                                    <React.Fragment key={shaftIndex}>
+                                                        {building.floors.map((floor, floorIndex) => {
+                                                            const summary = building.shaft_summaries[shaft][floor] || {};
+                                                            return (
+                                                                <SanitaryShaftTableRowComponent key={`${buildingIndex}-${shaftIndex}-${floorIndex}`} data={summary} shaft={shaft} floor={floor} name={building.BuildingName} />
+                                                            );
+                                                        })}
+                                                        <tr key={buildingIndex}>
+                                                            <td style={{ height: "30px" }}></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                                        </tr>
+                                                    </React.Fragment>
+                                                ))
+                                            ))
                                         }
                                     </tbody >
                                 </table>

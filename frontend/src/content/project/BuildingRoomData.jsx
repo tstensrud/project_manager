@@ -12,9 +12,8 @@ function BuildingRoomData({ projectId }) {
                     <CardTitle svg={<BuildingIcon />} title="Bygnings- og romdata" />
                     {
                         loading && loading === true ? (
-                            <>
-                                <LoadingSpinner />
-                            </>
+                            <LoadingSpinner />
+
                         ) : (
                             <>
                                 {

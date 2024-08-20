@@ -52,17 +52,11 @@ function Login(props) {
     }
 
     return (
-        <>
             <div style={{ display: "flex", width: "100%", height: "100%", justifyContent: "center", textAlign: "center", alignItems: "center" }}>
-            {
-                loading && loading === true ? (
-                    <>
-
+                {
+                    loading && loading === true ? (
                         <LoadingSpinner />
-
-                    </>
-                ) : (
-                    <>
+                    ) : (
                         <div className="login-page">
                             <form className="login-form" onSubmit={logMeIn}>
                                 <p className="message">Structor TS prosjekter</p>
@@ -76,11 +70,9 @@ function Login(props) {
                                 <p>{error && error.response.data ? (<>{error.response.data.error}</>) : ('')}</p>
                             </form>
                         </div>
-                    </>
-                )
-            }
-        </div >
-        </>
+                    )
+                }
+            </div >
     );
 }
 

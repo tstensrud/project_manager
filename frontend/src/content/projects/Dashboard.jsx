@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
@@ -13,6 +13,7 @@ function Dashboard() {
 
   const [projectId, setProjectId] = useState('');
   const { data, loading, error } = useFetch('/projects/');
+  const inputRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,20 +31,20 @@ function Dashboard() {
   }
 
   const handleSubmit = () => {
+    if (projectId === "" ) {
+      inputRef.current.focus();
+      return;
+    }
     navigate(`/project/${projectId}`);
   }
-
-  if (error) return <>Error: {error.message}</>;
+  
   return (
     <>
       <SubTitleComponent svg={<HeaderIcon />} headerText={"Dashboard - velg prosjekt"} projectName={""} projectNumber={""} />
-
       <div className="main-content">
         {
           loading && loading === true ? (
-            <>
-              <LoadingSpinner />
-            </>
+            <LoadingSpinner />
           ) : (
             <>
               <div className="flex-container-row">
@@ -53,7 +54,7 @@ function Dashboard() {
                     <form className="custom-form profile-form" onSubmit={handleSubmit}>
                       <p className="info">Velg prosjekt å jobbe på fra menyen under, eller opprett nytt prosjekt fra menyen over: Dashboard - Nytt prosjekt</p>
                       <p className="info">
-                        <select onChange={handleChange}>
+                        <select ref={inputRef} onChange={handleChange}>
                           <option>- Velg prosjekt -</option>
                           {Array.isArray(data?.data) ? (
                             data.data.map((project) => (
@@ -70,6 +71,9 @@ function Dashboard() {
                         </button>
                       </p>
                     </form>
+                  </div>
+                  <div>
+                    {error && error.message}
                   </div>
                 </div>
               </div>

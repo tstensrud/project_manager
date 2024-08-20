@@ -25,6 +25,7 @@ import ProtectedRoute from './login/ProtectedRoute';
 import SanitaryEquipment from './content/sanitary/SanitaryEquipment';
 import SanitaryShafts from './content/sanitary/SanitaryShafts';
 import Sanitary from './content/sanitary/Sanitary';
+import Reports from './content/reports/Reports';
 
 function App() {
 
@@ -40,9 +41,9 @@ function App() {
           <>
             <Route path="/" element={<Layout />}>
               <Route path="dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
-              <Route path="specifications/edit/:suid" element={<ProtectedRoute element={<EditSpecification />}/>}/>
-              <Route path="specifications/:projectId" element={<ProtectedRoute element={<Specifications />} />} />
-              <Route path="specifications/:suid/:projectId" element={<ProtectedRoute element={<Specification />} />} />
+              <Route path="specifications/edit/:suid/:name" element={<ProtectedRoute element={<EditSpecification />}/>}/>
+              <Route path="specifications" element={<ProtectedRoute element={<Specifications />} />} />
+              <Route path="specifications/:suid/" element={<ProtectedRoute element={<Specification />} />} />
               <Route path="specifications/:suid/new_room" element={<ProtectedRoute element={<NewRoomSpec />} />} />
               <Route path="newspecification" element={<ProtectedRoute element={<NewSpec />} />} />
               <Route path="userprofile" element={<ProtectedRoute element={<UserProfile />} />} />
@@ -59,6 +60,7 @@ function App() {
               <Route path="sanitary/:projectId" element={<ProtectedRoute element={<Sanitary />} />} />
               <Route path="sanitary/equipment/:projectId" element={<ProtectedRoute element={<SanitaryEquipment />} />} />
               <Route path="sanitary/shafts/:projectId" element={<ProtectedRoute element={<SanitaryShafts />} />} />
+              <Route path="reports/:projectId" element={<ProtectedRoute element={<Reports />} />} />
             </Route>
           </>)}
         <Route path="*" element={<Login setToken={setToken} />} />

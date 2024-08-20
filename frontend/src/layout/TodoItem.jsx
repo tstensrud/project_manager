@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import useUpdateData from '../hooks/useUpdateData';
 
-function TodoItem({user, itemData}) {
+function TodoItem({ user, itemData }) {
     const [projectId, setProjectId] = useState();
-    const {data, response, setData, handleSubmit} = useUpdateData(`/project_api/${projectId}/todo_item_complete/`);
+    const { data, response, setData, handleSubmit } = useUpdateData(`/project_api/${projectId}/todo_item_complete/`);
     const [todoClass, setTodoClass] = useState("todo-popup-listitem");
     const [buttonClass, setButtonClass] = useState("todo-list-button");
 
@@ -17,10 +17,10 @@ function TodoItem({user, itemData}) {
             ["completed_by"]: user,
         }
         setData(updatedData);
-        
-    },[]);
 
-    const handleComplete =  async (e) => {
+    }, []);
+
+    const handleComplete = async (e) => {
         console.log(data)
         await handleSubmit(e);
         setTodoClass("todo-completed");
@@ -28,17 +28,15 @@ function TodoItem({user, itemData}) {
     }
 
     return (
-        <>
-            <div className={todoClass}>
-                <p>{itemData.date} - {itemData.author_uid}</p>
-                <p>{itemData.content}</p>
-                <p>
-                    <form>
-                        <button onClick={handleComplete} className={buttonClass}>Utført</button>
-                    </form>
-                </p>
-            </div>
-        </>
+        <div className={todoClass}>
+            <p>{itemData.date} - {itemData.author_uid}</p>
+            <p>{itemData.content}</p>
+            <p>
+                <form>
+                    <button onClick={handleComplete} className={buttonClass}>Utført</button>
+                </form>
+            </p>
+        </div>
     );
 }
 

@@ -31,16 +31,12 @@ function BuildingSummary({ buildingData }) {
                     {MinusIcon && <MinusIcon />}
                     <span className="extract-text"> {extractAir.toLocaleString()} </span> m<sup>3</sup>/h
                 </p>
-
-                <p>
-                    Betjenes av ventilasjonssystem: <br />
-                    <ul>
-                        {
-                            buildingData.systems.map((system) => <><li>{system}</li></>)
-                        }
-                    </ul>
-                </p>
-
+                <p>Betjenes av ventilasjonssystem:</p>
+                <ul>
+                    {
+                        buildingData.systems.map((system, index) => <><li key={index}>{system}</li></>)
+                    }
+                </ul>
                 <p className="info">Prosjektert varme<br />
                     {Number((heating / 1000).toFixed(1)).toLocaleString()} kW
                 </p>

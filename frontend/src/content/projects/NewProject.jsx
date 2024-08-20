@@ -19,7 +19,7 @@ function NewProject() {
     const submitProject = async (e) => {
         await handleSubmit(e);
         setData('');
-        navigate(`/project_manager/dashboard`);
+        navigate(`/dashboard`);
     }
 
     return (

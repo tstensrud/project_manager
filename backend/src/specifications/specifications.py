@@ -26,8 +26,8 @@ def refresh_expiring_jwts(response):
     except (RuntimeError, KeyError):
         return response
     
-@jwt_required()
 @specifications_bp.route('/', methods=['GET'])
+@jwt_required()
 def specifications():
     spec = "Skok skoler 2022-o2023"
     specification_data = dbo.get_specification_room_types(spec)
@@ -37,8 +37,9 @@ def specifications():
     room_types_list = [{"id": key, "name": value} for key, value in room_id_type.items()]
     return jsonify(room_types_list)
 
-@jwt_required()
+
 @specifications_bp.route('/get_specifications/', methods=['GET'])
+@jwt_required()
 def get_specifications():
     specifications = dbo.get_specifications()
     spec_data = {}
@@ -47,8 +48,8 @@ def get_specifications():
     spec_list = [{"id": key, "name": value} for key, value in spec_data.items()]
     return jsonify({"data": spec_list})
 
-@jwt_required()
 @specifications_bp.route('/get_spec_room_data/<spec_uid>/', methods=['GET'])
+@jwt_required()
 def get_spec(spec_uid):
     specification = dbo.get_specification_room_data(spec_uid)
     spec = dbo.get_specification(spec_uid)
@@ -57,10 +58,22 @@ def get_spec(spec_uid):
     if specification:
         return jsonify({"data": specification_data, "spec_name": spec_name})
     else:
-        return jsonify({"error": "Ingen romdata lagt inn"})
-    
+        return jsonify({"error": "Ingen romdata lagt inn", "spec_name": spec_name})
+
+@specifications_bp.route('/get_spec_rooms/<spec_uid>/', methods=['GET'])
 @jwt_required()
+def get_spec_rooms(spec_uid):
+    room_types = dbo.get_specification_room_data(spec_uid)
+    if room_types:
+        uids = []
+        for room_type in room_types:
+            uids.append(room_type.uid)
+        return jsonify({"success": True, "message": "Roomtype UIDs", "data": uids})
+    else:
+        return jsonify({"success": False, "message": "No roomtypes found"})
+    
 @specifications_bp.route('/get_spec_room_types/<spec_uid>/', methods=['GET'])
+@jwt_required()
 def get_specification_room_types(spec_uid):
     specification_data = dbo.get_specification_room_types(spec_uid)
     spec = dbo.get_specification(spec_uid)
@@ -71,6 +84,7 @@ def get_specification_room_types(spec_uid):
     return jsonify({"spec_room_type_data": room_types_list})
 
 """ @jwt_required()
+
 @specifications_bp.route('/new_rooms/<spec_uid>/', methods=['POST'])
 def new_room(spec_uid):
     file = request.files['file']
@@ -89,8 +103,8 @@ def new_room(spec_uid):
     
     return jsonify({"message": "Fil mottatt"}) """
 
-@jwt_required()
 @specifications_bp.route('/new_room/<spec_uid>/', methods=['POST'])
+@jwt_required()
 def new_room_for_spec(spec_uid):
     data = request.get_json()
     if data:
@@ -119,22 +133,25 @@ def new_room_for_spec(spec_uid):
     return jsonify({"error", "Kunne ikke legge til nytt rom."})
 
 
-@jwt_required()
 @specifications_bp.route('/new_specification/', methods=['POST'])
+@jwt_required()
 def new_specification():
     data = request.get_json()
-    spec_name = escape(data["spec_name"])
-    if dbo.find_specification_name(spec_name):
-        return jsonify({"error", f"Kravspesifikasjon {spec_name} finnes allerede i databasen"})
-    else:
-        new_spec = dbo.new_specifitaion(spec_name)
-        if new_spec is not None:
-            return jsonify({"response": "Kravspesfikasjon opprettet", "data": new_spec})
+    if data:
+        spec_name = escape(data["spec_name"])
+        if dbo.find_specification_name(spec_name):
+            return jsonify({"error", f"Kravspesifikasjon {spec_name} finnes allerede i databasen"})
         else:
-            return jsonify({"success": False, "error": "Kunne ikke opprette ny kravspesifikasjon"})
+            new_spec = dbo.new_specifitaion(spec_name)
+            if new_spec is not None:
+                return jsonify({"response": "Kravspesfikasjon opprettet", "data": new_spec})
+            else:
+                return jsonify({"success": False, "error": "Kunne ikke opprette ny kravspesifikasjon"})
+    else:
+        return jsonify({"success": False, "message": "Ingen data mottatt"})
 
-@jwt_required
 @specifications_bp.route('/delete_spec_room_type/<room_type_uid>/', methods=['DELETE'])
+@jwt_required()
 def delete_spec_room_type(room_type_uid):
     room = dbo.get_room_type(room_type_uid)
     if room:
@@ -145,13 +162,33 @@ def delete_spec_room_type(room_type_uid):
     else:
         return jsonify({"success": False, "message": f"Fant ikke romtype {room.name}"})
 
+@specifications_bp.route('/get_room_type_data/<room_uid>/', methods=['GET'])
+@jwt_required()
+def get_room_type_data(room_uid):
+    room_data = dbo.get_spec_room_type_data(room_uid)
+    
+    if room_data:
+        return jsonify({"success": True, "message": "Room type data", "data": room_data})
+    else:
+        return jsonify({"success": False, "message": "No room type data found"})
 
-@jwt_required
+@specifications_bp.route('/delete_room_type/<room_uid>/', methods=['DELETE'])
+@jwt_required()
+def delete_room_type(room_uid):
+    print(room_uid)
+    deleted_room = dbo.delete_room_type_from_spec(room_uid)
+    if deleted_room:
+        return jsonify({"success": True, "message": "Room deleted"})
+    else:
+        return jsonify({"success": False, "error": "Kunne ikke slette rom"})
+
+
 @specifications_bp.route('/delete_spec/<spec_uid>/', methods=['DELETE'])
+@jwt_required()
 def delete_spec(spec_uid):
     spec = dbo.get_specification(spec_uid)
     if spec:
-        if dbo.delete_all_room_types_spec(spec_uid):
+        if dbo.delete_all_room_types_spec(spec_uid) is not False:
             if dbo.delete_specification(spec_uid):
                 return jsonify({"success": True, "message": "Spesifikasjon og tilhørende romtyper slettet"})
             else:
@@ -162,3 +199,27 @@ def delete_spec(spec_uid):
         return jsonify({"success": False, "message": f"Fant ingen kravspesifikasjon med id {spec_uid}"})
 
 
+@specifications_bp.route('/update_room/<room_uid>/', methods=['PATCH'])
+@jwt_required()
+def update_room(room_uid):
+    data = request.get_json()
+    if data:
+        processed_data = {}
+        float_values = ["air_per_person", "air_emission", "air_process", "air_minimum"]
+        for key, value in data.items():
+            escaped_value = escape(value).strip()
+            if key in float_values:
+                converted_value = replace_and_convert_to_float(escaped_value)
+                if converted_value is not False:
+                    processed_data[key] = converted_value
+                else:
+                    return jsonify({"success": False, "error": "Luftmengde må kun inneholde tall"})
+            else:
+                processed_data[key] = escape(value).strip()
+        if dbo.update_room_type_data(processed_data, room_uid):
+            return jsonify({"success": True, "message": "Updated room"})
+        else:
+            return jsonify({"success": False, "error": "Kunne ikke oppdatere romdata"})
+        
+
+        

@@ -8,90 +8,90 @@ import useFetch from '../../hooks/useFetch';
 import useUpdateData from '../../hooks/useUpdateData';
 
 
-function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, totalColumns }) {
-        const {projectId} = useParams();
-        const { setActiveProject } = useContext(GlobalContext);
+function HeatingTableRowComponent({ roomId, msgToParent, settingsUpdateState, totalColumns }) {
+    const { projectId } = useParams();
+    const { setActiveProject } = useContext(GlobalContext);
 
-        
-        // Initial fetches and refetch
-        const {data: heatingData, loading: heatingLoading, refetch: heatingRefetch} = useFetch(`/project_api/${projectId}/heating/get_room/${roomId}/`);
-        
-        // Update data
-        const {data: updatedRoomData, response, setData, handleSubmit: updateRoomData} = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomId}/`);
-        
-        // Edit of values
-        const [editingCell, setEditingCell] = useState(null);
-        const [editedData, setEditedData] = useState(null);
 
-        // Marking a row
-        const [markedRow, setMarkedRow] = useState('');
+    // Initial fetches and refetch
+    const { data: heatingData, loading: heatingLoading, refetch: heatingRefetch } = useFetch(`/project_api/${projectId}/heating/get_room/${roomId}/`);
 
-        // Room data
-        const [showRoomData, setShowRoomData] = useState(false);
+    // Update data
+    const { data: updatedRoomData, response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomId}/`);
 
-        // useEffects
-        useEffect(() => { // Refetch upon received message theat heating settings has changed
+    // Edit of values
+    const [editingCell, setEditingCell] = useState(null);
+    const [editedData, setEditedData] = useState(null);
+
+    // Marking a row
+    const [markedRow, setMarkedRow] = useState('');
+
+    // Room data
+    const [showRoomData, setShowRoomData] = useState(false);
+
+    // useEffects
+    useEffect(() => { // Refetch upon received message theat heating settings has changed
+        heatingRefetch();
+    }, [settingsUpdateState]);
+
+    useEffect(() => {
+        setActiveProject(projectId);
+    }, []);
+
+    useEffect(() => {
+        if (heatingData) {
+            setEditedData('');
+        }
+    }, [heatingData]);
+
+    // Handlers
+    const sendMessageToParent = (msg) => {
+        msgToParent(msg);
+    }
+
+    const handleEdit = (cellName) => {
+        setEditingCell(cellName);
+    };
+
+    const handleChange = (e, cellName) => {
+        setData((prevData) => ({
+            ...prevData,
+            [cellName]: e.target.value,
+        }));
+    };
+
+    const handleBlur = () => {
+        setEditingCell(null);
+    };
+
+    const handleKeyDown = async (e) => {
+        if (e.key === "Enter") {
+            await updateRoomData(e);
+            handleBlur();
+            setData('');
             heatingRefetch();
-        },[settingsUpdateState]);
-
-        useEffect(() => {
-            setActiveProject(projectId);
-        },[]);
-
-        useEffect(() => {
-            if(heatingData) {
-                setEditedData('');
-            }
-        },[heatingData]);
-        
-        // Handlers
-        const sendMessageToParent = (msg) => {
-            msgToParent(msg);
+            sendMessageToParent("updateSummaries");
+        } if (e.key == "Escape") {
+            handleBlur();
+            return;
         }
+    };
 
-        const handleEdit = (cellName) => {
-            setEditingCell(cellName);
-        };
-    
-        const handleChange = (e, cellName) => {
-            setData((prevData) => ({
-                ...prevData,
-                [cellName]: e.target.value,
-            }));
-        };
-
-        const handleBlur = () => {
-            setEditingCell(null);
-        };
-    
-        const handleKeyDown = async (e) => {
-            if (e.key === "Enter") {
-                await updateRoomData(e);
-                handleBlur();
-                setData('');
-                heatingRefetch();
-                sendMessageToParent("updateSummaries");
-            } if (e.key == "Escape") {
-                handleBlur();
-                return;
-            }
-        };
-
-        const handleOnMarkedRow = () => {
-            if (markedRow === '') {
-                setMarkedRow('marked-row');
-            } else {
-                setMarkedRow('');
-            }   
+    const handleOnMarkedRow = () => {
+        if (markedRow === '') {
+            setMarkedRow('marked-row');
+        } else {
+            setMarkedRow('');
         }
+    }
 
-        const handleOpenRoomData = (e) => {
-            e.preventDefault();
-            setShowRoomData(!showRoomData);
-        }
+    const handleOpenRoomData = (e) => {
+        e.preventDefault();
+        setShowRoomData(!showRoomData);
+    }
 
-        const renderEditableCell = (cellName) => (
-            <td name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+    const renderEditableCell = (cellName) => (
+        <td name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && heatingData ? (
                 <input
                     type="text"
@@ -109,47 +109,47 @@ function HeatingTableRowComponent({roomId, msgToParent, settingsUpdateState, tot
 
     return (
         <>
-        {showRoomData ? <RoomData heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData}/> : ''}
-        {response && response.error !== null && response.error !== undefined ? <MessageBox message={response.error} /> : ''}
-        <tr className={markedRow}>
+            {showRoomData ? <RoomData heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
+            {response && response.error !== null && response.error !== undefined ? <MessageBox message={response.error} /> : ''}
+            <tr className={markedRow}>
 
-            {
-                heatingLoading && heatingLoading === true ? (
-                    <>
-                    {
-                        Array.from({length: totalColumns}).map((_, index) => (
-                            <td className="loading-text" key={index}>####</td>
-                        ))
-                    }
-                    </>
-                ) : (
-                    <>
+                {
+                    heatingLoading && heatingLoading === true ? (
+                        <>
+                            {
+                                Array.from({ length: totalColumns }).map((_, index) => (
+                                    <td className="loading-text" key={index}>####</td>
+                                ))
+                            }
+                        </>
+                    ) : (
+                        <>
                             <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
-            <td>{heatingData ? heatingData.room_data.Floor : ''}</td>
-            <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
-                <strong><span className="table-link">{heatingData ? heatingData.room_data.RoomNumber : ''}</span></strong>
-                <br/>
-                <span className="table-text-grey">{heatingData ? heatingData.room_data.RoomName : ''}</span>
-            </td>
-            {renderEditableCell("RoomHeight")}
-            {renderEditableCell("OuterWallArea")}
-            {renderEditableCell("InnerWallArea")}
-            {renderEditableCell("WindowDoorArea")}
-            {renderEditableCell("RoofArea")}
-            {renderEditableCell("FloorGroundArea")}
-            {renderEditableCell("FloorAirArea")}
-            <td><strong>{heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}</strong></td>
-            <td>{heatingData ? heatingData.heating_data.ChosenHeating : ''}</td>
-            <td>{heatingData && heatingData ? (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1): ''}</td>
-            {renderEditableCell("HeatSource")}
-            <td>
-                {heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum ? (<><strong>NB!</strong> For lite valgt varme</>) : (<></>)}
-            </td>
-                    </>
-                )
-            }
+                            <td>{heatingData ? heatingData.room_data.Floor : ''}</td>
+                            <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
+                                <strong><span className="table-link">{heatingData ? heatingData.room_data.RoomNumber : ''}</span></strong>
+                                <br />
+                                <span className="table-text-grey">{heatingData ? heatingData.room_data.RoomName : ''}</span>
+                            </td>
+                            {renderEditableCell("RoomHeight")}
+                            {renderEditableCell("OuterWallArea")}
+                            {renderEditableCell("InnerWallArea")}
+                            {renderEditableCell("WindowDoorArea")}
+                            {renderEditableCell("RoofArea")}
+                            {renderEditableCell("FloorGroundArea")}
+                            {renderEditableCell("FloorAirArea")}
+                            <td><strong>{heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}</strong></td>
+                            <td>{heatingData ? heatingData.heating_data.ChosenHeating : ''}</td>
+                            <td>{heatingData && heatingData ? (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1) : ''}</td>
+                            {renderEditableCell("HeatSource")}
+                            <td>
+                                {heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum ? (<><strong>NB!</strong> For lite valgt varme</>) : (<></>)}
+                            </td>
+                        </>
+                    )
+                }
 
-        </tr>
+            </tr>
         </>
     );
 }

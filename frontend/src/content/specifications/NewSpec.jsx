@@ -23,7 +23,7 @@ function NewSpec() {
         await handleSubmit(e);
         setData('');
     }
-    //console.log(response && response.response)
+
     return (
         <>
 

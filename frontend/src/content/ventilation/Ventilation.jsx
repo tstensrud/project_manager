@@ -87,19 +87,16 @@ function Ventilation() {
 
                 {
                     loading && loading === true ? (
-                        <>
-                            <div style={{ display: "flex", width: "100%", height: "100%", justifyContent: "center", textAlign: "center", alignItems: "center" }}>
-                                <LoadingSpinner />
-                            </div>
-                        </>
+                        <div style={{ display: "flex", width: "100%", height: "100%", justifyContent: "center", textAlign: "center", alignItems: "center" }}>
+                            <LoadingSpinner />
+                        </div>
                     ) : (
                         <>
                             <div className="text-container-above-tables no-print">
-
-
                                 {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
-                                    <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
-                                        {buildingData.building_data[key].BuildingName}</button> &nbsp;</>
+                                    <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
+                                        {buildingData.building_data[key].BuildingName}
+                                    </button>
                                 ))}
 
                             </div>
@@ -113,19 +110,21 @@ function Ventilation() {
                                         <div className="table-wrapper">
                                             <table className="fl-table">
                                                 <thead>
-                                                    <th width="2%">#</th>
-                                                    <th width="2%">Etasje</th>
-                                                    <th width="10%">Rom</th>
-                                                    <th width="6%">Sum personer <br /> m<sup>3</sup>/h</th>
-                                                    <th width="6%">Sum emisjon <br /> m<sup>3</sup>/h</th>
-                                                    <th width="6%">Prosess <br /> m<sup>3</sup>/h</th>
-                                                    <th width="6%">Dimensjonert <br /> m<sup>3</sup>/h</th>
-                                                    <th width="6%">Tilluft<br /> m<sup>3</sup>/h</th>
-                                                    <th width="6%">Avtrekk<br /> m<sup>3</sup>/h</th>
-                                                    <th width="6%">m<sup>3</sup>/m<sup>2</sup></th>
-                                                    <th width="6%">Min <br />m<sup>3</sup>/h</th>
-                                                    <th width="6%">System</th>
-                                                    <th width="31%">Merknad</th>
+                                                    <tr>
+                                                        <th width="2%" className="no-print">#</th>
+                                                        <th width="2%">Etasje</th>
+                                                        <th width="10%">Rom</th>
+                                                        <th width="6%">Sum personer <br /> m<sup>3</sup>/h</th>
+                                                        <th width="6%">Sum emisjon <br /> m<sup>3</sup>/h</th>
+                                                        <th width="6%">Prosess <br /> m<sup>3</sup>/h</th>
+                                                        <th width="6%">Dimensjonert <br /> m<sup>3</sup>/h</th>
+                                                        <th width="6%">Tilluft<br /> m<sup>3</sup>/h</th>
+                                                        <th width="6%">Avtrekk<br /> m<sup>3</sup>/h</th>
+                                                        <th width="6%">m<sup>3</sup>/m<sup>2</sup></th>
+                                                        <th width="6%">Min <br />m<sup>3</sup>/h</th>
+                                                        <th width="6%">System</th>
+                                                        <th width="31%" className="no-print">Merknad</th>
+                                                    </tr>
                                                 </thead>
                                                 <tbody>
                                                     {
@@ -176,14 +175,17 @@ function Ventilation() {
                                                                         }
 
                                                                     </td>
-                                                                    <td></td><td></td><td></td><td></td>
+                                                                    <td className="no-print"></td>
+                                                                    <td className="no-print"></td>
+                                                                    <td className="no-print"></td>
+                                                                    <td className="no-print"></td>
                                                                 </tr>
                                                             </React.Fragment>
                                                         ))}
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <th></th>
+                                                        <th className="no-print"></th>
                                                         <th></th>
                                                         <th>
                                                             <strong>Sum</strong>
@@ -201,11 +203,11 @@ function Ventilation() {
                                                         <th>
                                                             <strong>{buildingSummaryData?.[0]?.extractAir ? <>{Number((buildingSummaryData[0].extractAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
                                                         </th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
+                                                        <th className="no-print"></th>
+                                                        <th className="no-print"></th>
+                                                        <th className="no-print"></th>
+                                                        <th className="no-print"></th>
+                                                        <th className="no-print"></th>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -216,11 +218,7 @@ function Ventilation() {
                         </>
                     )
                 }
-
-
-
             </div>
-
         </>
     );
 }

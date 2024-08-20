@@ -9,12 +9,12 @@ import SubTitleComponent from '../../layout/SubTitleComponent';
 import MessageBox from '../../layout/MessageBox';
 
 function NewRoomSpec() {
-    const {suid} = useParams();
-    
+    const { suid } = useParams();
+
     // Hooks
     const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
-    const {data, loading: specLoading, error: specError, refetch} = useFetch(`/specifications/get_spec_room_data/${suid}/`);
-    const {data: newData, setData, loading, response, error, handleSubmit} = useSubmitData(`/specifications/new_room/${suid}/`);
+    const { data, loading: specLoading, error: specError, refetch } = useFetch(`/specifications/get_spec_room_data/${suid}/`);
+    const { data: newData, setData, loading, response, error, handleSubmit } = useSubmitData(`/specifications/new_room/${suid}/`);
 
     // useStates
     const [submitted, setSubmitted] = useState(false);
@@ -39,12 +39,12 @@ function NewRoomSpec() {
     const notesRef = useRef(null);
 
     useEffect(() => {
-        setData({"vav": "1", "ventilation_principle": "Omrøring", "heat_ex": "R", "co2": false, "temp": false, "movement": false, "moisture": false, "time": false, "notes": ''})
-    },[]);
+        setData({ "vav": "1", "ventilation_principle": "Omrøring", "heat_ex": "R", "co2": false, "temp": false, "movement": false, "moisture": false, "time": false, "notes": '' })
+    }, []);
 
     useEffect(() => {
-        setData({"vav": "1", "ventilation_principle": "Omrøring", "heat_ex": "R", "co2": false, "temp": false, "movement": false, "moisture": false, "time": false, "notes": ''})
-    },[submitted]);
+        setData({ "vav": "1", "ventilation_principle": "Omrøring", "heat_ex": "R", "co2": false, "temp": false, "movement": false, "moisture": false, "time": false, "notes": '' })
+    }, [submitted]);
 
     const handleInputChange = (e) => {
         setData({
@@ -100,11 +100,11 @@ function NewRoomSpec() {
                     <div className="flex-container-row">
                         <div className="cards-large">
                             <div className="information [ card ]">
-                                <h2 className="card-title">Fyll inn romdata - <Link to={`/specifications/${suid}/${activeProject}/`} >{data && data.spec_name}</Link></h2>
+                                <h2 className="card-title">Fyll inn romdata - <Link to={`/specifications/${suid}`} >{data && data.spec_name}</Link></h2>
 
                                 <p className="info">
                                     Romtype <br />
-                                    <input ref={roomTypeRef} type="text" onChange={handleInputChange} className="form-input" name="room_type" placeholder="eks: Kontor" tabIndex="1" required /> {response && response.error_room_type ? (<>&nbsp; NB! Romtypen finnes allerede</>): ''}
+                                    <input ref={roomTypeRef} type="text" onChange={handleInputChange} className="form-input" name="room_type" placeholder="eks: Kontor" tabIndex="1" required /> {response && response.error_room_type ? (<>&nbsp; NB! Romtypen finnes allerede</>) : ''}
                                 </p>
                                 <p className="info">
                                     Luftmengde per person m<sup>3</sup>/pers <br />

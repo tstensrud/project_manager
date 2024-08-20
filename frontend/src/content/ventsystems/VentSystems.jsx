@@ -19,6 +19,8 @@ function VentSystems() {
     // Hooks
     const { data: receivedSystemsData, loading: systemsLoading, error: systemsError, refetch: systemsRefetch } = useFetch(`/project_api/${projectId}/systems/`);
     const { data: systemData, response: systemResponse, setData: setSystemData, handleSubmit: submitSystemData } = useSubmitData(`/project_api/${projectId}/new_system/`);
+    
+    // States
     const [childMessage, setChildMessage] = useState('');
 
     // Handlers
@@ -38,6 +40,7 @@ function VentSystems() {
 
     const handleSubmitNewSystem = async (e) => {
         e.preventDefault();
+
         await submitSystemData(e);
         systemsRefetch();
     }
@@ -50,6 +53,7 @@ function VentSystems() {
             setChildMessage(msg);
         }
     }
+
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Ventilasjonssytemer"} projectName={""} projectNumber={""} />
@@ -59,9 +63,7 @@ function VentSystems() {
                 {childMessage && <MessageBox message={childMessage} />}
                 {
                     systemsLoading && systemsLoading === true ? (
-                        <>
-                            <LoadingSpinner />
-                        </>
+                        <LoadingSpinner />
                     ) : (
                         <>
                             <div className="split-container-left">
@@ -102,24 +104,25 @@ function VentSystems() {
                                     receivedSystemsData ? (
                                         receivedSystemsData.systems_data === null ? (
                                             <>Ingen ssytemer lagt til</>
-
                                         ) : (
                                             <>
                                                 <TableTop />
                                                 <div className="table-wrapper">
                                                     <table className="fl-table">
                                                         <thead>
-                                                            <th width="2%">#</th>
-                                                            <th width="5%">Systemnr</th>
-                                                            <th width="10%">Plassering</th>
-                                                            <th width="10%">Betjeningsområde</th>
-                                                            <th width="7%">Viftekapasitet<br /> m<sup>3</sup>/h</th>
-                                                            <th width="5%">Gjenvinner</th>
-                                                            <th width="7%">Prosjektert tilluft<br /> m<sup>3</sup>/h</th>
-                                                            <th width="7%">Prosjektert avtrekk<br /> m<sup>3</sup>/h</th>
-                                                            <th width="5%">Spesialsystem</th>
-                                                            <th width="32%">Merknad</th>
-                                                            <th width="10%">Slett system</th>
+                                                            <tr>
+                                                                <th width="2%">#</th>
+                                                                <th width="5%">Systemnr</th>
+                                                                <th width="10%">Plassering</th>
+                                                                <th width="10%">Betjeningsområde</th>
+                                                                <th width="7%">Viftekapasitet<br /> m<sup>3</sup>/h</th>
+                                                                <th width="5%">Gjenvinner</th>
+                                                                <th width="7%">Prosjektert tilluft<br /> m<sup>3</sup>/h</th>
+                                                                <th width="7%">Prosjektert avtrekk<br /> m<sup>3</sup>/h</th>
+                                                                <th width="5%">Spesialsystem</th>
+                                                                <th width="32%">Merknad</th>
+                                                                <th width="10%">Slett system</th>
+                                                            </tr>
                                                         </thead>
                                                         <tbody>
                                                             {

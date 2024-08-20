@@ -28,22 +28,19 @@ function Sanitary() {
             <div className='main-content'>
                 {
                     loading && loading === true ? (
-                        <>
-                            <LoadingSpinner />
-                        </>
+                        <LoadingSpinner />
                     ) : (
-                        <>
-                            <div className="flex-container-row">
-                                {
-                                    data && data.building_data === null ? (
-                                        <p className="p-description">{data.error}</p>
-                                    ) : (
-                                        data && data.building_data && Object.keys(data.building_data).map((key, index) => (
-                                            <BuildingSummary buildingUid={data.building_data[key].uid} msgToParent={handleChildMessage} projectId={projectId} key={index} />
-                                        )))
-                                }
-                            </div>
-                        </>)
+                        <div className="flex-container-row">
+                            {
+                                data && data.building_data === null ? (
+                                    <p className="p-description">{data.error}</p>
+                                ) : (
+                                    data && data.building_data && Object.keys(data.building_data).map((key) => (
+                                        <BuildingSummary buildingUid={data.building_data[key].uid} msgToParent={handleChildMessage} projectId={projectId} key={data.building_data[key].uid} />
+                                    )))
+                            }
+                        </div>
+                    )
                 }
             </div>
         </>

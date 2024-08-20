@@ -4,95 +4,101 @@ import { GlobalContext } from '../../GlobalContext';
 
 import useFetch from '../../hooks/useFetch'
 import useSubmitData from "../../hooks/useSubmitData";
-import useUpdateData from '../../hooks/useUpdateData'
-import useDeleteData from '../../hooks/useDeleteData'
-
+import useUpdateData from '../../hooks/useUpdateData';
+import useDeleteData from '../../hooks/useDeleteData';
 import MessageBox from '../../layout/MessageBox';
+import DeleteBox from './DeleteBox';
 
 
 
-function SystemTableRowComponent({systemId, msgToParent, totalColumns}) {
-        const {projectId} = useParams();
-        const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
+    const { projectId } = useParams();
+    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
-        // Hooks
-        const {data: systemData, loading: systemLoading, error: systemError, refetch: systemRefetch} = useFetch(`/project_api/${projectId}/get_system/${systemId}/`);
-        const {data: updatedSystemData, response, setData, handleSubmit: updateSystemData} = useUpdateData(`/project_api/${projectId}/update_system/${systemId}/`);
-        const {data: deleteSystemId, responseDeleteSystem, setData: setDeleteData, handleSubmit: deleteSubmit} = useDeleteData(`/project_api/${projectId}/delete_system/${systemId}/`);
-        
-        // Use states
-        const [editingCell, setEditingCell] = useState(null);
-        const [editedData, setEditedData] = useState(null);
-        const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
-        const [cellClass, setRowClass] = useState("");
-        const [markedRow, setMarkedRow] = useState('');
+    // Hooks
+    const { data: systemData, loading: systemLoading, error: systemError, refetch: systemRefetch } = useFetch(`/project_api/${projectId}/get_system/${systemId}/`);
+    const { data: updatedSystemData, response, setData, handleSubmit: updateSystemData } = useUpdateData(`/project_api/${projectId}/update_system/${systemId}/`);
+    const { data: deleteSystemId, responseDeleteSystem, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/project_api/${projectId}/delete_system/${systemId}/`);
 
-        // use effects
-        useEffect(() => {
-            setActiveProject(projectId);
-            setDeleteData({"roomId": systemId});
-        },[]);
+    // Use states
+    const [editingCell, setEditingCell] = useState(null);
+    const [editedData, setEditedData] = useState(null);
+    const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
+    const [cellClass, setRowClass] = useState("");
+    const [markedRow, setMarkedRow] = useState('');
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-        useEffect(() => {
-            if(systemData) {
-                //setEditedData({ ...roomData });
-                setEditedData('');
-            }
-        },[systemData]);
+    // use effects
+    useEffect(() => {
+        setActiveProject(projectId);
+        setDeleteData({ "roomId": systemId });
+    }, []);
 
-
-        // Handlers
-        const sendMessageToParent = (msg) => {
-            msgToParent(msg);
+    useEffect(() => {
+        if (systemData) {
+            //setEditedData({ ...roomData });
+            setEditedData('');
         }
+    }, [systemData]);
 
-        const handleEdit = (cellName) => {
-            setEditingCell(cellName);
-        };
-    
-        const handleChange = (e, cellName) => {
-            //setEditedData((prevData) => ({
-            setData((prevData) => ({
-                ...prevData,
-                [cellName]: e.target.value,
-            }));
-        };
-        
-        const onDelete = async (e) => {
-            await deleteSubmit(e);
-            setDisabledDeleteButton(true);
-            setRowClass("deleted-row")
-            sendMessageToParent("deleted");
+
+    // Handlers
+    const sendMessageToParent = (msg) => {
+        msgToParent(msg);
+    }
+
+    const handleEdit = (cellName) => {
+        setEditingCell(cellName);
+    };
+
+    const handleChange = (e, cellName) => {
+        //setEditedData((prevData) => ({
+        setData((prevData) => ({
+            ...prevData,
+            [cellName]: e.target.value,
+        }));
+    };
+
+    const showDeleteBox = async (e) => {
+        e.preventDefault();
+        setShowDeleteDialog(true);
+    }
+
+    const deleteSystem = async (e) => {
+        await deleteSubmit(e);
+        setDisabledDeleteButton(true);
+        setRowClass("deleted-row")
+        sendMessageToParent("deleted");
+    }
+
+    const handleBlur = () => {
+        setEditingCell(null);
+    };
+
+    const handleKeyDown = async (e) => {
+        if (e.key === "Enter") {
+            await updateSystemData(e);
+            handleBlur();
+            setData('');
+            systemRefetch();
+        } if (e.key == "Escape") {
+            handleBlur();
+            return;
         }
+    };
 
-        const handleBlur = () => {
-            setEditingCell(null);
-        };
-    
-        const handleKeyDown = async (e) => {
-            if (e.key === "Enter") {
-                await updateSystemData(e);
-                handleBlur();
-                setData('');
-                systemRefetch();
-            } if (e.key == "Escape") {
-                handleBlur();
-                return;
-            }
-        };
-
-        const handleOnMarkedRow = () => {
-            if (markedRow === '') {
-                setMarkedRow('marked-row');
-            } else {
-                setMarkedRow('');
-            }   
+    const handleOnMarkedRow = () => {
+        if (markedRow === '') {
+            setMarkedRow('marked-row');
+        } else {
+            setMarkedRow('');
         }
+    }
 
-        const renderEditableCell = (cellName) => (
-            <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+    const renderEditableCell = (cellName) => (
+        <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && systemData ? (
-                
+
                 <input
                     type="text"
                     className="table-input"
@@ -105,26 +111,26 @@ function SystemTableRowComponent({systemId, msgToParent, totalColumns}) {
             ) : (
                 systemData ? systemData.system_data[cellName] : ''
             )}
-        </td>   
-        );
-        
-        if (response && response.error !== null && response.error !== undefined) return (<><MessageBox message={response.error} /></>);
+        </td>
+    );
+
     return (
         <>
+            {response && response.error !== null && response.error !== undefined ? (<MessageBox message={response.error} />) : (<></>)}
+
             <tr className={markedRow}>
 
                 {
                     systemLoading && systemLoading === true ? (
                         <>
                             {
-                                Array.from({length: totalColumns}).map((_, index) => (
+                                Array.from({ length: totalColumns }).map((_, index) => (
                                     <td className="loading-text">###</td>
                                 ))
                             }
                         </>
                     ) : (
                         <>
-
                             <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
                             <td className={cellClass}>{systemData ? systemData.system_data.SystemName : ''}</td>
                             {renderEditableCell("Location")}
@@ -135,16 +141,20 @@ function SystemTableRowComponent({systemId, msgToParent, totalColumns}) {
                             <td className={cellClass}>{systemData ? systemData.system_data.AirFlowExtract : ''}</td>
                             <td className={cellClass}>{systemData ? systemData.system_data.SpecialSystem : ''}</td>
                             <td className={cellClass}>
+                                {
+                                    showDeleteDialog === true ? (
+                                        <DeleteBox systemName={systemData && systemData.system_data.SystemName} setShowDeleteDialog={setShowDeleteDialog} deleteSystem={deleteSystem} />
+                                    ) : (<></>)
+                                }
                                 {systemData && systemData.system_data.AirFlowSupply !== systemData.system_data.AirFlowExtract ? (<>Ubalanse på system. </>) : (<></>)}
                                 {systemData && systemData.system_data.AirFlowSupply > systemData.system_data.AirFlow ? (<>For mye tilluft. </>) : (<></>)}
                                 {systemData && systemData.system_data.AirFlowExtract > systemData.system_data.AirFlow ? (<>For mye avtrekk. </>) : (<></>)}
                             </td>
                             <td className={cellClass}>
-                                <button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button>
+                                {showDeleteDialog === true ? (<></>) : (<button onClick={showDeleteBox} className="table-button" disabled={disabledDeleteButton}>Slett</button>)}
                             </td>
                         </>
                     )
-
                 }
             </tr>
         </>

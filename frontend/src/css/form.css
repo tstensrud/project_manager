@@ -14,10 +14,16 @@ select{
     transition: 0.2s;
     max-width: 190px;
     border-radius: var(--form-elements-border-radius);
+    outline: 0;
+    
 }
 
 select:hover {
   border-color: var(--navbar-active-link);
+}
+
+select:focus {
+  border-color: var(--svg-icon-color);
 }
 
 .table-select{
@@ -72,6 +78,7 @@ select:hover {
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
     cursor: pointer;
+    margin-right: 5px;
 }
 
 .table-sorting-button:hover {
@@ -97,6 +104,7 @@ select:hover {
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
     cursor: pointer;
+    margin-right: 5px;
 }
 
 .table-button{
