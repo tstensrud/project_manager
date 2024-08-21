@@ -59,7 +59,7 @@ function Cooling() {
                 roomRefetch();
             }
             if (msg === "updateSummaries") {
-                buildingReFetch();
+                /* buildingReFetch(); */
             }
             setChildMessage('');
         }
@@ -112,21 +112,23 @@ function Cooling() {
                             <div className="table-wrapper">
                                 <table className="fl-table">
                                     <thead>
-                                        <th width="2%">#</th>
-                                        <th width="5%">Etasje</th>
-                                        <th width="5%">Romnr</th>
-                                        <th width="5%">Romtemp <br /> &#176;C</th>
-                                        <th width="5%">Temp vent<br /> &#176;C</th>
-                                        <th width="5%">W/Pers</th>
-                                        <th width="5%">Lys<br /> W/m<sup>2</sup></th>
-                                        <th width="5%">Ustyr<br /> W/m<sup>2</sup></th>
-                                        <th width="5%">Soltilskudd<br /> W/m<sup>2</sup></th>
-                                        <th width="5%">Solreduksjon<br /> (0-1,0)</th>
-                                        <th width="5%">&#8721; Internlast<br /> W</th>
-                                        <th width="5%">Kjøling utstyr<br /> W</th>
-                                        <th width="5%">&#8721; kjøling<br /> W</th>
-                                        <th width="5%">Ekstra vent. <br />m<sup>3</sup>/h</th>
-                                        <th width="32%">Merknad</th>
+                                        <tr>
+                                            <th width="2%">#</th>
+                                            <th width="5%">Etasje</th>
+                                            <th width="5%">Romnr</th>
+                                            <th width="5%">Romtemp <br /> &#176;C</th>
+                                            <th width="5%">Temp vent<br /> &#176;C</th>
+                                            <th width="5%">W/Pers</th>
+                                            <th width="5%">Lys<br /> W/m<sup>2</sup></th>
+                                            <th width="5%">Ustyr<br /> W/m<sup>2</sup></th>
+                                            <th width="5%">Soltilskudd<br /> W/m<sup>2</sup></th>
+                                            <th width="5%">Solreduksjon<br /> (0-1,0)</th>
+                                            <th width="5%">&#8721; Internlast<br /> W</th>
+                                            <th width="5%">Kjøling utstyr<br /> W</th>
+                                            <th width="5%">&#8721; kjøling<br /> W</th>
+                                            <th width="5%">Ekstra vent. <br />m<sup>3</sup>/h</th>
+                                            <th width="32%">Merknad</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         {

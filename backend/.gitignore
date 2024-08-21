@@ -6,6 +6,7 @@ fbAdminConfig.json
 # C extensions
 *.so
 
+excel/
 # Distribution / packaging
 .Python
 build/

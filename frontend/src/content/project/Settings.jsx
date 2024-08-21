@@ -61,7 +61,7 @@ function Settings () {
                                     {
                                         specData && specData.data !== undefined && specData.data !== '' ? (
                                             <>
-                                                {specData.data.map((spec, index) => (<><option key={index} value={spec.id}>{spec.name}</option></>))}
+                                                {specData.data.map((spec, index) => (<option key={index} value={spec.id}>{spec.name}</option>))}
                                             </>
                                         ) : (
                                             <option>Ingen spesifikasjoner</option>

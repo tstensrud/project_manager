@@ -32,17 +32,6 @@ function CoolingSettings ({setShowHeatingSettings: setShowCoolingSettings, build
         }
     }
 
-    const handleHeatSourceChange = (e) => {
-        setHeatSourceData({[e.target.name]: e.target.value});
-    }
-
-    const handleHeatSourceSubmit = async (e) => {
-        e.preventDefault();
-        await updateHeatSource(e);
-        setHeatSourceData('');
-        onSettingsUpdate(); // Pass a message of change to CoolingTableRowComponent
-    }
-
     const handleFormChange = (e) => {
         setData({
             ...updatedBuildingData,

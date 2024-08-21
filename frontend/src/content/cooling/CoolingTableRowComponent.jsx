@@ -66,7 +66,7 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
             handleBlur();
             setData('');
             coolingRefetch();
-            sendMessageToParent("updateSummaries");
+            //sendMessageToParent("updateSummaries");
         } if (e.key == "Escape") {
             handleBlur();
             return;

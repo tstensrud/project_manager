@@ -21,7 +21,8 @@ def create_app():
     #app.config['SQLALCHEMY_ECHO'] = True
     app.config['JWT_SECRET_KEY'] = "ASsaf39834578DJYACDS1234fwec1af521f35f1"
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
-    #app.config['UPLOAD_FOLDER'] = "./src/specifications/templates/"
+    
+    #app.config['UPLOAD_FOLDER'] = ".static/excel"
     db.init_app(app)
 
         

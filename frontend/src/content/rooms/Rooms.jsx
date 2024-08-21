@@ -163,7 +163,7 @@ function Rooms() {
                                     &nbsp; &nbsp;
                                     <input className="input-short" type="text" name="floor" onChange={handleFormChange} placeholder="Etasje" tabIndex="2" required /> &nbsp; &nbsp;
                                     <input ref={inputRoomNumberRef} className="input-short" type="text" name="roomNumber" onChange={handleFormChange} placeholder="Romnr." tabIndex="3" required /> &nbsp; &nbsp;
-                                    <select ref={roomTypeRef} onChange={handleFormChange} name="roomType" tabindex="4">
+                                    <select ref={roomTypeRef} onChange={handleFormChange} name="roomType" tabIndex="4">
                                         <option key="0" value="">- Velg romtype -</option>
                                         {roomTypeData && roomTypeData.spec_room_type_data !== undefined && roomTypeData.spec_room_type_data.map(type => (
                                             <option key={type.uid} value={type.uid}>{type.name}</option>
@@ -179,8 +179,9 @@ function Rooms() {
                             <div className="container-above-table-rooms-bottom">
                                 {/*<button key="all" name="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;*/}
                                 {buildingData && buildingData.building_data !== undefined && Object.keys(buildingData.building_data).map((key, index) => (
-                                    <><button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
-                                        {buildingData.building_data[key].BuildingName}</button> &nbsp;</>
+                                    <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
+                                        {buildingData.building_data[key].BuildingName}&nbsp;
+                                    </button>
                                 ))}
 
                             </div>

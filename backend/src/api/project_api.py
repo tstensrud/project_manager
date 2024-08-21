@@ -1,11 +1,13 @@
 from datetime import datetime, timezone, timedelta
 import json
-from flask import Blueprint, jsonify, request
+import os
+from flask import Blueprint, jsonify, request, send_from_directory, url_for
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
 from .. import db_operations as dbo
 from .. import sanitary_calculations as sc
 from .. import globals
 from .. import excel
+from .. import create_app
 from markupsafe import escape
 
 project_api_bp = Blueprint('project_api', __name__, static_folder='static', template_folder='templates')
@@ -89,7 +91,6 @@ def todo(project_uid):
 @jwt_required()
 def new_todo_item(project_uid, user_uuid):
     data = request.get_json()
-    print(data)
     content = escape(data["todo_content"])
     if dbo.new_todo_item(project_uid, user_uuid, content):
         response = {"success": "Huskepunkt opprettet"}
@@ -222,7 +223,6 @@ def get_room(project_uid, room_uid):
 @jwt_required()
 def udpate_room(project_uid, room_uid):
     data = request.get_json()
-    print(data)
     if data:
         room = dbo.get_room(room_uid)
         processed_data = {}
@@ -232,7 +232,6 @@ def udpate_room(project_uid, room_uid):
             
             if key == "room_number":
                 if dbo.check_if_roomnumber_exists(room.building_uid, cleansed_value):
-                    print("Checking for existing room number")
                     return ({"error": "Romnummer finnes allerede"})
                 processed_data[key] = cleansed_value
             
@@ -277,7 +276,6 @@ def delete_room(project_uid, room_uid):
 @jwt_required()
 def undo_delete(project_uid, room_uid):
     data = request.get_json()
-    print(f"Data from undo delete: {data}")
     if data:
         if data["undo"] is True:
             if dbo.undo_delete_room(room_uid):
@@ -443,15 +441,12 @@ def ventilation_update_room(project_uid, room_uid):
         
         if key == "system_uid":
             if current_room_system_uid is None:
-                print("Current system id is None. Setting system")
                 if dbo.update_room_data(room_uid, processed_data):
                     dbo.update_system_airflows(value)
                     return jsonify({"success": "System satt"})
             else:
                 if dbo.update_room_data(room_uid, processed_data):
-                    print(f"Changing system from {current_room_system_uid} to {value}")
                     if dbo.update_airflow_changed_system(value, current_room_system_uid):
-                        print("Changed system successfully")
                         return jsonify({"success": "Byttet system"})
                     else:
                         return jsonify({"error": "kunne ikke bytte system"})
@@ -498,7 +493,6 @@ def heating_room_data(project_uid, room_uid):
 @jwt_required()
 def heating_update_room(project_uid, room_uid):
     data = request.get_json()
-    print(f"Data received {data}")
     if data:
         float_values = ["room_height", "outer_wall_area", "inner_wall_area", "window_door_area",
                         "roof_area", "floor_ground_area", "floor_air_area", "chosen_heating"]
@@ -638,7 +632,6 @@ def update_all_rooms_cooling(project_uid, building_uid):
                 if converted_value > 1:
                     return jsonify({"error": "Solreduksjon kan være maks 1"})
             processed_data[key] = converted_value
-        print(processed_data)
         rooms = dbo.get_all_rooms_building(building_uid)
         for room in rooms:
             if dbo.update_room_data(room.uid, processed_data):
@@ -738,14 +731,31 @@ def update_curve(project_uid, building_uid):
         return jsonify({"success": False, "message": "No curve data received"})
 
 
-@project_api_bp.route('/excel/ventilation/', methods=['GET'])
+@project_api_bp.route('/excel/<sheet>/', methods=['GET'])
 @jwt_required()
-def ventilation_excel(project_uid):
-    excel.generate_sheet_ventilation(project_uid)
-    return jsonify({"test": "hey"})
+def ventilation_excel(project_uid, sheet):
+    print(sheet)
+    if sheet == "ventilation":
+        file = excel.generate_excel_report(project_uid, vent=True)
+    elif sheet == "heating":
+        file = excel.generate_excel_report(project_uid, heating=True)
+    elif sheet == "cooling":
+        file = excel.generate_excel_report(project_uid, cooling=True)
+    else:
+        return jsonify({"success": False, "message": f"Kan ikke generere excel-fil for {sheet}"})
+    
+    if file:
+        download_url = url_for(f'views.download_file', filename=file, _external=True)
+        return jsonify({"success": True, "message": "Excel-fil generert", "data": download_url})
+    else:
+        return jsonify({"success": False, "message": "Kunne ikke generere excel-fil"})
 
-@project_api_bp.route('/excel/heating/', methods=['GET'])
+""" @project_api_bp.route('/excel/heating/', methods=['GET'])
 @jwt_required()
 def heating_excel(project_uid):
-    excel.generate_excel_heating(project_uid)
-    return jsonify({"test": "hey"})
+    file = excel.generate_excel_report(project_uid, heating=True)
+    if file:
+        download_url = url_for(f'views.download_file', filename=file, _external=True)
+        return jsonify({"success": True, "message": "Excel-fil generert", "data": download_url})
+    else:
+        return jsonify({"success": False, "message": "Kunne ikke generere excel-fil"}) """

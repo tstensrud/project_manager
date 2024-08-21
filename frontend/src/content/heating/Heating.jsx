@@ -86,7 +86,6 @@ function Heating() {
             setBuildingId(selectedBuildingUid);
             setSortedBuildings(roomData.room_data.filter((room) => room.BuildingUid === selectedBuildingUid));
         }
-
     }
 
     return (
@@ -113,21 +112,23 @@ function Heating() {
                             <div className="table-wrapper">
                                 <table className="fl-table">
                                     <thead>
-                                        <th width="2%">#</th>
-                                        <th width="2%">Etg</th>
-                                        <th width="5%">Romnr</th>
-                                        <th width="5%">Høyde <br />m</th>
-                                        <th width="5%">Yttervegg <br /> m<sup>2</sup></th>
-                                        <th width="5%">Innervegg <br />m<sup>2</sup></th>
-                                        <th width="5%">Vindu/dør <br />m<sup>2</sup></th>
-                                        <th width="5%">Tak <br />m<sup>2</sup></th>
-                                        <th width="5%">Gulv grunn <br />m<sup>2</sup></th>
-                                        <th width="5%">Gulv fritt <br />m<sup>2</sup></th>
-                                        <th width="5%">&#8721; varmetap<br /> W</th>
-                                        <th width="5%">Valgt varme<br /> W</th>
-                                        <th width="5%">W/m<sup>2</sup></th>
-                                        <th width="8%">Varmekilde</th>
-                                        <th width="8%">Merknad</th>
+                                        <tr>
+                                            <th width="2%">#</th>
+                                            <th width="2%">Etg</th>
+                                            <th width="5%">Romnr</th>
+                                            <th width="5%">Høyde <br />m</th>
+                                            <th width="5%">Yttervegg <br /> m<sup>2</sup></th>
+                                            <th width="5%">Innervegg <br />m<sup>2</sup></th>
+                                            <th width="5%">Vindu/dør <br />m<sup>2</sup></th>
+                                            <th width="5%">Tak <br />m<sup>2</sup></th>
+                                            <th width="5%">Gulv grunn <br />m<sup>2</sup></th>
+                                            <th width="5%">Gulv fritt <br />m<sup>2</sup></th>
+                                            <th width="5%">&#8721; varmetap<br /> W</th>
+                                            <th width="5%">Valgt varme<br /> W</th>
+                                            <th width="5%">W/m<sup>2</sup></th>
+                                            <th width="8%">Varmekilde</th>
+                                            <th width="8%">Merknad</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         {

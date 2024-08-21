@@ -4,7 +4,7 @@ import json
 import random
 from uuid import uuid4
 from werkzeug.security import generate_password_hash
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_from_directory
 from . import models, db, globals
 from .models import User
 from . import db_operations as dbo
@@ -78,8 +78,8 @@ def token():
     if request.method == "GET":
         return jsonify({"Message": "Nothing here"})
 
-@jwt_required()
 @views.route('/get_user/', methods=['GET'])
+@jwt_required()
 def get_user():
     verify_jwt_in_request()
     user_identiy = get_jwt_identity()
@@ -89,11 +89,14 @@ def get_user():
     user_data["email"] = user.email
     user_data["name"] = user.name
     if user:
-        print(user_data)
         return jsonify({"user": user_data})
     else:
         return jsonify({"error": "Could not fetch user data"})
-    
+
+@views.route('/excel/download/<filename>')
+def download_file(filename):
+    directory = os.path.join('..', 'static', 'excel')
+    return send_from_directory(directory, filename, as_attachment=True)
 
 @views.route('/logout/<user_uid>/', methods=["POST"])
 def logout(user_uid):

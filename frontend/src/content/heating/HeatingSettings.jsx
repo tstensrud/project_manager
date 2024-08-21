@@ -6,29 +6,28 @@ import MessageBox from '../../layout/MessageBox';
 
 
 
-function HeatingSettings ({setShowHeatingSettings, buildingUid, onSettingsUpdate}) {
-    
-    const {projectId} = useParams();
+function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate }) {
+
+    const { projectId } = useParams();
 
     // Hooks
-    const {data, loading, error, refetch} = useFetch(`/project_api/${projectId}/heating/buildingsettings/${buildingUid}/`);
+    const { data, loading, error, refetch } = useFetch(`/project_api/${projectId}/heating/buildingsettings/${buildingUid}/`);
 
     // Update data
-    const {data: updatedBuildingData, response, setData, handleSubmit: updateBuildingData} = useUpdateData(`/project_api/${projectId}/heating/buildingsettings/update/${buildingUid}/`);
+    const { data: updatedBuildingData, response, setData, handleSubmit: updateBuildingData } = useUpdateData(`/project_api/${projectId}/heating/buildingsettings/update/${buildingUid}/`);
 
     // Set heat source for rooms in building
-    const {data: updatedHeatSourceData, response: responseHeatsource, setData: setHeatSourceData, handleSubmit: updateHeatSource} = useUpdateData(`/project_api/${projectId}/heating/buildingsettings/setheatsource/${buildingUid}/`);
+    const { data: updatedHeatSourceData, response: responseHeatsource, setData: setHeatSourceData, handleSubmit: updateHeatSource } = useUpdateData(`/project_api/${projectId}/heating/buildingsettings/setheatsource/${buildingUid}/`);
 
     // Handlers
     const handleClick = (e) => {
         setShowHeatingSettings(false);
     }
 
-    const handleSubmit = async (e) =>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (updatedBuildingData !== null && updatedBuildingData !== undefined && updatedBuildingData !== '') {
-            console.log(updatedBuildingData);
             await updateBuildingData(e);
             refetch();
             setData('');
@@ -37,7 +36,7 @@ function HeatingSettings ({setShowHeatingSettings, buildingUid, onSettingsUpdate
     }
 
     const handleHeatSourceChange = (e) => {
-        setHeatSourceData({[e.target.name]: e.target.value});
+        setHeatSourceData({ [e.target.name]: e.target.value });
     }
 
     const handleHeatSourceSubmit = async (e) => {
@@ -54,12 +53,10 @@ function HeatingSettings ({setShowHeatingSettings, buildingUid, onSettingsUpdate
         })
     }
 
-
-
     return (
         <>
-        {response && response.error && response.error !== null ? (<MessageBox message={response.error} /> ) : (<></>)}
-        {error && error.error && error.error !== null ? (<MessageBox message={error.error} /> ) : (<></>)}
+            {response && response.error && response.error !== null ? (<MessageBox message={response.error} />) : (<></>)}
+            {error && error.error && error.error !== null ? (<MessageBox message={error.error} />) : (<></>)}
 
             <div className="settings-popup">
                 <div className="todo-popup-header">
@@ -74,7 +71,7 @@ function HeatingSettings ({setShowHeatingSettings, buildingUid, onSettingsUpdate
                         DUT (C&#176;) <br />
                         <input name="dut" placeholder={data && data.building_data.Dut} className="input-heating" onChange={handleFormChange} /><br />
                         Temp ventilasjon (C&#176;) <br />
-                        <input name="vent_temp" placeholder={data && data.building_data.VentTemp}  className="input-heating" onChange={handleFormChange} /><br />
+                        <input name="vent_temp" placeholder={data && data.building_data.VentTemp} className="input-heating" onChange={handleFormChange} /><br />
                         Luftveksling infilt. (1/h) <br />
                         <input name="infiltration" placeholder={data && data.building_data.Infiltration} className="input-heating" onChange={handleFormChange} /><br />
                         U-verdi yttervegg (W/m<sup>2</sup>K)<br />
@@ -86,13 +83,13 @@ function HeatingSettings ({setShowHeatingSettings, buildingUid, onSettingsUpdate
                         U-verdi gulv luft (W/m<sup>2</sup>K)<br />
                         <input name="u_value_floor_air" placeholder={data && data.building_data.UvalueFloorAir} className="input-heating" onChange={handleFormChange} /><br />
                         U-verdi tak (W/m<sup>2</sup>K) <br />
-                        <input name="u_value_roof"  placeholder={data && data.building_data.UvalueRoof} className="input-heating" onChange={handleFormChange} /><br />
+                        <input name="u_value_roof" placeholder={data && data.building_data.UvalueRoof} className="input-heating" onChange={handleFormChange} /><br />
                         Kuldebroveri (W/m<sup>2</sup>K) <br />
                         <input name="cold_bridge_value" placeholder={data && data.building_data.ColdBridge} className="input-heating" onChange={handleFormChange} /><br />
                         Årsmiddeltemp. (C&#176;)<br />
                         <input name="year_mid_temp" placeholder={data && data.building_data.YearMidTemp} className="input-heating" onChange={handleFormChange} /><br />
                         Temp gulv mot luft (C&#176;)<br />
-                        <input name="temp_floor_air" placeholder={data && data.building_data.TempFloorAir}className="input-heating" onChange={handleFormChange} /><br />
+                        <input name="temp_floor_air" placeholder={data && data.building_data.TempFloorAir} className="input-heating" onChange={handleFormChange} /><br />
                         Tillegg (%)<br />
                         <input name="safety" placeholder={data && data.building_data.Safety} className="input-heating" onChange={handleFormChange} /><br />
                         <p>
@@ -101,11 +98,11 @@ function HeatingSettings ({setShowHeatingSettings, buildingUid, onSettingsUpdate
                     </form>
                     <br />
                     <form onSubmit={handleHeatSourceSubmit}>
-                    <p>
-                        Sett primærvarmekilde for alle rom: <br />
-                        <input name="heat_source" onChange={handleHeatSourceChange} className='input-heating-medium-length' placeholder='Radiator'/> <br></br>
-                        <button className="form-button">Lagre</button>
-                    </p>
+                        <p>
+                            Sett primærvarmekilde for alle rom: <br />
+                            <input name="heat_source" onChange={handleHeatSourceChange} className='input-heating-medium-length' placeholder='Radiator' /> <br></br>
+                            <button className="form-button">Lagre</button>
+                        </p>
                     </form>
                 </div>
             </div>

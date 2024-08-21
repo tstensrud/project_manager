@@ -10,7 +10,6 @@ const useFetchExcel = (endpoint) => {
         e.preventDefault();
         setLoading(true);
         try {
-          console.log("Fetching excel");
           const res = await AxiosInstance.get(endpoint);
           setResponse(res.data);
           setLoading(false);
