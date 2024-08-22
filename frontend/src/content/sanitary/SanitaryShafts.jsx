@@ -8,6 +8,7 @@ import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
 import TableTop from '../../layout/TableTop.jsx';
 import SanitaryShaftTableRowComponent from './SanitaryShaftTableRowComponent.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
+import HelpBoxShafts from './HelpBoxShafts.jsx';
 
 function SanitaryShafts() {
     const { projectId } = useParams();
@@ -31,7 +32,7 @@ function SanitaryShafts() {
                         </div>
                     ) : (
                         <>
-                            <TableTop />
+                            <TableTop info={<HelpBoxShafts />} />
                             <div className="table-wrapper">
                                 <table className="fl-table">
                                     <thead>

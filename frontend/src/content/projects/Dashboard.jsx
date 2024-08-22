@@ -30,7 +30,8 @@ function Dashboard() {
     localStorage.setItem("projectid", projectId);
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (projectId === "" ) {
       inputRef.current.focus();
       return;

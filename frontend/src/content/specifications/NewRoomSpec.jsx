@@ -7,6 +7,9 @@ import useFetch from '../../hooks/useFetch'
 import HeaderIcon from '../../assets/svg/specificationsIcon.svg?react';
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import MessageBox from '../../layout/MessageBox';
+import TableTop from '../../layout/TableTop';
+import HelpIcon from '../../assets/svg/helpIcon.svg?react';
+import HelpBoxNewRoom from './HelpBoxNewRoom';
 
 function NewRoomSpec() {
     const { suid } = useParams();
@@ -18,6 +21,7 @@ function NewRoomSpec() {
 
     // useStates
     const [submitted, setSubmitted] = useState(false);
+    const [showHelpBox, setShowHelpBox] = useState(false);
 
     // Input fields useRefs
     const roomTypeRef = useRef(null);
@@ -87,19 +91,42 @@ function NewRoomSpec() {
         notesRef.current.value = '';
     }
 
-
+    const toggleHelpBox = (e) => {
+        e.preventDefault();
+        setShowHelpBox(!showHelpBox);
+    }
+    
     return (
         <>
-            <SubTitleComponent>
-                <HeaderIcon /> Nytt rom til kravspesifikasjon
-            </SubTitleComponent>
+            <SubTitleComponent svg={<HeaderIcon />} headerText="Nytt rom til kravspesifikasjon" projectName={data && data.spec_name} />
             <div className='main-content'>
                 {response && response.success ? <><MessageBox message={response.success} /> </> : ''}
                 {response && response.error ? <><MessageBox message={response.error} /> </> : ''}
+
+                {
+                showHelpBox === true ? (
+                        <div className="help-box-wrapper">
+                            <div className="help-box-container">
+                                <div className="help-box-card">
+                                    <div className="help-box-card-header">
+                                        <Link to="#" onClick={toggleHelpBox}>Lukk</Link>
+                                    </div>
+                                    <div className="help-box-card-item">
+                                        <HelpBoxNewRoom />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                ) : (<></>)
+            }
+
                 <form onSubmit={submitNewData}>
                     <div className="flex-container-row">
                         <div className="cards-large">
                             <div className="information [ card ]">
+                                <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
+                                    <Link onClick={toggleHelpBox} to="#"><HelpIcon /></Link>
+                                </div>
                                 <h2 className="card-title">Fyll inn romdata - <Link to={`/specifications/${suid}`} >{data && data.spec_name}</Link></h2>
 
                                 <p className="info">
@@ -153,34 +180,35 @@ function NewRoomSpec() {
                             <div className="information [ card ]">
                                 <p className="info">
                                     Romstyring: <br />
-                                    <div className="checkbox-group">
-                                        <select ref={vavRef} onChange={handleInputChange} name="vav" tabIndex="11">
-                                            <option value="1">VAV - variabel luftmengde</option>
-                                            <option value="0">CAV - konstant luftmengde</option>
-                                        </select>
-                                    </div>
-                                    <br /><br />
-                                    <div className="checkbox-group">
-                                        <label for="temp">CO2</label>
-                                        <input ref={co2Ref} type="checkbox" onChange={handleCheckChange} name="co2" tabIndex="13" />
-                                    </div>
-                                    <div className="checkbox-group">
-                                        <label for="temp">Temp</label>
-                                        <input ref={tempRef} type="checkbox" onChange={handleCheckChange} name="temp" tabIndex="14" />
-                                    </div>
-                                    <div className="checkbox-group">
-                                        <label for="movement">Bevegelse</label>
-                                        <input ref={movementRef} type="checkbox" onChange={handleCheckChange} name="movement" tabIndex="15" />
-                                    </div>
-                                    <div className="checkbox-group">
-                                        <label for="moisture">Fukt</label>
-                                        <input ref={moistureRef} type="checkbox" onChange={handleCheckChange} name="moisture" tabIndex="16" />
-                                    </div>
-                                    <div className="checkbox-group">
-                                        <label for="time">Tid</label>
-                                        <input ref={timeRef} type="checkbox" onChange={handleCheckChange} name="time" tabIndex="17" />
-                                    </div>
                                 </p>
+                                <div className="checkbox-group">
+                                    <select ref={vavRef} onChange={handleInputChange} name="vav" tabIndex="11">
+                                        <option value="1">VAV - variabel luftmengde</option>
+                                        <option value="0">CAV - konstant luftmengde</option>
+                                    </select>
+                                </div>
+                                <br /><br />
+                                <div className="checkbox-group">
+                                    <label htmlFor="temp">CO2</label>
+                                    <input ref={co2Ref} type="checkbox" onChange={handleCheckChange} name="co2" tabIndex="13" />
+                                </div>
+                                <div className="checkbox-group">
+                                    <label htmlFor="temp">Temp</label>
+                                    <input ref={tempRef} type="checkbox" onChange={handleCheckChange} name="temp" tabIndex="14" />
+                                </div>
+                                <div className="checkbox-group">
+                                    <label htmlFor="movement">Bevegelse</label>
+                                    <input ref={movementRef} type="checkbox" onChange={handleCheckChange} name="movement" tabIndex="15" />
+                                </div>
+                                <div className="checkbox-group">
+                                    <label htmlFor="moisture">Fukt</label>
+                                    <input ref={moistureRef} type="checkbox" onChange={handleCheckChange} name="moisture" tabIndex="16" />
+                                </div>
+                                <div className="checkbox-group">
+                                    <label htmlFor="time">Tid</label>
+                                    <input ref={timeRef} type="checkbox" onChange={handleCheckChange} name="time" tabIndex="17" />
+                                </div>
+
                                 <p className="info">
                                     Presiseringer / kommentar til rom: <br />
                                     <input ref={notesRef} onChange={handleInputChange} name="notes" tabIndex="18" />

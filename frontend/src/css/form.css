@@ -54,6 +54,7 @@ select:focus {
     transition: all 0.3 ease;
     cursor: pointer;
     border-radius: var(--form-elements-border-radius);
+    height: 38px;
 }
 
 .form-button:hover {

@@ -12,6 +12,7 @@ import RoomTableRowComponent from "./RoomTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 import TableTop from '../../layout/TableTop';
 import LoadingSpinner from '../../layout/LoadingSpinner';
+import HelpBox from './HelpBox.jsx';
 
 
 function Rooms() {
@@ -185,7 +186,7 @@ function Rooms() {
                                 ))}
 
                             </div>
-                            <TableTop />
+                            <TableTop info={<HelpBox />} />
                             {
                                 roomData ? (
                                     roomData.room_data === null ? (

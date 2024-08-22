@@ -140,15 +140,33 @@ def new_building(project_uid):
         else:
             return jsonify({"building_data": "Could not add new building"})
 
-@project_api_bp.route('/buildings/delete/<buid>/', methods=['DELETE'])
+@project_api_bp.route('/buildings/edit/<building_uid>/', methods=['PATCH'])
 @jwt_required()
-def delete_building(project_uid, buid):
+def edit_building(project_uid, building_uid):
     data = request.get_json()
     if data:
-        return jsonify({"success": "Bygg slettet"})
+        new_name = escape(data["buildingName"].strip())
+        exists = dbo.check_for_existing_building_name(project_uid, new_name)
+        if exists:
+            return jsonify({"success": False, "error": "Et bygg med dette navnet finnes allerede"})
+        if dbo.edit_building_name(building_uid, new_name):
+            return ({"success": True, "message": "Navn endret"})
+        else:
+            return ({"success": False, "error": "Kunne ikke endre bygningsnavn"})
     else:
-        return jsonify({"error": "Kunne ikke slette bygg"})
+        return ({"success": False, "error": "Mottok ikke data"})
 
+@project_api_bp.route('/buildings/delete/<building_uid>/', methods=['DELETE'])
+@jwt_required()
+def delete_building(project_uid, building_uid):
+    rooms = dbo.check_if_building_has_rooms(building_uid)
+    if rooms:
+        return jsonify({"success": False, "error": "Kan ikke slette bygg så lenge rom er tilknyttet bygget"})
+    else:
+        if dbo.delete_building(building_uid):
+            return jsonify({"success": True, "message": "Bygg slettet"})
+        else:
+            return jsonify({"success": False, "error": "Kunne ikke slette bygg"})
 #
 #               
 #   ROOMS

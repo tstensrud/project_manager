@@ -12,6 +12,8 @@ import DeleteIcon from '../../assets/svg/deleteIcon.svg?react'
 // Components
 import EditSpecTableRow from './EditSpecTableRow';
 import DeleteBox from './DeleteBox';
+import TableTop from '../../layout/TableTop';
+import HelpBoxEdit from './HelpBoxEdit';
 
 function EditSpecification() {
     const { suid, name } = useParams();
@@ -58,6 +60,7 @@ function EditSpecification() {
                         <Link to="#" onClick={openDeleteDialog}>Slett kravspesifikasjon</Link>&nbsp;&nbsp; <DeleteIcon />
                     </div>
                 </div>
+                <TableTop info={<HelpBoxEdit />} />
                 <div className="table-wrapper">
                     <table className="fl-table">
                         <thead>

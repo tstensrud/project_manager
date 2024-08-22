@@ -11,6 +11,7 @@ import MessageBox from '../../layout/MessageBox';
 import ToggleSettingsButton from './ToggleSettingsButton';
 import TableTop from '../../layout/TableTop.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
+import HelpBox from './HelpBox.jsx';
 //import BuildingSummary from './BuildingSummary';
 
 function Heating() {
@@ -108,7 +109,7 @@ function Heating() {
                                     </button>
                                 ))}
                             </div>
-                            <TableTop />
+                            <TableTop info={<HelpBox />} />
                             <div className="table-wrapper">
                                 <table className="fl-table">
                                     <thead>

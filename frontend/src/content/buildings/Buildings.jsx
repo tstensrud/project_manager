@@ -12,7 +12,7 @@ function Buildings() {
     const { projectId } = useParams();
 
     // Hooks
-    const { data, loading, refetch } = useFetch(`/project_api/${projectId}/buildings/`);
+    const { data, loading, refetch: refetchBuildingData } = useFetch(`/project_api/${projectId}/buildings/`);
     const { buildingData, setData, handleSubmit } = useSubmitData(`/project_api/${projectId}/buildings/new_building/`);
     const [formInput, setFormInput] = useState('');
 
@@ -28,7 +28,7 @@ function Buildings() {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         await handleSubmit(e);
-        refetch();
+        refetchBuildingData();
         setFormInput('');
     }
 
@@ -61,7 +61,7 @@ function Buildings() {
                                     <p className="p-description">{data.error}</p>
                                 ) : (
                                     data && data.building_data && Object.keys(data.building_data).map((key, index) => (
-                                        <BuildingSummary key={index} buildingData={data.building_data[key]} />
+                                        <BuildingSummary refetchBuildingData={refetchBuildingData} key={index} buildingData={data.building_data[key]} />
                                     ))
                                 )
                             }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import useFetch from '../../hooks/useFetch.jsx'
 import { customSortFloors } from '../../utils/customSortFloors.js'
@@ -10,11 +10,13 @@ import SanitaryTableRowComponent from "./SanitaryTableRowComponent.jsx";
 import MessageBox from '../../layout/MessageBox.jsx';
 import TableTop from '../../layout/TableTop.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
+import HelpBox from './HelpBox.jsx';
 
 //import BuildingSummary from './BuildingSummary';
 
 function SanitaryEquipment() {
     const { projectId } = useParams();
+    const [showHelpBox, setShowHelpBox] = useState(false);
 
     // Initial fetch of data
     const { data: roomData, loading: roomDataLoading } = useFetch(`/project_api/${projectId}/rooms/`);
@@ -96,7 +98,7 @@ function SanitaryEquipment() {
                                 ))}
 
                             </div>
-                            <TableTop />
+                                <TableTop info={<HelpBox />} />
                             {
                                 roomData ? (
                                     roomData.room_data === null ? (

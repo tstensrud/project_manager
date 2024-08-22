@@ -309,7 +309,42 @@ def delete_building(building_uid: str) -> bool:
         db.session.rollback()
         return False
 
+def edit_building_name(building_uid: str, new_name: str) -> bool:
+    building = get_building(building_uid)
+    building.building_name = new_name
+    try:
+        db.session.commit()
+        return True
+    except Exception as e:
+        globals.log(f"Could not edit building name: {e}")
+        db.session.rollback()
+        return False
 
+def check_for_existing_building_name(project_uid: str, building_name: str) -> bool:
+    building = db.session.query(models.Buildings).filter(and_(models.Buildings.project_uid == project_uid, models.Buildings.building_name == building_name)).first()
+    if building:
+        return True
+    else:
+        return False
+
+def check_if_building_has_rooms(building_uid: str) -> bool:
+    room = db.session.query(models.Rooms).filter(models.Rooms.building_uid == building_uid).first()
+    if room:
+        return True
+    else:
+        return False
+
+def delete_building(building_uid: str) -> bool:
+    building = get_building(building_uid)
+    if building:
+        try:
+            db.session.delete(building)
+            db.session.commit()
+            return True
+        except Exception as e:
+            globals.log(f"Could not delete building: {e}")
+            db.session.rollback()
+            return False
 '''
 Rooms methods
 '''

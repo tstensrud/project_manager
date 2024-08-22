@@ -22,6 +22,7 @@ function Sanitary() {
             }
         }
     }
+    
     return (
         <>
             <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitæranlegg - oppsummering"} projectName={""} projectNumber={""} />

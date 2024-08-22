@@ -11,6 +11,7 @@ import SystemsTableRowComponent from "./SystemsTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 import TableTop from '../../layout/TableTop';
 import LoadingSpinner from '../../layout/LoadingSpinner';
+import HelpBox from './HelpBox';
 
 function VentSystems() {
     const { projectId } = useParams();
@@ -106,7 +107,7 @@ function VentSystems() {
                                             <>Ingen ssytemer lagt til</>
                                         ) : (
                                             <>
-                                                <TableTop />
+                                                <TableTop info={<HelpBox />} />
                                                 <div className="table-wrapper">
                                                     <table className="fl-table">
                                                         <thead>

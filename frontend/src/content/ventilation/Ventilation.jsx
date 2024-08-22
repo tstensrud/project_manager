@@ -10,6 +10,7 @@ import VentilationTableRowComponent from "./VentilationTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 import TableTop from '../../layout/TableTop';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
+import HelpBox from './HelpBox.jsx';
 
 //import BuildingSummary from './BuildingSummary';
 
@@ -100,7 +101,7 @@ function Ventilation() {
                                 ))}
 
                             </div>
-                            <TableTop />
+                            <TableTop info={<HelpBox />} />
                             {
                                 roomData ? (
                                     roomData.room_data === null ? (

@@ -185,3 +185,50 @@
     align-items: center;
     text-align: center; 
   }
+
+  .help-box-wrapper {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    justify-content: center; 
+    align-items: center;
+    z-index: 1000;
+    background-color: rgba(156, 156, 156, 0.295);
+  }
+
+  .help-box-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2%;
+    align-items: center;
+  }
+
+  .help-box-card {
+    background-color: var(--app-content-secondary-color);
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
+    width: 30%;
+    height: 50%;
+    overflow-y: auto;
+  }
+
+  .help-box-card-header {
+    width: 100%;
+    background-color: var(--app-content-secondary-color);
+    display: flex;
+    justify-content: flex-end;
+    position: sticky;
+    top: 0;
+    padding-top: 10px;
+  }
+
+  .help-box-card-item {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }

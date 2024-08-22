@@ -469,10 +469,19 @@ a:hover {
   color: var(--link-hover);
 }
 
+.grey-info-text {
+  color: var(--grey-text);
+  font-size: 14px;
+}
 /* Header text */
 h3 {
   display: inline-block;
   line-height: 0;
+}
+
+h4 {
+  margin-top: 10px;
+  margin-bottom: 0;
 }
 
 /* Lists */
