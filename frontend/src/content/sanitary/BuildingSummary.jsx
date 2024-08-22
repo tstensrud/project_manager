@@ -65,7 +65,7 @@ function BuildingSummary({ buildingUid, projectId }) {
     return (
         <div className="cards">
             <div className="information [ card ]">
-                <div style={{ display: "flex", width: "100%", marginBottom: "20px" }}>
+                <div style={{ display: "flex", width: "400px", marginBottom: "20px" }}>
                     <div style={{ display: "flex", width: "40%" }}>
                         <BuildingIcon />
                     </div>
@@ -82,13 +82,13 @@ function BuildingSummary({ buildingUid, projectId }) {
                             Avløpskurve: <strong>{buildingSummaryData && buildingSummaryData.building_data.GraphCurve}</strong>
                             <form onSubmit={handleCurveSubmit}>
                                 <p>
-                                    <select onChange={handleCurveChange}>
+                                    <select className="card-select" onChange={handleCurveChange}>
                                         <option value="">- Velg avløpskurve -</option>
                                         <option value="A">Kurve A</option>
                                         <option value="B">Kurve B</option>
                                     </select>
                                     &nbsp;&nbsp;&nbsp;
-                                    <button className="form-button" type="submit">Oppdater</button>
+                                    <button className="card-button" type="submit">Oppdater</button>
                                 </p>
                             </form>
                             <h3>Oppsummering vannmengder</h3>

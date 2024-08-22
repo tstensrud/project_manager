@@ -88,10 +88,10 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                             <form>
                                 <div style={{ display: "flex", flexDirection: "row" }}>
                                     <div style={{ display: "flex", marginRight: "15px" }}>
-                                        <input className="input-medium" onChange={handleNameChange} type="text" name="buildingName" placeholder='Endre navn..' />
+                                        <input className="card-input" onChange={handleNameChange} type="text" name="buildingName" placeholder='Endre navn..' />
                                     </div>
                                     <div style={{ display: "flex", marginRight: "15px" }}>
-                                        <button onClick={submitNameChange} className="form-button">Lagre</button>
+                                        <button onClick={submitNameChange} className="card-button">Lagre</button>
                                     </div>
                                 </div>
                             </form>

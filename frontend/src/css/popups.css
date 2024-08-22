@@ -8,7 +8,7 @@
     background-color: rgba(89, 113, 157);
     border: 1px solid #ccc;
     padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     width: 500px;
 }
@@ -24,13 +24,14 @@
     color: white;
     border: 1px solid #ccc;
     padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     width: 500px;
-    word-wrap: break-word; 
+    word-wrap: break-word;
     overflow-wrap: break-word;
     word-break: break-word;
 }
+
 .popup-close {
     position: absolute;
     top: 10px;
@@ -40,6 +41,7 @@
     font-weight: bold;
     cursor: pointer;
 }
+
 .popup-close:hover,
 .popup-close:focus {
     color: red;
@@ -50,17 +52,17 @@
 /* To-do list */
 .todo-container {
     position: fixed;
-    z-index:1000;
+    z-index: 1000;
 }
 
 .todo-popup {
     display: flex;
     position: fixed;
     top: 0;
-    right:0;
+    right: 0;
     height: 100%;
     background-color: var(--app-content-secondary-color);
-    box-shadow: 5px 1px 20px   black;
+    box-shadow: 5px 1px 20px black;
     justify-content: flex-start;
     flex-direction: column;
     align-items: flex-start;
@@ -69,27 +71,24 @@
     font-size: 14px;
 }
 
-
-
 .todo-popup-header {
     display: flex;
+    flex-direction: column;
     background-color: var(--table-header);
     border-bottom: var(--default-border);
     color: var(--app-content-main-color);
     padding: 5px;
     position: relative;
     width: 100%;
-    height: 51px;
-    align-items: center;
-    justify-content: center;
     font-weight: 800;
 }
 
 .todo-popup-item-container {
     overflow-y: auto;
 }
+
 .todo-popup-listitem {
-    background-color: var(--table-background-color);
+    background-color: var(--card-background-color);
     color: var(--app-content-main-color);
     padding: 5px;
     position: relative;
@@ -108,14 +107,12 @@
 }
 
 .todo-close-btn {
-    position: absolute;
-    top: 5px;
-    right: 15px;
     font-size: 20px;
     cursor: pointer;
 }
+
 .todo-close-btn:hover {
-    color: var(--navbar-active-link);
+    color: var(--form-element-hover);
 }
 
 .todo-completed {
@@ -134,11 +131,11 @@
     display: flex;
     position: fixed;
     top: 0;
-    left:0;
+    left: 0;
     height: 100%;
     background-color: var(--app-content-secondary-color);
     color: var(--app-content-main-color);
-    box-shadow: 5px 1px 20px   black;
+    box-shadow: 5px 1px 20px black;
     justify-content: flex-start;
     flex-direction: column;
     align-items: flex-start;
@@ -158,22 +155,22 @@
     position: fixed;
     height: 100%;
     width: 100%;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     z-index: 1000;
     background-color: rgba(131, 0, 0, 0.295);
-  }
-  
-  .delete-confirmation-container {
+}
+
+.delete-confirmation-container {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
+}
 
-  .delete-confirmation-card {
+.delete-confirmation-card {
     background-color: var(--app-content-secondary-color);
     display: flex;
     flex-direction: column;
@@ -183,29 +180,29 @@
     height: 400px;
     justify-content: center;
     align-items: center;
-    text-align: center; 
-  }
+    text-align: center;
+}
 
-  .help-box-wrapper {
+.help-box-wrapper {
     position: fixed;
     height: 100%;
     width: 100%;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     z-index: 1000;
     background-color: rgba(156, 156, 156, 0.295);
-  }
+}
 
-  .help-box-container {
+.help-box-container {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     margin-top: 2%;
     align-items: center;
-  }
+}
 
-  .help-box-card {
+.help-box-card {
     background-color: var(--app-content-secondary-color);
     display: flex;
     flex-direction: column;
@@ -215,9 +212,10 @@
     width: 30%;
     height: 50%;
     overflow-y: auto;
-  }
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.301);
+}
 
-  .help-box-card-header {
+.help-box-card-header {
     width: 100%;
     background-color: var(--app-content-secondary-color);
     display: flex;
@@ -225,10 +223,10 @@
     position: sticky;
     top: 0;
     padding-top: 10px;
-  }
+}
 
-  .help-box-card-item {
+.help-box-card-item {
     width: 100%;
     display: flex;
     flex-direction: column;
-  }
+}

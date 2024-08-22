@@ -23,7 +23,7 @@
 }
 
 .information {
-	background-color: rgb(18, 28, 38);
+	background-color: var(--card-background-color);
 	padding: 1.5rem;
 
 	.card-title {
@@ -59,6 +59,33 @@
 			font-size: 1.25rem;
 		}
 	}
+}
+
+.card-input {
+	background-color: var(--app-content-secondary-color);
+	border: 1px solid rgba(0, 0, 0, 0);
+	width: 100%;
+}
+
+.card-button {
+	background-color: var(--app-content-secondary-color);
+	border: var(--form-border);
+	font-family: "Roboto", sans-serif;
+	text-transform: uppercase;
+	outline: 0;
+	color: var(--form-text-color);
+	font-size: 14px;
+	-webkit-transition: all 0.3 ease;
+	transition: all 0.3 ease;
+	cursor: pointer;
+	border-radius: var(--form-elements-border-radius);
+	height: 38px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.card-button:hover {
+	border: 1px solid var(--form-element-hover);
 }
 
 

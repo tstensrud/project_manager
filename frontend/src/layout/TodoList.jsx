@@ -38,9 +38,12 @@ function TodoList({ setShowTodoList }) {
     return (
         <div id="todo-popup" className="todo-popup">
             <div className="todo-popup-header">
-                <span onClick={(e) => handleClick(e, setShowTodoList)} className="todo-close-btn">&times;</span>
-                <br />
-                Huskeliste
+                <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
+                    <span onClick={(e) => handleClick(e, setShowTodoList)} className="todo-close-btn">&times;</span>
+                </div>
+                <div>
+                    Huskeliste
+                </div>
             </div>
             <div className="todo-popup-item-container" id="todo-popup-item-container">
                 <form id="todoItem" onSubmit={submitTodoItem}>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import useFetch from '../../hooks/useFetch'
 import { customSortFloors } from '../../utils/customSortFloors.js'
@@ -16,6 +16,7 @@ import HelpBox from './HelpBox.jsx';
 
 function Ventilation() {
     const { projectId } = useParams();
+    const location = useLocation();
 
     // Initial fetch of data
     const { data: roomData, loading } = useFetch(`/project_api/${projectId}/rooms/`);
@@ -79,6 +80,7 @@ function Ventilation() {
         }
     }
 
+    console.log(location.pathname)
     return (
         <>
             {childMessage.error && <MessageBox message={childMessage.error} />}

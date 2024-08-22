@@ -9,17 +9,18 @@ function HelpBox() {
             <h4>Redigerbare kolonner</h4>
             <p>
                 Følgende kolonner er redigerbare:
-                <ul>
-                    <li>Romtemp <span className="grey-info-text">(maks temperatur tillatt i rom på sommertid)</span></li>
-                    <li>Temp vent</li>
-                    <li>W/pers</li>
-                    <li>Lys</li>
-                    <li>Utstyr <span className="grey-info-text">(hvis rommet har ekstra utstyr som genererer varme)</span></li>
-                    <li>Soltilskudd</li>
-                    <li>Solreudksjon <span className="grey-info-text">(Fra 0 til 1. 1 = 100% solreduksjon.)</span></li>
-                    <li>Kjøling ustyr</li>
-                </ul>
             </p>
+            <ul>
+                <li>Romtemp <span className="grey-info-text">(maks temperatur tillatt i rom på sommertid)</span></li>
+                <li>Temp vent</li>
+                <li>W/pers</li>
+                <li>Lys</li>
+                <li>Utstyr <span className="grey-info-text">(hvis rommet har ekstra utstyr som genererer varme)</span></li>
+                <li>Soltilskudd</li>
+                <li>Solreudksjon <span className="grey-info-text">(Fra 0 til 1. 1 = 100% solreduksjon.)</span></li>
+                <li>Kjøling ustyr</li>
+            </ul>
+
             <h4>Ekstra vent</h4>
             <p>
                 Denne kolonnen viser hvor mye ekstra tilluft som må til for å klare kjøling basert på de kjøledataene som er lagt inn.

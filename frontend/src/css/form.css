@@ -1,448 +1,477 @@
+select {
+  padding: 1px 15px;
+  background-color: var(--form-background-color);
+  border: var(--form-border);
+  color: var(--form-text-color);
+  font-size: 14px;
+  line-height: 24px;
+  padding: 0px 12px 0px 5px;
+  height: 36px;
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: left 10px center;
+  transition: 0.2s;
+  max-width: 190px;
+  border-radius: var(--form-elements-border-radius);
+  outline: 0;
 
-select{
-    padding:1px 15px;
-    background-color: var( --app-content-secondary-color);
-    border:var(--default-border);
-    color: var(--app-content-main-color);
-    font-size: 14px;
-    line-height: 24px;
-    padding: 0px 12px 0px 5px;
-    height: 36px;
-    background-size: 16px;
-    background-repeat: no-repeat;
-    background-position: left 10px center;
-    transition: 0.2s;
-    max-width: 190px;
-    border-radius: var(--form-elements-border-radius);
-    outline: 0;
-    
 }
 
 select:hover {
-  border-color: var(--navbar-active-link);
+  border-color: var(--form-element-hover);
 }
 
 select:focus {
-  border-color: var(--svg-icon-color);
+  border-color: var(--form-focus-color);
 }
 
-.table-select{
-    padding:1px 10px;
-    background-color: var(--table-background-color);
-    border: var(--default-border);
-    color: var(--app-content-main-color);
-    font-size: 12px;
-    line-height: 20px;
-    height: 28px;
-    background-size: 16px;
-    background-repeat: no-repeat;
-    background-position: left 10px center;
-    transition: 0.2s;
-    border-radius: var(--form-elements-border-radius);
+.card-select {
+  padding: 1px 15px;
+  background-color: var(--form-element-card-background-color);
+  border: var(--form-border);
+  color: var(--form-text-color);
+  font-size: 14px;
+  line-height: 24px;
+  padding: 0px 12px 0px 5px;
+  height: 36px;
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: left 10px center;
+  transition: 0.2s;
+  max-width: 190px;
+  border-radius: var(--form-elements-border-radius);
+  outline: 0;
 }
 
-.form-button{
-    font-family: "Roboto", sans-serif;
-    text-transform: uppercase;
-    outline: 0;
-    background: var(--app-content-secondary-color);
-    border: var(--default-border);
-    padding: 10px;
-    color: var(--app-content-main-color);
-    font-size: 14px;
-    -webkit-transition: all 0.3 ease;
-    transition: all 0.3 ease;
-    cursor: pointer;
-    border-radius: var(--form-elements-border-radius);
-    height: 38px;
+.table-select {
+  padding: 1px 10px;
+  background-color: var(--table-background-color);
+  border: var(--default-border);
+  color: var(--form-text-color);
+  font-size: 12px;
+  line-height: 20px;
+  height: 28px;
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: left 10px center;
+  transition: 0.2s;
+  border-radius: var(--form-elements-border-radius);
+}
+
+.form-button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: var(--form-background-color);
+  border: var(--form-border);
+  padding: 10px;
+  color: var(--form-text-color);
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+  border-radius: var(--form-elements-border-radius);
+  height: 38px;
 }
 
 .form-button:hover {
-    border-color: var(--navbar-active-link);
+  border: 1px solid var(--form-element-hover);
 }
 
-.table-sorting-button{
-    font-family: "Roboto", sans-serif;
-    text-transform: uppercase;
-    outline: 0;
-    height: 45px;
-    background: var(--app-content-secondary-color);
-    border-top: var(--default-border);
-    border-left:  var(--default-border);
-    border-right:  var(--default-border);
-    border-bottom: 0;
-    border-top-left-radius: var(--form-elements-border-radius);
-    border-top-right-radius: var(--form-elements-border-radius);
-    padding: 10px;
-    color: var(--app-content-main-color);;
-    font-size: 14px;
-    -webkit-transition: all 0.3 ease;
-    transition: all 0.3 ease;
-    cursor: pointer;
-    margin-right: 5px;
+.table-sorting-button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  height: 45px;
+  background: var(--app-content-secondary-color);
+  border-top: var(--form-border);
+  border-left: var(--form-border);
+  border-right: var(--form-border);
+  border-bottom: 0;
+  border-top-left-radius: var(--form-elements-border-radius);
+  border-top-right-radius: var(--form-elements-border-radius);
+  padding: 10px;
+  color: var(--form-text-color);
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+  margin-right: 5px;
 }
 
 .table-sorting-button:hover {
-    background-color: var(--table-header);
-    color: var(--app-content-main-color);
+  background-color: var(--table-header);
+  color: var(--app-content-main-color);
 }
 
-.table-sorting-button-active{
-    font-family: "Roboto", sans-serif;
-    text-transform: uppercase;
-    height: 45px;
-    outline: 0;
-    background-color: var(--table-background-color);
-    border-top: var(--default-border);
-    border-left:  var(--default-border);
-    border-right:  var(--default-border);
-    border-bottom: 0;
-    border-top-left-radius: var(--form-elements-border-radius);
-    border-top-right-radius: var(--form-elements-border-radius);
-    padding: 10px;
-    color: var(--app-content-main-color);
-    font-size: 14px;
-    -webkit-transition: all 0.3 ease;
-    transition: all 0.3 ease;
-    cursor: pointer;
-    margin-right: 5px;
+.table-sorting-button-active {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  height: 45px;
+  outline: 0;
+  background-color: var(--table-background-color);
+  border-top: var(--default-border);
+  border-left: var(--default-border);
+  border-right: var(--default-border);
+  border-bottom: 0;
+  border-top-left-radius: var(--form-elements-border-radius);
+  border-top-right-radius: var(--form-elements-border-radius);
+  padding: 10px;
+  color: var(--app-content-main-color);
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+  margin-right: 5px;
 }
 
-.table-button{
-    color: var(--app-content-main-color);
-    width:fit-content;
-    line-height: 20px;
-    padding:1px 5px;
-    outline: none;
-    border: var(--default-border);
-    background-color: var(--table-button-background);
-    font-size: 14px;
-    cursor: pointer;
-    transition-duration: 0.25s;
-    border-radius: var(--form-elements-border-radius);
+.table-button {
+  color: var(--form-text-color);
+  width: fit-content;
+  text-transform: uppercase;
+  line-height: 20px;
+  padding: 1px 5px;
+  outline: none;
+  border: var(--form-table-button-border);
+  background-color: var(--form-background-color);
+  font-size: 14px;
+  cursor: pointer;
+  transition-duration: 0.25s;
+  border-radius: var(--form-elements-border-radius);
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .table-button:hover {
-  border-color: var(--navbar-active-link);
+  border-color: var(--form-element-hover);
+  background-color: var(--form-table-button-hover-background);
 }
 
-.todo-list-button{
-    color: var(--app-content-main-color);
-    width:fit-content;
-    height: 30px;
-    width: 70px;
-    border: var(--default-border);
-    padding:1px 5px;
-    outline: none;
-    background-color: var(--app-content-secondary-color);
-    font-size: 14px;
-    cursor: pointer;
-    transition-duration: 0.25s;
-    border-radius: var(--form-elements-border-radius);
+.todo-list-button {
+  color: var(--app-content-main-color);
+  width: fit-content;
+  height: 30px;
+  width: 70px;
+  border: var(--form-border);
+  padding: 1px 5px;
+  outline: none;
+  background-color: var(--form-element-card-background-color);
+  font-size: 14px;
+  cursor: pointer;
+  transition-duration: 0.25s;
+  border-radius: var(--form-elements-border-radius);
 }
 
 .todo-list-button:hover {
-  border-color: var(--navbar-active-link);
+  border-color: var(--form-element-hover);
 }
 
-.todo-list-button-complete{
-    color: grey;
-    width:fit-content;
-    line-height: 20px;
-    padding:1px 5px;
-    outline: none;
-    border: 0px;
-    background-color: #e9e9e9;
-    font-size: 14px;
-    cursor: pointer;
-    transition-duration: 0.25s;
-    border-radius: var(--form-elements-border-radius);
+.todo-list-button-complete {
+  color: grey;
+  width: fit-content;
+  line-height: 20px;
+  padding: 1px 5px;
+  outline: none;
+  border: 0px;
+  background-color: #e9e9e9;
+  font-size: 14px;
+  cursor: pointer;
+  transition-duration: 0.25s;
+  border-radius: var(--form-elements-border-radius);
 }
 
 .form-text-area {
-    background-color: var(--app-content-secondary-color);
-    border: var(--default-border);
-    border-radius: var(--form-elements-border-radius);
-    color: var(--app-content-main-color);
-    font-size: 15px;
-    line-height: 20px;
-    padding: 0px 0px 0px 5px;
-    height: 15em;
-    width: 50em;
+  background: var(--app-content-secondary-color);
+  border: var(--form-border);
+  border-radius: var(--form-elements-border-radius);
+  color: var(--form-text-color);
+  font-size: 15px;
+  line-height: 20px;
+  padding: 0px 0px 0px 5px;
+  height: 15em;
+  width: 50em;
 }
 
-.form-text-area:hover{
-  border-color: var(--navbar-active-link);
+.form-text-area:hover {
+  border-color: var(--form-element-hover);
 }
 
 .form-text-area:focus {
-  border-color: var(--navbar-active-link);
+  border-color: var(--form-focus-color);
   outline: none;
 }
 
 .table-input {
-    background-color: var(--app-content-secondary-color);
-    color: var(--app-content-main-color);
-    font-size: 12px;
-    font-family: "Poppins", sans-serif;
-    line-height: 20px;
-    border-radius: 0px;
-    width: 100%;
-    height: 100%; 
-    box-sizing: border-box;
-    transition: 0.1s;
-    margin: 0;
-    border: none;
-    padding: 0 0 0 10px;
-    top: 0;
-    left: 0;
-    position: absolute;
+  background-color: var(--form-background-color);
+  color: var(--form-text-color);
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  line-height: 20px;
+  border-radius: 0px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  transition: 0.1s;
+  margin: 0;
+  border: none;
+  padding: 0 0 0 10px;
+  top: 0;
+  left: 0;
+  position: absolute;
 }
 
 .todo-input {
-    background-color: var(--app-content-secondary-color);
-    color: var(--app-content-main-color);
-    font-size: 14px;
-    font-family: "Poppins", sans-serif;
-    line-height: 25px;
-    border-radius: 0px;
-    width: 100%;
-    height: 100%; 
-    box-sizing: border-box;
-    transition: 0.1s;
-    margin: 0;
-    border: none;
-    padding: 0 0 0 10px;
-    top: 0;
-    left: 0;
-    position: absolute;
+  background-color: var(--app-content-secondary-color);
+  color: var(--app-content-main-color);
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  line-height: 25px;
+  border-radius: 0px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  transition: 0.1s;
+  margin: 0;
+  border: none;
+  padding: 0 0 0 10px;
+  top: 0;
+  left: 0;
+  position: absolute;
 }
 
 input[type="checkbox"] {
-    outline: 0;
-    background: #f2f2f2;
-    border: 1px solid black;
-    width: 40px;
-  }
+  outline: 0;
+  background: #f2f2f2;
+  border: 1px solid black;
+  width: 40px;
+}
 
 input {
-    font-family: "Roboto", sans-serif;
-    outline: 0;
-    background-color: var(--app-content-secondary-color);
-    width: 500px;
-    border: var(--default-border);
-    color: var(--app-content-main-color);
-    margin: 0 0 15px;
-    padding: 10px;
-    box-sizing: border-box;
-    font-size: 14px;
-    border-radius: var(--form-elements-border-radius);
-  }
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background-color: var(--form-background-color);
+  width: 500px;
+  border: var(--form-border);
+  color: var(--form-text-color);
+  margin: 0 0 15px;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border-radius: var(--form-elements-border-radius);
+}
 
 .input-short {
-    font-family: "Roboto", sans-serif;
-    outline: 0;
-    background-color: var(--app-content-secondary-color);
-    width: 100px;
-    border: var(--default-border);
-    color: var(--app-content-main-color);
-    margin: 0 0 15px;
-    padding: 10px;
-    box-sizing: border-box;
-    font-size: 14px;
-    border-radius: var(--form-elements-border-radius);
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background-color: var(--form-background-color);
+  width: 100px;
+  border: var(--form-border);
+  color: var(--form-text-color);
+  margin: 0 0 15px;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border-radius: var(--form-elements-border-radius);
 }
 
 .input-medium {
-    font-family: "Roboto", sans-serif;
-    outline: 0;
-    background-color: var(--app-content-secondary-color);
-    width: 200px;
-    border: var(--default-border);
-    margin: 0 0 15px;
-    padding: 10px;
-    box-sizing: border-box;
-    font-size: 14px;
-    border-radius: var(--form-elements-border-radius);
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background-color: var(--form-background-color);
+  width: 200px;
+  border: var(--form-border);
+  margin: 0 0 15px;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border-radius: var(--form-elements-border-radius);
 }
-  
+
 input:focus,
 .input-short:focus,
 .input-medium:focus {
-    border-color: var(--svg-icon-color);
-  }
+  border-color: var(--form-element-hover);
+}
 
-  .form {
-    position: relative;
-    z-index: 1;
-    background: var(--app-content-main-color);
-    max-width: 360px;
-    margin: 0 auto 100px;
-    padding: 45px;
-    text-align: center;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-  }
+.form {
+  position: relative;
+  z-index: 1;
+  background: var(--form-background-color);
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
 
-  .form button {
-    font-family: "Roboto", sans-serif;
-    text-transform: uppercase;
-    outline: 0;
-    background-color: var(--app-content-secondary-color);
-    width: 100%;
-    border: 0;
-    padding: 15px;
-    color: var(--app-content-main-color);
-    font-size: 14px;
-    -webkit-transition: all 0.3 ease;
-    transition: all 0.3 ease;
-    cursor: pointer;
-    border-radius: var(--form-elements-border-radius);
-  }
-  
-  .form button:hover,.form button:active,.form button:focus {
-    background: var(--navbar-active-link);
-  }
-  .form .message {
-    margin: 15px 0 0;
-    color: #b3b3b3;
-    font-size: 12px;
-  }
-  .form .message a {
-    color: #4CAF50;
-    text-decoration: none;
-  }
-  .form .register-form {
-    display: none;
-  }
+.form button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background-color: var(--form-background-color);
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: var(--form-text-color);
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+  border-radius: var(--form-elements-border-radius);
+}
+
+.form button:hover,
+.form button:active,
+.form button:focus {
+  background: var(--form-background-color);
+  border-color: var(--form-element-hover);
+}
+
+.form .message {
+  margin: 15px 0 0;
+  color: #b3b3b3;
+  font-size: 12px;
+}
+
+.form .message a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+
+.form .register-form {
+  display: none;
+}
 
 .card-input {
-    font-family: "Roboto", sans-serif;
-    outline: 0;
-    background: var(--app-content-main-color);
-    width: 500px;
-    border: 1px solid black;
-    margin: 0 0 15px;
-    padding: 10px;
-    box-sizing: border-box;
-    font-size: 14px;
-    border-radius: var(--form-elements-border-radius);
-  }
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: var(--app-content-main-color);
+  width: 500px;
+  border: 1px solid black;
+  margin: 0 0 15px;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border-radius: var(--form-elements-border-radius);
+}
 
-.spec-button{
-    color: var(--app-content-main-color);
-    width:fit-content;
-    line-height: 20px;
-    padding:3px 8px;
-    outline: none;
-    border: 1px solid white;
-    border-radius: var(--form-elements-border-radius);
-    background-color: var(--app-content-secondary-color);
-    font-size: 14px;
-    cursor: pointer;
-    transition-duration: 0.25s;
+.spec-button {
+  color: var(--app-content-main-color);
+  width: fit-content;
+  line-height: 20px;
+  padding: 3px 8px;
+  outline: none;
+  border: 1px solid white;
+  border-radius: var(--form-elements-border-radius);
+  background-color: var(--app-content-secondary-color);
+  font-size: 14px;
+  cursor: pointer;
+  transition-duration: 0.25s;
 
 }
 
 .input-spec {
-    background-color: var(--app-content-secondary-color);
-    border: var(--default-border);
-    color: var(--app-content-main-color);
-    font-size: 14px;
-    line-height: 24px;
-    padding: 0px 10px 0px 5px;
-    height: 28px;
-    border-radius: 0px;
-    max-width: 150px;
-    transition: 0.2s;
-    border-radius: var(--form-elements-border-radius);
-  }
+  background-color: var(--app-content-secondary-color);
+  border: var(--default-border);
+  color: var(--app-content-main-color);
+  font-size: 14px;
+  line-height: 24px;
+  padding: 0px 10px 0px 5px;
+  height: 28px;
+  border-radius: 0px;
+  max-width: 150px;
+  transition: 0.2s;
+  border-radius: var(--form-elements-border-radius);
+}
 
 .input-heating {
-    background-color: var(--app-content-secondary-color);
-    color: var(--app-content-main-color);
-    font-size: 14px;
-    height: 28px;
-    width: 90px;
-    border-radius: 0px;
-    margin-top: 2px;
-    transition: 0.2s;
-    border-radius: var(--form-elements-border-radius);
-  }
+  background-color: var(--form-background-color);
+  color: var(--form-text-color);
+  font-size: 14px;
+  height: 28px;
+  width: 150px;
+  border-radius: 0px;
+  margin-top: 2px;
+  transition: 0.2s;
+  border-radius: var(--form-elements-border-radius);
+}
 
-  .input-heating-medium-length {
-    background-color: var(--app-content-secondary-color);
-    color: var(--app-content-main-color);
-    border: var(--default-border);
-    border-radius: var(--form-elements-border-radius);
-    font-size: 14px;
-    height: 35px;
-    margin-top: 5px;
-    max-width: 150px;
-    transition: 0.2s;
-  }
+.input-heating-medium-length {
+  background-color: var(--form-background-color);
+  color: var(--form-text-color);
+  border: var(--form-border);
+  border-radius: var(--form-elements-border-radius);
+  font-size: 14px;
+  height: 35px;
+  margin-top: 5px;
+  max-width: 150px;
+  transition: 0.2s;
+}
 
-  .input-heating:focus,
-  .input-heating-medium-length:focus {
-    border-color: var(--navbar-active-link);
-  }
+.input-heating:focus,
+.input-heating-medium-length:focus {
+  border-color: var(--form-focus-color);
+  background-color: var(--form-background-color);
+}
 
-.spec-select{
-    padding:1px 10px;
-    background-color: var(--app-content-secondary-color);
-    border: var(--default-border);
-    color: var(--app-content-main-color);
-    font-size: 12px;
-    line-height: 20px;
-    border-radius: 7px;
-    padding: 0px 10px 0px 5px;
-    height: 20px;
-    background-size: 16px;
-    background-repeat: no-repeat;
-    background-position: left 10px center;
-    transition: 0.2s;
-    border-radius: var(--form-elements-border-radius);
+.spec-select {
+  padding: 1px 10px;
+  background-color: var(--app-content-secondary-color);
+  border: var(--default-border);
+  color: var(--app-content-main-color);
+  font-size: 12px;
+  line-height: 20px;
+  border-radius: 7px;
+  padding: 0px 10px 0px 5px;
+  height: 20px;
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: left 10px center;
+  transition: 0.2s;
+  border-radius: var(--form-elements-border-radius);
 }
 
 input:placeholder {
-color: var(--app-content-main-color);
-font-size: 14px;
+  color: var(--app-content-main-color);
+  font-size: 14px;
 }
 
 input:hover {
-    border-color: var(--navbar-active-link);
+  border-color: var(--form-element-hover);
 }
 
 input:focus {
-    outline: none;
+  outline: none;
 }
 
 input[type="file"] {
-    width: 400px;
-    color: var(--app-content-main-color);
+  width: 400px;
+  color: var(--app-content-main-color);
 }
 
 input[type="file"]::file-selector-button {
-    background-color: var(--app-content-secondary-color);
-    border: var(--default-border);
-    color: var(--app-content-main-color);
-  }
+  background-color: var(--app-content-secondary-color);
+  border: var(--default-border);
+  color: var(--app-content-main-color);
+}
 
 input[type="file"]::file-selector-button:hover {
-    color: var(--app-content-main-color);
-    border: var(--default-border);
-    cursor: pointer;
-    
-  }
-  
+  color: var(--app-content-main-color);
+  border: var(--default-border);
+  cursor: pointer;
+
+}
+
 input[type="file"]::file-selector-button:active {
-    background-color: #4c82af;
-    color: white;
+  background-color: #4c82af;
+  color: white;
 }
 
 .checkbox-group {
   display: flex;
   align-items: center;
 }
+
 .checkbox-group label {
   margin-right: 10px;
   width: 75px;

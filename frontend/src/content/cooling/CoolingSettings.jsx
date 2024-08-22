@@ -48,9 +48,13 @@ function CoolingSettings ({setShowHeatingSettings: setShowCoolingSettings, build
 
             <div className="settings-popup">
                 <div className="todo-popup-header">
+                    <div style={{display: "flex", width: "100%", justifyContent: "flex-end"}}>
                     <span onClick={(e) => handleClick(e, setShowCoolingSettings)} className="todo-close-btn">&times;</span>
-                    <br />
+                    </div>
+                    
+                    <div>
                     Kjøleinnstillinger bygg {data && data.building_data.BuildingName}
+                    </div>
                 </div>
                 <div className="settings-popup-item-container">
                     <p>

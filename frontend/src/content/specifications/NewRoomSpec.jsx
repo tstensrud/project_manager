@@ -131,27 +131,27 @@ function NewRoomSpec() {
 
                                 <p className="info">
                                     Romtype <br />
-                                    <input ref={roomTypeRef} type="text" onChange={handleInputChange} className="form-input" name="room_type" placeholder="eks: Kontor" tabIndex="1" required /> {response && response.error_room_type ? (<>&nbsp; NB! Romtypen finnes allerede</>) : ''}
+                                    <input ref={roomTypeRef} type="text" onChange={handleInputChange} className="card-input" name="room_type" placeholder="eks: Kontor" tabIndex="1" required /> {response && response.error_room_type ? (<>&nbsp; NB! Romtypen finnes allerede</>) : ''}
                                 </p>
                                 <p className="info">
                                     Luftmengde per person m<sup>3</sup>/pers <br />
-                                    <input ref={airPerPersonRef} type="text" onChange={handleInputChange} className="form-input" name="air_per_person" placeholder="m3/pers" tabIndex="2" /> {response && response.error_air_per_person ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
+                                    <input ref={airPerPersonRef} type="text" onChange={handleInputChange} className="card-input" name="air_per_person" placeholder="m3/pers" tabIndex="2" /> {response && response.error_air_per_person ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
                                 </p>
                                 <p className="info">
                                     Emisjonsbelastning m<sup>3</sup>/h <br />
-                                    <input ref={airEmissionRef} type="text" onChange={handleInputChange} className="form-input" name="air_emission" placeholder="m3/h" tabIndex="3" /> {response && response.error_air_emission ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
+                                    <input ref={airEmissionRef} type="text" onChange={handleInputChange} className="card-input" name="air_emission" placeholder="m3/h" tabIndex="3" /> {response && response.error_air_emission ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
                                 </p>
                                 <p className="info">
                                     Prosess m<sup>3</sup>/h <br />
-                                    <input ref={airProcessRef} type="text" onChange={handleInputChange} className="form-input" name="air_process" placeholder="m3/h" tabIndex="4" />{response && response.error_air_process ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
+                                    <input ref={airProcessRef} type="text" onChange={handleInputChange} className="card-input" name="air_process" placeholder="m3/h" tabIndex="4" />{response && response.error_air_process ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
                                 </p>
                                 <p className="info">
                                     Minimum luftmengde m<sup>3</sup>/m<sup>2</sup> <br />
-                                    <input ref={airMinimumRef} type="text" onChange={handleInputChange} className="form-input" name="air_minimum" placeholder="m3/m2" tabIndex="5" />{response && response.error_air_minimum ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
+                                    <input ref={airMinimumRef} type="text" onChange={handleInputChange} className="card-input" name="air_minimum" placeholder="m3/m2" tabIndex="5" />{response && response.error_air_minimum ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
                                 </p>
                                 <p className="info">
                                     Ventilasjonsprinsipp <br />
-                                    <select ref={ventilationPrincipleRef} tabIndex="6" onChange={handleInputChange} name="ventilation_principle">
+                                    <select className="card-select" ref={ventilationPrincipleRef} tabIndex="6" onChange={handleInputChange} name="ventilation_principle">
                                         <option value="Omrøring">Omrøring</option>
                                         <option value="Fortrengning">Fortrengning</option>
                                         <option value="Annet">Annet</option>
@@ -159,7 +159,7 @@ function NewRoomSpec() {
                                 </p>
                                 <p className="info">
                                     Gjenvinner: <br />
-                                    <select ref={heatExRef} onChange={handleInputChange} name="heat_ex" tabIndex="7">
+                                    <select className="card-select" ref={heatExRef} onChange={handleInputChange} name="heat_ex" tabIndex="7">
                                         <option value="R">Roterenede</option>
                                         <option value="P">Kryss/plate</option>
                                         <option value="B">Batteri</option>
@@ -167,22 +167,23 @@ function NewRoomSpec() {
                                 </p>
                                 <p className="info">
                                     dB-teknisk<br />
-                                    <input ref={dbTechnicalRef} type="text" onChange={handleInputChange} className="form-input" name="db_technical" placeholder="dB" tabIndex="8" /> <br />
+                                    <input ref={dbTechnicalRef} type="text" onChange={handleInputChange} className="card-input" name="db_technical" placeholder="dB" tabIndex="8" /> <br />
                                     dB-naborom <br />
-                                    <input ref={dbNeighbourRef} type="text" onChange={handleInputChange} className="form-input" name="db_neighbour" placeholder="dB" tabIndex="9" /> <br />
+                                    <input ref={dbNeighbourRef} type="text" onChange={handleInputChange} className="card-input" name="db_neighbour" placeholder="dB" tabIndex="9" /> <br />
                                     dB-korridor <br />
-                                    <input ref={dbCorridorRef} type="text" onChange={handleInputChange} className="form-input" name="db_corridor" placeholder="dB" tabIndex="10" />
+                                    <input ref={dbCorridorRef} type="text" onChange={handleInputChange} className="card-input" name="db_corridor" placeholder="dB" tabIndex="10" />
                                 </p>
                             </div>
                         </div>
 
                         <div className="cards-large">
                             <div className="information [ card ]">
+                                <div style={{width: "500px"}}></div>
                                 <p className="info">
                                     Romstyring: <br />
                                 </p>
                                 <div className="checkbox-group">
-                                    <select ref={vavRef} onChange={handleInputChange} name="vav" tabIndex="11">
+                                    <select className="card-select" ref={vavRef} onChange={handleInputChange} name="vav" tabIndex="11">
                                         <option value="1">VAV - variabel luftmengde</option>
                                         <option value="0">CAV - konstant luftmengde</option>
                                     </select>
@@ -211,10 +212,10 @@ function NewRoomSpec() {
 
                                 <p className="info">
                                     Presiseringer / kommentar til rom: <br />
-                                    <input ref={notesRef} onChange={handleInputChange} name="notes" tabIndex="18" />
+                                    <input ref={notesRef} onChange={handleInputChange} name="notes" className="card-input" tabIndex="18" />
                                 </p>
                                 <p className="info">
-                                    <button type="submit" className="spec-button" tabIndex="19">Legg til</button>
+                                    <button type="submit" className="card-button" tabIndex="19">Legg til</button>
                                 </p>
                             </div>
                         </div>

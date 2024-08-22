@@ -60,9 +60,13 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
 
             <div className="settings-popup">
                 <div className="todo-popup-header">
-                    <span onClick={(e) => handleClick(e, setShowHeatingSettings)} className="todo-close-btn">&times;</span>
-                    <br />
-                    Varmeinnstillinger bygg {data && data.building_data.BuildingName}
+                    <div style={{display: "flex", width: "100%", justifyContent: "flex-end"}}>
+                        <span onClick={(e) => handleClick(e, setShowHeatingSettings)} className="todo-close-btn">&times;</span>
+                    </div>
+                    
+                    <div>
+                        Varmeinnstillinger bygg {data && data.building_data.BuildingName}
+                    </div>
                 </div>
                 <div className="settings-popup-item-container">
                     <form name="building_heating_settings" onSubmit={handleSubmit}>

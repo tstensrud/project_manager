@@ -59,6 +59,10 @@
   position: relative;
 }
 
+.fl-table tr:nth-child(even) {
+  background-color: var(--table-row-even);
+}
+
 .comments-cell {
   text-align: end !important;
   justify-content: end !important;

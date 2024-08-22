@@ -500,6 +500,8 @@ def update_room_data(room_uid: int, data) -> bool:
         if key == processed_data_list[0]:
             print(f"Setting {processed_data[key]} into {key} for room {room}")
             setattr(room, key, processed_data[key])
+            if key == "room_population" or key == "area":
+                update_ventilation_calculations(room_uid)
             #break
     try:
         db.session.commit()

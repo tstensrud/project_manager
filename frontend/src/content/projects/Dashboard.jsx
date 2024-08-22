@@ -55,7 +55,7 @@ function Dashboard() {
                     <form className="custom-form profile-form" onSubmit={handleSubmit}>
                       <p className="info">Velg prosjekt å jobbe på fra menyen under, eller opprett nytt prosjekt fra menyen over: Dashboard - Nytt prosjekt</p>
                       <p className="info">
-                        <select ref={inputRef} onChange={handleChange}>
+                        <select className="card-select" ref={inputRef} onChange={handleChange}>
                           <option>- Velg prosjekt -</option>
                           {Array.isArray(data?.data) ? (
                             data.data.map((project) => (
@@ -67,7 +67,7 @@ function Dashboard() {
                         </select>
                       </p>
                       <p>
-                        <button type="submit" className="form-button">
+                        <button type="submit" className="card-button">
                           Gå til valgt prosjekt
                         </button>
                       </p>

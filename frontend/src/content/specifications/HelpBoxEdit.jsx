@@ -9,16 +9,16 @@ function HelpBoxEdit() {
             </p>
 
             <h4>Gjenvinner</h4>
-            <p>
+            
                 <ul>
                     <li>R = Roterende</li>
                     <li>B = Varmebatteri</li>
                     <li>P = Plate/kryss</li>
                 </ul>
-            </p>
+            
 
             <h4>Styring</h4>
-            <p>
+            
                 <ul>
                     <li>VAV = Variable luftmengde</li>
                     <li>CAV = Konstant luftmengde</li>
@@ -27,14 +27,14 @@ function HelpBoxEdit() {
                     <li>CO2 - Styres på CO2-mengder</li>
                     <li>F = Fukt</li>
                 </ul>
-            </p>
+            
             <h4>Presiseringer</h4>
             <p>
                 Her kan du notere ned spesifike ting for romtypen som er verdt å vite når man prosjekterer.
             </p>
 
             <h4>Lyd</h4>
-            <p>
+            
                 <ul>
                     <li>
                         db-Teknisk - maks lydnivå fra det tekniske anlegget
@@ -46,7 +46,7 @@ function HelpBoxEdit() {
                         db-korridor - maks lydnivå overført til korridorsone
                     </li>
                 </ul>
-            </p>
+            
 
             <h4>Kommentar</h4>
             <p>

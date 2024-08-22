@@ -17,6 +17,7 @@ function HelpBox() {
             <h4>Redigere systemer</h4>
             <p>
                 Du kan redigere følgende kolonner for hvert system:
+            </p>
                 <ul>
                     <li>
                         Systemnr
@@ -34,7 +35,7 @@ function HelpBox() {
                         Gjenvinnertype. (R=roterende, B=batteri, P=plate/kryss)
                     </li>
                 </ul>
-            </p>
+
             <p>
                 Kolonnene med prosjektert tilluft blir kontinuerlig beregnet hver gang du knytter et rom opp mot systemet. Dersom
                 den prosjekterte luftmengden overgår viftekapasiteten vil du få et varsel om dette under "Merknad".
