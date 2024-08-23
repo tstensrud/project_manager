@@ -43,8 +43,8 @@ function Settings() {
             <div className="main-content">
 
                 <div className="flex-container-row">
-                    <div className="cards">
-                        <div className="information [ card ]">
+                    <div className="content-card">
+                        <div className="content-card-container">
                             <form className="custom-form profile-form" onSubmit={handleOnSubmit}>
                                 <h2 className="card-title">Rediger prosjektinnstillinger</h2>
                                 <h4>Prosjektnummer</h4>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Field with Top Border Label</title>
+    <style>
+        /* Container for input and label */
+        .input-container {
+            position: relative;
+            margin-top: 20px;
+            width: 300px; /* Set a width for the input field */
+        }
+
+        /* Style the input field */
+        .input-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        /* Style the label */
+        .input-label {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background-color: white;
+            padding: 0 5px;
+            font-size: 12px;
+            color: #666;
+            pointer-events: none;
+            transition: 0.2s ease all;
+        }
+
+        /* On focus, adjust the label position */
+        .input-container input:focus + .input-label,
+        .input-container input:not(:placeholder-shown) + .input-label {
+            top: -20px;
+            font-size: 12px;
+            color: #4caf50; /* Optional: Change color on focus */
+        }
+
+        /* Add some custom styling when input is filled */
+        .input-container input:valid + .input-label {
+            color: #4caf50;
+        }
+    </style>
+</head>
+<body>
+
+    <div className="input-container">
+        <input type="text" id="input-field" required placeholder=" " />
+        <label for="input-field" className="input-label">Title Text</label>
+    </div>
+
+</body>
+</html>

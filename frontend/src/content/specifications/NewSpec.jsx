@@ -33,15 +33,18 @@ function NewSpec() {
                     <div className="cards">
                         <div className="information [ card ]">
                             <h2 className="card-title">Opprett ny kravspesifikasjon</h2>
-                            <p className="info">Skriv inn navnet på kravspesifikasjonen du vil opprette. Gi den et beskrivende navn slik at det er lett å forstå hva det gjelder.<br />
-                                Er det en generell kravspesfikasjon bruk for eksempel et navn som: <br />
-                                SKOK - omsorgsboliger. <br />
+                            <p className="info">Skriv inn navnet på kravspesifikasjonen du vil opprette. Gi den et beskrivende navn slik at det er lett å forstå hva det gjelder.
+                            </p>
+                            <p className="info">
+                                Er det en generell kravspesfikasjon som kan benyttes i flere prosjetker, bruk for eksempel et navn som: <br />
+                                - SKOK - omsorgsboliger, 2024. <br />
                                 Er det en mer prosjektspesifik kravspesifikasjon bruk et navn som: <br />
                                 - Brekketunet bolig, Obos, 2024
                             </p>
                             <form onSubmit={submitNewSpec}>
                                 <p className="info">
-                                    <input name="spec_name" onChange={handleInputChange} type="text" placeholder="Navn på kravspesifikasjon"></input> &nbsp; &nbsp; <button type="submit" className="form-button">Legg til</button>
+                                    <input className="card-input" name="spec_name" onChange={handleInputChange} type="text" placeholder="Navn på kravspesifikasjon" />
+                                    <button type="submit" className="card-button">Legg til</button>
                                 </p>
                             </form>
                             <p>

@@ -63,8 +63,8 @@ function BuildingSummary({ buildingUid, projectId }) {
     }
 
     return (
-        <div className="cards">
-            <div className="information [ card ]">
+        <div className="content-card">
+            <div className="content-card-container">
                 <div style={{ display: "flex", width: "400px", marginBottom: "20px" }}>
                     <div style={{ display: "flex", width: "40%" }}>
                         <BuildingIcon />
@@ -79,7 +79,12 @@ function BuildingSummary({ buildingUid, projectId }) {
                         <LoadingSpinner />
                     ) : (
                         <>
-                            Avløpskurve: <strong>{buildingSummaryData && buildingSummaryData.building_data.GraphCurve}</strong>
+                            <div style={{ display: "flex", width: "100%", flexDirection: "row" }}>
+                                <div style={{marginRight: "20px"}}>
+                                Avløpskurve: 
+                                </div>
+                                <strong>{buildingSummaryData && buildingSummaryData.building_data.GraphCurve}</strong>
+                            </div>
                             <form onSubmit={handleCurveSubmit}>
                                 <p>
                                     <select className="card-select" onChange={handleCurveChange}>
@@ -91,100 +96,107 @@ function BuildingSummary({ buildingUid, projectId }) {
                                     <button className="card-button" type="submit">Oppdater</button>
                                 </p>
                             </form>
+
                             <h3>Oppsummering vannmengder</h3>
-                            <div className="sanitary-building-summary-equipment-header">
-                                <div style={{ display: "flex", justifyContent: "start", width: "100%" }}>
-                                    <strong>Spillvann</strong>
-                                </div>
-                            </div>
-
-                            <div className="sanitary-building-summary-equipment-container">
-                                <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                    Vannmengde
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
-                                    {buildingSummaryData && buildingSummaryData.totals.drainage.total.toFixed(2)} L/s
-                                </div>
-                            </div>
-
-                            <div className="sanitary-building-summary-equipment-container">
-                                <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                    Rørdim. (MA) 1:60
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
-                                    {buildingSummaryData && buildingSummaryData.totals.drainage.pipe_siz_1_60} mm
-                                </div>
-                            </div>
-
-                            <div className="sanitary-building-summary-equipment-container">
-                                <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                    Rørdim. (MA) vertikal
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
-                                    {buildingSummaryData && buildingSummaryData.totals.drainage.pipe_size_vertical} mm
-                                </div>
-                            </div>
-
-                            <div className="sanitary-building-summary-equipment-header">
-                                <div style={{ display: "flex", justifyContent: "start", width: "100%" }}>
-                                    <strong>Kaldtvann</strong>
-                                </div>
-                            </div>
-
-                            <div className="sanitary-building-summary-equipment-container">
-                                <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                    Vannmengde
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
-                                    {buildingSummaryData && buildingSummaryData.totals.cw.total.toFixed(2)} L/s
-                                </div>
-                            </div>
-
-                            <div className="sanitary-building-summary-equipment-container">
-                                <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                    Rørdim. (Cu)
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
-                                    {buildingSummaryData && buildingSummaryData.totals.cw.pipe_size} mm
-                                </div>
-                            </div>
-
-                            <div className="sanitary-building-summary-equipment-header">
-                                <div style={{ display: "flex", justifyContent: "start", width: "100%" }}>
-                                    <strong>Varmtvann</strong>
-                                </div>
-                            </div>
-
-                            <div className="sanitary-building-summary-equipment-container">
-                                <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                    Vannmengde
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
-                                    {buildingSummaryData && buildingSummaryData.totals.ww.total.toFixed(2)} L/s
-                                </div>
-                            </div>
-
-                            <div className="sanitary-building-summary-equipment-container">
-                                <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                    Rørdim. (Cu)
-                                </div>
-                                <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
-                                    {buildingSummaryData && buildingSummaryData.totals.ww.pipe_size} mm
-                                </div>
-                            </div>
-
-                            <h3>Installert sanitærustyr</h3>
-                            {
-                                buildingSummaryData && Object.entries(buildingSummaryData && buildingSummaryData.building_data.sanitary_summary).map((equip, index) => (
-                                    <div className="sanitary-building-summary-equipment-container" key={index}>
-                                        <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
-                                            {translateEquipment(equip[0])}</div>
-                                        <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
-                                            {equip[1]} stk
-                                        </div>
+                            <div className="content-card-inner-container">
+                                <div className="sanitary-building-summary-equipment-header">
+                                    <div style={{ display: "flex", justifyContent: "start", width: "100%" }}>
+                                        <strong>Spillvann</strong>
                                     </div>
-                                ))
-                            }
+                                </div>
+
+                                <div className="sanitary-building-summary-equipment-container">
+                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                        Vannmengde
+                                    </div>
+                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                        {buildingSummaryData && buildingSummaryData.totals.drainage.total.toFixed(2)} L/s
+                                    </div>
+                                </div>
+
+                                <div className="sanitary-building-summary-equipment-container">
+                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                        Rørdim. (MA) 1:60
+                                    </div>
+                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                        {buildingSummaryData && buildingSummaryData.totals.drainage.pipe_siz_1_60} mm
+                                    </div>
+                                </div>
+
+                                <div className="sanitary-building-summary-equipment-container">
+                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                        Rørdim. (MA) vertikal
+                                    </div>
+                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                        {buildingSummaryData && buildingSummaryData.totals.drainage.pipe_size_vertical} mm
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="content-card-inner-container">
+                                <div className="sanitary-building-summary-equipment-header">
+                                    <div style={{ display: "flex", justifyContent: "start", width: "100%" }}>
+                                        <strong>Kaldtvann</strong>
+                                    </div>
+                                </div>
+
+                                <div className="sanitary-building-summary-equipment-container">
+                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                        Vannmengde
+                                    </div>
+                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                        {buildingSummaryData && buildingSummaryData.totals.cw.total.toFixed(2)} L/s
+                                    </div>
+                                </div>
+
+                                <div className="sanitary-building-summary-equipment-container">
+                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                        Rørdim. (Cu)
+                                    </div>
+                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                        {buildingSummaryData && buildingSummaryData.totals.cw.pipe_size} mm
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="content-card-inner-container">
+                                <div className="sanitary-building-summary-equipment-header">
+                                    <div style={{ display: "flex", justifyContent: "start", width: "100%" }}>
+                                        <strong>Varmtvann</strong>
+                                    </div>
+                                </div>
+
+                                <div className="sanitary-building-summary-equipment-container">
+                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                        Vannmengde
+                                    </div>
+                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                        {buildingSummaryData && buildingSummaryData.totals.ww.total.toFixed(2)} L/s
+                                    </div>
+                                </div>
+
+                                <div className="sanitary-building-summary-equipment-container">
+                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                        Rørdim. (Cu)
+                                    </div>
+                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                        {buildingSummaryData && buildingSummaryData.totals.ww.pipe_size} mm
+                                    </div>
+                                </div>
+                            </div>
+                            <h3>Installert sanitærustyr</h3>
+                            <div className="content-card-inner-container">
+                                {
+                                    buildingSummaryData && Object.entries(buildingSummaryData && buildingSummaryData.building_data.sanitary_summary).map((equip, index) => (
+                                        <div className="sanitary-building-summary-equipment-container" key={index}>
+                                            <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                                {translateEquipment(equip[0])}</div>
+                                            <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                                {equip[1]} stk
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         </>
                     )
                 }

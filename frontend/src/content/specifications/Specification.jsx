@@ -2,12 +2,17 @@ import { GlobalContext } from '../../GlobalContext';
 import { useParams, Link } from 'react-router-dom';
 import { useState, useContext } from 'react';
 
+// Hooks
 import useSubmitFile from '../../hooks/useSubmitFile'
 import useFetch from '../../hooks/useFetch'
+
+// SVG
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeaderIcon from '../../assets/svg/specificationsIcon.svg?react';
 import EditIcon from '../../assets/svg/editIcon.svg?react';
 import LoadingSpinner from '../../layout/LoadingSpinner';
+import TableTop from '../../layout/TableTop';
+import Helpbox from './HelpBox';
 
 
 function Specification() {
@@ -59,10 +64,11 @@ function Specification() {
                                         <input type="file" accept='.csv' onChange={handleFileChange} disabled={true} /> &nbsp; &nbsp; <button type="submit" className="form-button" disabled>Last opp</button>
                                     </form>
                                 </div>
-                                <div style={{ display: "flex", flex: "1", justifyContent: "end", alignItems: "center", marginRight: "20px", cursor: "pointer" }}>
+                                <div style={{ display: "flex", flex: "1", justifyContent: "end", alignItems: "center", marginRight: "20px"}}>
                                     <Link to={`/specifications/edit/${suid}/${data.spec_name}`}>Rediger kravspesifikasjon</Link>  &nbsp; <EditIcon />
                                 </div>
                             </div>
+                            <TableTop info={<Helpbox />} />
                             <div className="table-wrapper">
                                 <table className="fl-table">
                                     <thead>

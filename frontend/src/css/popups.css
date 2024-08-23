@@ -44,7 +44,7 @@
 
 .popup-close:hover,
 .popup-close:focus {
-    color: red;
+    color: var(--navbar-active-link);
     text-decoration: none;
     cursor: pointer;
 }
@@ -112,17 +112,17 @@
 }
 
 .todo-close-btn:hover {
-    color: var(--form-element-hover);
+    color: var(--navbar-active-link);
 }
 
 .todo-completed {
     text-decoration: line-through;
     background-color: var(--table-background-color);
-    color: black;
+    color: var(--app-content-main-color);
     padding: 5px;
     position: relative;
     width: 300px;
-    border-bottom: 1px solid black;
+    border-bottom: var(--default-border);
 }
 
 /* Settings window for cooling and heating*/
@@ -175,7 +175,7 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: var(--default-border-radius);
     width: 400px;
     height: 400px;
     justify-content: center;
@@ -203,12 +203,12 @@
 }
 
 .help-box-card {
-    background-color: var(--app-content-secondary-color);
+    background-color: var(--card-background-color);
     display: flex;
     flex-direction: column;
     padding-left: 20px;
     padding-right: 20px;
-    border-radius: 10px;
+    border-radius: var(--default-border-radius);
     width: 30%;
     height: 50%;
     overflow-y: auto;
@@ -217,7 +217,7 @@
 
 .help-box-card-header {
     width: 100%;
-    background-color: var(--app-content-secondary-color);
+    background-color: var(--card-background-color);
     display: flex;
     justify-content: flex-end;
     position: sticky;

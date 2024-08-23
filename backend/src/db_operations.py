@@ -352,7 +352,7 @@ Rooms methods
 def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str, room_number: str, room_name: str, area: float, room_pop: int, 
              air_per_person: float, air_emission: float, air_process: float, air_minimum: float, ventilation_principle: str, 
              heat_exchange: str, room_control: str, notes: str, db_technical: str, db_neighbour: str, db_corridor: str):
-    val = 1.0
+    val = 0
     uid = globals.encode_uid_base64(uuid4())
     new_room = models.Rooms(
         uid=uid,
@@ -1092,24 +1092,24 @@ def sum_heatloss_chosen_building_floor(building_uid: str, floor: str) -> float:
 
 
 def sum_heat_loss_building(building_uid: int) -> float:
-    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).join(models.Buildings).filter(models.Buildings.uid == building_uid).scalar()
+    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(models.Rooms.building_uid == building_uid).scalar()
     return heat_loss
 
 
 def sum_heat_loss_chosen_building(building_uid: int) -> float:
-    heat_loss = db.session.query(func.sum(models.Rooms.chosen_heating)).join(models.Buildings).filter(models.Buildings.uid == building_uid).scalar()
+    heat_loss = db.session.query(func.sum(models.Rooms.chosen_heating)).filter(models.Rooms.building_uid == building_uid).scalar()
     #print("WE CALCULATED HEATLOSS")
     return heat_loss
 
 
 def sum_heat_loss_project(project_uid: int) -> float:
-    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).join(models.Projects).filter(models.Rooms.project_uid == project_uid).scalar()
+    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(models.Rooms.project_uid == project_uid).scalar()
     print(heat_loss)
     return heat_loss
 
 
 def sum_heat_loss_project_chosen(project_uid: int) -> float:
-    heat_loss = db.session.query(func.sum(models.Rooms.chosen_heating)).join(models.Buildings).join(models.Projects).filter(models.Projects.uid == project_uid).scalar()
+    heat_loss = db.session.query(func.sum(models.Rooms.chosen_heating)).filter(models.Rooms.project_uid == project_uid).scalar()
     return heat_loss
 
 '''
@@ -1132,7 +1132,6 @@ def set_standard_cooling_settings(room_uid: int, data) -> bool:
         globals.log(f"Set standard cooling settings: {e}")
         db.session.rollback()
         return False
-
 
 def calculate_heat_loads_for_room(room_uid: int) -> bool:
     room = get_room(room_uid)
@@ -1169,6 +1168,10 @@ def calculate_total_cooling_for_room(room_uid: int) -> bool:
             return False
     else:
         return False
+
+def sum_cooling_from_equipment_project(project_uid: str) -> float:
+    cooling = db.session.query(func.sum(models.Rooms.cooling_equipment)).filter(models.Rooms.project_uid == project_uid).scalar()
+    return cooling
 
 '''
 Sanitary

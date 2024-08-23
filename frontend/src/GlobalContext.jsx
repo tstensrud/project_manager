@@ -1,5 +1,4 @@
-import React, { createContext, useState } from 'react';
-import useFetch from './hooks/useFetch'
+import React, { createContext, useEffect, useState } from 'react';
 
 const GlobalContext = createContext();
 
@@ -9,6 +8,7 @@ const GlobalProvider = ({ children }) => {
     const [userName, setUserName] = useState(null);
     const [activeProjectName, setActiveProjectName] = useState(null);
     const [token, setToken] = useState(null);
+    const [darkmode, setDarkmode] = useState(true);
 
     const value = {
         activeProject,
@@ -20,8 +20,29 @@ const GlobalProvider = ({ children }) => {
         activeProjectName,
         setActiveProjectName,
         token,
-        setToken
+        setToken,
+        darkmode,
+        setDarkmode
     };
+
+    useEffect(() => {
+        const theme = localStorage.getItem("theme");
+        if (theme === "light") {
+            setDarkmode(false);
+        } else {
+            setDarkmode(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (darkmode) {
+            document.documentElement.classList.remove("light");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.documentElement.classList.add("light");
+            localStorage.setItem("theme", "light");
+        }
+    }, [darkmode]);
 
     return (
         <GlobalContext.Provider value={value}>

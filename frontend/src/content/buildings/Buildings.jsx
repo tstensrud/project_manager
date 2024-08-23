@@ -47,6 +47,8 @@ function Buildings() {
             </div>
 
             <div className="flex-container-row">
+
+
                 {
                     loading && loading === true ? (
                         <>

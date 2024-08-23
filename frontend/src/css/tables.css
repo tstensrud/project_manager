@@ -131,7 +131,7 @@
   background: #333;
   color: var(--app-content-main-color);
   padding: 5px;
-  border-radius: 5px;
+  border-radius: var(--default-border-radius);
   white-space: nowrap;
   z-index: 10;
 }
@@ -140,7 +140,7 @@
   color: var(--app-content-main-color);
   font-size: 13px;
   font-weight: normal;
-  border-radius: 5px;
+  border-radius: var(--default-border-radius);
   border-collapse: collapse;
   white-space: nowrap;
   background-color: var(--table-background-color);
@@ -192,7 +192,7 @@
   color: var(--app-content-main-color);
   font-size: 13px;
   font-weight: normal;
-  border-radius: 5px;
+  border-radius: var(--default-border-radius);
   border-collapse: collapse;
   width: 100%;
   white-space: nowrap;

@@ -7,9 +7,8 @@ import SubTitleComponent from '../../layout/SubTitleComponent';
 import AccountIcon from '../../assets/svg/accountIcon.svg?react'
 
 function UserProfile () {
-    const {userUuid} = useContext(GlobalContext);
-    const {data, loading, error, refetch} = useFetch(`/user/${userUuid}/`);
-    console.log(data)
+    const {userUuid,} = useContext(GlobalContext);
+    const {data, refetch} = useFetch(`/user/${userUuid}/`);
 
     return (
         <>
@@ -28,7 +27,6 @@ function UserProfile () {
                                     <p className="info">Email: {data.user.email}</p>
                                     <br />
                                     <p className="info">Bruker-ID: {data.user.uuid}</p>
-
                                 </> : ''}
                         </div>
                     </div>

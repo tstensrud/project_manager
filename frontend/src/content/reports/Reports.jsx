@@ -44,8 +44,8 @@ function Reports() {
             <div className="main-content">
                 <SubTitleComponent svg={<HeaderIcon />} headerText={"Rapporter"} projectName="" projectNumber="" />
                 <div className="flex-container-row">
-                    <div className="cards">
-                        <div className="information [ card ]">
+                    <div className="content-card">
+                        <div className="content-card-container">
                             <h3>Excel-utskrifter</h3>
                             <ul>
                                 <li>
@@ -67,8 +67,8 @@ function Reports() {
                 </div>
 
                 <div style={{ display: "flex", width: "100%", justifyContent: "center" }}>
-                    <div className="cards">
-                        <div className="information [ card ]">
+                    <div className="content-card">
+                        <div className="content-card-container">
                             <h3>Klartgjorte filer</h3>
                             {ventLoading && ventLoading === true || heatingLoading && heatingLoading === true ? (
                                 <>

@@ -6,11 +6,11 @@ import LoadingSpinner from '../../layout/LoadingSpinner';
 function VentilationSummary({ projectId }) {
     const { data: systemsData, loading, error } = useFetch(`/project_api/${projectId}/systems/`)
     const { data } = useFetch(`/project_api/${projectId}/ventilation/`)
-
+    console.log(systemsData)
     return (
         <>
-            <div className="cards">
-                <div className="information [ card ]">
+            <div className="content-card">
+                <div className="content-card-container">
                     <CardTitle svg={<VentIcon />} title="Ventilasjonsdata" />
                     {
                         loading && loading === true ? (
@@ -27,7 +27,16 @@ function VentilationSummary({ projectId }) {
                                                 ))}
                                             </ul>
                                             <h4>Prosjektert luftmengde</h4>
-                                            {data.ventdata ? data.ventdata.toLocaleString() : "Ingen data"} m<sup>3</sup>/h
+                                            {
+                                                data.ventdata ? (
+                                                    <>
+                                                        <div style={{ display: "flex", width: "100%", flexDirection: "row" }}>
+                                                            {data.ventdata.toLocaleString()} m<sup>3</sup>/h
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <>"Ingen data"</>
+                                                )}
                                         </>
                                     ) : (
                                         <>

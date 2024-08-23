@@ -80,8 +80,9 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
     }
 
     return (
-        <div className="cards">
-            <div className="information [ card ]">
+
+        <div className="content-card">
+            <div className="content-card-container">
                 {
                     editBuildingContainer && editBuildingContainer === true ? (
                         <>
@@ -106,27 +107,38 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                         <CardTitle svg={<BuildingIcon />} title={buildingName} />
                     )
                 }
+                <div className="content-card-inner-container">
+                    <h4>Prosjektert areal</h4>
+                    <p className="info">
+                        {area.toLocaleString()} m<sup>2</sup>
+                    </p>
+                </div>
 
-                <p className="info">Prosjektert areal<br />
-                    {area.toLocaleString()} m<sup>2</sup>
-                </p>
-
-                <p className="info">Prosjektert luftmengde<br />
+                <div className="content-card-inner-container">
+                <h4>Prosjektert luftmengde</h4>
+                <p className="info">
                     {PlusIcon && <PlusIcon />}
                     <span className="supply-text"> {supplyAir.toLocaleString()} </span> m<sup>3</sup>/h
                     <br />
                     {MinusIcon && <MinusIcon />}
                     <span className="extract-text"> {extractAir.toLocaleString()} </span> m<sup>3</sup>/h
                 </p>
-                <p>Betjenes av ventilasjonssystem:</p>
+                </div>
+
+                <div className="content-card-inner-container">
+                <h4>Betjenes av ventilasjonssystem:</h4>
                 <ul>
                     {
                         buildingData.systems.map((system, index) => <li key={index}>{system}</li>)
                     }
                 </ul>
-                <p className="info">Prosjektert varme<br />
-                    {Number((heating / 1000).toFixed(1)).toLocaleString()} kW
+                    </div>
+                    <div className="content-card-inner-container">
+                <h4>Prosjektert varme</h4>
+                <p className="info">
+                    {Number((heating / 1000).toFixed(2)).toLocaleString()} kW
                 </p>
+                </div>
                 <div style={{ display: "flex", flexDirection: "row" }}>
                     <div style={{ display: "flex", marginTop: "50px", width: "100%", alignItems: "center", justifyContent: "end" }}>
                         {

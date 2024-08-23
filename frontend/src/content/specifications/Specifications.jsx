@@ -11,17 +11,17 @@ function Specifications() {
     const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
     const { data, loading, error, refetch } = useFetch(`/specifications/get_specifications/`);
 
-    useEffect(() => {
+    /* useEffect(() => {
         setActiveProject(projectId);
-    }, []);
+    }, []); */
 
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Kravspesifikasjoner"} projectName={""} projectNumber={""} />
             <div className='main-content'>
                 <div className="flex-container-row">
-                    <div className="cards">
-                        <div className="information [ card ]">
+                    <div className="content-card">
+                        <div className="content-card-container">
                             {
                                 loading && loading === true ? (
                                     <LoadingSpinner />

@@ -4,23 +4,25 @@ import CardTitle from '../../layout/CardTitle';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 
 function HeatingSummary({ projectId }) {
-    const { data, loading, error } = useFetch(`/project_api/${projectId}/heating/`)
-
+    const { data, loading, error } = useFetch(`/project_api/${projectId}/energy/`)
+    console.log(data)
     return (
         <>
-            <div className="cards">
-                <div className="information [ card ]">
+            <div className="content-card">
+                <div className="content-card-container">
                     {
                         loading && loading === true ? (
                             <LoadingSpinner />
                         ) : (
                             <>
                                 <CardTitle svg={<HeatingIcon />} title="Varme- og kjøledata" />
-                                <h4>Prosjektbeskrivelse</h4>
-                                <p className="info">Tekst</p>
-
-                                <p className="info">Prosjektert varmetap<br />
-                                    {data && ((data.heating_data / 1000).toFixed(0)).toLocaleString()} kW
+                                <h4>Prosjektert varmetap</h4>
+                                <p className="info">
+                                    {data && ((data.heating_data / 1000).toFixed(2)).toLocaleString()} kW
+                                </p>
+                                <h4>Tilført kjøling</h4>
+                                <p>
+                                {data && ((data.cooling_data / 1000).toFixed(2)).toLocaleString()} kW
                                 </p>
                             </>
                         )

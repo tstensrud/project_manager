@@ -475,11 +475,12 @@ def ventilation_update_room(project_uid, room_uid):
 #   HEATING
 #
 #
-@project_api_bp.route('/heating/', methods=['GET'])
+@project_api_bp.route('/energy/', methods=['GET'])
 @jwt_required()
 def heating(project_uid):
-    total_heating = dbo.sum_heat_loss_project(project_uid)
-    return jsonify({"heating_data": total_heating})
+    total_heating = dbo.sum_heat_loss_project_chosen(project_uid)
+    total_cooling_equipment = dbo.sum_cooling_from_equipment_project(project_uid)
+    return jsonify({"heating_data": total_heating, "cooling_data": total_cooling_equipment})
 
 @project_api_bp.route('/heating/buildings/', methods=['GET'])
 @jwt_required()

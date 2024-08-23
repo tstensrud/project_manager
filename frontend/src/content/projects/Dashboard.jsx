@@ -49,8 +49,8 @@ function Dashboard() {
           ) : (
             <>
               <div className="flex-container-row">
-                <div className="cards">
-                  <div className="information [ card ]">
+                <div className="content-card">
+                  <div className="content-card-container">
                     <h2 className="card-title">Velg prosjekt</h2>
                     <form className="custom-form profile-form" onSubmit={handleSubmit}>
                       <p className="info">Velg prosjekt å jobbe på fra menyen under, eller opprett nytt prosjekt fra menyen over: Dashboard - Nytt prosjekt</p>

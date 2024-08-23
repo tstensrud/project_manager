@@ -1,4 +1,6 @@
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+
+// Components
 import Layout from "./Layout";
 import NoAccess from "./layout/NoAccess";
 import Login from "./login/Login";
@@ -30,7 +32,7 @@ import Reports from './content/reports/Reports';
 function App() {
 
   const { token, removeToken, setToken } = useToken();
-
+  
   return (
     <Router>
       <Routes>
@@ -41,7 +43,7 @@ function App() {
           <>
             <Route path="/" element={<Layout />}>
               <Route path="dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
-              <Route path="specifications/edit/:suid/:name" element={<ProtectedRoute element={<EditSpecification />}/>}/>
+              <Route path="specifications/edit/:suid/:name" element={<ProtectedRoute element={<EditSpecification />} />} />
               <Route path="specifications" element={<ProtectedRoute element={<Specifications />} />} />
               <Route path="specifications/:suid/" element={<ProtectedRoute element={<Specification />} />} />
               <Route path="specifications/:suid/new_room" element={<ProtectedRoute element={<NewRoomSpec />} />} />

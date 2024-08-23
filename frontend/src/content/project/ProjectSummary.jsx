@@ -9,8 +9,8 @@ function ProjectSummary({ projectId }) {
 
     return (
         <>
-            <div className="cards">
-                <div className="information [ card ]">
+            <div className="content-card">
+                <div className="content-card-container">
                     {
                         loading && loading === true ? (
                             <LoadingSpinner />

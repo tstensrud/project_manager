@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { GlobalContext } from '../../GlobalContext';
 import useSubmitData from '../../hooks/useSubmitData'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +9,14 @@ function NewProject() {
 
     const {data, setData, response, loading, error, handleSubmit} = useSubmitData('/projects/new_project/');
     const navigate = useNavigate();
+    const { activeProject, setActiveProject, setActiveProjectName } = useContext(GlobalContext);
 
+    useEffect(() => {
+        setActiveProject(null);
+        setActiveProjectName(null)
+    },[])
+
+    // Handlers
     const handleChange = (e) => {
         setData({
             ...data,
@@ -38,6 +46,7 @@ function NewProject() {
                                     Prosjektnummer <br />
                                     <input
                                         name="projectNumber"
+                                        className="card-input"
                                         onChange={handleChange}
                                         type="text"
                                         placeholder="Prosjektnummer" />
@@ -46,6 +55,7 @@ function NewProject() {
                                     Prosjektnavn <br />
                                     <input
                                         name="projectName"
+                                        className="card-input"
                                         onChange={handleChange}
                                         type="text"
                                         placeholder="Navn på prosjekt" />
@@ -58,7 +68,7 @@ function NewProject() {
                                         className="form-text-area">
                                     </textarea>
                                 </p>
-                                <button type="submit" className="form-button" disabled={loading}>
+                                <button type="submit" className="card-button" disabled={loading}>
                                     Legg til
                                 </button>
                             </form>

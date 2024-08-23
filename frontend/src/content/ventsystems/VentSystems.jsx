@@ -20,7 +20,7 @@ function VentSystems() {
     // Hooks
     const { data: receivedSystemsData, loading: systemsLoading, error: systemsError, refetch: systemsRefetch } = useFetch(`/project_api/${projectId}/systems/`);
     const { data: systemData, response: systemResponse, setData: setSystemData, handleSubmit: submitSystemData } = useSubmitData(`/project_api/${projectId}/new_system/`);
-    
+
     // States
     const [childMessage, setChildMessage] = useState('');
 
@@ -69,35 +69,43 @@ function VentSystems() {
                         <>
                             <div className="split-container-left">
                                 <form id="system" onSubmit={handleSubmitNewSystem} role="form">
-                                    Systemnummer <br />
-                                    <input type="text" onChange={handleFormChange} name="systemNumber" className='input-medium' placeholder="Systemnummer" tabIndex="1" required />
-                                    <br />
-                                    <br />
-                                    Aggregatplassering <br />
-                                    <input type="text" onChange={handleFormChange} name="placement" className='input-medium' placeholder="Plassering" tabIndex="2" required />
-                                    <br />
-                                    <br />
-                                    Betjeningsområde <br />
-                                    <input type="text" onChange={handleFormChange} name="serviceArea" className='input-medium' placeholder="Betjeningsområde" tabIndex="3" />
-                                    <br />
-                                    <br />
-                                    Viftekapasitet m<sup>3</sup>/h <br />
-                                    <input type="text" onChange={handleFormChange} name="airflow" className='input-medium' placeholder="Luftmengde" tabIndex="4" />
-                                    <br />
-                                    <br />
-                                    <select onChange={handleFormChange} name="heat_exchange" tabIndex="5">
-                                        <option value="none">- Gjenvinner -</option>
-                                        <option value="R">Roterende</option>
-                                        <option value="P">Plate/kryss</option>
-                                        <option value="B">Batteri</option>
-                                        <option value="0">Ingen</option>
-                                    </select>
-                                    <br />
-                                    <br />
-                                    Spesialsystem
-                                    <input type="checkbox" onChange={handleCheckBoxChange} name="special_system" tabIndex="6" />
-                                    <br />
-                                    <button className="form-button" tabIndex="7">Legg til</button>
+                                    <div className="input-container">
+                                        <input className="input-container-input" onChange={handleFormChange} name="systemNumber" type="text" tabIndex="1" placeholder="360.001" required />
+                                        <label for="input-field" className="input-label-left">Systemnummer</label>
+                                    </div>
+
+                                    <div className="input-container">
+                                        <input className="input-container-input" onChange={handleFormChange} name="placement" type="text" tabIndex="2" required />
+                                        <label for="input-field" className="input-label-left">Aggregatplassering</label>
+                                    </div>
+
+                                    <div className="input-container">
+                                        <input className="input-container-input" onChange={handleFormChange} name="serviceArea" type="text" tabIndex="3" required />
+                                        <label for="input-field" className="input-label-left">Betjeningsområde</label>
+                                    </div>
+
+                                    <div className="input-container">
+                                        <input className="input-container-input" onChange={handleFormChange} name="airflow" type="text" tabIndex="4" required />
+                                        <label for="input-field" className="input-label-left">Viftekapasitet m<sup>3</sup>/h <br /></label>
+                                    </div>
+                                    <p>
+                                        <select onChange={handleFormChange} name="heat_exchange" tabIndex="5">
+                                            <option value="none">- Gjenvinner -</option>
+                                            <option value="R">Roterende</option>
+                                            <option value="P">Plate/kryss</option>
+                                            <option value="B">Batteri</option>
+                                            <option value="0">Ingen</option>
+                                        </select>
+                                    </p>
+                                    <p>
+                                        Spesialsystem
+                                        <input type="checkbox" onChange={handleCheckBoxChange} name="special_system" tabIndex="6" />
+                                    </p>
+
+                                    <p>
+                                        <button className="form-button" tabIndex="7">Legg til</button>
+                                    </p>
+
                                 </form>
                             </div>
                             <div className="split-container-right">

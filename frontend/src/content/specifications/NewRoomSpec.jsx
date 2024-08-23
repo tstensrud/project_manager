@@ -95,7 +95,7 @@ function NewRoomSpec() {
         e.preventDefault();
         setShowHelpBox(!showHelpBox);
     }
-    
+
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText="Nytt rom til kravspesifikasjon" projectName={data && data.spec_name} />
@@ -104,7 +104,7 @@ function NewRoomSpec() {
                 {response && response.error ? <><MessageBox message={response.error} /> </> : ''}
 
                 {
-                showHelpBox === true ? (
+                    showHelpBox === true ? (
                         <div className="help-box-wrapper">
                             <div className="help-box-container">
                                 <div className="help-box-card">
@@ -117,76 +117,93 @@ function NewRoomSpec() {
                                 </div>
                             </div>
                         </div>
-                ) : (<></>)
-            }
+                    ) : (<></>)
+                }
 
                 <form onSubmit={submitNewData}>
                     <div className="flex-container-row">
-                        <div className="cards-large">
-                            <div className="information [ card ]">
+                        <div className="content-card">
+                            <div className="content-card-container">
                                 <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
                                     <Link onClick={toggleHelpBox} to="#"><HelpIcon /></Link>
                                 </div>
                                 <h2 className="card-title">Fyll inn romdata - <Link to={`/specifications/${suid}`} >{data && data.spec_name}</Link></h2>
 
-                                <p className="info">
-                                    Romtype <br />
-                                    <input ref={roomTypeRef} type="text" onChange={handleInputChange} className="card-input" name="room_type" placeholder="eks: Kontor" tabIndex="1" required /> {response && response.error_room_type ? (<>&nbsp; NB! Romtypen finnes allerede</>) : ''}
-                                </p>
-                                <p className="info">
-                                    Luftmengde per person m<sup>3</sup>/pers <br />
-                                    <input ref={airPerPersonRef} type="text" onChange={handleInputChange} className="card-input" name="air_per_person" placeholder="m3/pers" tabIndex="2" /> {response && response.error_air_per_person ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
-                                </p>
-                                <p className="info">
-                                    Emisjonsbelastning m<sup>3</sup>/h <br />
-                                    <input ref={airEmissionRef} type="text" onChange={handleInputChange} className="card-input" name="air_emission" placeholder="m3/h" tabIndex="3" /> {response && response.error_air_emission ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
-                                </p>
-                                <p className="info">
-                                    Prosess m<sup>3</sup>/h <br />
-                                    <input ref={airProcessRef} type="text" onChange={handleInputChange} className="card-input" name="air_process" placeholder="m3/h" tabIndex="4" />{response && response.error_air_process ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
-                                </p>
-                                <p className="info">
-                                    Minimum luftmengde m<sup>3</sup>/m<sup>2</sup> <br />
-                                    <input ref={airMinimumRef} type="text" onChange={handleInputChange} className="card-input" name="air_minimum" placeholder="m3/m2" tabIndex="5" />{response && response.error_air_minimum ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
-                                </p>
-                                <p className="info">
-                                    Ventilasjonsprinsipp <br />
+                                <div className="input-container">
+                                    <input className="input-container-input" ref={roomTypeRef} onChange={handleInputChange} name="room_type" type="text" tabIndex="1" placeholder="eks: Kontor" required/>
+                                    <label for="input-field" className="input-label">Romtype</label>
+                                </div>
+
+                                <h4>Luftmengdekrav</h4>
+                                <div className="input-container">
+                                    <input className="input-container-input" ref={airPerPersonRef} onChange={handleInputChange} name="air_per_person" type="text" tabIndex="2" placeholder="m3/pers" />{response && response.error_air_per_person ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
+                                    <label for="input-field" className="input-label">Personbelastning</label>
+                                </div>
+
+                                <div className="input-container">
+                                    <input className="input-container-input" ref={airEmissionRef} onChange={handleInputChange} name="air_emission" type="text" tabIndex="3" placeholder="m3/h" />{response && response.error_air_emission ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
+                                    <label for="input-field" className="input-label">Emisjon</label>
+                                </div>
+
+                                <div className="input-container">
+                                    <input className="input-container-input" ref={airProcessRef} onChange={handleInputChange} name="air_process" type="text" tabIndex="4" placeholder="m3/h" />{response && response.error_air_process ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
+                                    <label for="input-field" className="input-label">Prosess</label>
+                                </div>
+
+                                <div className="input-container">
+                                    <input className="input-container-input" ref={airMinimumRef} onChange={handleInputChange} name="air_minimum" type="text" tabIndex="5" placeholder="m3/h" />{response && response.error_air_minimum ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
+                                    <label for="input-field" className="input-label">Minimum luftmengde</label>
+                                </div>
+
+                                <h4>Ventilasjonsprinsipp</h4>
+                                <p style={{ marginBottom: "5px" }}>
                                     <select className="card-select" ref={ventilationPrincipleRef} tabIndex="6" onChange={handleInputChange} name="ventilation_principle">
                                         <option value="Omrøring">Omrøring</option>
                                         <option value="Fortrengning">Fortrengning</option>
                                         <option value="Annet">Annet</option>
                                     </select>
                                 </p>
-                                <p className="info">
-                                    Gjenvinner: <br />
+
+
+                                <h4>Gjenvinner</h4>
+                                <p style={{ marginBottom: "0px" }}>
                                     <select className="card-select" ref={heatExRef} onChange={handleInputChange} name="heat_ex" tabIndex="7">
                                         <option value="R">Roterenede</option>
                                         <option value="P">Kryss/plate</option>
                                         <option value="B">Batteri</option>
                                     </select>
                                 </p>
-                                <p className="info">
-                                    dB-teknisk<br />
-                                    <input ref={dbTechnicalRef} type="text" onChange={handleInputChange} className="card-input" name="db_technical" placeholder="dB" tabIndex="8" /> <br />
-                                    dB-naborom <br />
-                                    <input ref={dbNeighbourRef} type="text" onChange={handleInputChange} className="card-input" name="db_neighbour" placeholder="dB" tabIndex="9" /> <br />
-                                    dB-korridor <br />
-                                    <input ref={dbCorridorRef} type="text" onChange={handleInputChange} className="card-input" name="db_corridor" placeholder="dB" tabIndex="10" />
-                                </p>
                             </div>
                         </div>
 
-                        <div className="cards-large">
-                            <div className="information [ card ]">
-                                <div style={{width: "500px"}}></div>
-                                <p className="info">
-                                    Romstyring: <br />
-                                </p>
+                        <div className="content-card">
+                            <div className="content-card-container">
+                                <div style={{ width: "500px" }}></div>
+                                <h4>Lydkrav</h4>
+                                
+                                <div className="input-container">
+                                    <input className="input-container-input" ref={dbTechnicalRef} onChange={handleInputChange} name="db_technical" type="text" tabIndex="8" placeholder="dB" />
+                                    <label for="input-field" className="input-label">Minimum luftmengde</label>
+                                </div>
+
+                                <div className="input-container">
+                                    <input className="input-container-input" ref={dbNeighbourRef} onChange={handleInputChange} name="db_neighbour" type="text" tabIndex="9" placeholder="dB" />
+                                    <label for="input-field" className="input-label">Minimum luftmengde</label>
+                                </div>
+
+                                <div className="input-container">
+                                    <input className="input-container-input" ref={dbCorridorRef} onChange={handleInputChange} name="db_corridor" type="text" tabIndex="10" placeholder="dB" />
+                                    <label for="input-field" className="input-label">Minimum luftmengde</label>
+                                </div>
+                                
+                                <h4>Romstyring</h4>
                                 <div className="checkbox-group">
-                                    <select className="card-select" ref={vavRef} onChange={handleInputChange} name="vav" tabIndex="11">
-                                        <option value="1">VAV - variabel luftmengde</option>
-                                        <option value="0">CAV - konstant luftmengde</option>
-                                    </select>
+                                    <p>
+                                        <select className="card-select" ref={vavRef} onChange={handleInputChange} name="vav" tabIndex="11">
+                                            <option value="1">VAV - variabel luftmengde</option>
+                                            <option value="0">CAV - konstant luftmengde</option>
+                                        </select>
+                                    </p>
                                 </div>
                                 <br /><br />
                                 <div className="checkbox-group">
@@ -210,11 +227,12 @@ function NewRoomSpec() {
                                     <input ref={timeRef} type="checkbox" onChange={handleCheckChange} name="time" tabIndex="17" />
                                 </div>
 
-                                <p className="info">
-                                    Presiseringer / kommentar til rom: <br />
-                                    <input ref={notesRef} onChange={handleInputChange} name="notes" className="card-input" tabIndex="18" />
-                                </p>
-                                <p className="info">
+                                <div className="input-container">
+                                    <input className="input-container-input" ref={notesRef} onChange={handleInputChange} name="notes" type="text" tabIndex="18" placeholder="Presiseringer " />
+                                    <label for="input-field" className="input-label">Minimum luftmengde</label>
+                                </div>
+
+                                <p>
                                     <button type="submit" className="card-button" tabIndex="19">Legg til</button>
                                 </p>
                             </div>

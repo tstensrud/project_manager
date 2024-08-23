@@ -3,28 +3,33 @@ import { useContext } from "react";
 import { Link } from 'react-router-dom';
 import { GlobalContext } from '../GlobalContext';
 import useFetch from "../hooks/useFetch";
+
 import TodoButton from './TodoButton';
 import AccountIcon from '../assets/svg/accountIcon.svg?react';
+import MoonIcon from '../assets/svg/moonIcon.svg?react';
+import HeatingIcon from '../assets/svg/heatingIcon.svg?react';
 
 
 
 function Navbar() {
-    const { activeProject, setActiveProject, userUuid, setUserUuid, userName, setUserName, activeProjectName, setActiveProjectName } = useContext(GlobalContext);
+    const { activeProject, setActiveProject, userUuid, setUserUuid, userName, setUserName, activeProjectName, setActiveProjectName, darkmode, setDarkmode } = useContext(GlobalContext);
     const [navButtonClass, setNavButtonClass] = useState('dropdown-content-disabled');
-    const {data: userData, loading, error, refetch: refetchUserInfo} = useFetch(`/get_user/`);
+    const { data: userData, loading, error, refetch: refetchUserInfo } = useFetch(`/get_user/`);
 
+
+    // useEffects
     useEffect(() => {
         refetchUserInfo();
         const projectName = localStorage.getItem("projectname");
         const projectId = localStorage.getItem("projectid");
         setActiveProjectName(projectName);
         setActiveProject(projectId);
-    },[]);
+    }, []);
 
     useEffect(() => {
         setUserUuid(userData && userData.user.uuid);
         setUserName(userData && userData.user.name);
-    },[userData]);
+    }, [userData]);
 
     useEffect(() => {
         if (activeProject !== "0" && activeProject !== null && activeProject !== undefined) {
@@ -32,7 +37,12 @@ function Navbar() {
         } else {
             setNavButtonClass("dropdown-content-disabled");
         }
-    },[activeProject]);
+    }, [activeProject]);
+
+    // Handlers
+    const toggleDarkModeContainer = () => {
+        setDarkmode(!darkmode);
+    }
 
     return (
         <>
@@ -66,10 +76,31 @@ function Navbar() {
                 </div>
 
                 <div className="active-project-title-container">
-                    <span className="page-title-text">{activeProjectName}</span>
+
+                    {activeProjectName && activeProjectName ? (
+                        <div className="page-title-container">
+                            <span className="page-title-text">
+                                {activeProjectName}
+                            </span>
+                        </div>
+                    ) : (<></>)}
                 </div>
 
                 <div className="navbar-button-container-right">
+
+                    <div className="darkmode-container">
+                        <div style={{ display: "flex", marginRight: "10px" }}>
+                            <MoonIcon />
+                        </div>
+                        <div className="toggle-switch">
+                            <input onClick={toggleDarkModeContainer} type="checkbox" id="toggle" />
+                            <label for="toggle" className="slider"></label>
+                        </div>
+                        <div style={{ display: "flex", marginLeft: "10px" }}>
+                            <HeatingIcon />
+                        </div>
+                    </div>
+
                     <div className="logout-dropdown">
                         <div className="dropdown">
                             <button className="dropbtn">Kravspesifikasjoner</button>
