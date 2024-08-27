@@ -2,58 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Field with Top Border Label</title>
     <style>
-        /* Container for input and label */
-        .input-container {
-            position: relative;
-            margin-top: 20px;
-            width: 300px; /* Set a width for the input field */
-        }
-
-        /* Style the input field */
-        .input-container input {
-            width: 100%;
-            padding: 10px;
+        /* Remove the default arrow and style the select element */
+        select {
+            appearance: none; /* Standard syntax */
+            -webkit-appearance: none; /* For WebKit-based browsers */
+            -moz-appearance: none; /* For Firefox */
+            background-color: #f0f0f0;
             border: 1px solid #ccc;
-            border-radius: 4px;
-            outline: none;
+            padding: 10px;
+            font-size: 16px;
+            width: 200px;
+            border-radius: 5px;
         }
 
-        /* Style the label */
-        .input-label {
+        /* Custom arrow using a pseudo-element */
+        select::after {
+            content: '▼'; /* Custom arrow character */
             position: absolute;
-            top: -10px;
-            left: 10px;
-            background-color: white;
-            padding: 0 5px;
-            font-size: 12px;
-            color: #666;
+            right: 10px;
             pointer-events: none;
-            transition: 0.2s ease all;
         }
 
-        /* On focus, adjust the label position */
-        .input-container input:focus + .input-label,
-        .input-container input:not(:placeholder-shown) + .input-label {
-            top: -20px;
-            font-size: 12px;
-            color: #4caf50; /* Optional: Change color on focus */
+        /* Container for the select element to position the custom arrow correctly */
+        .select-wrapper {
+            position: relative;
+            display: inline-block;
         }
 
-        /* Add some custom styling when input is filled */
-        .input-container input:valid + .input-label {
-            color: #4caf50;
+        /* Add padding to accommodate the custom arrow */
+        .select-wrapper select {
+            padding-right: 30px; /* Add padding to the right for the custom arrow */
         }
     </style>
 </head>
 <body>
-
-    <div className="input-container">
-        <input type="text" id="input-field" required placeholder=" " />
-        <label for="input-field" className="input-label">Title Text</label>
+    <div class="select-wrapper">
+        <select>
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+            <option value="4">Option 4</option>
+        </select>
     </div>
-
 </body>
 </html>

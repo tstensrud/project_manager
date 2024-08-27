@@ -52,7 +52,7 @@ function HelpBoxNewRoom() {
             </p>
             <h4>Presiseringer</h4>
             <p>
-                Her kan du notere ned spesifike ting for romtypen som er angitt av BH.
+                Her kan du notere ned spesifike ting for romtypen som er angitt av byggherre.
             </p>
         </>
     );

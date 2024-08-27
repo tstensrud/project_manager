@@ -97,8 +97,8 @@ function VentSystems() {
                                             <option value="0">Ingen</option>
                                         </select>
                                     </p>
-                                    <p>
-                                        Spesialsystem
+                                    <p style={{display: "flex", textAlign: "center", alignItems: "center"}}>
+                                        Spesialsystem&nbsp;
                                         <input type="checkbox" onChange={handleCheckBoxChange} name="special_system" tabIndex="6" />
                                     </p>
 

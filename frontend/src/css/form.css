@@ -6,7 +6,7 @@ select {
   font-size: 14px;
   line-height: 24px;
   padding: 0px 12px 0px 12px;
-  height: 37px;
+  height: 36px;
   background-size: 16px;
   background-repeat: no-repeat;
   background-position: left 10px center;
@@ -14,6 +14,8 @@ select {
   max-width: 190px;
   border-radius: var(--form-elements-border-radius);
   outline: 0;
+  padding-left: 20px;
+  padding-right: 20px;
 
 }
 
@@ -26,20 +28,15 @@ select:focus {
 }
 
 .card-select {
-  padding: 1px 15px;
   background-color: var(--form-element-card-background-color);
   border: var(--form-border);
+  border-radius: var(--form-elements-border-radius);
   color: var(--form-text-color);
   font-size: 14px;
-  line-height: 24px;
-  padding: 0px 12px 0px 12px;
+  padding-left: 20px;
+  padding-right: 20px;
   height: 36px;
-  background-size: 16px;
-  background-repeat: no-repeat;
-  background-position: left 10px center;
   transition: 0.2s;
-  max-width: 190px;
-  border-radius: var(--form-elements-border-radius);
   outline: 0;
 }
 
@@ -64,18 +61,25 @@ select:focus {
   outline: 0;
   background: var(--form-background-color);
   border: var(--form-border);
-  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   color: var(--form-text-color);
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
   cursor: pointer;
   border-radius: var(--form-elements-border-radius);
-  height: 38px;
+  height: 36px;
 }
 
 .form-button:hover {
-  border: 1px solid var(--form-element-hover);
+  border-color: var(--form-element-hover);
+  font-weight: 500;
+}
+
+.form-button:focus {
+  border-color: var(--form-element-hover);
+  font-weight: 500;
 }
 
 .table-sorting-button {
@@ -86,7 +90,8 @@ select:focus {
   background: var(--app-content-secondary-color);
   border-radius: var(--form-elements-border-radius);
   border: var(--form-border);
-  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   color: var(--form-text-color);
   font-size: 14px;
   font-weight: 800;
@@ -97,8 +102,8 @@ select:focus {
 }
 
 .table-sorting-button:hover {
-  background-color: var(--table-header);
   color: var(--app-content-main-color);
+  border-color: var(--form-element-hover);
 }
 
 .table-sorting-button-active {
@@ -110,7 +115,8 @@ select:focus {
   border-radius: var(--form-elements-border-radius);
   border: var(--form-border);
   border-color: var(--form-focus-color);
-  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   color: var(--app-content-main-color);
   font-size: 14px;
   font-weight: 800;
@@ -238,7 +244,12 @@ input[type="checkbox"] {
   outline: 0;
   background: #f2f2f2;
   border: 1px solid black;
-  width: 40px;
+  width: 15px;
+  margin: 0;
+}
+
+input[type="checkbox"]:focus {
+  box-shadow: 0 0 0 1px var(--form-element-hover)
 }
 
 input {
@@ -249,10 +260,12 @@ input {
   border: var(--form-border);
   color: var(--form-text-color);
   margin: 0 0 15px;
-  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   box-sizing: border-box;
   font-size: 14px;
   border-radius: var(--form-elements-border-radius);
+  height: 36px;
 }
 
 .input-short {
@@ -262,8 +275,8 @@ input {
   width: 100px;
   border: var(--form-border);
   color: var(--form-text-color);
-  margin: 0 0 15px;
-  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   box-sizing: border-box;
   font-size: 14px;
   border-radius: var(--form-elements-border-radius);
@@ -276,7 +289,8 @@ input {
   width: 200px;
   border: var(--form-border);
   margin: 0 0 15px;
-  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   box-sizing: border-box;
   font-size: 14px;
   border-radius: var(--form-elements-border-radius);
@@ -318,7 +332,10 @@ input:focus,
   width: 500px;
   border: var(--form-border);
   margin: 0 0 15px;
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   box-sizing: border-box;
   font-size: 14px;
   border-radius: var(--form-elements-border-radius);
@@ -450,7 +467,7 @@ input[type="file"]::file-selector-button:active {
 }
 
 .card-button {
-  background-color: var(--app-content-secondary-color);
+  background-color: var(--form-element-card-background-color);
   border: var(--form-border);
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
@@ -461,13 +478,19 @@ input[type="file"]::file-selector-button:active {
   transition: all 0.3 ease;
   cursor: pointer;
   border-radius: var(--form-elements-border-radius);
-  height: 38px;
-  padding-left: 14px;
-  padding-right: 14px;
+  height: 36px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .card-button:hover {
-  border: 1px solid var(--form-element-hover);
+  border-color: var(--form-element-hover);
+  font-weight: 500;
+}
+
+.card-button:focus {
+  border-color: var(--form-element-hover);
+  font-weight: 500;
 }
 
 /* Container for input and label */
@@ -480,7 +503,7 @@ input[type="file"]::file-selector-button:active {
 .input-container-input {
   width: 100%;
   padding: 10px;
-  background-color: var(--form-element-card-background-color);
+  background-color: var(--form-background-color);
   border: var(--form-border);
   border-radius: var(--form-elements-border-radius);
   outline: none;
@@ -492,7 +515,7 @@ input[type="file"]::file-selector-button:active {
 
 .input-label {
   position: absolute;
-  top: -9px;
+  top: -17px;
   right: 10px;
   color: var(--form-label-text);
   padding: 0 5px;
@@ -504,7 +527,7 @@ input[type="file"]::file-selector-button:active {
 
 .input-label-left {
   position: absolute;
-  top: -9px;
+  top: -17px;
   left: 10px;
   color: var(--form-label-text);
   padding: 0 5px;
@@ -515,14 +538,14 @@ input[type="file"]::file-selector-button:active {
 }
 
 .input-container input:focus+.input-label {
-  top: -20px;
+  top: -21px;
   font-size: 14px;
   font-weight: 700;
   color: var(--form-focus-color);
 }
 
 .input-container input:focus+.input-label-left {
-  top: -20px;
+  top: -21px;
   font-size: 14px;
   font-weight: 700;
   color: var(--form-focus-color);

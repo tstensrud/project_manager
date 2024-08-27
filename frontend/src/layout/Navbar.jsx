@@ -7,7 +7,7 @@ import useFetch from "../hooks/useFetch";
 import TodoButton from './TodoButton';
 import AccountIcon from '../assets/svg/accountIcon.svg?react';
 import MoonIcon from '../assets/svg/moonIcon.svg?react';
-import HeatingIcon from '../assets/svg/heatingIcon.svg?react';
+import SunIcon from '../assets/svg/sunIcon.svg?react';
 
 
 
@@ -97,7 +97,7 @@ function Navbar() {
                             <label for="toggle" className="slider"></label>
                         </div>
                         <div style={{ display: "flex", marginLeft: "10px" }}>
-                            <HeatingIcon />
+                            <SunIcon />
                         </div>
                     </div>
 

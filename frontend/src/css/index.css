@@ -33,12 +33,12 @@
   --default-border-radius: 10px;
 
 
-  --form-border: 1px solid rgb(43, 53, 64);
-  --form-focus-border: 1px solid #00FFA7;
+  --form-border: 2px solid rgb(43, 53, 64);
+  --form-focus-border: 2px solid #00FFA7;
   --form-text-color: white;
   --form-elements-border-radius: 25px;
   --form-background-color: rgb(12, 18, 25);
-  --form-element-hover: #24633c;
+  --form-element-hover: #00FFA7;
   --form-focus-color: #00FFA7;
   --form-table-button-background: ;
   --form-table-button-border: 1px solid rgb(43, 53, 64);
@@ -49,16 +49,16 @@
 
 
 .light:root {
-  --app-bg: white;
-  --app-content-secondary-color: #DBD4D4;
+  --app-bg: #EFF1F6;
+  --app-content-secondary-color: #EFF1F6;
   --app-content-main-color: black;
-  --header-bg-color: #F2EEEE;
-  --header-text-color: white;
-  --header-text-bg-color: black;
-  --card-background-color: #FBFBFB;
+  --header-bg-color: white;
+  --header-text-color: black;
+  --header-text-bg-color: white;
+  --card-background-color: white;
   --default-border: 1px solid rgb(0, 0, 0);
-  --link: #D72F59;
-  --link-hover: #D72F59;
+  --link: #3B80F6;
+  --link-hover: #3B80F6;
   --table-header: #FBFBFB;
   --table-footer: #161F29;
   --table-background-color: #FBFBFB;
@@ -67,27 +67,26 @@
   --table-button-background: rgb(18, 28, 38);
   --table-border: 1px solid rgb(43, 53, 64);
   --table-hover: #4949492a;
-  --navbar-active-link: #D72F59;
-  --navbar-active-font-color: white;
-  --navbar-main-color: #DBD4D4;
-  --svg-icon-color: #D72F59;
+  --navbar-active-link: #EBF2FF;
+  --navbar-active-font-color: black;
+  --navbar-main-color: white;
+  --svg-icon-color: #3B80F6;
   --marked-row: #d72f597a;
   --grey-text: rgba(46, 41, 41, 0.719);
   --system-summary: rgba(89, 113, 157, 0.2);
   --default-border-radius: 10px;
 
-
-  --form-border: 1px solid #00000036;
-  --form-focus-border: 1px solid #D72F59;
+  --form-border: 2px solid #00000036;
+  --form-focus-border: 2px solid black;
   --form-text-color: black;
   --form-elements-border-radius: 25px;
   --form-background-color: #FBFBFB;
-  --form-element-hover: #D72F59;
-  --form-focus-color: #D72F59;
+  --form-element-hover: black;
+  --form-focus-color: black;
   --form-table-button-background: yellow;
-  --form-table-button-border: 1px solid black;
+  --form-table-button-border: 2px solid black;
   --form-table-button-hover-background: #DBD4D4;
-  --form-element-card-background-color: #DBD4D4;
+  --form-element-card-background-color: #EFF1F6;
   --form-label-text: black;
 }
 
@@ -143,6 +142,7 @@ body {
   background-color: var(--header-bg-color);
   color: var(--app-content-main-color);
   padding-left: 50px;
+  padding-right: 50px;
 }
 
 .main-content {
@@ -408,7 +408,6 @@ a:hover {
 }
 
 
-
 /* Navigation */
 
 .page-title-text {
@@ -496,6 +495,7 @@ a:hover {
   padding: 14px 16px;
   background-color: inherit;
   font-family: inherit;
+  font-weight: 500;
   margin: 0;
   height: 100%;
 }
@@ -513,6 +513,8 @@ a:hover {
 .dropdown-content a:hover {
   background-color: var(--navbar-active-link);
   color: var(--navbar-active-font-color);
+  font-weight: 500;
+  transition: 200ms;
 }
 
 .dropdown:hover .dropdown-content {
@@ -600,6 +602,14 @@ svg.feather {
   display: inline-block;
   line-height: 0;
   stroke: var(--svg-icon-color);
+  fill: none;
+}
+
+svg.non-title-icons {
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 0;
+  stroke: var(--app-content-main-color);
   fill: none;
 }
 
@@ -701,10 +711,11 @@ input:checked + .slider::before {
   display: flex;
   flex-direction: column;
   padding: 15px;
+  height: 100%;
 }
 
 .content-card-inner-container {
-  border: var(--default-border);
+  border: 0;
   padding: 10px;
   margin-top: 10px;
   border-radius: var(--default-border-radius);
@@ -714,4 +725,27 @@ input:checked + .slider::before {
   width: 600px;
   padding: 8% 0 0;
   margin: auto;
+}
+
+.edit-building-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: var(--form-element-card-background-color);
+  border: var(--form-border);
+  border-radius: var(--form-elements-border-radius);
+  color: black;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.edit-building-button:hover {
+  color: black;
+  border-color: var(--form-focus-color);
 }

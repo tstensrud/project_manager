@@ -200,8 +200,8 @@ function NewRoomSpec() {
                                 <div className="checkbox-group">
                                     <p>
                                         <select className="card-select" ref={vavRef} onChange={handleInputChange} name="vav" tabIndex="11">
-                                            <option value="1">VAV - variabel luftmengde</option>
-                                            <option value="0">CAV - konstant luftmengde</option>
+                                            <option value="1">VAV</option>
+                                            <option value="0">CAV</option>
                                         </select>
                                     </p>
                                 </div>

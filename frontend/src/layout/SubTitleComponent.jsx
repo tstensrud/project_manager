@@ -20,7 +20,7 @@ function SubTitleComponent(props) {
                     </h3>
                 </div>
             </div>
-            <div style={{ display: "flex", justifyContent: "end", marginRight: "20px", flex: "1" }}>
+            <div style={{ display: "flex", justifyContent: "end", flex: "1" }}>
                 {
                     (activeProject && activeProject !== "0") ? (
                         <TodoButton />

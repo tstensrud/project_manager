@@ -87,11 +87,11 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                     editBuildingContainer && editBuildingContainer === true ? (
                         <>
                             <form>
-                                <div style={{ display: "flex", flexDirection: "row" }}>
-                                    <div style={{ display: "flex", marginRight: "15px" }}>
+                                <div style={{ display: "flex", flexDirection: "column" }}>
+                                    <div style={{ display: "flex"}}>
                                         <input className="card-input" onChange={handleNameChange} type="text" name="buildingName" placeholder='Endre navn..' />
                                     </div>
-                                    <div style={{ display: "flex", marginRight: "15px" }}>
+                                    <div style={{ display: "flex" }}>
                                         <button onClick={submitNameChange} className="card-button">Lagre</button>
                                     </div>
                                 </div>
@@ -109,47 +109,51 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                 }
                 <div className="content-card-inner-container">
                     <h4>Prosjektert areal</h4>
+
                     <p className="info">
                         {area.toLocaleString()} m<sup>2</sup>
+
+                    </p>
+
+
+                    <h4>Prosjektert luftmengde</h4>
+
+                    <p className="info">
+                        {PlusIcon && <PlusIcon />}
+                        <span className="supply-text"> {supplyAir.toLocaleString()} </span> m<sup>3</sup>/h
+                        <br />
+                        {MinusIcon && <MinusIcon />}
+                        <span className="extract-text"> {extractAir.toLocaleString()} </span> m<sup>3</sup>/h
+                    </p>
+
+
+                    <h4>Betjenes av ventilasjonssystem:</h4>
+
+                    <ul>
+                        {
+                            buildingData.systems.map((system, index) => <li key={index}>{system}</li>)
+                        }
+                    </ul>
+
+
+                    <h4>Prosjektert varme</h4>
+                    <p className="info">
+                        {Number((heating / 1000).toFixed(2)).toLocaleString()} kW
                     </p>
                 </div>
-
-                <div className="content-card-inner-container">
-                <h4>Prosjektert luftmengde</h4>
-                <p className="info">
-                    {PlusIcon && <PlusIcon />}
-                    <span className="supply-text"> {supplyAir.toLocaleString()} </span> m<sup>3</sup>/h
-                    <br />
-                    {MinusIcon && <MinusIcon />}
-                    <span className="extract-text"> {extractAir.toLocaleString()} </span> m<sup>3</sup>/h
-                </p>
-                </div>
-
-                <div className="content-card-inner-container">
-                <h4>Betjenes av ventilasjonssystem:</h4>
-                <ul>
-                    {
-                        buildingData.systems.map((system, index) => <li key={index}>{system}</li>)
-                    }
-                </ul>
-                    </div>
-                    <div className="content-card-inner-container">
-                <h4>Prosjektert varme</h4>
-                <p className="info">
-                    {Number((heating / 1000).toFixed(2)).toLocaleString()} kW
-                </p>
-                </div>
-                <div style={{ display: "flex", flexDirection: "row" }}>
-                    <div style={{ display: "flex", marginTop: "50px", width: "100%", alignItems: "center", justifyContent: "end" }}>
+                <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
+                    <div style={{ display: "flex", width: "100%", height: "100%", alignItems: "end", justifyContent: "end" }}>
                         {
                             editBuildingContainer && editBuildingContainer === true ? (
                                 <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
                                     <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-                                        <div style={{ display: "flex", justifyContent: "start", alignItems: "center", width: "50%" }}>
-                                            <Link onClick={handleDeleteBuilding} to="">Slett bygg</Link> &nbsp; <DeleteIcon />
-                                        </div>
-                                        <div style={{ display: "flex", justifyContent: "end", alignItems: "center", width: "50%" }}>
-                                            <Link to="" onClick={closeEditOptions}>Avbryt</Link>
+                                        <button onClick={handleDeleteBuilding} className="card-button">
+                                            Slett bygg
+                                        </button>
+                                        <div style={{ display: "flex", justifyContent: "end", flex: "1" }}>
+                                            <button onClick={closeEditOptions} className="card-button">
+                                                Avbryt
+                                            </button>
                                         </div>
                                     </div>
                                     <div>
@@ -159,14 +163,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                                     </div>
                                 </div>
                             ) : (
-                                <>
-                                    <div style={{ display: "flex", marginRight: "15px" }}>
-                                        <Link to="" onClick={showEditOptions}>Rediger bygg</Link>
-                                    </div>
-                                    <div style={{ display: "flex" }}>
-                                        <EditIcon />
-                                    </div>
-                                </>
+                                    <button onClick={showEditOptions} className="card-button">Rediger bygg</button>
                             )
                         }
                     </div>

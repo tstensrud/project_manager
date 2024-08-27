@@ -46,9 +46,9 @@ function HelpBox() {
             </p>
             <h4>Slette rom</h4>
             <p>
-                I siste kolonne har du en "Slett"-knapp. Trykker du på denne får du muligheten til å angre, dersom du trykker
+                I siste kolonne har du en "Slett"-knapp. Trykker du på denne får du muligheten til å angre dersom du trykker
                 ved en feil. Merk at denne angremuligheten forsvinner så fort du går ut av tabellen ved å for eksempel bytte
-                bygg eller gå til en av de andre sidene på siden.
+                bygg eller gå til et annet sted av siden.
             </p>
         </>
     );
