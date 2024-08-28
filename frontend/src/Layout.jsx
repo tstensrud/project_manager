@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Outlet } from 'react-router-dom';
 import { GlobalContext } from './GlobalContext';
 import Header from './layout/Header';
@@ -8,14 +8,15 @@ import Header from './layout/Header';
 function Layout() {
     const { userUuid, setUserUuid } = useContext(GlobalContext);
 
-    return(
+    
+
+    return (
         <>
-        <Header />
-        
-        <div className="app-container">
-            <Outlet />
-        </div>
-      </>
+            <Header/>
+            <div className="app-container">
+                <Outlet />
+            </div>
+        </>
     );
 }
 

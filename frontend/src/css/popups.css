@@ -112,7 +112,7 @@
 }
 
 .todo-close-btn:hover {
-    color: var(--navbar-active-link);
+    color: var(--link-hover);
 }
 
 .todo-completed {

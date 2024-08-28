@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
 import MessageBox from '../../layout/MessageBox';
@@ -10,13 +10,15 @@ import useUpdateData from '../../hooks/useUpdateData';
 function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, totalColumns, index }) {
     const { projectId } = useParams();
     const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+    const [extraAirNeeded, setExtraAirNeeded] = useState(0)
 
 
     // Initial fetches and refetch
     const { data: coolingData, loading: coolingLoading, error: coolingError, refetch: coolingRefetch } = useFetch(`/project_api/${projectId}/cooling/get_room/${roomId}/`);
 
     // Update data
-    const { data: updatedRoomData, response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/cooling/update_room/${roomId}/`);
+    const { data: updatedRoomData, response: updateRoomDataResponse, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/cooling/update_room/${roomId}/`);
+    const { data: updateVentilationData, response: updateVentDataResponse, setData: setUpdateVentData, handleSubmit: updateVentilationDataSubmit } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomId}/1/`);
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
@@ -37,14 +39,24 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
     useEffect(() => {
         if (coolingData) {
             setEditedData('');
+            calculateExtraAirNeeded();
         }
     }, [coolingData]);
 
+    useEffect(() => {
+        if (updateVentDataResponse && updateVentDataResponse.success === true) {
+            console.log("Vent data response: ", updateVentDataResponse);
+            setUpdateVentData({});
+            coolingRefetch();
+        }
+        if (updateRoomDataResponse && updateRoomDataResponse.success === true) {
+            console.log("Room data response: ", updateRoomDataResponse);
+            setData({});
+            coolingRefetch();
+        }
+    },[updateVentDataResponse, updateRoomDataResponse])
+    
     // Handlers
-    const sendMessageToParent = (msg) => {
-        msgToParent(msg);
-    }
-
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
     };
@@ -64,9 +76,6 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
         if (e.key === "Enter") {
             await updateRoomData(e);
             handleBlur();
-            setData('');
-            coolingRefetch();
-            //sendMessageToParent("updateSummaries");
         } if (e.key == "Escape") {
             handleBlur();
             return;
@@ -78,6 +87,18 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
             setMarkedRow('marked-row');
         } else {
             setMarkedRow('');
+        }
+    }
+
+    const calculateExtraAirNeeded = () => {
+        const { SumInternalHeatLoad, CoolingSum, VentairTempSummer, RoomTempSummer } = coolingData.cooling_data;
+        const calculatedValue = (SumInternalHeatLoad - CoolingSum) / (0.35 * (VentairTempSummer - RoomTempSummer));
+        const airFlow = coolingData && coolingData.cooling_data.Airflow;
+        if (calculatedValue < 0) {
+            setExtraAirNeeded(calculatedValue.toFixed(0));
+            setUpdateVentData({air_supply: ((calculatedValue.toFixed(0) * - 1) + airFlow), air_extract: ((calculatedValue.toFixed(0) * - 1) + airFlow)})
+        } else {
+            setExtraAirNeeded(0);
         }
     }
 
@@ -98,7 +119,14 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
             )}
         </td>
     );
-    if (response && response.error !== null && response.error !== undefined) return (<><MessageBox message={response.error} /></>);
+
+    const handleUpdateVentilation = async (e) => {
+        e.preventDefault();
+        console.log(updateVentilationData)
+        await updateVentilationDataSubmit(e);
+    }
+
+    if (updateRoomDataResponse && updateRoomDataResponse.error !== null && updateRoomDataResponse.error !== undefined) return (<><MessageBox message={updateRoomDataResponse.error} /></>);
     return (
         <>
             <tr className={markedRow}>
@@ -132,17 +160,20 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
                             {renderEditableCell("CoolingEquipment")}
                             <td><strong>{coolingData ? (coolingData.cooling_data.CoolingSum).toFixed(0) : ''}</strong></td>
                             <td>
-                                {coolingData && (
-                                    (() => {
-                                        const { SumInternalHeatLoad, CoolingSum, VentairTempSummer, RoomTempSummer } = coolingData.cooling_data;
-                                        const calculatedValue = (SumInternalHeatLoad - CoolingSum) / (0.35 * (VentairTempSummer - RoomTempSummer));
-
-                                        return calculatedValue < 0 ? calculatedValue.toFixed(0) : null;
-                                    })()
-                                )}
+                                { extraAirNeeded }
                             </td>
                             <td>
+                                {
+                                    extraAirNeeded < 0 ? (
+                                        <>
+                                            Det mangler {extraAirNeeded * -1} m3/h for å dekke kjøling ved luft. <Link to="" onClick={handleUpdateVentilation}>Oppdater luftmengde</Link>
+                                        </>
+                                    ) : (
+                                        <>
+                                        </>
+                                    )
 
+                                }
                             </td>
                         </>
                     )

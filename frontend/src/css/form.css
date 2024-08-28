@@ -43,7 +43,7 @@ select:focus {
 .table-select {
   padding: 1px 10px;
   background-color: var(--table-background-color);
-  border: var(--default-border);
+  border: var(--form-border);
   color: var(--form-text-color);
   font-size: 12px;
   line-height: 20px;

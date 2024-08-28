@@ -80,7 +80,6 @@ function Ventilation() {
         }
     }
 
-    console.log(location.pathname)
     return (
         <>
             {childMessage.error && <MessageBox message={childMessage.error} />}
@@ -103,118 +102,136 @@ function Ventilation() {
                                 ))}
 
                             </div>
-                            <TableTop info={<HelpBox />} />
+
                             {
                                 roomData ? (
                                     roomData.room_data === null ? (
-                                        <p>Ingen rom lagt til</p>
-                                    ) : (
-
-                                        <div className="table-wrapper">
-                                            <table className="fl-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="2%" className="no-print">#</th>
-                                                        <th width="2%">Etasje</th>
-                                                        <th width="10%">Rom</th>
-                                                        <th width="6%">Sum personer <br /> m<sup>3</sup>/h</th>
-                                                        <th width="6%">Sum emisjon <br /> m<sup>3</sup>/h</th>
-                                                        <th width="6%">Prosess <br /> m<sup>3</sup>/h</th>
-                                                        <th width="6%">Dimensjonert <br /> m<sup>3</sup>/h</th>
-                                                        <th width="6%">Tilluft<br /> m<sup>3</sup>/h</th>
-                                                        <th width="6%">Avtrekk<br /> m<sup>3</sup>/h</th>
-                                                        <th width="6%">m<sup>3</sup>/m<sup>2</sup></th>
-                                                        <th width="6%">Min <br />m<sup>3</sup>/h</th>
-                                                        <th width="6%">System</th>
-                                                        <th width="31%" className="no-print">Merknad</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {
-                                                        floors && floors.map(floor => (
-                                                            <React.Fragment key={floor}>
-                                                                {
-                                                                    sortedBuildings && sortedBuildings.length > 0 ? (
-                                                                        sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} allRoomData={room} totalColumns={13} roomId={room.uid} systems={ventSystemData} />)
-                                                                    ) : (<></>)
-                                                                }
-                                                                <tr className="summary-row">
-                                                                    <td><br /><br /></td><td></td><td></td><td></td><td></td><td></td>
-                                                                    <td>
-                                                                        {
-                                                                            buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
-                                                                            Object.keys(buildingSummaryData[0].floor_summaries)
-                                                                                .filter(key => key === floor)
-                                                                                .map(key => (
-                                                                                    <React.Fragment key={key}>
-                                                                                        <strong>{Number(buildingSummaryData[0].floor_summaries[key].demand.toFixed(0)).toLocaleString()}</strong>
-                                                                                    </React.Fragment>
-                                                                                ))
-                                                                        }
-
-                                                                    </td>
-                                                                    <td>
-                                                                        {
-                                                                            buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
-                                                                            Object.keys(buildingSummaryData[0].floor_summaries)
-                                                                                .filter(key => key === floor)
-                                                                                .map(key => (
-                                                                                    <React.Fragment key={key}>
-                                                                                        <span className="supply-text">{Number(buildingSummaryData[0].floor_summaries[key].supply.toFixed(0)).toLocaleString()}</span>
-                                                                                    </React.Fragment>
-                                                                                ))
-                                                                        }
-                                                                    </td>
-                                                                    <td>
-                                                                        {
-                                                                            buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
-                                                                            Object.keys(buildingSummaryData[0].floor_summaries)
-                                                                                .filter(key => key === floor)
-                                                                                .map(key => (
-                                                                                    <React.Fragment key={key}>
-                                                                                        <span className="extract-text">{Number(buildingSummaryData[0].floor_summaries[key].extract.toFixed(0)).toLocaleString()}</span>
-                                                                                    </React.Fragment>
-                                                                                ))
-                                                                        }
-
-                                                                    </td>
-                                                                    <td className="no-print"></td>
-                                                                    <td className="no-print"></td>
-                                                                    <td className="no-print"></td>
-                                                                    <td className="no-print"></td>
-                                                                </tr>
-                                                            </React.Fragment>
-                                                        ))}
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th className="no-print"></th>
-                                                        <th></th>
-                                                        <th>
-                                                            <strong>Sum</strong>
-                                                        </th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-
-                                                        <th>
-                                                            <strong>{buildingSummaryData?.[0]?.demand != null ? <>{Number((buildingSummaryData[0]).demand.toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
-                                                        </th>
-                                                        <th>
-                                                            <strong>{buildingSummaryData?.[0]?.supplyAir != null ? <>{Number((buildingSummaryData[0].supplyAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
-                                                        </th>
-                                                        <th>
-                                                            <strong>{buildingSummaryData?.[0]?.extractAir ? <>{Number((buildingSummaryData[0].extractAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
-                                                        </th>
-                                                        <th className="no-print"></th>
-                                                        <th className="no-print"></th>
-                                                        <th className="no-print"></th>
-                                                        <th className="no-print"></th>
-                                                        <th className="no-print"></th>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
+                                        <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                            Ingen rom lagt til
                                         </div>
+                                    ) : (
+                                        <>
+                                            {
+                                                activeSortButton === null ? (
+                                                    <>
+                                                        <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                                            Velg bygg
+                                                        </div>
+
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <TableTop info={<HelpBox />} />
+                                                        <div className="table-wrapper">
+                                                            <table className="fl-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th width="2%" className="no-print">#</th>
+                                                                        <th width="2%">Etasje</th>
+                                                                        <th width="10%">Rom</th>
+                                                                        <th width="6%">Sum personer <br /> m<sup>3</sup>/h</th>
+                                                                        <th width="6%">Sum emisjon <br /> m<sup>3</sup>/h</th>
+                                                                        <th width="6%">Prosess <br /> m<sup>3</sup>/h</th>
+                                                                        <th width="6%">Dimensjonert <br /> m<sup>3</sup>/h</th>
+                                                                        <th width="6%">Tilluft<br /> m<sup>3</sup>/h</th>
+                                                                        <th width="6%">Avtrekk<br /> m<sup>3</sup>/h</th>
+                                                                        <th width="6%">m<sup>3</sup>/m<sup>2</sup></th>
+                                                                        <th width="6%">Min <br />m<sup>3</sup>/h</th>
+                                                                        <th width="6%">System</th>
+                                                                        <th width="31%" className="no-print">Merknad</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {
+                                                                        floors && floors.map(floor => (
+                                                                            <React.Fragment key={floor}>
+                                                                                {
+                                                                                    sortedBuildings && sortedBuildings.length > 0 ? (
+                                                                                        sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} allRoomData={room} totalColumns={13} roomId={room.uid} systems={ventSystemData} />)
+                                                                                    ) : (<></>)
+                                                                                }
+                                                                                <tr className="summary-row">
+                                                                                    <td><br /><br /></td><td></td><td></td><td></td><td></td><td></td>
+                                                                                    <td>
+                                                                                        {
+                                                                                            buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
+                                                                                            Object.keys(buildingSummaryData[0].floor_summaries)
+                                                                                                .filter(key => key === floor)
+                                                                                                .map(key => (
+                                                                                                    <React.Fragment key={key}>
+                                                                                                        <strong>{Number(buildingSummaryData[0].floor_summaries[key].demand.toFixed(0)).toLocaleString()}</strong>
+                                                                                                    </React.Fragment>
+                                                                                                ))
+                                                                                        }
+
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {
+                                                                                            buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
+                                                                                            Object.keys(buildingSummaryData[0].floor_summaries)
+                                                                                                .filter(key => key === floor)
+                                                                                                .map(key => (
+                                                                                                    <React.Fragment key={key}>
+                                                                                                        <span className="supply-text">{Number(buildingSummaryData[0].floor_summaries[key].supply.toFixed(0)).toLocaleString()}</span>
+                                                                                                    </React.Fragment>
+                                                                                                ))
+                                                                                        }
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {
+                                                                                            buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
+                                                                                            Object.keys(buildingSummaryData[0].floor_summaries)
+                                                                                                .filter(key => key === floor)
+                                                                                                .map(key => (
+                                                                                                    <React.Fragment key={key}>
+                                                                                                        <span className="extract-text">{Number(buildingSummaryData[0].floor_summaries[key].extract.toFixed(0)).toLocaleString()}</span>
+                                                                                                    </React.Fragment>
+                                                                                                ))
+                                                                                        }
+
+                                                                                    </td>
+                                                                                    <td className="no-print"></td>
+                                                                                    <td className="no-print"></td>
+                                                                                    <td className="no-print"></td>
+                                                                                    <td className="no-print"></td>
+                                                                                </tr>
+                                                                            </React.Fragment>
+                                                                        ))}
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <th className="no-print"></th>
+                                                                        <th></th>
+                                                                        <th>
+                                                                            <strong>Sum</strong>
+                                                                        </th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+
+                                                                        <th>
+                                                                            <strong>{buildingSummaryData?.[0]?.demand != null ? <>{Number((buildingSummaryData[0]).demand.toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
+                                                                        </th>
+                                                                        <th>
+                                                                            <strong>{buildingSummaryData?.[0]?.supplyAir != null ? <>{Number((buildingSummaryData[0].supplyAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
+                                                                        </th>
+                                                                        <th>
+                                                                            <strong>{buildingSummaryData?.[0]?.extractAir ? <>{Number((buildingSummaryData[0].extractAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
+                                                                        </th>
+                                                                        <th className="no-print"></th>
+                                                                        <th className="no-print"></th>
+                                                                        <th className="no-print"></th>
+                                                                        <th className="no-print"></th>
+                                                                        <th className="no-print"></th>
+                                                                    </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </div>
+                                                    </>
+                                                )
+                                            }
+
+                                        </>
                                     )
                                 ) : (<span></span>)
                             }

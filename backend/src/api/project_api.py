@@ -1,14 +1,11 @@
 from datetime import datetime, timezone, timedelta
 import json
-import os
-from flask import Blueprint, jsonify, request, send_from_directory, url_for
+from flask import Blueprint, jsonify, request, url_for
 from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
 from .. import db_operations as dbo
 from .. import sanitary_calculations as sc
 from .. import globals
 from .. import excel
-from .. import create_app
-from markupsafe import escape
 
 project_api_bp = Blueprint('project_api', __name__, static_folder='static', template_folder='templates')
 globals.blueprint_setup(project_api_bp)
@@ -60,16 +57,11 @@ def settings(project_uid):
     project_data = project.get_json()
     return jsonify({"data": project_data})
 
-@project_api_bp.route('/reports', methods=['GET'])
-@jwt_required()
-def reports(project_id):
-    pass
-
 @project_api_bp.route('/settings/update_project/', methods=['PATCH'])
 @jwt_required()
 def set_spec(project_uid):
     data = request.get_json()
-    spec_uid = escape(data["project_specification"].strip())
+    spec_uid = data["project_specification"].strip()
     if dbo.set_project_specification(project_uid, spec_uid):
         return jsonify({"message": "Success"})
     else:
@@ -91,7 +83,7 @@ def todo(project_uid):
 @jwt_required()
 def new_todo_item(project_uid, user_uuid):
     data = request.get_json()
-    content = escape(data["todo_content"])
+    content = data["todo_content"]
     if dbo.new_todo_item(project_uid, user_uuid, content):
         response = {"success": "Huskepunkt opprettet"}
     else:
@@ -102,8 +94,8 @@ def new_todo_item(project_uid, user_uuid):
 @jwt_required()
 def todo_item_complete(project_uid):
     data = request.get_json()
-    item_uid = escape(data["item_id"])
-    uuid = escape(data["completed_by"])
+    item_uid = data["item_id"]
+    uuid = data["completed_by"]
     if dbo.set_todo_item_completed(item_uid, uuid):
         response = {"success": "Huskepunkt utført"}
     else:
@@ -131,7 +123,7 @@ def buildings(project_uid):
 @jwt_required()
 def new_building(project_uid):
     data = request.get_json()
-    name = escape(data["buildingName"])
+    name = data["buildingName"]
     if not data:
         return jsonify({"building_data": "No data received"})
     else:
@@ -145,7 +137,7 @@ def new_building(project_uid):
 def edit_building(project_uid, building_uid):
     data = request.get_json()
     if data:
-        new_name = escape(data["buildingName"].strip())
+        new_name = data["buildingName"].strip()
         exists = dbo.check_for_existing_building_name(project_uid, new_name)
         if exists:
             return jsonify({"success": False, "error": "Et bygg med dette navnet finnes allerede"})
@@ -195,21 +187,21 @@ def rooms(project_uid):
                 if key not in data_fields:
                     return jsonify({"success": False, "error": "Feil i mottatt data"})
                 
-            building_uid = escape(data["buildingUid"])
-            room_type_id = escape(data["roomType"])
-            floor = escape(data["floor"].strip())
-            name = escape(data["roomName"].strip())
-            room_number = escape(data["roomNumber"].strip())
+            building_uid = data["buildingUid"]
+            room_type_id = data["roomType"]
+            floor = data["floor"].strip()
+            name = data["roomName"].strip()
+            room_number = data["roomNumber"].strip()
             
             if dbo.check_if_roomnumber_exists(building_uid, room_number):
                 return jsonify({"error": "Romnummer finnes allerede for dette bygget"})
             
-            area = escape(data["roomArea"].strip())
+            area = data["roomArea"].strip()
             converted_area = globals.replace_and_convert_to_float(area)
             if converted_area is False:
                 return jsonify({"error": "Areal må kun inneholde tall"})
   
-            people = escape(data["roomPeople"].strip())
+            people = data["roomPeople"].strip()
             converted_people = globals.replace_and_convert_to_int(people)
             if converted_people is False:
                 return jsonify({"error": "Persontantall må kun inneholde tall"})
@@ -246,7 +238,7 @@ def udpate_room(project_uid, room_uid):
         processed_data = {}
         for key, value in data.items():
             key = globals.camelcase_to_snake(key)
-            cleansed_value = escape(value.strip())
+            cleansed_value = value.strip()
             
             if key == "room_number":
                 if dbo.check_if_roomnumber_exists(room.building_uid, cleansed_value):
@@ -277,7 +269,7 @@ def udpate_room(project_uid, room_uid):
 @jwt_required()
 def delete_room(project_uid, room_uid):
     data = request.get_json()
-    received_room_uid = escape(data["roomId"])
+    received_room_uid = data["roomId"]
     room = dbo.get_room(room_uid)
     room_system = room.system_uid
     if room_uid != received_room_uid:
@@ -334,19 +326,19 @@ def get_system(project_uid, system_uid):
 def new_system(project_uid):
     data = request.get_json()
     project = dbo.get_project(project_uid)
-    system_number = escape(data["systemNumber"].strip())
+    system_number = data["systemNumber"].strip()
 
     if dbo.check_if_system_number_exists(project_uid, system_number):
         return jsonify({"error": "Systemnummer finnes allerede"})
     try:
-        airflow = float(escape(data["airflow"].strip()))
+        airflow = float(data["airflow"].strip())
     except ValueError:
         return jsonify({"error": "Luftmengde må kun inneholde tall"})
     
-    service_area = escape(data["serviceArea"].strip())
-    placement = escape(data["placement"].strip())
+    service_area = data["serviceArea"].strip()
+    placement = data["placement"].strip()
     if "special_system" in data:
-        special_system = escape(data["special_system"])
+        special_system = data["special_system"]
         if special_system is True or special_system == "True":
             special_system = "Ja"
         else:
@@ -354,7 +346,7 @@ def new_system(project_uid):
     else:
         special_system = ""
     
-    system_h_ex_in = escape(data["heat_exchange"].strip())
+    system_h_ex_in = data["heat_exchange"].strip()
     if system_h_ex_in == "none":
         return jsonify({"error", "Du velge type gjenvinner"})
     if system_h_ex_in != "0":
@@ -380,7 +372,7 @@ def update_system(project_uid, system_uid):
             except ValueError:
                 return jsonify({"error": "Viftekapasitet må kun inneholde tall"})
         globals.replace_and_convert_to_float(value)
-        processed_data[key] = escape(value.strip())
+        processed_data[key] = value.strip()
     dbo.update_system_info(system_uid, processed_data)
     
     return jsonify({"success": True})
@@ -433,9 +425,9 @@ def ventilation_get_room(project_uid, room_uid):
     else:
         return jsonify({"room_data": None})
 
-@project_api_bp.route('/ventilation/update_room/<room_uid>/', methods=['PATCH'])
+@project_api_bp.route('/ventilation/update_room/<room_uid>/<cooling>/', methods=['PATCH'])
 @jwt_required()
-def ventilation_update_room(project_uid, room_uid):
+def ventilation_update_room(project_uid, room_uid, cooling):
     room = dbo.get_room(room_uid)
     data = request.get_json()
     current_room_system_uid = room.system_uid
@@ -443,21 +435,16 @@ def ventilation_update_room(project_uid, room_uid):
 
     for key, value in data.items():
         key = globals.camelcase_to_snake(key)
-        processed_data[key] = escape(value.strip())
 
         if key == "air_supply" or key == "air_extract":
             try:
-                converted_value = float(value)
+                converted_value = globals.replace_and_convert_to_float(str(value))
             except ValueError as e:
                 return jsonify({"error": "Tilluft og avtrekk må kun inneholde tall"})
-            globals.replace_and_convert_to_float(value)
-            if dbo.update_room_data(room_uid, processed_data):
-                dbo.update_ventilation_calculations(room_uid)
-            if current_room_system_uid is not None:
-                dbo.update_system_airflows(current_room_system_uid)
-            return jsonify({"success": "Luftmengde oppdatert"})
+            processed_data[key] = converted_value
         
         if key == "system_uid":
+            processed_data[key] = value.strip()
             if current_room_system_uid is None:
                 if dbo.update_room_data(room_uid, processed_data):
                     dbo.update_system_airflows(value)
@@ -467,9 +454,22 @@ def ventilation_update_room(project_uid, room_uid):
                     if dbo.update_airflow_changed_system(value, current_room_system_uid):
                         return jsonify({"success": "Byttet system"})
                     else:
-                        return jsonify({"error": "kunne ikke bytte system"})
-        else:
-            return jsonify({"error": "Kunne ikke oppdatere rom-data"})
+                        return jsonify({"error": "kunne ikke bytte system"})   
+    
+    updated_room = dbo.update_room_data(room_uid, processed_data)
+    if updated_room is False:
+        return jsonify({"success": False, "error": "Kunne ikke oppdatere rom"})
+    
+    updated_vent_calc = dbo.update_ventilation_calculations(room_uid)
+    if updated_vent_calc is False:
+        return jsonify({"success": False, "error": "Kunne ikke oppdatere ventilasjonsberegninger"})
+
+    
+           
+    if cooling == "1":
+        dbo.calculate_total_cooling_for_room(room_uid)
+    
+    return jsonify({"success": True, "message": "Ventilasjonsdata oppdatert"})
 #
 #               
 #   HEATING
@@ -518,7 +518,7 @@ def heating_update_room(project_uid, room_uid):
         processed_data = {}
         for key, value in data.items():
             key = globals.camelcase_to_snake(key)
-            processed_value = escape(value.strip())
+            processed_value = value.strip()
             if key in float_values:
                 float_value = globals.replace_and_convert_to_float(processed_value)
                 if float_value is False:
@@ -618,7 +618,7 @@ def update_room_cooling(project_uid, room_uid):
         processed_data = {}
         for key, value in data.items():
             key = globals.camelcase_to_snake(key)
-            value_checked = escape(value.strip())
+            value_checked = value.strip()
             converted_value = globals.replace_and_convert_to_float(value_checked)
             if converted_value is False:
                 return jsonify({"error": f"Celler for kjøledata må kun inneholde tall"})
@@ -643,7 +643,7 @@ def update_all_rooms_cooling(project_uid, building_uid):
         processed_data = {}
         for key, value in data.items():
             key = globals.camelcase_to_snake(key)
-            value_checked = escape(value.strip())
+            value_checked = value.strip()
             converted_value = globals.replace_and_convert_to_float(value_checked)
             if converted_value is False:
                 return jsonify({"error": "Kun tall er tillatt i celler."})
@@ -683,6 +683,7 @@ def get_buildings_sanitary(project_uid):
         return jsonify({"error": "Ingen bygg lagt til enda"})
     else:
         building_data = []
+
         for building in buildings:
             building_data.append(dbo.get_building_data(building.uid, False, False, True))
         return jsonify({"building_data": building_data})
@@ -695,9 +696,9 @@ def update_room_sanitary(project_uid, room_uid):
         processed_data = {}
         for key, value in data.items():
             if key == "shaft":
-                processed_data[key] = escape(value)
+                processed_data[key] = value
             else:
-                value_checked = escape(value.strip())
+                value_checked = value.strip()
                 converted_value = globals.replace_and_convert_to_float(value_checked)
                 if converted_value is False:
                     return jsonify({"error": f"Antall utsyr må kun inneholde tall"})
@@ -714,6 +715,7 @@ def update_room_sanitary(project_uid, room_uid):
 def get_sanitary_building_summary(project_uid, building_uid):
     building = dbo.get_building(building_uid)
     if building:
+        print("Starting timer")
         curve = building.graph_curve
         building_sanitary_totals = sc.sum_flows_building(building_uid, curve)
         totals = {
@@ -743,7 +745,7 @@ def update_curve(project_uid, building_uid):
 
     data = request.get_json()
     if data:
-        curve = escape(data["curve"])
+        curve = data["curve"]
         dbo.update_building_graph_curve(building_uid, curve)
         return jsonify({"success": True, "message": "curve received"})
     else:
@@ -768,13 +770,4 @@ def ventilation_excel(project_uid, sheet):
         return jsonify({"success": True, "message": "Excel-fil generert", "data": download_url})
     else:
         return jsonify({"success": False, "message": "Kunne ikke generere excel-fil"})
-
-""" @project_api_bp.route('/excel/heating/', methods=['GET'])
-@jwt_required()
-def heating_excel(project_uid):
-    file = excel.generate_excel_report(project_uid, heating=True)
-    if file:
-        download_url = url_for(f'views.download_file', filename=file, _external=True)
-        return jsonify({"success": True, "message": "Excel-fil generert", "data": download_url})
-    else:
-        return jsonify({"success": False, "message": "Kunne ikke generere excel-fil"}) """
+    

@@ -186,57 +186,74 @@ function Rooms() {
                                 ))}
 
                             </div>
-                            <TableTop info={<HelpBox />} />
                             {
-                                roomData ? (
-                                    roomData.room_data === null ? (
-                                        <p>Ingen rom lagt til</p>
-                                    ) : (
-                                        <div className="table-wrapper">
-                                            <table className="fl-table" id="roomsTableVentilation">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="2%">#</th>
-                                                        <th width="12%">Bygg</th>
-                                                        <th width="4%">Etasje</th>
-                                                        <th width="6%">Romnr</th>
-                                                        <th width="15%">Romtype</th>
-                                                        <th width="10%">Romnavn</th>
-                                                        <th width="5%">Areal <br /> m<sup>2</sup></th>
-                                                        <th width="5%">Personer</th>
-                                                        <th width="30%">Kommentarer</th>
-                                                        <th width="10%">Slett Rom</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {
-                                                        floors && floors.map(floor => (
-                                                            <React.Fragment key={floor}>
-                                                                {
-                                                                    sortedBuildings && sortedBuildings.length > 0 ? (
-                                                                        sortedBuildings.filter(room => room.Floor === floor).map((room) => <RoomTableRowComponent msgToParent={handleChildMessage} totalColumns={10} key={room.uid} roomId={room.uid} />)
-                                                                    ) : (<></>)
-                                                                }
-                                                                <tr className="summary-row">
-                                                                    <td style={{height: "25px"}}></td>
-                                                                    <td style={{height: "25px"}}></td>
-                                                                    <td style={{height: "25px"}}></td>
-                                                                    <td style={{height: "25px"}}></td>
-                                                                    <td style={{height: "25px"}}></td>
-                                                                    <td style={{height: "25px"}}></td>
-                                                                    <td style={{height: "25px"}}></td>
-                                                                    <td style={{height: "25px"}}></td>
-                                                                    <td style={{height: "25px"}}></td>
-                                                                    <td style={{height: "25px"}}></td>
-                                                                </tr>
-                                                            </React.Fragment>
-                                                        ))}
-                                                </tbody>
-                                            </table>
+                                activeSortButton === null ? (
+                                    <>
+                                        <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                            Velg bygg
                                         </div>
-                                    )
-                                ) : (<></>)
+                                    </>
+                                ) : (
+                                    <>
+                                        {
+                                            roomData ? (
+                                                roomData.room_data === null ? (
+                                                    <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                                        Ingen rom lagt til
+                                                    </div>
+                                                ) : (
+                                                    <>
+                                                        <TableTop info={<HelpBox />} />
+                                                        <div className="table-wrapper">
+                                                            <table className="fl-table" id="roomsTableVentilation">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th width="2%">#</th>
+                                                                        <th width="12%">Bygg</th>
+                                                                        <th width="4%">Etasje</th>
+                                                                        <th width="6%">Romnr</th>
+                                                                        <th width="15%">Romtype</th>
+                                                                        <th width="10%">Romnavn</th>
+                                                                        <th width="5%">Areal <br /> m<sup>2</sup></th>
+                                                                        <th width="5%">Personer</th>
+                                                                        <th width="30%">Kommentarer</th>
+                                                                        <th width="10%">Slett Rom</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {
+                                                                        floors && floors.map(floor => (
+                                                                            <React.Fragment key={floor}>
+                                                                                {
+                                                                                    sortedBuildings && sortedBuildings.length > 0 ? (
+                                                                                        sortedBuildings.filter(room => room.Floor === floor).map((room) => <RoomTableRowComponent msgToParent={handleChildMessage} totalColumns={10} key={room.uid} roomId={room.uid} />)
+                                                                                    ) : (<></>)
+                                                                                }
+                                                                                <tr className="summary-row">
+                                                                                    <td style={{ height: "25px" }}></td>
+                                                                                    <td style={{ height: "25px" }}></td>
+                                                                                    <td style={{ height: "25px" }}></td>
+                                                                                    <td style={{ height: "25px" }}></td>
+                                                                                    <td style={{ height: "25px" }}></td>
+                                                                                    <td style={{ height: "25px" }}></td>
+                                                                                    <td style={{ height: "25px" }}></td>
+                                                                                    <td style={{ height: "25px" }}></td>
+                                                                                    <td style={{ height: "25px" }}></td>
+                                                                                    <td style={{ height: "25px" }}></td>
+                                                                                </tr>
+                                                                            </React.Fragment>
+                                                                        ))}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </>
+                                                )
+                                            ) : (<></>)
+                                        }
+                                    </>
+                                )
                             }
+
                         </>
                     )
                 }

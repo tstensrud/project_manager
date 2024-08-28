@@ -30,8 +30,8 @@ function NewSpec() {
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Ny kravspesifikasjon"} projectName={""} projectNumber={""} />
             <div className="main-content">
                 <div className="flex-container-row">
-                    <div className="cards">
-                        <div className="information [ card ]">
+                    <div className="content-card">
+                        <div className="content-card-container">
                             <h2 className="card-title">Opprett ny kravspesifikasjon</h2>
                             <p className="info">Skriv inn navnet på kravspesifikasjonen du vil opprette. Gi den et beskrivende navn slik at det er lett å forstå hva det gjelder.
                             </p>

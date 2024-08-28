@@ -83,9 +83,7 @@ function Cooling() {
         } else {
             setBuildingId(selectedBuildingUid);
             setSortedBuildings(roomData.room_data.filter((room) => room.BuildingUid === selectedBuildingUid));
-            //history.push(`/projects/${projectId}/heating?building=${selectedBuildingUid}`);
         }
-
     }
 
     return (
@@ -100,61 +98,71 @@ function Cooling() {
                     ) : (
                         <>
                             <div className="text-container-above-tables">
-
                                 {activeSortButton !== null && activeSortButton !== "all" ? <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate} msgToParent={handleChildMessage} buildingUid={activeSortButton} /> : ''}&nbsp;
-                                {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
-                                    <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
-                                        {buildingData.building_data[key].BuildingName}
-                                    </button>
-                                ))}
-
+                                {
+                                    buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
+                                        <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
+                                            {buildingData.building_data[key].BuildingName}
+                                        </button>
+                                    ))
+                                }
                             </div>
-                            <TableTop info={<HelpBox />} />
-                            <div className="table-wrapper">
-                                <table className="fl-table">
-                                    <thead>
-                                        <tr>
-                                            <th width="2%">#</th>
-                                            <th width="5%">Etasje</th>
-                                            <th width="5%">Romnr</th>
-                                            <th width="5%">Romtemp <br /> &#176;C</th>
-                                            <th width="5%">Temp vent<br /> &#176;C</th>
-                                            <th width="5%">W/Pers</th>
-                                            <th width="5%">Lys<br /> W/m<sup>2</sup></th>
-                                            <th width="5%">Ustyr<br /> W/m<sup>2</sup></th>
-                                            <th width="5%">Soltilskudd<br /> W/m<sup>2</sup></th>
-                                            <th width="5%">Solreduksjon<br /> (0-1,0)</th>
-                                            <th width="5%">&#8721; Internlast<br /> W</th>
-                                            <th width="5%">Kjøling utstyr<br /> W</th>
-                                            <th width="5%">&#8721; kjøling<br /> W</th>
-                                            <th width="5%">Ekstra vent. <br />m<sup>3</sup>/h</th>
-                                            <th width="32%">Merknad</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            floors && floors.map(floor => (
-                                                <React.Fragment key={floor}>
-                                                    {
-                                                        sortedBuildings && sortedBuildings.length > 0 ? (
-                                                            sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={15} key={room.uid} roomId={room.uid} />)
-                                                        ) : (<></>)
-                                                    }
-                                                    <tr className="summary-row">
-                                                        <td>
-                                                            <br /><br />
-                                                        </td>
-                                                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                            {
+                                activeSortButton === null ? (
+                                    <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                        Velg bygg
+                                    </div>
+                                ) : (
+                                    <>
+                                        <TableTop info={<HelpBox />} />
+                                        <div className="table-wrapper">
+                                            <table className="fl-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="2%">#</th>
+                                                        <th width="5%">Etasje</th>
+                                                        <th width="5%">Romnr</th>
+                                                        <th width="5%">Romtemp <br /> &#176;C</th>
+                                                        <th width="5%">Temp vent<br /> &#176;C</th>
+                                                        <th width="5%">W/Pers</th>
+                                                        <th width="5%">Lys<br /> W/m<sup>2</sup></th>
+                                                        <th width="5%">Ustyr<br /> W/m<sup>2</sup></th>
+                                                        <th width="5%">Soltilskudd<br /> W/m<sup>2</sup></th>
+                                                        <th width="5%">Solreduksjon<br /> (0-1,0)</th>
+                                                        <th width="5%">&#8721; Internlast<br /> W</th>
+                                                        <th width="5%">Kjøling utstyr<br /> W</th>
+                                                        <th width="5%">&#8721; kjøling<br /> W</th>
+                                                        <th width="5%">Ekstra vent. <br />m<sup>3</sup>/h</th>
+                                                        <th width="32%">Merknad</th>
                                                     </tr>
-                                                </React.Fragment>
-                                            ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        floors && floors.map(floor => (
+                                                            <React.Fragment key={floor}>
+                                                                {
+                                                                    sortedBuildings && sortedBuildings.length > 0 ? (
+                                                                        sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={15} key={room.uid} roomId={room.uid} />)
+                                                                    ) : (<></>)
+                                                                }
+                                                                <tr className="summary-row">
+                                                                    <td>
+                                                                        <br /><br />
+                                                                    </td>
+                                                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                                                </tr>
+                                                            </React.Fragment>
+                                                        ))
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </>
+                                )
+                            }
                         </>
                     )
                 }
-
             </div>
         </>
     );

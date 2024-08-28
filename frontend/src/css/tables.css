@@ -1,8 +1,11 @@
 /* Room lists */
 .table-wrapper{
-  margin: 0px 20px 100px 20px;
+  display: flex;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 0px;
   overflow: auto;
-  height: 81%;
+  height: 80%;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   background-color: var(--table-background-color);

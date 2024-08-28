@@ -32,13 +32,13 @@ function Dashboard() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (projectId === "" ) {
+    if (projectId === "") {
       inputRef.current.focus();
       return;
     }
     navigate(`/project/${projectId}`);
   }
-  
+
   return (
     <>
       <SubTitleComponent svg={<HeaderIcon />} headerText={"Dashboard - velg prosjekt"} projectName={""} projectNumber={""} />

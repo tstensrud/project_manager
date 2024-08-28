@@ -6,26 +6,25 @@ from uuid import uuid4
 from . import models, db
 from . import globals
 from . import sanitary_calculations as sc
-import json
 
 '''
 Project methods
 '''
 def new_project(number: str, name: str, description: str) -> models.Projects:
-        uid = globals.encode_uid_base64(uuid4())
-        new_project = models.Projects(uid=uid,
-                                      project_number=number, 
-                                        project_name=name, 
-                                        project_description=description, 
-                                        specification=None)
-        try:
-            db.session.add(new_project)
-            db.session.commit()
-            return new_project
-        except Exception as e:
-            globals.log(f"Error creating new project: {e}")
-            db.session.rollback()
-            return False
+    uid = globals.encode_uid_base64(uuid4())
+    new_project = models.Projects(uid=uid,
+                                    project_number=number,
+                                    project_name=name,
+                                    project_description=description,
+                                    specification=None)
+    try:
+        db.session.add(new_project)
+        db.session.commit()
+        return new_project
+    except Exception as e:
+        globals.log(f"Error creating new project: {e}")
+        db.session.rollback()
+        return False
 
 def set_project_specification(project_uid: str, spec_uid: str) -> bool:
     project = get_project(project_uid)
@@ -57,26 +56,36 @@ def get_all_project_names():
 
 
 def get_all_project_rooms(project_uid: str) -> list[models.Rooms]:
-    rooms = db.session.query(models.Rooms).filter(models.Rooms.project_uid == project_uid).order_by(models.Rooms.floor, models.Rooms.room_number).all()
+    rooms = db.session.query(
+        models.Rooms).filter(
+            models.Rooms.project_uid == project_uid).order_by(
+                models.Rooms.floor, models.Rooms.room_number).all()
     return rooms
 
 def get_all_project_rooms_excel(project_uid: str) -> list[models.Rooms]:
-    rooms = db.session.query(models.Rooms).join(models.Buildings, models.Rooms.building_uid == models.Buildings.uid).filter(models.Rooms.project_uid == project_uid).order_by(models.Buildings.building_name, models.Rooms.floor, models.Rooms.room_number).all()
+    rooms = db.session.query(models.Rooms).join(
+        models.Buildings, models.Rooms.building_uid == models.Buildings.uid).filter(
+            models.Rooms.project_uid == project_uid).order_by(
+                models.Buildings.building_name, models.Rooms.floor, models.Rooms.room_number).all()
     return rooms
 
 def count_rooms_in_project(project_uid) -> int:
-    total_rooms = db.session.query(func.count(models.Rooms.project_uid)).filter(models.Rooms.project_uid == project_uid).scalar()
+    total_rooms = db.session.query(
+        func.count(
+            models.Rooms.project_uid)).filter(
+                models.Rooms.project_uid == project_uid).scalar()
     return total_rooms
 
 def check_for_existing_project_number(project_number: str) -> bool:
     project = models.Projects.query.filter_by(project_number = project_number).first()
     if project:
         return True
-    else:
-        return False
+    return False
 
 def summarize_project_airflow(project_uid: str) -> float:
-    airflow = db.session.query(func.sum(models.Rooms.air_supply)).filter(models.Rooms.project_uid == project_uid).scalar()
+    airflow = db.session.query(func.sum(
+        models.Rooms.air_supply)).filter(
+            models.Rooms.project_uid == project_uid).scalar()
     return airflow
 
 '''
@@ -109,7 +118,9 @@ def get_todo_item(item_uid: int) -> models.TodoItem:
 
 
 def get_project_todo_items(project_uid: int) -> dict:
-    todo_list = db.session.query(models.TodoItem).filter(and_(models.TodoItem.project_uid == project_uid, models.TodoItem.completed == False)).order_by(models.TodoItem.date).all()
+    todo_list = db.session.query(models.TodoItem).filter(and_(
+        models.TodoItem.project_uid == project_uid, models.TodoItem.completed == False)).order_by(
+            models.TodoItem.date).all()
     todo_dict = [{"id": item.uid, "project_uid": item.project_uid, "author_uid": item.user.name, "date": item.date,
                     "content": item.content, "completed": item.completed, "date_completed": item.date_completed,
                     "completed_by": item.completed_by} for item in todo_list]
@@ -219,21 +230,36 @@ def update_building_graph_curve(building_uid: str, curve: str) -> bool:
         return False
     
 def summarize_sanitary_equipment_building(building_uid: str) -> dict:
-    sink_1_14_inch = db.session.query(func.sum(models.Rooms.sink_1_14_inch)).filter(models.Rooms.building_uid == building_uid).scalar()
-    sink_large = db.session.query(func.sum(models.Rooms.sink_large)).filter(models.Rooms.building_uid == building_uid).scalar()
-    wc = db.session.query(func.sum(models.Rooms.wc)).filter(models.Rooms.building_uid == building_uid).scalar()
-    urinal = db.session.query(func.sum(models.Rooms.urinal)).filter(models.Rooms.building_uid == building_uid).scalar()
-    dishwasher = db.session.query(func.sum(models.Rooms.dishwasher)).filter(models.Rooms.building_uid == building_uid).scalar()
-    shower = db.session.query(func.sum(models.Rooms.shower)).filter(models.Rooms.building_uid == building_uid).scalar()
-    tub = db.session.query(func.sum(models.Rooms.tub)).filter(models.Rooms.building_uid == building_uid).scalar()
-    washing_machine = db.session.query(func.sum(models.Rooms.washing_machine)).filter(models.Rooms.building_uid == building_uid).scalar()
-    tap_water_outlet_inside = db.session.query(func.sum(models.Rooms.tap_water_outlet_inside)).filter(models.Rooms.building_uid == building_uid).scalar()
-    tap_water_outlet_outside = db.session.query(func.sum(models.Rooms.tap_water_outlet_outside)).filter(models.Rooms.building_uid == building_uid).scalar()
-    firehose = db.session.query(func.sum(models.Rooms.firehose)).filter(models.Rooms.building_uid == building_uid).scalar()
-    drain_75_mm = db.session.query(func.sum(models.Rooms.drain_75_mm)).filter(models.Rooms.building_uid == building_uid).scalar()
-    drain_110_mm = db.session.query(func.sum(models.Rooms.drain_110_mm)).filter(models.Rooms.building_uid == building_uid).scalar()
-    sink_utility = db.session.query(func.sum(models.Rooms.sink_utility)).filter(models.Rooms.building_uid == building_uid).scalar()
-    drinking_fountain = db.session.query(func.sum(models.Rooms.drinking_fountain)).filter(models.Rooms.building_uid == building_uid).scalar()
+    sink_1_14_inch = db.session.query(func.sum(models.Rooms.sink_1_14_inch)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    sink_large = db.session.query(func.sum(models.Rooms.sink_large)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    wc = db.session.query(func.sum(models.Rooms.wc)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    urinal = db.session.query(func.sum(models.Rooms.urinal)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    dishwasher = db.session.query(func.sum(models.Rooms.dishwasher)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    shower = db.session.query(func.sum(models.Rooms.shower)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    tub = db.session.query(func.sum(models.Rooms.tub)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    washing_machine = db.session.query(func.sum(models.Rooms.washing_machine)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    tap_water_outlet_inside = db.session.query(func.sum(models.Rooms.tap_water_outlet_inside)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    tap_water_outlet_outside = db.session.query(func.sum(models.Rooms.tap_water_outlet_outside)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    firehose = db.session.query(func.sum(models.Rooms.firehose)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    drain_75_mm = db.session.query(func.sum(models.Rooms.drain_75_mm)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    drain_110_mm = db.session.query(func.sum(models.Rooms.drain_110_mm)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    sink_utility = db.session.query(func.sum(models.Rooms.sink_utility)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
+    drinking_fountain = db.session.query(func.sum(models.Rooms.drinking_fountain)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
 
     return {
             "sink_1_14_inch": sink_1_14_inch,
@@ -254,7 +280,8 @@ def summarize_sanitary_equipment_building(building_uid: str) -> dict:
     }
 
 def get_building_floors(building_uid: str) -> list[str]:
-    floors = db.session.query(models.Rooms.floor).filter(models.Rooms.building_uid == building_uid).distinct().all()
+    floors = db.session.query(models.Rooms.floor).filter(
+        models.Rooms.building_uid == building_uid).distinct().all()
     floors.sort()
     cleaned_floors = [floor[0] for floor in floors]
     return cleaned_floors
@@ -286,10 +313,10 @@ def new_building(project_uid: str, building_name: str) -> bool:
         globals.log(f"new building: {e}")
         db.session.rollback()
         return False
-    
 
 def get_all_project_buildings(project_uid: int) -> list[models.Buildings]:
-    buildings = models.Buildings.query.filter(models.Buildings.project_uid == project_uid).order_by(models.Buildings.building_name).all()
+    buildings = models.Buildings.query.filter(
+        models.Buildings.project_uid == project_uid).order_by(models.Buildings.building_name).all()
     if buildings == []:
         return None
     else:
@@ -321,18 +348,18 @@ def edit_building_name(building_uid: str, new_name: str) -> bool:
         return False
 
 def check_for_existing_building_name(project_uid: str, building_name: str) -> bool:
-    building = db.session.query(models.Buildings).filter(and_(models.Buildings.project_uid == project_uid, models.Buildings.building_name == building_name)).first()
+    building = db.session.query(
+        models.Buildings).filter(and_(
+            models.Buildings.project_uid == project_uid, models.Buildings.building_name == building_name)).first()
     if building:
         return True
-    else:
-        return False
+    return False
 
 def check_if_building_has_rooms(building_uid: str) -> bool:
     room = db.session.query(models.Rooms).filter(models.Rooms.building_uid == building_uid).first()
     if room:
         return True
-    else:
-        return False
+    return False
 
 def delete_building(building_uid: str) -> bool:
     building = get_building(building_uid)
@@ -349,9 +376,12 @@ def delete_building(building_uid: str) -> bool:
 Rooms methods
 '''
 
-def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str, room_number: str, room_name: str, area: float, room_pop: int, 
-             air_per_person: float, air_emission: float, air_process: float, air_minimum: float, ventilation_principle: str, 
-             heat_exchange: str, room_control: str, notes: str, db_technical: str, db_neighbour: str, db_corridor: str):
+def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str,
+             room_number: str,room_name: str, area: float, room_pop: int,
+             air_per_person: float, air_emission: float, air_process: float,
+             air_minimum: float, ventilation_principle: str,
+             heat_exchange: str, room_control: str, notes: str, db_technical: str,
+             db_neighbour: str, db_corridor: str):
     val = 0
     uid = globals.encode_uid_base64(uuid4())
     new_room = models.Rooms(
@@ -423,7 +453,6 @@ def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str
         drain_110_mm=0
     )
     
-    
     try:
         db.session.add(new_room)
         db.session.commit()
@@ -432,14 +461,12 @@ def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str
         globals.log(e)
         db.session.rollback()
         return False
-    
 
 def get_room(room_uid: str) -> models.Rooms:
     room = db.session.query(models.Rooms).filter(models.Rooms.uid == room_uid).first()
     return room
 
-
-def delete_room(room_uid: str) -> bool:   
+def delete_room(room_uid: str) -> bool:
     room = db.session.query(models.Rooms).filter(models.Rooms.uid == room_uid).first()
     if room:
         room_dict = room.__dict__.copy()
@@ -455,8 +482,7 @@ def delete_room(room_uid: str) -> bool:
             db.session.rollback()
             globals.log(f"delete_room() second try/except block: {e}")
             return False
-    else:
-        return False
+    return False
 
 def undo_delete_room(room_uid: str) -> bool:
     room = db.session.query(models.DeletedRooms).filter(models.DeletedRooms.uid == room_uid).first()
@@ -474,35 +500,35 @@ def undo_delete_room(room_uid: str) -> bool:
             globals.log(f"Failure to undo deletion of room: {e}")
             db.session.rollback()
             return False
-    else:
-        return False
-
+    return False
 
 def check_if_roomnumber_exists(building_uid, room_number) -> bool:
-    room = db.session.query(models.Rooms.room_number).join(models.Buildings).filter(and_(models.Buildings.uid == building_uid, models.Rooms.room_number == room_number)).first()
-    print(room)
+    room = db.session.query(models.Rooms.room_number).join(
+        models.Buildings).filter(and_(
+            models.Buildings.uid == building_uid, models.Rooms.room_number == room_number)).first()
     if room:
         return True
-    else:
-        return False
-
+    return False
 
 def update_room_data(room_uid: int, data) -> bool:
+    print(data)
     room = get_room(room_uid)
-    processed_data = {}
-
-    for key, value in data.items():
-        processed_data[key] = value
-    processed_data_list = list(processed_data.keys())
-
     room_columns = {column.key for column in inspect(models.Rooms).mapper.column_attrs}
-    for key in room_columns:
-        if key == processed_data_list[0]:
-            print(f"Setting {processed_data[key]} into {key} for room {room}")
-            setattr(room, key, processed_data[key])
-            if key == "room_population" or key == "area":
-                update_ventilation_calculations(room_uid)
-            #break
+    for column in room_columns:
+        for key, value in data.items():
+            if column == key:
+                print(f"Setting {value} into {column} for room {room}")
+                setattr(room, column, value)
+
+                if key == "area" or key == "room_population":
+                    update_ventilation_calculations(room_uid)
+                    calculate_total_heat_loss_for_room(room_uid)
+                    calculate_total_cooling_for_room(room_uid)
+
+                if key == "air_supply" or key == "air_extract":
+                    calculate_total_heat_loss_for_room(room_uid)
+                    calculate_total_cooling_for_room(room_uid)
+
     try:
         db.session.commit()
         return True
@@ -537,7 +563,6 @@ def initial_ventilation_calculations(room_uid: int) -> bool:
         db.session.rollback()
         return False
 
-
 def update_ventilation_calculations(room_uid: int) -> bool:
     room = get_room(room_uid)
     room.air_person_sum = round((room.room_population * room.air_per_person),1)
@@ -554,7 +579,6 @@ def update_ventilation_calculations(room_uid: int) -> bool:
         globals.log(f"update_ventilation_calculations: {e}")
         db.session.rollback()
         return False
-
 
 def update_ventilation_table(room_uid: int, new_supply: float, new_extract: float, system=None) -> bool:
     room = get_room(room_uid)
@@ -578,7 +602,6 @@ def update_ventilation_table(room_uid: int, new_supply: float, new_extract: floa
         globals.log(f"update_ventilation_table: {e}")
         return False
 
-
 def set_system_for_room(room_uid: int, system_uid: int) -> bool:
     room = get_room(room_uid)
     room.system_uid = system_uid
@@ -591,60 +614,67 @@ def set_system_for_room(room_uid: int, system_uid: int) -> bool:
         globals.log(f"set_system_for_room_vent_prop: {e}")
         return False
 
-
 def summarize_building_area(building_uid: int) -> float:
-    total_building_area = db.session.query(func.sum(models.Rooms.area)).join(models.Buildings).filter(models.Buildings.uid == building_uid).scalar()
+    total_building_area = db.session.query(func.sum(
+        models.Rooms.area)).join(models.Buildings).filter(
+            models.Buildings.uid == building_uid).scalar()
     return total_building_area
 
-
 def summarize_project_area(project_uid: int) -> float:
-    area = db.session.query(func.sum(models.Rooms.area)).join(models.Buildings).join(models.Projects).filter(models.Projects.uid == project_uid).scalar()
+    area = db.session.query(func.sum(
+        models.Rooms.area)).join(models.Buildings).join(models.Projects).filter(
+            models.Projects.uid == project_uid).scalar()
     return area
 
-
 def summarize_supply_air_building(building_uid: int) -> float:
-    supply = db.session.query(func.sum(models.Rooms.air_supply)).join(models.Buildings).filter(models.Buildings.uid == building_uid).scalar()
+    supply = db.session.query(func.sum(
+        models.Rooms.air_supply)).join(models.Buildings).filter(
+            models.Buildings.uid == building_uid).scalar()
     return supply
-
 
 def summarize_demand_building(building_uid: int) -> float:
-    supply = db.session.query(func.sum(models.Rooms.air_demand)).join(models.Buildings).filter(models.Buildings.uid == building_uid).scalar()
+    supply = db.session.query(func.sum(
+        models.Rooms.air_demand)).join(models.Buildings).filter(
+            models.Buildings.uid == building_uid).scalar()
     return supply
-
 
 def summarize_extract_air_building(building_uid: int) -> float:
-    supply = db.session.query(func.sum(models.Rooms.air_extract)).join(models.Buildings).filter(models.Buildings.uid == building_uid).scalar()
+    supply = db.session.query(func.sum(
+        models.Rooms.air_extract)).join(models.Buildings).filter(
+            models.Buildings.uid == building_uid).scalar()
     return supply
 
-
 def get_ventilation_data_rooms_in_building(building_uid: int):
-    data = db.session.query(models.Rooms).join(models.Buildings).filter(models.Buildings.uid == building_uid).order_by(models.Rooms.floor).all()
+    data = db.session.query(models.Rooms).join(
+        models.Buildings).filter(models.Buildings.uid == building_uid).order_by(
+            models.Rooms.floor).all()
     return data
-
 
 def get_ventlation_data_all_rooms_project(project_uid: int):
-    data = db.session.query(models.Rooms).join(models.Buildings).join(models.Projects).filter(models.Projects.uid == project_uid).order_by(models.Buildings.building_name, models.Rooms.floor).all()
+    data = db.session.query(models.Rooms).join(models.Buildings).join(models.Projects).filter(
+        models.Projects.uid == project_uid).order_by(models.Buildings.building_name, models.Rooms.floor).all()
     return data
 
-
 def get_summary_of_ventilation_system(project_uid: int, system_uid: str) -> float:
-    supply = db.session.query(func.sum(models.Rooms.air_extract)).join(models.Buildings).join(models.Projects).filter(and_(models.Projects.uid == project_uid, models.Rooms.system_uid == system_uid)).scalar()
+    supply = db.session.query(func.sum(models.Rooms.air_extract)).filter(
+        models.Rooms.system_uid == system_uid).scalar()
     return supply
 
 '''
 Ventilation systems
 '''
-
-def new_ventilation_system(project_uid: int, system_number: str, placement: str, service_area: str, heat_ex: str, airflow: float, special: str) -> bool:
+def new_ventilation_system(project_uid: int, system_number: str, placement: str,
+                           service_area: str, heat_ex: str, airflow: float,
+                           special: str) -> bool:
     uid = globals.encode_uid_base64(uuid4())
     system = models.VentilationSystems(uid=uid,
-                                       project_uid=project_uid, 
-                                       system_name=system_number, 
-                                       location=placement, 
-                                       service_area=service_area, 
-                                       heat_exchange=heat_ex, 
-                                       air_flow=airflow, 
-                                       air_flow_supply=0.0, 
+                                       project_uid=project_uid,
+                                       system_name=system_number,
+                                       location=placement,
+                                       service_area=service_area,
+                                       heat_exchange=heat_ex,
+                                       air_flow=airflow,
+                                       air_flow_supply=0.0,
                                        air_flow_extract=0.0,
                                        special_system=special)
     try:
@@ -661,7 +691,7 @@ def systems_in_building(building_uid) -> list[str]:
     return [system[0] for system in systems]
 
 def delete_system(system_uid: int) -> bool:
-    rooms = db.session.query(models.Rooms).join(models.VentilationSystems).filter(models.VentilationSystems.uid==system_uid).all()
+    rooms = db.session.query(models.Rooms).filter(models.Rooms.system_uid == system_uid).all()
     db.session.query(models.VentilationSystems).filter(models.VentilationSystems.uid == system_uid).delete()
     
     for room in rooms:
@@ -673,40 +703,38 @@ def delete_system(system_uid: int) -> bool:
         db.session.rollback()
         globals.log(f"delete system: {e}")
         return False
-    
 
 def get_all_systems(project_uid: int) -> list:
-    systems = db.session.query(models.VentilationSystems).join(models.Projects).filter(models.Projects.uid == project_uid).order_by(models.VentilationSystems.system_name).all()
+    systems = db.session.query(models.VentilationSystems).join(
+        models.Projects).filter(models.Projects.uid == project_uid).order_by(
+            models.VentilationSystems.system_name).all()
     return systems
-
 
 def get_system(system_uid: int) -> models.VentilationSystems:
     system = db.session.query(models.VentilationSystems).filter(models.VentilationSystems.uid == system_uid).first()
     return system
 
-
 def check_if_system_number_exists(project_uid: int, system_number: str) -> bool:
-    system = db.session.query(models.VentilationSystems).join(models.Projects).filter(models.Projects.uid == project_uid, models.VentilationSystems.system_name == system_number).first()
+    system = db.session.query(models.VentilationSystems).join(
+        models.Projects).filter(
+            models.Projects.uid == project_uid, models.VentilationSystems.system_name == system_number).first()
     if system:
         return True
-    else:
-        return False
-    
+    return False
 
 def get_system_names(project_uid: int) -> list:
-    system_names = db.session.query(models.VentilationSystems.system_name).join(models.Projects).filter(models.Projects.uid == project_uid).all()
+    system_names = db.session.query(models.VentilationSystems.system_name).filter(models.VentilationSystems.project_uid == project_uid).all()
     return [system_name[0] for system_name in system_names]
 
-
 def summarize_system_supply(system_uid) -> float:
-    supply = db.session.query(func.sum(models.Rooms.air_supply)).join(models.VentilationSystems).filter(models.VentilationSystems.uid == system_uid).scalar()
+    supply = db.session.query(func.sum(models.Rooms.air_supply)).join(models.VentilationSystems).filter(
+        models.VentilationSystems.uid == system_uid).scalar()
     return supply
 
-
 def summarize_system_extract(system_uid) -> float:
-    extract = db.session.query(func.sum(models.Rooms.air_extract)).join(models.VentilationSystems).filter(models.VentilationSystems.uid == system_uid).scalar()
+    extract = db.session.query(func.sum(models.Rooms.air_extract)).join(models.VentilationSystems).filter(
+        models.VentilationSystems.uid == system_uid).scalar()
     return extract
-
 
 def update_system_airflows(system_uid: int) -> bool:
     system = get_system(system_uid)
@@ -720,7 +748,6 @@ def update_system_airflows(system_uid: int) -> bool:
             globals.log(f"update_system_air_flows: {e}")
             db.session.rollback()
             return False
-
 
 def update_airflow_changed_system(system_uid_new: int, system_uid_old: int) -> bool:
     new_system = get_system(system_uid_new)
@@ -737,7 +764,6 @@ def update_airflow_changed_system(system_uid_new: int, system_uid_old: int) -> b
         globals.log(f"update_airflow_changed_system: {e}")
         db.session.rollback()
         return False
-
 
 def update_system_info(system_uid: int, data: dict) -> bool:
     print(f"Received data: {data}")
@@ -763,17 +789,19 @@ def update_system_info(system_uid: int, data: dict) -> bool:
         return False
 
 def sum_airflow_demand_floor_building(building_uid: str, floor: str) -> float:
-    demand_air = db.session.query(func.sum(models.Rooms.air_demand)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
+    demand_air = db.session.query(func.sum(models.Rooms.air_demand)).filter(
+        and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
     return demand_air if demand_air is not None else 0.0
 
 def sum_airflow_supply_floor_building(building_uid: str, floor: str) -> float:
-    supply_air = db.session.query(func.sum(models.Rooms.air_supply)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
+    supply_air = db.session.query(func.sum(models.Rooms.air_supply)).filter(
+        and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
     return supply_air if supply_air is not None else 0.0
 
 def sum_airflow_extract_floor_building(building_uid: str, floor: str) -> float:
-    extract_air = db.session.query(func.sum(models.Rooms.air_extract)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
+    extract_air = db.session.query(func.sum(models.Rooms.air_extract)).filter(
+        and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
     return extract_air if extract_air is not None else 0.0
-
     
 '''
 Specifications
@@ -811,13 +839,11 @@ def get_specifications() -> list:
         spec_list.append(spec)
     return spec_list
 
-
 def find_specification_name(name: str) -> bool:
     name = db.session.query(models.Specifications.name).filter(models.Specifications.name == name).first()
     if name:
         return True
-    else:
-        return False
+    return False
 
 def delete_specification(spec_uid: str) -> bool:
     spec = get_specification(spec_uid)
@@ -830,21 +856,18 @@ def delete_specification(spec_uid: str) -> bool:
             globals.log(f"Could not delete specification: {e}")
             db.session.rollback()
             return False
-    else:
-        return False
-    
+    return False
+
 # Get data for a specific roomtype in a specification
 
 def get_room_type(room_type_uid: int, specification: str) -> models.RoomTypes:
-    room_data_object = db.session.query(models.RoomTypes).filter(and_(models.RoomTypes.specification_uid == specification, models.RoomTypes.uid == room_type_uid)).first()
+    room_data_object = db.session.query(models.RoomTypes).filter(and_(
+        models.RoomTypes.specification_uid == specification, models.RoomTypes.uid == room_type_uid)).first()
     return room_data_object
 
 def update_room_type_data(data, room_uid: str) -> bool:
     room = db.session.query(models.RoomTypes).filter(models.RoomTypes.uid == room_uid).first()
-    
-
     processed_data = {}
-
     for key, value in data.items():
         processed_data[key] = value
     processed_data_list = list(processed_data.keys())
@@ -854,7 +877,7 @@ def update_room_type_data(data, room_uid: str) -> bool:
         if key == processed_data_list[0]:
             print(f"Setting {processed_data[key]} into {key} for room {room}")
             setattr(room, key, processed_data[key])
-            
+
             project_rooms_with_room_type = db.session.query(models.Rooms).filter(models.Rooms.room_type_uid == room_uid).all()
             for project_room in project_rooms_with_room_type:
                 print("Changing project rooms")
@@ -870,17 +893,17 @@ def update_room_type_data(data, room_uid: str) -> bool:
         globals.log(f"update_room_type_data(): {e}")
         return False
 
-
 def get_room_type_name(specification: str, room_uid: int) -> str:
-    room_type_name = db.session.query(models.RoomTypes.name).join(models.Specifications).filter(models.Specifications.name == specification, models.RoomTypes.uid == room_uid).first()
+    room_type_name = db.session.query(models.RoomTypes.name).join(models.Specifications).filter(
+        models.Specifications.name == specification, models.RoomTypes.uid == room_uid).first()
     return room_type_name
 
 def find_room_type_for_specification(spec_uid: str, room_type_name: str) -> bool:
-    room_type = db.session.query(models.RoomTypes.name).filter(and_(models.RoomTypes.specification_uid == spec_uid, models.RoomTypes.name == room_type_name)).first()
+    room_type = db.session.query(models.RoomTypes.name).filter(and_(
+        models.RoomTypes.specification_uid == spec_uid, models.RoomTypes.name == room_type_name)).first()
     if room_type:
         return True
-    else:
-        return False
+    return False
 
 def delete_room_type_from_spec(room_uid) -> bool:
     room = db.session.query(models.RoomTypes).filter(models.RoomTypes.uid == room_uid).first()
@@ -907,17 +930,17 @@ def delete_all_room_types_spec(spec_uid: str) -> bool:
             return False
     else:
         return None
-    
+
 # Get name of all room types for a specific specification
 def get_specification_room_types(specification_uid: str):
-    room_types = db.session.query(models.RoomTypes).join(models.Specifications).filter(models.Specifications.uid == specification_uid).all()
-    #print(f"Found room types: {room_types} for specid {specification_uid}")
+    room_types = db.session.query(models.RoomTypes).join(models.Specifications).filter(
+        models.Specifications.uid == specification_uid).all()
     return room_types
 
 # Get all room types and data for a specific specification
-
 def get_specification_room_data(specification_uid: str):
-    data = db.session.query(models.RoomTypes).join(models.Specifications).filter(models.Specifications.uid == specification_uid).all()
+    data = db.session.query(models.RoomTypes).join(models.Specifications).filter(
+        models.Specifications.uid == specification_uid).all()
     return data
 
 def get_spec_room_type_data(room_uid: str) -> dict:
@@ -925,9 +948,7 @@ def get_spec_room_type_data(room_uid: str) -> dict:
     if room:
         room_data = room.get_json()
         return room_data
-    else:
-        return None
-    
+    return None
 
 def new_specification_room_type(specification_uid: int, data) -> bool:
     room_control = ""
@@ -982,14 +1003,12 @@ def new_specification_room_type(specification_uid: int, data) -> bool:
         db.session.rollback()
         return False
 
-
 '''
 Heating and cooling
 '''
 
 def update_building_heating_settings(building_uid: str, updated_data) -> bool:
     building = db.session.query(models.Buildings).filter(models.Buildings.uid == building_uid).first()
-
 
     processed_data = {}
 
@@ -1011,16 +1030,13 @@ def update_building_heating_settings(building_uid: str, updated_data) -> bool:
         db.session.rollback()
         return False
 
-
 def infiltration_loss(delta_t_inside_outside: float, room_volume: float, air_change_per_hour: float) -> float:
     infiltration_loss = 0.28 * 1.2 * delta_t_inside_outside * room_volume * air_change_per_hour
     return infiltration_loss
 
-
 def ventilation_loss(air_flow_per_area: float, room_area: float, indoor_temp: float, vent_air_temp: float) -> float:
     ventilation_loss = 0.35 * air_flow_per_area * room_area * (indoor_temp - vent_air_temp)
     return ventilation_loss
-
 
 def calculate_total_heat_loss_for_room(room_uid: int) -> bool:
     try:
@@ -1072,9 +1088,9 @@ def calculate_total_heat_loss_for_room(room_uid: int) -> bool:
         db.session.rollback()
         return False
 
-
 def get_all_rooms_building(building_uid: int) -> list[models.Rooms]:
-    rooms = db.session.query(models.Rooms).join(models.Buildings).filter(models.Buildings.uid == building_uid).all()
+    rooms = db.session.query(models.Rooms).join(models.Buildings).filter(
+        models.Buildings.uid == building_uid).all()
     if not rooms:
         print(f"No rooms found for building_uid: {building_uid}")
     else:
@@ -1082,40 +1098,38 @@ def get_all_rooms_building(building_uid: int) -> list[models.Rooms]:
     return rooms
 
 def sum_heatloss_demand_building_floor(building_uid: str, floor: str) -> float:
-    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
+    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(and_(
+        models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
     return heat_loss
 
 def sum_heatloss_chosen_building_floor(building_uid: str, floor: str) -> float:
-    heat_loss = db.session.query(func.sum(models.Rooms.chosen_heating)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
+    heat_loss = db.session.query(func.sum(models.Rooms.chosen_heating)).filter(and_(
+        models.Rooms.building_uid == building_uid, models.Rooms.floor == floor)).scalar()
     return heat_loss
-
-
 
 def sum_heat_loss_building(building_uid: int) -> float:
-    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(models.Rooms.building_uid == building_uid).scalar()
+    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
     return heat_loss
-
 
 def sum_heat_loss_chosen_building(building_uid: int) -> float:
-    heat_loss = db.session.query(func.sum(models.Rooms.chosen_heating)).filter(models.Rooms.building_uid == building_uid).scalar()
-    #print("WE CALCULATED HEATLOSS")
+    heat_loss = db.session.query(func.sum(models.Rooms.chosen_heating)).filter(
+        models.Rooms.building_uid == building_uid).scalar()
     return heat_loss
-
 
 def sum_heat_loss_project(project_uid: int) -> float:
-    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(models.Rooms.project_uid == project_uid).scalar()
-    print(heat_loss)
+    heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(
+        models.Rooms.project_uid == project_uid).scalar()
     return heat_loss
 
-
 def sum_heat_loss_project_chosen(project_uid: int) -> float:
-    heat_loss = db.session.query(func.sum(models.Rooms.chosen_heating)).filter(models.Rooms.project_uid == project_uid).scalar()
+    heat_loss = db.session.query(func.sum(models.Rooms.chosen_heating)).filter(
+        models.Rooms.project_uid == project_uid).scalar()
     return heat_loss
 
 '''
 Cooling
 '''
-
 def set_standard_cooling_settings(room_uid: int, data) -> bool:
     room = get_room(room_uid)
     room.room_temp_summer = data["room_temp_summer"] if data["room_temp_summer"] != 0 else room.room_temp_summer
@@ -1148,11 +1162,10 @@ def calculate_heat_loads_for_room(room_uid: int) -> bool:
 
 def calculate_total_cooling_for_room(room_uid: int) -> bool:
     if calculate_heat_loads_for_room(room_uid):
-        room = get_room(room_uid)   
-        
+        room = get_room(room_uid)
+
         heatload_sun = room.sun_adition * room.sun_reduction
         sum_internal_heat_loads = room.sum_internal_heatload_people + room.sum_internal_heatload_lights + room.internal_heatload_equipment + heatload_sun
-        
         cooling_from_vent = 0.35 * room.air_supply * (room.room_temp_summer - room.ventair_temp_summer)
         sum_cooling = cooling_from_vent + room.cooling_equipment
 
@@ -1166,22 +1179,20 @@ def calculate_total_cooling_for_room(room_uid: int) -> bool:
             globals.log(f"cooling calculatiosn: {e}")
             db.session.rollback()
             return False
-    else:
-        return False
+    return False
 
 def sum_cooling_from_equipment_project(project_uid: str) -> float:
-    cooling = db.session.query(func.sum(models.Rooms.cooling_equipment)).filter(models.Rooms.project_uid == project_uid).scalar()
+    cooling = db.session.query(func.sum(models.Rooms.cooling_equipment)).filter(
+        models.Rooms.project_uid == project_uid).scalar()
     return cooling
 
 '''
 Sanitary
 '''
-
 def get_building_shafts(building_uid: str) -> list[str]:
     shafts = db.session.query(distinct(models.Rooms.shaft)).filter(models.Rooms.building_uid == building_uid).all()
     shaft_list = [shaft[0] for shaft in shafts if shaft[0] is not None]
     sorted_list = sorted(shaft_list)
-    #print(sorted_list)
     return sorted_list
     
 def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str):
@@ -1207,7 +1218,6 @@ def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str
                 cumulative_sum_drainage = cumulative_sum_drainage + floor_sum_drainage_simul
         pipe_size_vertical = sc.pipesize_drainage_vertical(cumulative_sum_drainage)
         pipe_size_1_60 = sc.pipesize_drainage_1_60(cumulative_sum_drainage)
-            
 
         #Cold water
         floor_sum_cold_water = sc.sum_cold_water_floor(building_uid, floor, shaft)
@@ -1219,7 +1229,6 @@ def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str
                 cumulative_sum_coldwater = cumulative_sum_coldwater + floor_sum_cold_water_simul
         pipe_size_cold_water = sc.pipesize_tap_water(cumulative_sum_coldwater)
 
-        
         #Warm water
         floor_sum_warm_water = sc.sum_warm_water_floor(building_uid, floor, shaft)
         if floor_sum_warm_water > 0:
@@ -1239,7 +1248,7 @@ def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str
         shaft_summary["pipe_size_warm_water"] = pipe_size_warm_water
 
         shaft_summaries[floor] = shaft_summary
-    
+
     return shaft_summaries
 
 
