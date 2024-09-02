@@ -37,10 +37,9 @@ function NewProject() {
                 <div className="flex-container-row">
                     {error && <p>Error: {error.message}</p>}
 
-                    <div className="cards">
-                        <div className="information [ card ]">
+                    <div className="content-card">
+                        <div className="content-card-container">
                             <h2 className="card-title">Opprett nytt prosjekt</h2>
-                            <p className="info"></p>
                             <form className="custom-form profile-form" onSubmit={submitProject}>
                                 <p>
                                     Prosjektnummer <br />

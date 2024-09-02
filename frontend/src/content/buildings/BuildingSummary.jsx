@@ -11,11 +11,7 @@ import CardTitle from '../../layout/CardTitle';
 // SVG imports
 import PlusIcon from '../../assets/svg/plusIcon.svg?react';
 import MinusIcon from '../../assets/svg/minusIcon.svg?react';
-import DeleteIcon from '../../assets/svg/deleteIcon.svg?react';
 import BuildingIcon from '../../assets/svg/buildingIcon.svg?react';
-import EditIcon from '../../assets/svg/editIcon.svg?react';
-
-
 
 function BuildingSummary({ refetchBuildingData, buildingData }) {
 
@@ -88,7 +84,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                         <>
                             <form>
                                 <div style={{ display: "flex", flexDirection: "column" }}>
-                                    <div style={{ display: "flex"}}>
+                                    <div style={{ display: "flex" }}>
                                         <input className="card-input" onChange={handleNameChange} type="text" name="buildingName" placeholder='Endre navn..' />
                                     </div>
                                     <div style={{ display: "flex" }}>
@@ -108,38 +104,50 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                     )
                 }
                 <div className="content-card-inner-container">
-                    <h4>Prosjektert areal</h4>
+                    <div style={{ marginBottom: "10px" }} className="grey-text">
+                        <h4>Prosjektert areal</h4>
+                    </div>
 
-                    <p className="info">
+                    <div style={{ marginBottom: "20px" }}>
                         {area.toLocaleString()} m<sup>2</sup>
+                    </div>
 
-                    </p>
 
+                    <div style={{ marginBottom: "10px" }} className="grey-text">
+                        <h4>Prosjektert luftmengde</h4>
+                    </div>
 
-                    <h4>Prosjektert luftmengde</h4>
-
-                    <p className="info">
+                    <div style={{ marginBottom: "20px" }}>
                         {PlusIcon && <PlusIcon />}
                         <span className="supply-text"> {supplyAir.toLocaleString()} </span> m<sup>3</sup>/h
                         <br />
                         {MinusIcon && <MinusIcon />}
                         <span className="extract-text"> {extractAir.toLocaleString()} </span> m<sup>3</sup>/h
-                    </p>
+                    </div>
 
-
-                    <h4>Betjenes av ventilasjonssystem:</h4>
-
-                    <ul>
+                    <div style={{ marginBottom: "20px" }}>
+                        <div style={{ marginBottom: "10px" }} className="grey-text">
+                            <h4>Betjenes av ventilasjonssystem</h4>
+                        </div>
                         {
-                            buildingData.systems.map((system, index) => <li key={index}>{system}</li>)
+                            buildingData.systems.map((system, index) =>
+                                <div key={index} style={{ display: "flex", flexDirection: "row" }}>
+                                    <div style={{ display: "flex", width: "100%" }}>
+                                        {system}
+                                    </div>
+                                </div>
+                            )
                         }
-                    </ul>
+                    </div>
 
 
-                    <h4>Prosjektert varme</h4>
-                    <p className="info">
+
+                    <div style={{ marginBottom: "10px" }} className="grey-text">
+                        <h4>Prosjektert varme</h4>
+                    </div>
+                    <div style={{ marginBottom: "20px" }}>
                         {Number((heating / 1000).toFixed(2)).toLocaleString()} kW
-                    </p>
+                    </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
                     <div style={{ display: "flex", width: "100%", height: "100%", alignItems: "end", justifyContent: "end" }}>
@@ -163,7 +171,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                                     </div>
                                 </div>
                             ) : (
-                                    <button onClick={showEditOptions} className="card-button">Rediger bygg</button>
+                                <button onClick={showEditOptions} className="card-button">Rediger bygg</button>
                             )
                         }
                     </div>

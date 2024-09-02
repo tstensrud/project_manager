@@ -111,117 +111,148 @@ function Heating() {
                             </div>
                             {
                                 activeSortButton === null ? (
-                                        <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
-                                            Velg bygg
-                                        </div>
+                                    <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                        Velg bygg
+                                    </div>
                                 ) : (
                                     <>
                                         <TableTop info={<HelpBox />} />
-                                        <div className="table-wrapper">
-                                            <table className="fl-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="2%">#</th>
-                                                        <th width="2%">Etg</th>
-                                                        <th width="5%">Romnr</th>
-                                                        <th width="5%">Høyde <br />m</th>
-                                                        <th width="5%">Yttervegg <br /> m<sup>2</sup></th>
-                                                        <th width="5%">Innervegg <br />m<sup>2</sup></th>
-                                                        <th width="5%">Vindu/dør <br />m<sup>2</sup></th>
-                                                        <th width="5%">Tak <br />m<sup>2</sup></th>
-                                                        <th width="5%">Gulv grunn <br />m<sup>2</sup></th>
-                                                        <th width="5%">Gulv fritt <br />m<sup>2</sup></th>
-                                                        <th width="5%">&#8721; varmetap<br /> W</th>
-                                                        <th width="5%">Valgt varme<br /> W</th>
-                                                        <th width="5%">W/m<sup>2</sup></th>
-                                                        <th width="8%">Varmekilde</th>
-                                                        <th width="8%">Merknad</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {
-                                                        floors && floors.map(floor => (
-                                                            <React.Fragment key={floor}>
-                                                                {
-                                                                    sortedBuildings && sortedBuildings.length > 0 ? (
-                                                                        sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <HeatingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={15} key={room.uid} roomId={room.uid} />)
-                                                                    ) : (<></>)
-                                                                }
-                                                                <tr className="summary-row">
-                                                                    <td>
-                                                                        <br /><br />
-                                                                    </td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td>
-                                                                        {
-                                                                            buildingSummaryData && buildingSummaryData[0]?.floor_summaries_heating &&
-                                                                            Object.keys(buildingSummaryData[0].floor_summaries_heating)
-                                                                                .filter(key => key === floor)
-                                                                                .map(key => (
-                                                                                    <React.Fragment key={key}>
-                                                                                        <span className="heating-text">{Number(buildingSummaryData[0].floor_summaries_heating[key].demand.toFixed(0)).toLocaleString()}</span>
-                                                                                    </React.Fragment>
-                                                                                ))
-                                                                        }
-                                                                    </td>
-                                                                    <td>
-                                                                        {
-                                                                            buildingSummaryData && buildingSummaryData[0]?.floor_summaries_heating &&
-                                                                            Object.keys(buildingSummaryData[0].floor_summaries_heating)
-                                                                                .filter(key => key === floor)
-                                                                                .map(key => (
-                                                                                    <React.Fragment key={key}>
-                                                                                        <span className="heating-text">{Number(buildingSummaryData[0].floor_summaries_heating[key].chosen.toFixed(0)).toLocaleString()}</span>
-                                                                                    </React.Fragment>
-                                                                                ))
-                                                                        }
-                                                                    </td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                    <td></td>
-                                                                </tr>
-                                                            </React.Fragment>
-                                                        ))}
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th>
-                                                            Sum
-                                                        </th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th>
-                                                            <strong>
-                                                                {buildingSummaryData?.[0]?.heatingDemand != null ? <><span className="heating-text">{((buildingSummaryData[0].heatingDemand) / 1000).toFixed(1)}</span> <br />kW</> : ''}
-                                                            </strong>
-                                                        </th>
-                                                        <th>
-                                                            <strong>
-                                                                {buildingSummaryData?.[0]?.heating != null ? <><span className="heating-text">{((buildingSummaryData[0].heating) / 1000).toFixed(1)}</span> <br />kW</> : ''}
-                                                            </strong>
-                                                        </th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
+                                        <div className="table-container">
+                                            <div className="table-header-wrapper">
+                                                <table className="fl-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="2%">#</th>
+                                                            {/* <th width="2%">Etg</th> */}
+                                                            <th width="5%">Romnr</th>
+                                                            <th width="5%">Høyde <br />m</th>
+                                                            <th width="5%">Yttervegg <br /> m<sup>2</sup></th>
+                                                            <th width="5%">Innervegg <br />m<sup>2</sup></th>
+                                                            <th width="5%">Vindu/dør <br />m<sup>2</sup></th>
+                                                            <th width="5%">Tak <br />m<sup>2</sup></th>
+                                                            <th width="5%">Gulv grunn <br />m<sup>2</sup></th>
+                                                            <th width="5%">Gulv fritt <br />m<sup>2</sup></th>
+                                                            <th width="5%">&#8721; varmetap<br /> W</th>
+                                                            <th width="5%">Valgt varme<br /> W</th>
+                                                            <th width="5%">W/m<sup>2</sup></th>
+                                                            <th width="8%">Varmekilde</th>
+                                                            <th width="10%">Merknad</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
 
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
+                                            {
+                                                floors && floors.map(floor => (
+                                                    <React.Fragment key={floor}>
+                                                        <div className="table-wrapper">
+                                                            <div className="table-title">
+                                                                <h3>Etasje {floor}</h3>
+                                                            </div>
+                                                            <table className="fl-table" id="roomsTableVentilation">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td style={{ border: "0px" }} width="2%"></td>
+                                                                        <td style={{ border: "0px" }} width="5%"></td>
+                                                                        <td style={{ border: "0px" }} width="5%"></td>
+                                                                        <td style={{ border: "0px" }} width="5%"></td>
+                                                                        <td style={{ border: "0px" }} width="5%"></td>
+                                                                        <td style={{ border: "0px" }} width="5%"></td>
+                                                                        <td style={{ border: "0px" }} width="5%"></td>
+                                                                        <td style={{ border: "0px" }} width="5%"></td>
+                                                                        <td style={{ border: "0px" }} width="5%"></td>
+                                                                        <td style={{ border: "0px" }} width="5%"></td>
+                                                                        <td style={{ border: "0px" }} width="5%"></td>
+                                                                        <td style={{ border: "0px" }} width="5%"></td>
+                                                                        <td style={{ border: "0px" }} width="8%"></td>
+                                                                        <td style={{ border: "0px" }} width="10%"></td>
+                                                                    </tr>
+                                                                    {
+                                                                        sortedBuildings && sortedBuildings.length > 0 ? (
+                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <HeatingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={14} key={room.uid} roomId={room.uid} />)
+                                                                        ) : (<></>)
+                                                                    }
+
+                                                                    <tr className="summary-row">
+                                                                        <td width="2%">
+                                                                            <br /><br />
+                                                                        </td>
+                                                                        {/* <td width="2%"></td> */}
+                                                                        <td width="5%"></td>
+                                                                        <td width="5%"></td>
+                                                                        <td width="5%"></td>
+                                                                        <td width="5%"></td>
+                                                                        <td width="5%"></td>
+                                                                        <td width="5%"></td>
+                                                                        <td width="5%"></td>
+                                                                        <td width="5%"></td>
+                                                                        <td width="5%">
+                                                                            {
+                                                                                buildingSummaryData && buildingSummaryData[0]?.floor_summaries_heating &&
+                                                                                Object.keys(buildingSummaryData[0].floor_summaries_heating)
+                                                                                    .filter(key => key === floor)
+                                                                                    .map(key => (
+                                                                                        <React.Fragment key={key}>
+                                                                                            <span className="heating-text">{Number(buildingSummaryData[0].floor_summaries_heating[key].demand.toFixed(0)).toLocaleString()}</span>
+                                                                                        </React.Fragment>
+                                                                                    ))
+                                                                            }
+                                                                        </td>
+                                                                        <td width="5%">
+                                                                            {
+                                                                                buildingSummaryData && buildingSummaryData[0]?.floor_summaries_heating &&
+                                                                                Object.keys(buildingSummaryData[0].floor_summaries_heating)
+                                                                                    .filter(key => key === floor)
+                                                                                    .map(key => (
+                                                                                        <React.Fragment key={key}>
+                                                                                            <span className="heating-text">{Number(buildingSummaryData[0].floor_summaries_heating[key].chosen.toFixed(0)).toLocaleString()}</span>
+                                                                                        </React.Fragment>
+                                                                                    ))
+                                                                            }
+                                                                        </td>
+                                                                        <td width="5%"></td>
+                                                                        <td width="8%"></td>
+                                                                        <td width="10%"></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </React.Fragment>
+                                                ))}
+                                            <div className="table-wrapper">
+                                                <table className="fl-table">
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th width="2%"></th>
+                                                            {/* <th width="2%"></th> */}
+                                                            <th width="5%">
+                                                                Sum
+                                                            </th>
+                                                            <th width="5%"></th>
+                                                            <th width="5%"></th>
+                                                            <th width="5%"></th>
+                                                            <th width="5%"></th>
+                                                            <th width="5%"></th>
+                                                            <th width="5%"></th>
+                                                            <th width="5%"></th>
+                                                            <th width="5%">
+                                                                <strong>
+                                                                    {buildingSummaryData?.[0]?.heatingDemand != null ? <><span className="heating-text">{((buildingSummaryData[0].heatingDemand) / 1000).toFixed(1)}</span> <br />kW</> : ''}
+                                                                </strong>
+                                                            </th>
+                                                            <th width="5%">
+                                                                <strong>
+                                                                    {buildingSummaryData?.[0]?.heating != null ? <><span className="heating-text">{((buildingSummaryData[0].heating) / 1000).toFixed(1)}</span> <br />kW</> : ''}
+                                                                </strong>
+                                                            </th>
+                                                            <th width="5%"></th>
+                                                            <th width="8%"></th>
+                                                            <th width="8%"></th>
+
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
                                         </div>
                                     </>
                                 )
@@ -229,7 +260,7 @@ function Heating() {
                         </>
                     )
                 }
-            </div>
+            </div >
         </>
     );
 }

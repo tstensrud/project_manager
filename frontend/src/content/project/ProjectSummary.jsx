@@ -20,17 +20,28 @@ function ProjectSummary({ projectId }) {
                                     data && data.data ? (
                                         <>
                                             <CardTitle svg={<StarIcon />} title={<>{data && data.data.ProjectName} oppsummert</>} />
+                                            <div className="content-card-inner-container">
+                                                <div style={{ marginBottom: "10px" }} className="grey-text">
+                                                    <h4>Prosjektbeskrivelse</h4>
+                                                </div>
+                                                <div style={{ marginBottom: "20px" }}>
+                                                    {data && data.data.ProjectDescription}
+                                                </div>
 
-                                            <h4>Prosjektbeskrivelse</h4>
-                                            <p className="info">{data && data.data.ProjectDescription} </p>
-                                            <h4>Kravspesifikasjon</h4>
-                                            <p className="info">
-                                                <Link to={`/specifications/${data.data.SpecUid}`}>{data && data.data.SpecificationName}</Link>
-                                            </p>
-                                            <h4>Prosjektert areal</h4>
-                                            <p className="info">
-                                                {data &&  data.data.area !== null && data.data.area.toLocaleString()} m<sup>2</sup>
-                                            </p>
+                                                <div style={{ marginBottom: "10px" }} className="grey-text">
+                                                    <h4>Kravspesifikasjon</h4>
+                                                </div>
+
+                                                <div style={{ marginBottom: "20px" }}>
+                                                    <Link to={`/specifications/${data.data.SpecUid}`}>{data && data.data.SpecificationName}</Link>
+                                                </div>
+                                                <div style={{ marginBottom: "10px" }} className="grey-text">
+                                                    <h4>Prosjektert areal</h4>
+                                                </div>
+                                                <div>
+                                                    {data && data.data.area !== null && data.data.area.toLocaleString()} m<sup>2</sup>
+                                                </div>
+                                            </div>
                                         </>
                                     ) : (
                                         <>{data && data.error}</>

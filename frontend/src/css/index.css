@@ -5,27 +5,21 @@
 }
 
 :root {
-  --app-bg: rgb(12, 18, 25);
-  --app-content-secondary-color: rgb(12, 18, 25);
-  --header-bg-color: rgb(12, 18, 25);
-  --header-text-color: white;
-  --header-text-bg-color: rgb(12, 18, 25);
-  --app-content-main-color: white;
+  --primary-color: white;
+  --secondary-color: rgb(18, 28, 38);
+  --tertiary-color: rgb(12, 18, 25);
+  --accent-color: #00FFA7;
+  
   --default-border: 1px solid rgb(43, 53, 64);
-  --card-background-color: rgb(18, 28, 38);
+
   --inner-card-backgrounnd-color: rgba(33, 50, 68, 0.432);
-  --link: #00FFA7;
-  --link-hover: #00FFA7;
-  --table-header: rgb(18, 28, 38);
+  --table-header: var(--secondary-color);
   --table-footer: #161F29;
-  --table-background-color: rgb(18, 28, 38);
+  --table-background-color: var(--secondary-color);
   --table-button-border: #1f1c2e;
-  --table-button-background: rgb(18, 28, 38);
+  --table-button-background: var(--secondary-color);
   --table-border: 1px solid rgb(43, 53, 64);
   --table-hover: #4949492a;
-  --navbar-active-link: #24633c;
-  --navbar-main-color: rgb(18, 28, 38);
-  --svg-icon-color: #00FFA7;
   --marked-row: #1e7e3659;
   --form-elements-border-radius: 6px;
   --grey-text: rgba(212, 212, 212, 0.473);
@@ -33,45 +27,35 @@
   --default-border-radius: 10px;
   --background-shade: rgba(255, 255, 255, 0.329);
 
-
   --form-border: 2px solid rgb(43, 53, 64);
-  --form-focus-border: 2px solid #00FFA7;
-  --form-text-color: white;
+  --form-focus-border: 2px solid var(--accent-color);
   --form-elements-border-radius: 25px;
-  --form-background-color: rgb(12, 18, 25);
-  --form-element-hover: #00FFA7;
-  --form-focus-color: #00FFA7;
-  --form-table-button-background: ;
+  --form-background-color: var(--tertiary-color);
+  --form-element-hover: var(--accent-color);
+  --form-focus-color: var(--accent-color);
   --form-table-button-border: 1px solid rgb(43, 53, 64);
-  --form-table-button-hover-background: rgb(12, 18, 25);
-  --form-element-card-background-color: rgb(12, 18, 25);
-  --form-label-text: white;
+  --form-table-button-hover-background: var(--tertiary-color);
+  --form-element-card-background-color: var(--tertiary-color);
+
 }
 
 
 .light:root {
-  --app-bg: #EFF1F6;
-  --app-content-secondary-color: #EFF1F6;
-  --app-content-main-color: black;
-  --header-bg-color: white;
-  --header-text-color: black;
-  --header-text-bg-color: white;
-  --card-background-color: white;
+  --primary-color: black;
+  --secondary-color: white;
+  --tertiary-color: #EFF1F6;
+  --accent-color: #ec2828;
+  
   --default-border: 1px solid rgb(0, 0, 0);
-  --link: #ec2828;
-  --link-hover: #ec2828;
-  --table-header: #FBFBFB;
+
+  --table-header: var(--secondary-color);
   --table-footer: #161F29;
-  --table-background-color: #FBFBFB;
+  --table-background-color: var(--secondary-color);
   --table-row-even: #ececec;
   --table-button-border: #1f1c2e;
   --table-button-background: rgb(18, 28, 38);
   --table-border: 1px solid rgb(43, 53, 64);
-  --table-hover: #4949492a;
-  --navbar-active-link: #EBF2FF;
-  --navbar-active-font-color: black;
-  --navbar-main-color: white;
-  --svg-icon-color: #ec2828;
+  --table-hover: #8b1f1f11;
   --marked-row: #d72f597a;
   --grey-text: rgba(46, 41, 41, 0.719);
   --system-summary: rgba(89, 113, 157, 0.2);
@@ -79,17 +63,15 @@
   --background-shade: rgba(0, 0, 0, 0.356);
 
   --form-border: 2px solid #00000036;
-  --form-focus-border: 2px solid black;
-  --form-text-color: black;
+  --form-focus-border: 2px solid var(--primary-color);
   --form-elements-border-radius: 25px;
-  --form-background-color: #FBFBFB;
-  --form-element-hover: black;
-  --form-focus-color: black;
-  --form-table-button-background: ;
-  --form-table-button-border: 2px solid black;
+  --form-background-color: var(--secondary-color);
+  --form-element-hover: var(--primary-color);
+  --form-focus-color: var(--primary-color);
+  --form-table-button-border: 2px solid var(--primary-color);
   --form-table-button-hover-background: #DBD4D4;
-  --form-element-card-background-color: #EFF1F6;
-  --form-label-text: black;
+  --form-element-card-background-color: var(--tertiary-color);
+
 }
 
 body,
@@ -112,8 +94,8 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: var(--app-bg);
-  color: var(--app-content-main-color);
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 
@@ -131,8 +113,8 @@ body {
 }
 
 .header {
-  background-color: var(--header-bg-color);
-  color: var(--app-content-main-color);
+  background-color: var(--tertiary-color);
+  color: var(--primary-color);
   display: flex;
   height: 50px;
 }
@@ -142,15 +124,15 @@ body {
   align-items: center;
   border-top: var(--default-border);
   border-bottom: var(--default-border);
-  background-color: var(--header-bg-color);
-  color: var(--app-content-main-color);
+  background-color: var(--tertiary-color);
+  color: var(--primary-color);
   padding-left: 50px;
   padding-right: 50px;
 }
 
 .main-content {
-  background-color: var(--app-content-secondary-color);
-  color: var(--app-content-main-color);
+  background-color: var(--tertiary-color);
+  color: var(--primary-color);
 
 }
 
@@ -187,7 +169,7 @@ body {
   margin-top: 20px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   position: relative;
   background-color: var(--system-summary);
   max-width: 500px;
@@ -225,7 +207,7 @@ body {
 .subtitle-header-container {
   position: sticky;
   padding: 5px;
-  background-color: black;
+  background-color: var(--primary-color);
   padding-left: 20px;
 }
 
@@ -234,7 +216,7 @@ body {
   height: 400px;
   margin-bottom: 100px;
   background-color: var(--sidebar);
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   border-radius: var(--default-border-radius);
   padding: 10px;
   display: grid;
@@ -304,7 +286,7 @@ body {
 
 
 .p-description {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   font-size: 14px;
   font-weight: 0px;
 }
@@ -390,7 +372,7 @@ body {
   top: 0;
   right: 0;
   background-color: var(--sidebar);
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   padding: 10px;
   max-width: 500px;
   max-height: 100px;
@@ -403,7 +385,7 @@ body {
 
 a {
   text-decoration: none;
-  color: var(--link);
+  color: var(--accent-color);
 }
 
 a:hover {
@@ -416,14 +398,14 @@ a:hover {
 .page-title-text {
   font-size: 30px;
   font-weight: 500;
-  color: var(--header-text-color);
+  color: var(--primary-color);
 }
 
 .page-title-container {
   display: flex;
   align-items: center;
   text-align: center;
-  background-color: var(--header-text-bg-color);
+  background-color: var(--secondary-color);
   border-radius: 25px;
   padding-left: 20px;
   padding-right: 20px;
@@ -491,7 +473,7 @@ a:hover {
   display: flex;
   height: 520px;
   top: 50px;
-  background-color: var(--card-background-color);
+  background-color: var(--tertiary-color);
   z-index: 1000;
   left: 50px;
   border-radius: var(--default-border-radius);
@@ -504,7 +486,7 @@ a:hover {
   display: flex;
   height: 520px;
   top: 50px;
-  background-color: var(--card-background-color);
+  background-color: var(--tertiary-color);
   z-index: 1000;
   right: 50px;
   border-radius: var(--default-border-radius);
@@ -535,12 +517,12 @@ a:hover {
 }
 
 .menu-link {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   font-weight: 500;
 }
 
 .menu-link:hover {
-  color: var(--link-hover);
+  color: var(--accent-color);
   text-decoration: none;
   transition: 300ms;   
 }
@@ -564,11 +546,11 @@ a:hover {
 }
 
 .table-link {
-  color: var(--link);
+  color: var(--accent-color);
 }
 
 .table-link:hover {
-  color: var(--link-hover);
+  color: var(--accent-color);
 }
 
 .grey-info-text {
@@ -625,12 +607,16 @@ h4 {
   color: var(--navbar-active-font-color);
 }
 
+.grey-text {
+  color: var(--grey-text);
+}
+
 /* SVG stuff*/
 svg.feather {
   vertical-align: middle;
   display: inline-block;
   line-height: 0;
-  stroke: var(--svg-icon-color);
+  stroke: var(--accent-color);
   fill: none;
 }
 
@@ -638,14 +624,14 @@ svg.non-title-icons {
   vertical-align: middle;
   display: inline-block;
   line-height: 0;
-  stroke: var(--app-content-main-color);
+  stroke: var(--primary-color);
   fill: none;
 }
 
 svg.delete {
   vertical-align: middle;
   display: inline-block;
-  stroke: var(--app-content-main-color);
+  stroke: var(--primary-color);
   fill: none
 }
 
@@ -663,7 +649,7 @@ svg.delete {
 .loading-spinner {
   border: 4px solid var(--table-background-color);
   border-radius: 50%;
-  border-top-color: var(--svg-icon-color);
+  border-top-color: var(--accent-color);
   width: 20px;
   height: 20px;
   animation: spin 1s linear infinite;
@@ -701,10 +687,10 @@ svg.delete {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--card-background-color);
+  background-color: var(--tertiary-color);
   transition: 0.4s;
   border-radius: 20px;
-  border: 1px solid var(--svg-icon-color);
+  border: 1px solid var(--accent-color);
 }
 
 .slider::before {
@@ -715,13 +701,13 @@ svg.delete {
   left: 2px;
   top: 2px;
   bottom: 2px;
-  background-color: var(--svg-icon-color);
+  background-color: var(--accent-color);
   transition: 0.4s;
   border-radius: 50%;
 }
 
 input:checked + .slider {
-  background-color: var(--card-background-color);
+  background-color: var(--tertiary-color);
 }
 
 input:checked + .slider::before {
@@ -730,7 +716,7 @@ input:checked + .slider::before {
 
 .content-card {
   max-width: 1000px;
-  background-color: var(--card-background-color);
+  background-color: var(--secondary-color);
   border-radius: var(--default-border-radius);
   margin-left: 20px;
   margin-top: 20px;
@@ -747,7 +733,6 @@ input:checked + .slider::before {
 .content-card-inner-container {
   border: 0;
   padding: 10px;
-  margin-top: 10px;
   border-radius: var(--default-border-radius);
 }
 

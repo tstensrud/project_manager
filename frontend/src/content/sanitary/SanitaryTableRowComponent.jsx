@@ -88,8 +88,8 @@ function SanitaryTableRowComponent({ roomId, msgToParent, index, allRoomData, to
         }
     }
 
-    const renderEditableCell = (cellName) => (
-        <td name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+    const renderEditableCell = (cellName, width) => (
+        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && sanitaryData ? (
                 <input
                     type="text"
@@ -128,29 +128,29 @@ function SanitaryTableRowComponent({ roomId, msgToParent, index, allRoomData, to
                         </>
                     ) : (
                         <>
-                            <td style={{ cursor: 'pointer', width: "30px" }} onClick={handleOnMarkedRow}>#</td>
-                            <td style={{ width: "50px" }}>{allRoomData ? allRoomData.Floor : ''}</td>
-                            <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ /*cursor: 'pointer',*/ textTransform: 'uppercase' }}>
+                            <td style={{ cursor: 'pointer' }} width="2%" onClick={handleOnMarkedRow}>#</td>
+                            {/* <td style={{ width: "50px" }}>{allRoomData ? allRoomData.Floor : ''}</td> */}
+                            <td width="12%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ /*cursor: 'pointer',*/ textTransform: 'uppercase' }}>
                                 <strong>{allRoomData ? allRoomData.RoomNumber : ''}</strong>
                                 <br />
                                 <span className="table-text-grey">{allRoomData ? allRoomData.RoomName : ''}</span>
                             </td>
-                            {renderEditableCell("shaft")}
-                            {renderEditableCell("sink_1_14_inch")}
-                            {renderEditableCell("sink_large")}
-                            {renderEditableCell("drinking_fountain")}
-                            {renderEditableCell("sink_utility")}
-                            {renderEditableCell("wc")}
-                            {renderEditableCell("urinal")}
-                            {renderEditableCell("dishwasher")}
-                            {renderEditableCell("shower")}
-                            {renderEditableCell("tub")}
-                            {renderEditableCell("washing_machine")}
-                            {renderEditableCell("tap_water_outlet_inside")}
-                            {renderEditableCell("tap_water_outlet_outside")}
-                            {renderEditableCell("firehose")}
-                            {renderEditableCell("drain_75_mm")}
-                            {renderEditableCell("drain_110_mm")}
+                            {renderEditableCell("shaft", "5%")}
+                            {renderEditableCell("sink_1_14_inch", "5%")}
+                            {renderEditableCell("sink_large", "5%")}
+                            {renderEditableCell("drinking_fountain", "5%")}
+                            {renderEditableCell("sink_utility", "5%")}
+                            {renderEditableCell("wc", "5%")}
+                            {renderEditableCell("urinal", "5%")}
+                            {renderEditableCell("dishwasher", "5%")}
+                            {renderEditableCell("shower", "5%")}
+                            {renderEditableCell("tub", "5%")}
+                            {renderEditableCell("washing_machine", "5%")}
+                            {renderEditableCell("tap_water_outlet_inside", "5%")}
+                            {renderEditableCell("tap_water_outlet_outside", "5%")}
+                            {renderEditableCell("firehose", "5%")}
+                            {renderEditableCell("drain_75_mm", "5%")}
+                            {renderEditableCell("drain_110_mm", "5%")}
                         </>
                     )
                 }

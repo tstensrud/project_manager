@@ -16,14 +16,20 @@ function HeatingSummary({ projectId }) {
                         ) : (
                             <>
                                 <CardTitle svg={<HeatingIcon />} title="Varme- og kjøledata" />
-                                <h4>Prosjektert varmetap</h4>
-                                <p className="info">
-                                    {data && ((data.heating_data / 1000).toFixed(2)).toLocaleString()} kW
-                                </p>
-                                <h4>Tilført kjøling</h4>
-                                <p>
-                                {data && ((data.cooling_data / 1000).toFixed(2)).toLocaleString()} kW
-                                </p>
+                                <div className="content-card-inner-container">
+                                    <div style={{ marginBottom: "10px" }} className="grey-text">
+                                        <h4>Prosjektert varmetap</h4>
+                                    </div>
+                                    <div style={{ marginBottom: "20px" }}>
+                                        {data && ((data.heating_data / 1000).toFixed(2)).toLocaleString()} kW
+                                    </div>
+                                    <div style={{ marginBottom: "10px" }} className="grey-text">
+                                        <h4>Tilført kjøling</h4>
+                                    </div>
+                                    <div>
+                                        {data && ((data.cooling_data / 1000).toFixed(2)).toLocaleString()} kW
+                                    </div>
+                                </div>
                             </>
                         )
                     }

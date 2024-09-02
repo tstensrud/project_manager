@@ -109,8 +109,8 @@ function RoomTableRowComponent({ roomId, msgToParent, systems, index, allRoomDat
         }
     }
 
-    const renderEditableCell = (cellName, cellClass) => (
-        <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+    const renderEditableCell = (cellName, cellClass, width) => (
+        <td width={width} className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && ventData ? (
                 <input
                     type="text"
@@ -181,22 +181,23 @@ function RoomTableRowComponent({ roomId, msgToParent, systems, index, allRoomDat
                         </>
                     ) : (
                         <>
-                            <td className="no-print" style={{ cursor: 'pointer', width: "30px" }} onClick={handleOnMarkedRow}>#</td>
-                            <td style={{ width: "50px" }}>{allRoomData ? allRoomData.Floor : ''}</td>
-                            <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer', textTransform: 'uppercase' }}>
+                        
+                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+                            {/* <td width="2%">{allRoomData ? allRoomData.Floor : ''}</td> */}
+                            <td width="10%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer', textTransform: 'uppercase' }}>
                                 <strong><span className="table-link">{allRoomData ? allRoomData.RoomNumber : ''}</span></strong>
                                 <br />
                                 <span className="table-text-grey">{allRoomData ? allRoomData.RoomName : ''}</span>
                             </td>
-                            <td>{ventData ? (ventData.vent_data.AirPersonSum).toFixed(0) : ''} </td>
-                            <td>{ventData ? (ventData.vent_data.AirEmissionSum).toFixed(0) : ''}</td>
-                            <td>{ventData ? ventData.vent_data.AirProcess : ''}</td>
-                            <td>{ventData ? (ventData.vent_data.AirDemand).toFixed(0) : ''}</td>
-                            {renderEditableCell("AirSupply", "supplyCell")}
-                            {renderEditableCell("AirExtract", "extractCell")}
-                            <td>{ventData ? ventData.vent_data.AirChosen : ''}</td>
-                            <td>{calculateMinAirFlow()}</td>
-                            <td>
+                            <td width="6%">{ventData ? (ventData.vent_data.AirPersonSum).toFixed(0) : ''} </td>
+                            <td width="6%">{ventData ? (ventData.vent_data.AirEmissionSum).toFixed(0) : ''}</td>
+                            <td width="6%">{ventData ? ventData.vent_data.AirProcess : ''}</td>
+                            <td width="6%">{ventData ? (ventData.vent_data.AirDemand).toFixed(0) : ''}</td>
+                            {renderEditableCell("AirSupply", "supplyCell", "6%")}
+                            {renderEditableCell("AirExtract", "extractCell", "6%")}
+                            <td width="6%">{ventData ? ventData.vent_data.AirChosen : ''}</td>
+                            <td width="6%">{calculateMinAirFlow()}</td>
+                            <td width="6%">
                                 <select value={currentSystemName} name="systemUid" className="table-select" onChange={handleSystemChange}>
                                     {currentSystemName && currentSystemName !== null ? (<option key="0">{currentSystemName}</option>) : ''}
                                     {systems && Object.keys(systems.systems_data).map((key, index) => (
@@ -204,10 +205,11 @@ function RoomTableRowComponent({ roomId, msgToParent, systems, index, allRoomDat
                                     ))}
                                 </select>
                             </td>
-                            <td className="comments-cell no-print">
+                            <td width="34%" className="comments-cell no-print">
                                 {ventData && ventData.vent_data.AirSupply && ventData.vent_data.AirExtract < ventData.vent_data.AirDemand ? (<>For lite luft. </>) : (<></>)}
                                 {ventData && ventData.vent_data.AirSupply !== ventData.vent_data.AirExtract ? (<>Ubalanse i rom. </>) : (<></>)}
                             </td>
+                            
                         </>
                     )
                 }

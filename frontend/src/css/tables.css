@@ -1,15 +1,36 @@
 /* Room lists */
-.table-wrapper{
+
+.table-container {
   display: flex;
+  flex-direction: column;
+  height: 81%;
+  overflow-y: auto;
+}
+
+.table-header-wrapper {
+  position: sticky;
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 0px;
-  overflow: auto;
-  height: 80%;
+  top: 0;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: var(--table-background-color);
+  z-index: 10;
+}
+
+.table-wrapper{
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 0px;
+  height: auto;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   background-color: var(--table-background-color);
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.158);
+  margin-bottom: 20px;
 }
 
 .table-wrapper-tiny{
@@ -35,7 +56,7 @@
 }
 
 .fl-table {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   font-size: 13px;
   font-weight: normal;
   border: none;
@@ -54,15 +75,37 @@
   box-sizing: border-box;
 }
 
-
 .fl-table td {
   border-top: var(--table-border);
   border-bottom: var(--table-border);
   font-size: 13px;
+  font-weight: 400;
   overflow: hidden;
   position: relative;
 }
 
+.table-title {
+  color: var(--primary-color);
+  font-size: 13px;
+  font-weight: normal;
+  border: none;
+  width: 100%;
+  max-width: 100%;
+  background-color: var(--table-background-color);
+  display: flex;
+  justify-content: center;
+}
+
+.table-title td {
+  border-top: var(--table-border);
+  border-bottom: 0;
+  text-align: center;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  box-sizing: border-box;
+  background-color: var(--table-header);
+  letter-spacing: 0.025rem;
+}
 .fl-table tr:nth-child(even) {
   background-color: var(--table-row-even);
 }
@@ -74,12 +117,14 @@
 }
 
 .fl-table thead th {
-  color: var(--app-content-main-color);
+  color: var(--grey-text);
   background-color: var(--table-header);
   top: 0;
   height: 25px;
   position: sticky;
   z-index: 1;
+  font-size: 15px;
+  letter-spacing: 0.025rem;
 }
 
 .fl-table tfoot {
@@ -88,17 +133,17 @@
   position: sticky;
   z-index: 1;
   background-color: var(--table-background-color);
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
 }
 
 .fl-table tr:hover {
   background-color: var(--table-hover);
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
 }
 
 .marked-row {
   background-color: var(--marked-row) !important;
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
 }
 
 .deleted-row {
@@ -118,14 +163,12 @@
   background-color: #3ea578;
   color: black;
   font-weight: 500;
-  width: 200px;
 }
 
 .extractCell {
   background-color: #c96072;
   color: black;
   font-weight: 500;
-  width: 150px;
 }
 
 /* Summaries */
@@ -133,7 +176,7 @@
 .popup {
   position: absolute;
   background: #333;
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   padding: 5px;
   border-radius: var(--default-border-radius);
   white-space: nowrap;
@@ -141,7 +184,7 @@
 }
 
 .fl-table-summary {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   font-size: 13px;
   font-weight: normal;
   border-radius: var(--default-border-radius);
@@ -174,7 +217,7 @@
 
 
 .fl-table-summary thead th {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   background-color: var(--table-hover);
   top: 0;
   height: 25px;
@@ -188,12 +231,12 @@
 
 .fl-table-summary tr:hover {
   background-color: var(--table-hover);
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
 }
 
 /* Room data table*/
 .fl-table-room-data {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   font-size: 13px;
   font-weight: normal;
   border-radius: var(--default-border-radius);
@@ -227,7 +270,7 @@
 
 
 .fl-table-room-data thead th {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   background-color: var(--table-hover);
   top: 0;
   height: 25px;
@@ -241,7 +284,7 @@
 
 .fl-table-room-data tr:hover {
   background-color: var(--table-hover);
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
 }
 
 
@@ -264,7 +307,7 @@
 
 .room-data-close-btn {
   position: absolute;
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   top: 0px;
   right: 15px;
   font-size: 20px;
@@ -272,5 +315,5 @@
 }
 
 .room-data-close-btn:hover {
-  color: var(--svg-icon-color);
+  color: var(--accent-color);
 }

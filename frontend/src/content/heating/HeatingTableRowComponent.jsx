@@ -90,8 +90,8 @@ function HeatingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
         setShowRoomData(!showRoomData);
     }
 
-    const renderEditableCell = (cellName) => (
-        <td name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+    const renderEditableCell = (cellName, width) => (
+        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && heatingData ? (
                 <input
                     type="text"
@@ -124,25 +124,25 @@ function HeatingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
                         </>
                     ) : (
                         <>
-                            <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
-                            <td>{heatingData ? heatingData.room_data.Floor : ''}</td>
-                            <td onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
+                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+                            {/* <td width="2%">{heatingData ? heatingData.room_data.Floor : ''}</td> */}
+                            <td width="5%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
                                 <strong><span className="table-link">{heatingData ? heatingData.room_data.RoomNumber : ''}</span></strong>
                                 <br />
                                 <span className="table-text-grey">{heatingData ? heatingData.room_data.RoomName : ''}</span>
                             </td>
-                            {renderEditableCell("RoomHeight")}
-                            {renderEditableCell("OuterWallArea")}
-                            {renderEditableCell("InnerWallArea")}
-                            {renderEditableCell("WindowDoorArea")}
-                            {renderEditableCell("RoofArea")}
-                            {renderEditableCell("FloorGroundArea")}
-                            {renderEditableCell("FloorAirArea")}
-                            <td><strong>{heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}</strong></td>
-                            <td>{heatingData ? heatingData.heating_data.ChosenHeating : ''}</td>
-                            <td>{heatingData && heatingData ? (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1) : ''}</td>
-                            {renderEditableCell("HeatSource")}
-                            <td>
+                            {renderEditableCell("RoomHeight", "5%")}
+                            {renderEditableCell("OuterWallArea", "5%")}
+                            {renderEditableCell("InnerWallArea", "5%")}
+                            {renderEditableCell("WindowDoorArea", "5%")}
+                            {renderEditableCell("RoofArea", "5%")}
+                            {renderEditableCell("FloorGroundArea", "5%")}
+                            {renderEditableCell("FloorAirArea", "5%")}
+                            <td width="5%"><strong>{heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}</strong></td>
+                            <td width="5%">{heatingData ? heatingData.heating_data.ChosenHeating : ''}</td>
+                            <td width="5%">{heatingData && heatingData ? (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1) : ''}</td>
+                            {renderEditableCell("HeatSource", "8%")}
+                            <td width="10%">
                                 {heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum ? (<><strong>NB!</strong> For lite valgt varme</>) : (<></>)}
                             </td>
                         </>

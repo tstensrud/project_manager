@@ -115,47 +115,60 @@ function Cooling() {
                                 ) : (
                                     <>
                                         <TableTop info={<HelpBox />} />
-                                        <div className="table-wrapper">
-                                            <table className="fl-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="2%">#</th>
-                                                        <th width="5%">Etasje</th>
-                                                        <th width="5%">Romnr</th>
-                                                        <th width="5%">Romtemp <br /> &#176;C</th>
-                                                        <th width="5%">Temp vent<br /> &#176;C</th>
-                                                        <th width="5%">W/Pers</th>
-                                                        <th width="5%">Lys<br /> W/m<sup>2</sup></th>
-                                                        <th width="5%">Ustyr<br /> W/m<sup>2</sup></th>
-                                                        <th width="5%">Soltilskudd<br /> W/m<sup>2</sup></th>
-                                                        <th width="5%">Solreduksjon<br /> (0-1,0)</th>
-                                                        <th width="5%">&#8721; Internlast<br /> W</th>
-                                                        <th width="5%">Kjøling utstyr<br /> W</th>
-                                                        <th width="5%">&#8721; kjøling<br /> W</th>
-                                                        <th width="5%">Ekstra vent. <br />m<sup>3</sup>/h</th>
-                                                        <th width="32%">Merknad</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {
-                                                        floors && floors.map(floor => (
-                                                            <React.Fragment key={floor}>
-                                                                {
-                                                                    sortedBuildings && sortedBuildings.length > 0 ? (
-                                                                        sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={15} key={room.uid} roomId={room.uid} />)
-                                                                    ) : (<></>)
-                                                                }
-                                                                <tr className="summary-row">
-                                                                    <td>
-                                                                        <br /><br />
-                                                                    </td>
-                                                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                                                </tr>
-                                                            </React.Fragment>
-                                                        ))
-                                                    }
-                                                </tbody>
-                                            </table>
+                                        <div className="table-container">
+                                            <div className="table-header-wrapper">
+                                                <table className="fl-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="2%">#</th>
+                                                            {/*  <th width="5%">Etasje</th> */}
+                                                            <th width="5%">Romnr</th>
+                                                            <th width="5%">Romtemp <br /> &#176;C</th>
+                                                            <th width="5%">Temp vent<br /> &#176;C</th>
+                                                            <th width="5%">W/Pers</th>
+                                                            <th width="5%">Lys<br /> W/m<sup>2</sup></th>
+                                                            <th width="5%">Ustyr<br /> W/m<sup>2</sup></th>
+                                                            <th width="5%">Soltilskudd<br /> W/m<sup>2</sup></th>
+                                                            <th width="5%">Solreduksjon<br /> (0-1,0)</th>
+                                                            <th width="5%">&#8721; Internlast<br /> W</th>
+                                                            <th width="5%">Kjøling utstyr<br /> W</th>
+                                                            <th width="5%">&#8721; kjøling<br /> W</th>
+                                                            <th width="5%">Ekstra vent. <br />m<sup>3</sup>/h</th>
+                                                            <th width="34%">Merknad</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+
+                                            {
+                                                floors && floors.map(floor => (
+                                                    <React.Fragment key={floor}>
+                                                        <div className="table-wrapper">
+
+                                                            <div className="table-title">
+                                                                <h3>Etasje {floor}</h3>
+                                                            </div>
+
+                                                            <table className="fl-table">
+                                                                <tbody>
+                                                                    {
+                                                                        sortedBuildings && sortedBuildings.length > 0 ? (
+                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={14} key={room.uid} roomId={room.uid} />)
+                                                                        ) : (<></>)
+                                                                    }
+                                                                    <tr className="summary-row">
+                                                                        <td>
+                                                                            <br /><br />
+                                                                        </td>
+                                                                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </React.Fragment>
+                                                ))
+                                            }
+
                                         </div>
                                     </>
                                 )
@@ -163,7 +176,7 @@ function Cooling() {
                         </>
                     )
                 }
-            </div>
+            </div >
         </>
     );
 }

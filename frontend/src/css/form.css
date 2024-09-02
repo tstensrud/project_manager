@@ -2,7 +2,7 @@ select {
   padding: 1px 15px;
   background-color: var(--form-background-color);
   border: var(--form-border);
-  color: var(--form-text-color);
+  color: var(--primary-color);
   font-size: 14px;
   line-height: 24px;
   padding: 0px 12px 0px 12px;
@@ -31,7 +31,7 @@ select:focus {
   background-color: var(--form-element-card-background-color);
   border: var(--form-border);
   border-radius: var(--form-elements-border-radius);
-  color: var(--form-text-color);
+  color: var(--primary-color);
   font-size: 14px;
   padding-left: 20px;
   padding-right: 20px;
@@ -44,7 +44,7 @@ select:focus {
   padding: 1px 10px;
   background-color: var(--table-background-color);
   border: var(--form-border);
-  color: var(--form-text-color);
+  color: var(--primary-color);
   font-size: 12px;
   line-height: 20px;
   height: 28px;
@@ -63,7 +63,7 @@ select:focus {
   border: var(--form-border);
   padding-left: 20px;
   padding-right: 20px;
-  color: var(--form-text-color);
+  color: var(--primary-color);
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
@@ -87,12 +87,12 @@ select:focus {
   text-transform: uppercase;
   outline: 0;
   height: 45px;
-  background: var(--app-content-secondary-color);
+  background: var(--secondary-color);
   border-radius: var(--form-elements-border-radius);
   border: var(--form-border);
   padding-left: 20px;
   padding-right: 20px;
-  color: var(--form-text-color);
+  color: var(--primary-color);
   font-size: 14px;
   font-weight: 800;
   -webkit-transition: all 0.3 ease;
@@ -102,7 +102,7 @@ select:focus {
 }
 
 .table-sorting-button:hover {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   border-color: var(--form-element-hover);
 }
 
@@ -117,7 +117,7 @@ select:focus {
   border-color: var(--form-focus-color);
   padding-left: 20px;
   padding-right: 20px;
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   font-size: 14px;
   font-weight: 800;
   -webkit-transition: all 0.3 ease;
@@ -127,7 +127,7 @@ select:focus {
 }
 
 .table-button {
-  color: var(--form-text-color);
+  color: var(--primary-color);
   width: fit-content;
   text-transform: uppercase;
   line-height: 20px;
@@ -149,7 +149,7 @@ select:focus {
 }
 
 .todo-list-button {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   width: fit-content;
   height: 30px;
   width: 70px;
@@ -182,10 +182,10 @@ select:focus {
 }
 
 .form-text-area {
-  background: var(--app-content-secondary-color);
+  background: var(--secondary-color);
   border: var(--form-border);
   border-radius: var(--form-elements-border-radius);
-  color: var(--form-text-color);
+  color: var(--primary-color);
   font-size: 15px;
   line-height: 20px;
   padding: 0px 0px 0px 5px;
@@ -204,7 +204,7 @@ select:focus {
 
 .table-input {
   background-color: var(--form-background-color);
-  color: var(--form-text-color);
+  color: var(--primary-color);
   font-size: 12px;
   font-family: "Poppins", sans-serif;
   line-height: 20px;
@@ -222,8 +222,8 @@ select:focus {
 }
 
 .todo-input {
-  background-color: var(--app-content-secondary-color);
-  color: var(--app-content-main-color);
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
   font-size: 14px;
   font-family: "Poppins", sans-serif;
   line-height: 25px;
@@ -258,7 +258,7 @@ input {
   background-color: var(--form-background-color);
   width: 500px;
   border: var(--form-border);
-  color: var(--form-text-color);
+  color: var(--primary-color);
   margin: 0 0 15px;
   padding-left: 20px;
   padding-right: 20px;
@@ -274,7 +274,7 @@ input {
   background-color: var(--form-background-color);
   width: 100px;
   border: var(--form-border);
-  color: var(--form-text-color);
+  color: var(--primary-color);
   padding-left: 20px;
   padding-right: 20px;
   box-sizing: border-box;
@@ -310,7 +310,7 @@ input:focus,
   width: 100%;
   border: 0;
   padding: 15px;
-  color: var(--form-text-color);
+  color: var(--primary-color);
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
@@ -328,7 +328,7 @@ input:focus,
 .card-input {
   font-family: "Roboto", sans-serif;
   outline: 0;
-  background-color: var(--app-content-secondary-color);
+  background-color: var(--secondary-color);
   width: 500px;
   border: var(--form-border);
   margin: 0 0 15px;
@@ -343,14 +343,14 @@ input:focus,
 }
 
 .spec-button {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   width: fit-content;
   line-height: 20px;
   padding: 3px 8px;
   outline: none;
   border: 1px solid white;
   border-radius: var(--form-elements-border-radius);
-  background-color: var(--app-content-secondary-color);
+  background-color: var(--secondary-color);
   font-size: 14px;
   cursor: pointer;
   transition-duration: 0.25s;
@@ -358,9 +358,9 @@ input:focus,
 }
 
 .input-spec {
-  background-color: var(--app-content-secondary-color);
+  background-color: var(--secondary-color);
   border: var(--default-border);
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   font-size: 14px;
   line-height: 24px;
   padding: 0px 10px 0px 5px;
@@ -373,7 +373,7 @@ input:focus,
 
 .input-heating {
   background-color: var(--form-background-color);
-  color: var(--form-text-color);
+  color: var(--primary-color);
   font-size: 14px;
   height: 28px;
   width: 150px;
@@ -385,7 +385,7 @@ input:focus,
 
 .input-heating-medium-length {
   background-color: var(--form-background-color);
-  color: var(--form-text-color);
+  color: var(--primary-color);
   border: var(--form-border);
   border-radius: var(--form-elements-border-radius);
   font-size: 14px;
@@ -403,9 +403,9 @@ input:focus,
 
 .spec-select {
   padding: 1px 10px;
-  background-color: var(--app-content-secondary-color);
+  background-color: var(--secondary-color);
   border: var(--default-border);
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   font-size: 12px;
   line-height: 20px;
   border-radius: 7px;
@@ -419,7 +419,7 @@ input:focus,
 }
 
 input:placeholder {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   font-size: 14px;
 }
 
@@ -434,17 +434,17 @@ input:focus {
 
 input[type="file"] {
   width: 400px;
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
 }
 
 input[type="file"]::file-selector-button {
-  background-color: var(--app-content-secondary-color);
+  background-color: var(--secondary-color);
   border: var(--default-border);
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
 }
 
 input[type="file"]::file-selector-button:hover {
-  color: var(--app-content-main-color);
+  color: var(--primary-color);
   border: var(--default-border);
   cursor: pointer;
 
@@ -472,7 +472,7 @@ input[type="file"]::file-selector-button:active {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
-  color: var(--form-text-color);
+  color: var(--primary-color);
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
@@ -517,7 +517,7 @@ input[type="file"]::file-selector-button:active {
   position: absolute;
   top: -17px;
   right: 10px;
-  color: var(--form-label-text);
+  color: var(--primary-color);
   padding: 0 5px;
   font-size: 14px;
   font-weight: 700;
@@ -529,7 +529,7 @@ input[type="file"]::file-selector-button:active {
   position: absolute;
   top: -17px;
   left: 10px;
-  color: var(--form-label-text);
+  color: var(--primary-color);
   padding: 0 5px;
   font-size: 14px;
   font-weight: 700;

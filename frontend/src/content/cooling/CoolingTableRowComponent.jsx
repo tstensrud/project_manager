@@ -54,8 +54,8 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
             setData({});
             coolingRefetch();
         }
-    },[updateVentDataResponse, updateRoomDataResponse])
-    
+    }, [updateVentDataResponse, updateRoomDataResponse])
+
     // Handlers
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
@@ -96,14 +96,14 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
         const airFlow = coolingData && coolingData.cooling_data.Airflow;
         if (calculatedValue < 0) {
             setExtraAirNeeded(calculatedValue.toFixed(0));
-            setUpdateVentData({air_supply: ((calculatedValue.toFixed(0) * - 1) + airFlow), air_extract: ((calculatedValue.toFixed(0) * - 1) + airFlow)})
+            setUpdateVentData({ air_supply: ((calculatedValue.toFixed(0) * - 1) + airFlow), air_extract: ((calculatedValue.toFixed(0) * - 1) + airFlow) })
         } else {
             setExtraAirNeeded(0);
         }
     }
 
-    const renderEditableCell = (cellName) => (
-        <td name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+    const renderEditableCell = (cellName, width) => (
+        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && coolingData ? (
                 <input
                     type="text"
@@ -141,28 +141,28 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
                         </>
                     ) : (
                         <>
-                            <td style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
-                            <td>{coolingData ? coolingData.room_data.Floor : ''}</td>
-                            <td>
+                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+                            {/* <td>{coolingData ? coolingData.room_data.Floor : ''}</td> */}
+                            <td width="5%">
                                 {coolingData ? coolingData.room_data.RoomNumber : ''}
                                 <br />
                                 <span className="table-text-grey">{coolingData ? coolingData.room_data.RoomName : ''}</span>
 
                             </td>
-                            {renderEditableCell("RoomTempSummer")}
-                            {renderEditableCell("VentairTempSummer")}
-                            {renderEditableCell("InternalHeatloadPeople")}
-                            {renderEditableCell("InternalHeatloadLights")}
-                            {renderEditableCell("InternalHeatloadEquipment")}
-                            {renderEditableCell("SunAdition")}
-                            {renderEditableCell("SunReduction")}
-                            <td>{coolingData ? coolingData.cooling_data.SumInternalHeatLoad : ''}</td>
-                            {renderEditableCell("CoolingEquipment")}
-                            <td><strong>{coolingData ? (coolingData.cooling_data.CoolingSum).toFixed(0) : ''}</strong></td>
-                            <td>
-                                { extraAirNeeded }
+                            {renderEditableCell("RoomTempSummer", "5%")}
+                            {renderEditableCell("VentairTempSummer", "5%")}
+                            {renderEditableCell("InternalHeatloadPeople", "5%")}
+                            {renderEditableCell("InternalHeatloadLights", "5%")}
+                            {renderEditableCell("InternalHeatloadEquipment", "5%")}
+                            {renderEditableCell("SunAdition", "5%")}
+                            {renderEditableCell("SunReduction", "5%")}
+                            <td width="5%">{coolingData ? coolingData.cooling_data.SumInternalHeatLoad : ''}</td>
+                            {renderEditableCell("CoolingEquipment", "5%")}
+                            <td width="5%"><strong>{coolingData ? (coolingData.cooling_data.CoolingSum).toFixed(0) : ''}</strong></td>
+                            <td width="5%">
+                                {extraAirNeeded}
                             </td>
-                            <td>
+                            <td width="34%">
                                 {
                                     extraAirNeeded < 0 ? (
                                         <>
@@ -178,7 +178,6 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
                         </>
                     )
                 }
-
             </tr>
         </>
     );

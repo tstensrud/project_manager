@@ -122,110 +122,144 @@ function Ventilation() {
                                                 ) : (
                                                     <>
                                                         <TableTop info={<HelpBox />} />
-                                                        <div className="table-wrapper">
-                                                            <table className="fl-table">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th width="2%" className="no-print">#</th>
-                                                                        <th width="2%">Etasje</th>
-                                                                        <th width="10%">Rom</th>
-                                                                        <th width="6%">Sum personer <br /> m<sup>3</sup>/h</th>
-                                                                        <th width="6%">Sum emisjon <br /> m<sup>3</sup>/h</th>
-                                                                        <th width="6%">Prosess <br /> m<sup>3</sup>/h</th>
-                                                                        <th width="6%">Dimensjonert <br /> m<sup>3</sup>/h</th>
-                                                                        <th width="6%">Tilluft<br /> m<sup>3</sup>/h</th>
-                                                                        <th width="6%">Avtrekk<br /> m<sup>3</sup>/h</th>
-                                                                        <th width="6%">m<sup>3</sup>/m<sup>2</sup></th>
-                                                                        <th width="6%">Min <br />m<sup>3</sup>/h</th>
-                                                                        <th width="6%">System</th>
-                                                                        <th width="31%" className="no-print">Merknad</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    {
-                                                                        floors && floors.map(floor => (
-                                                                            <React.Fragment key={floor}>
-                                                                                {
-                                                                                    sortedBuildings && sortedBuildings.length > 0 ? (
-                                                                                        sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} allRoomData={room} totalColumns={13} roomId={room.uid} systems={ventSystemData} />)
-                                                                                    ) : (<></>)
-                                                                                }
-                                                                                <tr className="summary-row">
-                                                                                    <td><br /><br /></td><td></td><td></td><td></td><td></td><td></td>
-                                                                                    <td>
-                                                                                        {
-                                                                                            buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
-                                                                                            Object.keys(buildingSummaryData[0].floor_summaries)
-                                                                                                .filter(key => key === floor)
-                                                                                                .map(key => (
-                                                                                                    <React.Fragment key={key}>
-                                                                                                        <strong>{Number(buildingSummaryData[0].floor_summaries[key].demand.toFixed(0)).toLocaleString()}</strong>
-                                                                                                    </React.Fragment>
-                                                                                                ))
-                                                                                        }
+                                                        <div className="table-container">
+                                                            <div className="table-header-wrapper">
+                                                                <table className="fl-table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th width="2%" className="no-print">#</th>
+                                                                            <th width="10%">Rom</th>
+                                                                            <th width="6%">Sum personer <br /> m<sup>3</sup>/h</th>
+                                                                            <th width="6%">Sum emisjon <br /> m<sup>3</sup>/h</th>
+                                                                            <th width="6%">Prosess <br /> m<sup>3</sup>/h</th>
+                                                                            <th width="6%">Dimensjonert <br /> m<sup>3</sup>/h</th>
+                                                                            <th width="6%">Tilluft<br /> m<sup>3</sup>/h</th>
+                                                                            <th width="6%">Avtrekk<br /> m<sup>3</sup>/h</th>
+                                                                            <th width="6%">m<sup>3</sup>/m<sup>2</sup></th>
+                                                                            <th width="6%">Min <br />m<sup>3</sup>/h</th>
+                                                                            <th width="6%">System</th>
+                                                                            <th width="34%" className="no-print">Merknad</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
 
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        {
-                                                                                            buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
-                                                                                            Object.keys(buildingSummaryData[0].floor_summaries)
-                                                                                                .filter(key => key === floor)
-                                                                                                .map(key => (
-                                                                                                    <React.Fragment key={key}>
-                                                                                                        <span className="supply-text">{Number(buildingSummaryData[0].floor_summaries[key].supply.toFixed(0)).toLocaleString()}</span>
-                                                                                                    </React.Fragment>
-                                                                                                ))
-                                                                                        }
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        {
-                                                                                            buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
-                                                                                            Object.keys(buildingSummaryData[0].floor_summaries)
-                                                                                                .filter(key => key === floor)
-                                                                                                .map(key => (
-                                                                                                    <React.Fragment key={key}>
-                                                                                                        <span className="extract-text">{Number(buildingSummaryData[0].floor_summaries[key].extract.toFixed(0)).toLocaleString()}</span>
-                                                                                                    </React.Fragment>
-                                                                                                ))
-                                                                                        }
+                                                            {
+                                                                floors && floors.map(floor => (
+                                                                    <React.Fragment key={floor}>
+                                                                        <div className="table-wrapper">
 
-                                                                                    </td>
-                                                                                    <td className="no-print"></td>
-                                                                                    <td className="no-print"></td>
-                                                                                    <td className="no-print"></td>
-                                                                                    <td className="no-print"></td>
-                                                                                </tr>
-                                                                            </React.Fragment>
-                                                                        ))}
-                                                                </tbody>
-                                                                <tfoot>
-                                                                    <tr>
-                                                                        <th className="no-print"></th>
-                                                                        <th></th>
-                                                                        <th>
-                                                                            <strong>Sum</strong>
-                                                                        </th>
-                                                                        <th></th>
-                                                                        <th></th>
-                                                                        <th></th>
+                                                                            <div className="table-title">
+                                                                                <h3>Etasje {floor}</h3>                                                                            
+                                                                            </div>
 
-                                                                        <th>
-                                                                            <strong>{buildingSummaryData?.[0]?.demand != null ? <>{Number((buildingSummaryData[0]).demand.toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
-                                                                        </th>
-                                                                        <th>
-                                                                            <strong>{buildingSummaryData?.[0]?.supplyAir != null ? <>{Number((buildingSummaryData[0].supplyAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
-                                                                        </th>
-                                                                        <th>
-                                                                            <strong>{buildingSummaryData?.[0]?.extractAir ? <>{Number((buildingSummaryData[0].extractAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
-                                                                        </th>
-                                                                        <th className="no-print"></th>
-                                                                        <th className="no-print"></th>
-                                                                        <th className="no-print"></th>
-                                                                        <th className="no-print"></th>
-                                                                        <th className="no-print"></th>
-                                                                    </tr>
-                                                                </tfoot>
-                                                            </table>
+                                                                            <table className="fl-table">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td style={{border: "0px"}} width="2%"></td>
+                                                                                        <td style={{border: "0px"}} width="10%"></td>
+                                                                                        <td style={{border: "0px"}} width="6%"></td>
+                                                                                        <td style={{border: "0px"}} width="6%"></td>
+                                                                                        <td style={{border: "0px"}} width="6%"></td>
+                                                                                        <td style={{border: "0px"}} width="6%"></td>
+                                                                                        <td style={{border: "0px"}} width="6%"></td>
+                                                                                        <td style={{border: "0px"}} width="6%"></td>
+                                                                                        <td style={{border: "0px"}} width="6%"></td>
+                                                                                        <td style={{border: "0px"}} width="6%"></td>
+                                                                                        <td style={{border: "0px"}} width="6%"></td>
+                                                                                        <td style={{border: "0px"}} width="34%"></td>
+                                                                                    </tr>
+                                                                                    
+                                                                                    {
+                                                                                        sortedBuildings && sortedBuildings.length > 0 ? (
+                                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} allRoomData={room} totalColumns={12} roomId={room.uid} systems={ventSystemData} />)
+                                                                                        ) : (<></>)
+                                                                                    }
+                                                                                    <tr className="summary-row">
+                                                                                        <td width="2%"><br /><br /></td>
+                                                                                        <td width="10%"></td>
+                                                                                        <td width="6%"></td>
+                                                                                        <td width="6%"></td>
+                                                                                        <td width="6%"></td>
+                                                                                        <td width="6%">
+                                                                                            {
+                                                                                                buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
+                                                                                                Object.keys(buildingSummaryData[0].floor_summaries)
+                                                                                                    .filter(key => key === floor)
+                                                                                                    .map(key => (
+                                                                                                        <React.Fragment key={key}>
+                                                                                                            <strong>{Number(buildingSummaryData[0].floor_summaries[key].demand.toFixed(0)).toLocaleString()}</strong>
+                                                                                                        </React.Fragment>
+                                                                                                    ))
+                                                                                            }
+
+                                                                                        </td>
+                                                                                        <td width="6%">
+                                                                                            {
+                                                                                                buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
+                                                                                                Object.keys(buildingSummaryData[0].floor_summaries)
+                                                                                                    .filter(key => key === floor)
+                                                                                                    .map(key => (
+                                                                                                        <React.Fragment key={key}>
+                                                                                                            <span className="supply-text">{Number(buildingSummaryData[0].floor_summaries[key].supply.toFixed(0)).toLocaleString()}</span>
+                                                                                                        </React.Fragment>
+                                                                                                    ))
+                                                                                            }
+                                                                                        </td>
+                                                                                        <td width="6%">
+                                                                                            {
+                                                                                                buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
+                                                                                                Object.keys(buildingSummaryData[0].floor_summaries)
+                                                                                                    .filter(key => key === floor)
+                                                                                                    .map(key => (
+                                                                                                        <React.Fragment key={key}>
+                                                                                                            <span className="extract-text">{Number(buildingSummaryData[0].floor_summaries[key].extract.toFixed(0)).toLocaleString()}</span>
+                                                                                                        </React.Fragment>
+                                                                                                    ))
+                                                                                            }
+
+                                                                                        </td>
+                                                                                        <td width="6%" className="no-print"></td>
+                                                                                        <td width="6%" className="no-print"></td>
+                                                                                        <td width="6%" className="no-print"></td>
+                                                                                        <td width="34%" className="no-print"></td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </React.Fragment>
+                                                                ))
+                                                            }
+
+                                                            <div className="table-wrapper">
+                                                                <table className="fl-table">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <th width="2%" className="no-print"></th>
+                                                                            <th width="10%">
+                                                                                <strong>Sum</strong>
+                                                                            </th>
+                                                                            <th width="6%"></th>
+                                                                            <th width="6%"></th>
+                                                                            <th width="6%"></th>
+
+                                                                            <th width="6%">
+                                                                                <strong>{buildingSummaryData?.[0]?.demand != null ? <>{Number((buildingSummaryData[0]).demand.toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
+                                                                            </th>
+                                                                            <th width="6%">
+                                                                                <strong>{buildingSummaryData?.[0]?.supplyAir != null ? <>{Number((buildingSummaryData[0].supplyAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
+                                                                            </th>
+                                                                            <th width="6%">
+                                                                                <strong>{buildingSummaryData?.[0]?.extractAir ? <>{Number((buildingSummaryData[0].extractAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
+                                                                            </th>
+                                                                            <th width="6%" className="no-print"></th>
+                                                                            <th width="6%" className="no-print"></th>
+                                                                            <th width="6%" className="no-print"></th>
+                                                                            <th width="34%" className="no-print"></th>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
                                                     </>
                                                 )

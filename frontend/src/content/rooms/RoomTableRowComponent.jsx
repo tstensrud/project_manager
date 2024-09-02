@@ -94,8 +94,8 @@ function RoomTableRowComponent({roomId, msgToParent, totalColumns }) {
             }   
         };
 
-        const renderEditableCell = (cellName) => (
-            <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+        const renderEditableCell = (cellName, width) => (
+            <td width={width} className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
             {editingCell === cellName && roomData ? (
                 <input
                     type="text"
@@ -134,16 +134,16 @@ function RoomTableRowComponent({roomId, msgToParent, totalColumns }) {
                 </>
             ) : (
                 <>
-                    <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
-                    <td className={cellClass}>{roomData ? roomData.room_data.BuildingName : ''}</td>
-                    {renderEditableCell("Floor")}
-                    {renderEditableCell("RoomNumber")}
-                    <td className={cellClass}>{roomData ? roomData.room_data.RoomTypeName : ''}</td>
-                    {renderEditableCell("RoomName")}
-                    {renderEditableCell("Area")}
-                    {renderEditableCell("RoomPopulation")}
-                    {renderEditableCell("Comments")}
-                    <td className={cellClass}>
+                    <td width="2%" className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+                    <td width="12%" className={cellClass}>{roomData ? roomData.room_data.BuildingName : ''}</td>
+                    {renderEditableCell("Floor", "4%")}
+                    {renderEditableCell("RoomNumber", "6%")}
+                    <td width="15%" className={cellClass}>{roomData ? roomData.room_data.RoomTypeName : ''}</td>
+                    {renderEditableCell("RoomName", "10%")}
+                    {renderEditableCell("Area", "5%")}
+                    {renderEditableCell("RoomPopulation", "5%")}
+                    {renderEditableCell("Comments", "30%")}
+                    <td className={cellClass} width="10%">
                         
                         {
                             undoButton ? <><button onClick={handleUndo} className="table-button">Angre</button></> : <><button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button></>
