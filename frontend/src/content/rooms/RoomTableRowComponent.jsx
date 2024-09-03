@@ -2,14 +2,20 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
+// Hooks
 import useSubmitData from '../../hooks/useSubmitData'
 import useFetch from '../../hooks/useFetch'
 import useUpdateData from '../../hooks/useUpdateData'
 import useDeleteData from '../../hooks/useDeleteData'
+
+// Components
 import MessageBox from '../../layout/MessageBox';
 
+// Svg
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
 
-function RoomTableRowComponent({roomId, msgToParent, totalColumns }) {
+
+function RoomTableRowComponent({roomId, totalColumns }) {
         const {projectId} = useParams();
         const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
@@ -46,10 +52,6 @@ function RoomTableRowComponent({roomId, msgToParent, totalColumns }) {
         },[roomData]);
 
         // Handlers
-        const sendMessageToParent = (msg) => {
-            msgToParent(msg);
-        }
-
         const handleEdit = (cellName) => {
             setEditingCell(cellName);
         };
@@ -65,7 +67,6 @@ function RoomTableRowComponent({roomId, msgToParent, totalColumns }) {
             await deleteSubmit(e);
             setDisabledDeleteButton(true);
             setRowClass("deleted-row")
-            sendMessageToParent("deleted");
             setUndoButton(true);
             setUndoDeleteData({"undo": true});
         }
@@ -134,7 +135,7 @@ function RoomTableRowComponent({roomId, msgToParent, totalColumns }) {
                 </>
             ) : (
                 <>
-                    <td width="2%" className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+                    <td width="2%" className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}><MarkRowIcon /></td>
                     <td width="12%" className={cellClass}>{roomData ? roomData.room_data.BuildingName : ''}</td>
                     {renderEditableCell("Floor", "4%")}
                     {renderEditableCell("RoomNumber", "6%")}

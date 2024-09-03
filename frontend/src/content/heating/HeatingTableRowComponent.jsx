@@ -2,13 +2,19 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
-import RoomData from './RoomData';
-import MessageBox from '../../layout/MessageBox';
+// Hooks
 import useFetch from '../../hooks/useFetch';
 import useUpdateData from '../../hooks/useUpdateData';
 
+// Components
+import RoomData from './RoomData';
+import MessageBox from '../../layout/MessageBox';
 
-function HeatingTableRowComponent({ roomId, msgToParent, settingsUpdateState, totalColumns }) {
+// SVG
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
+
+
+function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState, totalColumns }) {
     const { projectId } = useParams();
     const { setActiveProject } = useContext(GlobalContext);
 
@@ -35,20 +41,12 @@ function HeatingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
     }, [settingsUpdateState]);
 
     useEffect(() => {
-        setActiveProject(projectId);
-    }, []);
-
-    useEffect(() => {
         if (heatingData) {
             setEditedData('');
         }
     }, [heatingData]);
 
     // Handlers
-    const sendMessageToParent = (msg) => {
-        msgToParent(msg);
-    }
-
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
     };
@@ -70,7 +68,7 @@ function HeatingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
             handleBlur();
             setData('');
             heatingRefetch();
-            sendMessageToParent("updateSummaries");
+            buildingReFetch();
         } if (e.key == "Escape") {
             handleBlur();
             return;
@@ -124,7 +122,7 @@ function HeatingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
                         </>
                     ) : (
                         <>
-                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}><MarkRowIcon /></td>
                             {/* <td width="2%">{heatingData ? heatingData.room_data.Floor : ''}</td> */}
                             <td width="5%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
                                 <strong><span className="table-link">{heatingData ? heatingData.room_data.RoomNumber : ''}</span></strong>

@@ -2,12 +2,18 @@ import { useEffect, useState, useContext } from "react";
 import { Link, useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
-import MessageBox from '../../layout/MessageBox';
+// Hooks
 import useFetch from '../../hooks/useFetch';
 import useUpdateData from '../../hooks/useUpdateData';
 
+// Components
+import MessageBox from '../../layout/MessageBox';
 
-function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, totalColumns, index }) {
+// SVG
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
+
+
+function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, index }) {
     const { projectId } = useParams();
     const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
     const [extraAirNeeded, setExtraAirNeeded] = useState(0)
@@ -31,10 +37,6 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
     useEffect(() => { // Refetch upon received message that cooling settings has changed
         coolingRefetch();
     }, [settingsUpdateState]);
-
-    useEffect(() => {
-        setActiveProject(projectId);
-    }, []);
 
     useEffect(() => {
         if (coolingData) {
@@ -141,7 +143,7 @@ function CoolingTableRowComponent({ roomId, msgToParent, settingsUpdateState, to
                         </>
                     ) : (
                         <>
-                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}><MarkRowIcon /></td>
                             {/* <td>{coolingData ? coolingData.room_data.Floor : ''}</td> */}
                             <td width="5%">
                                 {coolingData ? coolingData.room_data.RoomNumber : ''}

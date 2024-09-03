@@ -18,9 +18,8 @@ function Project () {
     
     
     useEffect(() => {
-        const projectName = data && data.data.ProjectName;
+        const projectName = data?.data?.ProjectName;
         setActiveProjectName(projectName);
-        localStorage.setItem("projectname", projectName);
     },[data]);
     
     return (
@@ -31,7 +30,6 @@ function Project () {
                 <div className="flex-container-row">
                     <ProjectSummary projectId={projectId} />
                     <BuildingRoomData projectId={projectId} />
-
                 </div>
 
                 <div className="flex-container-row">

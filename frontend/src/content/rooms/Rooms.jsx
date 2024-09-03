@@ -17,7 +17,6 @@ import HelpBox from './HelpBox.jsx';
 
 function Rooms() {
     const { projectId } = useParams();
-    const { setActiveProject } = useContext(GlobalContext);
 
     // Form fields
     const roomTypeRef = useRef(null);
@@ -39,9 +38,6 @@ function Rooms() {
     // Submit new room
     const { data: newRoomData, response: newRoomDataResponse, setData, handleSubmit } = useSubmitData(`/project_api/${projectId}/rooms/`);
 
-    // Error messages from row components
-    const [childMessage, setChildMessage] = useState('');
-
     // Sorting
     const [sortedBuildings, setSortedBuildings] = useState(roomData?.room_data || []);
     const [buildingUid, setBuildingUid] = useState(null);
@@ -56,7 +52,6 @@ function Rooms() {
             : null;
         setBuildingSummaryData(filteredBuildingData);
     }, [activeSortButton, buildingData]);
-
 
     useEffect(() => {
         if (buildingSummaryData && buildingSummaryData[0] && buildingSummaryData[0].floor_summaries) {
@@ -87,14 +82,8 @@ function Rooms() {
         setSortedBuildings(roomData && roomData.room_data !== null && roomData.room_data.filter((room) => room.BuildingUid === buildingUid));
     }, [roomData]);
 
-    const handleChildMessage = (msg) => {
-        setChildMessage('');
-        if (msg !== undefined) {
-            setChildMessage(msg);
-        }
-    }
 
-    //console.log(newRoomData)
+    // Handlers
     const sortButtonClick = (e) => {
         e.preventDefault();
         const sortBy = e.target.name;
@@ -233,7 +222,7 @@ function Rooms() {
                                                                                 <tbody>
                                                                                     {
                                                                                         sortedBuildings && sortedBuildings.length > 0 ? (
-                                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room) => <RoomTableRowComponent msgToParent={handleChildMessage} totalColumns={10} key={room.uid} roomId={room.uid} />)
+                                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room) => <RoomTableRowComponent totalColumns={10} key={room.uid} roomId={room.uid} />)
                                                                                         ) : (<></>)
                                                                                     }
                                                                                 </tbody>

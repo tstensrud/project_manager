@@ -56,15 +56,6 @@ function Ventilation() {
     }, [buildingSummaryData]);
 
     // Handlers
-    const handleChildMessage = (msg) => {
-        if (msg !== undefined) {
-            if (msg === "updateSummaries") {
-                buildingReFetch();
-            }
-            setChildMessage(msg);
-        }
-    }
-
     const sortButtonClick = (e) => {
         e.preventDefault();
         const sortBy = e.target.name;
@@ -172,7 +163,7 @@ function Ventilation() {
                                                                                     
                                                                                     {
                                                                                         sortedBuildings && sortedBuildings.length > 0 ? (
-                                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} allRoomData={room} totalColumns={12} roomId={room.uid} systems={ventSystemData} />)
+                                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={12} roomId={room.uid} systems={ventSystemData} />)
                                                                                         ) : (<></>)
                                                                                     }
                                                                                     <tr className="summary-row">

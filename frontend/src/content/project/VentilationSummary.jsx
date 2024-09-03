@@ -6,7 +6,7 @@ import LoadingSpinner from '../../layout/LoadingSpinner';
 function VentilationSummary({ projectId }) {
     const { data: systemsData, loading, error } = useFetch(`/project_api/${projectId}/systems/`)
     const { data } = useFetch(`/project_api/${projectId}/ventilation/`)
-    console.log(systemsData)
+
     return (
         <>
             <div className="content-card">

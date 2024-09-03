@@ -2,14 +2,20 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
-import RoomData from './RoomData';
-import MessageBox from '../../layout/MessageBox';
+// Hooks
 import useFetch from '../../hooks/useFetch';
 import useUpdateData from '../../hooks/useUpdateData';
 import useUpdateSystem from '../../hooks/useUpdateSystem';
 
+// Components
+import RoomData from './RoomData';
+import MessageBox from '../../layout/MessageBox';
 
-function RoomTableRowComponent({ roomId, msgToParent, systems, index, allRoomData, totalColumns }) {
+// SVG
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
+
+
+function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoomData, totalColumns }) {
     const { projectId } = useParams();
     const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
     //console.log(allRoomData);
@@ -36,10 +42,6 @@ function RoomTableRowComponent({ roomId, msgToParent, systems, index, allRoomDat
 
     // useEffects
     useEffect(() => {
-        setActiveProject(projectId);
-    }, []);
-
-    useEffect(() => {
         if (ventData) {
             setEditedData('');
         }
@@ -64,15 +66,6 @@ function RoomTableRowComponent({ roomId, msgToParent, systems, index, allRoomDat
     }, [systemResponse]);
 
     // Handlers
-    const handleRoomDataClick = (e) => {
-        e.preventDefault();
-        setShowTodoList(!showTodoList);
-    }
-
-    const sendMessageToParent = (msg) => {
-        msgToParent(msg);
-    }
-
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
     };
@@ -94,7 +87,7 @@ function RoomTableRowComponent({ roomId, msgToParent, systems, index, allRoomDat
             handleBlur();
             setData('');
             ventRefetch();
-            sendMessageToParent("updateSummaries");
+            buildingReFetch();
         } if (e.key == "Escape") {
             handleBlur();
             return;
@@ -175,14 +168,14 @@ function RoomTableRowComponent({ roomId, msgToParent, systems, index, allRoomDat
                         <>
                             {
                                 Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="loading-text" key={index}>####</td>
+                                    <td className="loading-text" key={index}>#### <br/></td>
                                 ))
                             }
                         </>
                     ) : (
                         <>
                         
-                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}><MarkRowIcon /></td>
                             {/* <td width="2%">{allRoomData ? allRoomData.Floor : ''}</td> */}
                             <td width="10%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer', textTransform: 'uppercase' }}>
                                 <strong><span className="table-link">{allRoomData ? allRoomData.RoomNumber : ''}</span></strong>

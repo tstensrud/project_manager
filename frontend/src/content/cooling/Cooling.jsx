@@ -53,19 +53,6 @@ function Cooling() {
     }, [buildingSummaryData]);
 
     // Handlers
-    const handleChildMessage = (msg) => {
-        //console.log("Child message received:", msg);
-        if (msg !== undefined) {
-            if (msg === "update") {
-                roomRefetch();
-            }
-            if (msg === "updateSummaries") {
-                /* buildingReFetch(); */
-            }
-            setChildMessage('');
-        }
-    }
-
     const handleSettingsButtonUpdate = () => {
         setSettingsUpdatedState(prevState => !prevState);
     }
@@ -98,7 +85,7 @@ function Cooling() {
                     ) : (
                         <>
                             <div className="text-container-above-tables">
-                                {activeSortButton !== null && activeSortButton !== "all" ? <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate} msgToParent={handleChildMessage} buildingUid={activeSortButton} /> : ''}&nbsp;
+                                {activeSortButton !== null && activeSortButton !== "all" ? <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate} buildingUid={activeSortButton} /> : ''}&nbsp;
                                 {
                                     buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                                         <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
@@ -153,7 +140,7 @@ function Cooling() {
                                                                 <tbody>
                                                                     {
                                                                         sortedBuildings && sortedBuildings.length > 0 ? (
-                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} msgToParent={handleChildMessage} totalColumns={14} key={room.uid} roomId={room.uid} />)
+                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} totalColumns={14} key={room.uid} roomId={room.uid} />)
                                                                         ) : (<></>)
                                                                     }
                                                                     <tr className="summary-row">

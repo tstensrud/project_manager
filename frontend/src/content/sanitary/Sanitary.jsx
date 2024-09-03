@@ -12,17 +12,6 @@ function Sanitary() {
     // Hooks
     const { data, loading, refetch } = useFetch(`/project_api/${projectId}/sanitary/buildings/`);
 
-    // Handlers
-    const handleChildMessage = (msg) => {
-        //console.log("Child message received:", msg);
-        if (msg !== undefined) {
-            if (msg === "curve") {
-                refetch();
-                console.log("Update curve")
-            }
-        }
-    }
-    
     return (
         <>
             <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitæranlegg - oppsummering"} projectName={""} projectNumber={""} />
@@ -37,7 +26,7 @@ function Sanitary() {
                                     <p className="p-description">{data.error}</p>
                                 ) : (
                                     data && data.building_data && Object.keys(data.building_data).map((key) => (
-                                        <BuildingSummary buildingUid={data.building_data[key].uid} msgToParent={handleChildMessage} projectId={projectId} key={data.building_data[key].uid} />
+                                        <BuildingSummary buildingUid={data.building_data[key].uid} projectId={projectId} key={data.building_data[key].uid} />
                                     )))
                             }
                         </div>

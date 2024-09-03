@@ -8,8 +8,6 @@ import Header from './layout/Header';
 function Layout() {
     const { userUuid, setUserUuid } = useContext(GlobalContext);
 
-    
-
     return (
         <>
             <Header/>

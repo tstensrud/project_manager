@@ -2,12 +2,18 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
-import MessageBox from '../../layout/MessageBox';
+// Hooks
 import useFetch from '../../hooks/useFetch';
 import useUpdateData from '../../hooks/useUpdateData';
 
+// Components
+import MessageBox from '../../layout/MessageBox';
 
-function SanitaryTableRowComponent({ roomId, msgToParent, index, allRoomData, totalColumns }) {
+// SVG
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
+
+
+function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData, totalColumns }) {
     const { projectId } = useParams();
     const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
     //console.log(allRoomData);
@@ -32,10 +38,6 @@ function SanitaryTableRowComponent({ roomId, msgToParent, index, allRoomData, to
 
     // useEffects
     useEffect(() => {
-        setActiveProject(projectId);
-    }, []);
-
-    useEffect(() => {
         if (sanitaryData) {
             setEditedData('');
         }
@@ -43,11 +45,6 @@ function SanitaryTableRowComponent({ roomId, msgToParent, index, allRoomData, to
 
 
     // Handlers
-    const handleRoomDataClick = (e) => {
-        e.preventDefault();
-        setShowTodoList(!showTodoList);
-    }
-
     const sendMessageToParent = (msg) => {
         msgToParent(msg);
     }
@@ -73,7 +70,7 @@ function SanitaryTableRowComponent({ roomId, msgToParent, index, allRoomData, to
             handleBlur();
             setData('');
             sanitaryRefetch();
-            sendMessageToParent("updateSummaries");
+            buildingReFetch();
         } if (e.key == "Escape") {
             handleBlur();
             return;
@@ -128,7 +125,7 @@ function SanitaryTableRowComponent({ roomId, msgToParent, index, allRoomData, to
                         </>
                     ) : (
                         <>
-                            <td style={{ cursor: 'pointer' }} width="2%" onClick={handleOnMarkedRow}>#</td>
+                            <td style={{ cursor: 'pointer' }} width="2%" onClick={handleOnMarkedRow}><MarkRowIcon /></td>
                             {/* <td style={{ width: "50px" }}>{allRoomData ? allRoomData.Floor : ''}</td> */}
                             <td width="12%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ /*cursor: 'pointer',*/ textTransform: 'uppercase' }}>
                                 <strong>{allRoomData ? allRoomData.RoomNumber : ''}</strong>

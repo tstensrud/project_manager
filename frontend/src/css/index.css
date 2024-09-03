@@ -19,7 +19,7 @@
   --table-button-border: #1f1c2e;
   --table-button-background: var(--secondary-color);
   --table-border: 1px solid rgb(43, 53, 64);
-  --table-hover: #4949492a;
+  --table-hover: #4949495e;
   --marked-row: #1e7e3659;
   --form-elements-border-radius: 6px;
   --grey-text: rgba(212, 212, 212, 0.473);
@@ -33,7 +33,7 @@
   --form-background-color: var(--tertiary-color);
   --form-element-hover: var(--accent-color);
   --form-focus-color: var(--accent-color);
-  --form-table-button-border: 1px solid rgb(43, 53, 64);
+  --form-table-button-border: 2px solid rgb(43, 53, 64);
   --form-table-button-hover-background: var(--tertiary-color);
   --form-element-card-background-color: var(--tertiary-color);
 
@@ -55,7 +55,7 @@
   --table-button-border: #1f1c2e;
   --table-button-background: rgb(18, 28, 38);
   --table-border: 1px solid rgb(43, 53, 64);
-  --table-hover: #8b1f1f11;
+  --table-hover: #12499c5b;
   --marked-row: #d72f597a;
   --grey-text: rgba(46, 41, 41, 0.719);
   --system-summary: rgba(89, 113, 157, 0.2);
@@ -68,8 +68,8 @@
   --form-background-color: var(--secondary-color);
   --form-element-hover: var(--primary-color);
   --form-focus-color: var(--primary-color);
-  --form-table-button-border: 2px solid var(--primary-color);
-  --form-table-button-hover-background: #DBD4D4;
+  --form-table-button-border: 2px solid #00000036;
+  --form-table-button-hover-background: var(--tertiary-color);
   --form-element-card-background-color: var(--tertiary-color);
 
 }
@@ -473,7 +473,7 @@ a:hover {
   display: flex;
   height: 520px;
   top: 50px;
-  background-color: var(--tertiary-color);
+  background-color: var(--secondary-color);
   z-index: 1000;
   left: 50px;
   border-radius: var(--default-border-radius);
@@ -486,7 +486,7 @@ a:hover {
   display: flex;
   height: 520px;
   top: 50px;
-  background-color: var(--tertiary-color);
+  background-color: var(--secondary-color);
   z-index: 1000;
   right: 50px;
   border-radius: var(--default-border-radius);

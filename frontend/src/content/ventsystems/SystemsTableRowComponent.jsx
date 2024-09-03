@@ -2,14 +2,18 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
+// Hooks
 import useFetch from '../../hooks/useFetch'
 import useSubmitData from "../../hooks/useSubmitData";
 import useUpdateData from '../../hooks/useUpdateData';
 import useDeleteData from '../../hooks/useDeleteData';
+
+// Components
 import MessageBox from '../../layout/MessageBox';
 import DeleteBox from './DeleteBox';
 
-
+// SVG
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
 
 function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
     const { projectId } = useParams();
@@ -30,13 +34,11 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
 
     // use effects
     useEffect(() => {
-        setActiveProject(projectId);
         setDeleteData({ "roomId": systemId });
     }, []);
 
     useEffect(() => {
         if (systemData) {
-            //setEditedData({ ...roomData });
             setEditedData('');
         }
     }, [systemData]);
@@ -52,7 +54,6 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
     };
 
     const handleChange = (e, cellName) => {
-        //setEditedData((prevData) => ({
         setData((prevData) => ({
             ...prevData,
             [cellName]: e.target.value,
@@ -131,7 +132,7 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
                         </>
                     ) : (
                         <>
-                            <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>#</td>
+                            <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}><MarkRowIcon /></td>
                             <td className={cellClass}>{systemData ? systemData.system_data.SystemName : ''}</td>
                             {renderEditableCell("Location")}
                             {renderEditableCell("ServiceArea")}

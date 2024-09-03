@@ -28,7 +28,7 @@ function CoolingSettings ({setShowHeatingSettings: setShowCoolingSettings, build
             await updateBuildingData(e);
             refetch();
             setData('');
-            onSettingsUpdate(); // Pass a message of change to CoolingTableRowComponent
+            onSettingsUpdate();
         }
     }
 

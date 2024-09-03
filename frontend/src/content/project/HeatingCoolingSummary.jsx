@@ -5,7 +5,7 @@ import LoadingSpinner from '../../layout/LoadingSpinner';
 
 function HeatingSummary({ projectId }) {
     const { data, loading, error } = useFetch(`/project_api/${projectId}/energy/`)
-    console.log(data)
+    
     return (
         <>
             <div className="content-card">

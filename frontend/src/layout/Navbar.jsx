@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { Link } from 'react-router-dom';
 import { GlobalContext } from '../GlobalContext';
+
+// Hooks
 import useFetch from "../hooks/useFetch";
 
-import TodoButton from './TodoButton';
-import AccountIcon from '../assets/svg/accountIcon.svg?react';
+// SVG
 import MoonIcon from '../assets/svg/moonIcon.svg?react';
 import SunIcon from '../assets/svg/sunIcon.svg?react';
 
@@ -13,7 +14,6 @@ import SunIcon from '../assets/svg/sunIcon.svg?react';
 
 function Navbar() {
     const { activeProject, setActiveProject, userUuid, setUserUuid, userName, setUserName, activeProjectName, setActiveProjectName, darkmode, setDarkmode } = useContext(GlobalContext);
-    const [navButtonClass, setNavButtonClass] = useState('dropdown-content-disabled');
     const { data: userData, loading, error, refetch: refetchUserInfo } = useFetch(`/get_user/`);
     const [displayMenuContainer, setDisplayMenuContainer] = useState(false);
     const [displayDashboardMenu, setDisplayDashboardContainer] = useState(false);
@@ -21,9 +21,7 @@ function Navbar() {
     // useEffects
     useEffect(() => {
         refetchUserInfo();
-        const projectName = localStorage.getItem("projectname");
         const projectId = localStorage.getItem("projectid");
-        setActiveProjectName(projectName);
         setActiveProject(projectId);
     }, []);
 
@@ -31,14 +29,6 @@ function Navbar() {
         setUserUuid(userData && userData.user.uuid);
         setUserName(userData && userData.user.name);
     }, [userData]);
-
-    useEffect(() => {
-        if (activeProject !== "0" && activeProject !== null && activeProject !== undefined) {
-            setNavButtonClass("dropdown-content");
-        } else {
-            setNavButtonClass("dropdown-content-disabled");
-        }
-    }, [activeProject]);
 
     // Handlers
     const toggleDarkModeContainer = () => {

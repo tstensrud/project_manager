@@ -55,15 +55,6 @@ function SanitaryEquipment() {
     }, [buildingSummaryData]);
 
     // Handlers
-    const handleChildMessage = (msg) => {
-        if (msg !== undefined) {
-            if (msg === "updateSummaries") {
-                buildingReFetch();
-            }
-            setChildMessage(msg);
-        }
-    }
-
     const sortButtonClick = (e) => {
         e.preventDefault();
         const sortBy = e.target.name;
@@ -157,7 +148,7 @@ function SanitaryEquipment() {
                                                                                 <tbody>
                                                                                     {
                                                                                         sortedBuildings && sortedBuildings.length > 0 ? (
-                                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <SanitaryTableRowComponent index={index} msgToParent={handleChildMessage} key={room.uid} allRoomData={room} totalColumns={18} roomId={room.uid} />)
+                                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <SanitaryTableRowComponent index={index} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={18} roomId={room.uid} />)
                                                                                         ) : (<></>)
                                                                                     }
                                                                                     <tr className="summary-row">

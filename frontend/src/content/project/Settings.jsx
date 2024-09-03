@@ -16,10 +16,6 @@ function Settings() {
     const [chosenSpec, setChosenSpec] = useState();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        setActiveProject(projectId);
-    }, []);
-
     const handleOnSpecChange = (e) => {
         e.preventDefault();
         setSpecData({
