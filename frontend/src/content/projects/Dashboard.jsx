@@ -19,7 +19,6 @@ function Dashboard() {
   useEffect(() => {
     setActiveProject('0');
     setActiveProjectName('');
-    localStorage.removeItem("projectData");
   }, []);
 
   const handleChange = (e) => {
