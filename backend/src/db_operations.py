@@ -157,8 +157,8 @@ def get_building_data(building_uid: str, include_ventilation: bool, include_heat
     floors = get_building_floors(building_uid)
     area = summarize_building_area(building_uid)
 
-    building_data["area"] = area
     building_data["floors"] = floors
+    building_data["area"] = area
     
     floor_summaries = {}
 
@@ -211,7 +211,7 @@ def get_building_data(building_uid: str, include_ventilation: bool, include_heat
         shaft_list = {}
         if building_shafts:
             for shaft in building_shafts:
-                summary = shaft_summary_shaft_building(building_uid, shaft, graph_curve)
+                summary = shaft_summary_shaft_building(building_uid, shaft, graph_curve, floors)
                 shaft_list[shaft] = summary
         building_data["sanitary_summary"] = sanitary_summary
         building_data["shaft_summaries"] = shaft_list
@@ -230,53 +230,40 @@ def update_building_graph_curve(building_uid: str, curve: str) -> bool:
         return False
     
 def summarize_sanitary_equipment_building(building_uid: str) -> dict:
-    sink_1_14_inch = db.session.query(func.sum(models.Rooms.sink_1_14_inch)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    sink_large = db.session.query(func.sum(models.Rooms.sink_large)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    wc = db.session.query(func.sum(models.Rooms.wc)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    urinal = db.session.query(func.sum(models.Rooms.urinal)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    dishwasher = db.session.query(func.sum(models.Rooms.dishwasher)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    shower = db.session.query(func.sum(models.Rooms.shower)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    tub = db.session.query(func.sum(models.Rooms.tub)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    washing_machine = db.session.query(func.sum(models.Rooms.washing_machine)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    tap_water_outlet_inside = db.session.query(func.sum(models.Rooms.tap_water_outlet_inside)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    tap_water_outlet_outside = db.session.query(func.sum(models.Rooms.tap_water_outlet_outside)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    firehose = db.session.query(func.sum(models.Rooms.firehose)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    drain_75_mm = db.session.query(func.sum(models.Rooms.drain_75_mm)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    drain_110_mm = db.session.query(func.sum(models.Rooms.drain_110_mm)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    sink_utility = db.session.query(func.sum(models.Rooms.sink_utility)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
-    drinking_fountain = db.session.query(func.sum(models.Rooms.drinking_fountain)).filter(
-        models.Rooms.building_uid == building_uid).scalar()
+    summaries = db.session.query(
+        func.sum(models.Rooms.sink_1_14_inch).label("sink_1_14_inch"),
+        func.sum(models.Rooms.sink_large).label("sink_large"),
+        func.sum(models.Rooms.wc).label("wc"),
+        func.sum(models.Rooms.urinal).label("urinal"),
+        func.sum(models.Rooms.dishwasher).label("dishwasher"),
+        func.sum(models.Rooms.shower).label("shower"),
+        func.sum(models.Rooms.tub).label("tub"),
+        func.sum(models.Rooms.washing_machine).label("washing_machine"),
+        func.sum(models.Rooms.tap_water_outlet_inside).label("tap_water_outlet_inside"),
+        func.sum(models.Rooms.tap_water_outlet_outside).label("tap_water_outlet_outside"),
+        func.sum(models.Rooms.firehose).label("firehose"),
+        func.sum(models.Rooms.drain_75_mm).label("drain_75_mm"),
+        func.sum(models.Rooms.drain_110_mm).label("drain_110_mm"),
+        func.sum(models.Rooms.sink_utility).label("sink_utility"),
+        func.sum(models.Rooms.drinking_fountain).label("drinking_fountain")
+    ).filter(models.Rooms.building_uid == building_uid).one_or_none()
 
     return {
-            "sink_1_14_inch": sink_1_14_inch,
-            "sink_large": sink_large,
-            "wc": wc,
-            "urinal": urinal,
-            "shower": shower,
-            "tub": tub,
-            "dishwasher": dishwasher,
-            "washing_machine": washing_machine,
-            "tap_water_outlet_inside": tap_water_outlet_inside,
-            "tap_water_outlet_outside": tap_water_outlet_outside,
-            "firehose": firehose,
-            "drain_75_mm": drain_75_mm,
-            "drain_110_mm": drain_110_mm,
-            "sink_utility": sink_utility,
-            "drinking_fountain": drinking_fountain
+            "sink_1_14_inch":summaries.sink_1_14_inch,
+            "sink_large":summaries.sink_large,
+            "wc":summaries.wc,
+            "urinal":summaries.urinal,
+            "shower":summaries.shower,
+            "tub":summaries.tub,
+            "dishwasher":summaries.dishwasher,
+            "washing_machine":summaries.washing_machine,
+            "tap_water_outlet_inside":summaries.tap_water_outlet_inside,
+            "tap_water_outlet_outside":summaries.tap_water_outlet_outside,
+            "firehose":summaries.firehose,
+            "drain_75_mm":summaries.drain_75_mm,
+            "drain_110_mm":summaries.drain_110_mm,
+            "sink_utility":summaries.sink_utility,
+            "drinking_fountain":summaries.drinking_fountain
     }
 
 def get_building_floors(building_uid: str) -> list[str]:
@@ -1195,8 +1182,7 @@ def get_building_shafts(building_uid: str) -> list[str]:
     sorted_list = sorted(shaft_list)
     return sorted_list
     
-def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str):
-    floors = get_building_floors(building_uid)
+def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str, floors):
     shaft_summaries = {}
     cumulative_sum_drainage = 0
     cumulative_sum_coldwater = 0

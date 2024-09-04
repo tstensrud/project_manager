@@ -218,7 +218,7 @@ function Rooms() {
                                                                 floors && floors.map(floor => (
                                                                     <React.Fragment key={floor}>
                                                                         <div className="table-wrapper">
-                                                                            <table className="fl-table" id="roomsTableVentilation">
+                                                                            <table className="fl-table">
                                                                                 <tbody>
                                                                                     {
                                                                                         sortedBuildings && sortedBuildings.length > 0 ? (

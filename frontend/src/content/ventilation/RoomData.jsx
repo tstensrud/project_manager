@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Draggable from 'react-draggable';
 
+import RoomDataRow from './RoomDataRow';
+
 function RoomData({roomData, ventData, setShowRoomData}) {
     
   const [isHovered, setIsHovered] = useState(false);
@@ -62,51 +64,12 @@ function RoomData({roomData, ventData, setShowRoomData}) {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  Romtype
-                </td>
-                <td>
-                  {roomData.RoomTypeName}
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Bygg
-                </td>
-                <td>
-                  {roomData.BuildingName}
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Areal
-                </td>
-                <td>
-                  {roomData.Area} m<sup>2</sup>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Antall personer
-                </td>
-                <td>
-                  {roomData.RoomPopulation} stk.
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Kommentar
-                </td>
-                <td>
-                {roomData.Comments}
-                </td>
-              </tr>
-
+            <RoomDataRow rowName="Romtype">{roomData.RoomTypeName}</RoomDataRow>
+            <RoomDataRow rowName="Bygg">{roomData.BuildingName}</RoomDataRow>
+            <RoomDataRow rowName="Areal">{roomData.Area} m<sup>2</sup></RoomDataRow>
+            <RoomDataRow rowName="Antall personer">{roomData.RoomPopulation} stk.</RoomDataRow>
+            <RoomDataRow rowName="Kommentar">{roomData.Comments}</RoomDataRow>
+                     
               <tr>
                 <td className='fl-table-summary-sub-title'>
                   <strong>Ventilasjonsdata oppsummert</strong>
@@ -115,69 +78,15 @@ function RoomData({roomData, ventData, setShowRoomData}) {
 
                 </td>
               </tr>
-
-              <tr>
-                <td>
-                  System
-                </td>
-                <td>
-                  {ventData.vent_data.SystemName}
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Beregnet luftmengde
-                </td>
-                <td>
-                  {ventData.vent_data.AirDemand} m<sup>3</sup>/h
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Beregnet luftmengde min.
-                </td>
-                <td>
-                  {calculateMinAirFlow()} m<sup>3</sup>/h
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Valgt tilluft
-                </td>
-                <td>
-                <span className="supply-text">{ventData.vent_data.AirSupply}</span> m<sup>3</sup>/h
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Valgt avtrekk
-                </td>
-                <td>
-                <span className="extract-text">{ventData.vent_data.AirExtract}</span> m<sup>3</sup>/h
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Summert personbelastning
-                </td>
-                <td>
-                  {ventData.vent_data.AirPersonSum} m<sup>3</sup>/h
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Summert emisjonsbelastning
-                </td>
-                <td>
-                  {ventData.vent_data.AirEmissionSum} m<sup>3</sup>/h
-                </td>
-              </tr>
+              
+              <RoomDataRow rowName="System">{ventData.vent_data.SystemName}</RoomDataRow>
+              <RoomDataRow rowName="Beregnet luftmengde">{ventData.vent_data.AirDemand} m<sup>3</sup>/h</RoomDataRow>
+              <RoomDataRow rowName="Beregnet luftmengde min.">{calculateMinAirFlow()} m<sup>3</sup>/h</RoomDataRow>
+              <RoomDataRow rowName="Valgt tilluft"><span className="supply-text">{ventData.vent_data.AirSupply}</span> m<sup>3</sup>/h</RoomDataRow>
+              <RoomDataRow rowName="Valgt avtrekk"><span className="extract-text">{ventData.vent_data.AirExtract}</span> m<sup>3</sup>/h</RoomDataRow>
+              <RoomDataRow rowName="Summert personbelastning">{ventData.vent_data.AirPersonSum} m<sup>3</sup>/h</RoomDataRow>
+              <RoomDataRow rowName="Summert emisjonsbelastning">{ventData.vent_data.AirEmissionSum} m<sup>3</sup>/h</RoomDataRow>
+            
               <tr>
               <td className='fl-table-summary-sub-title'>
                   <strong>Grunnlagsdata ventilasjon</strong>
@@ -186,113 +95,19 @@ function RoomData({roomData, ventData, setShowRoomData}) {
 
                 </td>
               </tr>
-              <tr>
-                <td>
-                  Luft per person
-                </td>
-                <td>
-                  {ventData.vent_data.AirPerPerson} m<sup>3</sup>/pers
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Emisjonsbelastning
-                </td>
-                <td>
-                  {ventData.vent_data.AirEmission} m<sup>3</sup>/m<sup>2</sup>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Prosessventilasjon
-                </td>
-                <td>
-                  {ventData.vent_data.AirProcess} m<sup>3</sup>/h
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Minimum ventilasjon
-                </td>
-                <td>
-                  {ventData.vent_data.AirMinimum} m<sup>3</sup>/h
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Ventilasjonsprinsipp
-                </td>
-                <td>
-                  {ventData.vent_data.VentilationPrinciple}
-                </td>
-              </tr>
+              <RoomDataRow rowName="Luft per person">{ventData.vent_data.AirPerPerson} m<sup>3</sup>/pers</RoomDataRow>
+              <RoomDataRow rowName="Emisjonsbelastning">{ventData.vent_data.AirEmission} m<sup>3</sup>/m<sup>2</sup></RoomDataRow>
+              <RoomDataRow rowName="Prosessventilasjon">{ventData.vent_data.AirProcess} m<sup>3</sup>/h</RoomDataRow>
+              <RoomDataRow rowName="Minimum ventilasjon">{ventData.vent_data.AirMinimum} m<sup>3</sup>/h</RoomDataRow>
+              <RoomDataRow rowName="Ventilasjonsprinsipp">{ventData.vent_data.VentilationPrinciple}</RoomDataRow>
+              <RoomDataRow rowName="Varmeveksler">{ventData.vent_data.HeatExchange}</RoomDataRow>
+              <RoomDataRow rowName="Styring">{ventData.vent_data.RoomControl}</RoomDataRow>
+              <RoomDataRow rowName="Presiseringer">{ventData.vent_data.Notes}</RoomDataRow>
+              <RoomDataRow rowName="dB teknisk utstyr">{ventData.vent_data.DbTechnical}</RoomDataRow>
+              <RoomDataRow rowName="dB korridor naborom">{ventData.vent_data.DbNeighbour}</RoomDataRow>
+              <RoomDataRow rowName="dB mot korridor">{ventData.vent_data.DbCorridor}</RoomDataRow>
+              <RoomDataRow rowName="Kommentar"></RoomDataRow>
 
-              <tr>
-                <td>
-                  Varmeveksler
-                </td>
-                <td>
-                  {ventData.vent_data.HeatExchange}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Styring
-                </td>
-                <td>
-                  {ventData.vent_data.RoomControl}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Presiseringer
-                </td>
-                <td style={{wordWrap: "break-word", wordBreak: "break-all", whiteSpace: "normal"}}>
-                  {ventData.vent_data.Notes}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  dB teknisk utstyr
-                </td>
-                <td>
-                  {ventData.vent_data.DbTechnical}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  dB korridor naborom
-                </td>
-                <td>
-                  {ventData.vent_data.DbNeighbour}
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  dB korridor naborom
-                </td>
-                <td>
-                  {ventData.vent_data.DbNeighbour}
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  dB mot korridor
-                </td>
-                <td>
-                  {ventData.vent_data.DbCorridor}
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  Kommentarer
-                </td>
-                <td>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>

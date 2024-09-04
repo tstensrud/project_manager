@@ -177,7 +177,7 @@ function Heating() {
                                                                                     .filter(key => key === floor)
                                                                                     .map(key => (
                                                                                         <React.Fragment key={key}>
-                                                                                            <span className="heating-text">{Number(buildingSummaryData[0].floor_summaries_heating[key].demand.toFixed(0)).toLocaleString()}</span>
+                                                                                            <span className="heating-text"><strong>{Number(buildingSummaryData[0].floor_summaries_heating[key].demand.toFixed(0)).toLocaleString()}</strong></span>
                                                                                         </React.Fragment>
                                                                                     ))
                                                                             }
@@ -189,7 +189,7 @@ function Heating() {
                                                                                     .filter(key => key === floor)
                                                                                     .map(key => (
                                                                                         <React.Fragment key={key}>
-                                                                                            <span className="heating-text">{Number(buildingSummaryData[0].floor_summaries_heating[key].chosen.toFixed(0)).toLocaleString()}</span>
+                                                                                            <span className="heating-text"><strong>{Number(buildingSummaryData[0].floor_summaries_heating[key].chosen.toFixed(0)).toLocaleString()}</strong></span>
                                                                                         </React.Fragment>
                                                                                     ))
                                                                             }
@@ -207,31 +207,31 @@ function Heating() {
                                                 <table className="fl-table">
                                                     <tfoot>
                                                         <tr>
-                                                            <th width="2%"></th>
-                                                            {/* <th width="2%"></th> */}
-                                                            <th width="5%">
+                                                            <td width="2%"></td>
+                                                            {/* <td width="2%"></td> */}
+                                                            <td width="5%">
                                                                 Sum
-                                                            </th>
-                                                            <th width="5%"></th>
-                                                            <th width="5%"></th>
-                                                            <th width="5%"></th>
-                                                            <th width="5%"></th>
-                                                            <th width="5%"></th>
-                                                            <th width="5%"></th>
-                                                            <th width="5%"></th>
-                                                            <th width="5%">
+                                                            </td>
+                                                            <td width="5%"></td>
+                                                            <td width="5%"></td>
+                                                            <td width="5%"></td>
+                                                            <td width="5%"></td>
+                                                            <td width="5%"></td>
+                                                            <td width="5%"></td>
+                                                            <td width="5%"></td>
+                                                            <td width="5%">
                                                                 <strong>
                                                                     {buildingSummaryData?.[0]?.heatingDemand != null ? <><span className="heating-text">{((buildingSummaryData[0].heatingDemand) / 1000).toFixed(1)}</span> <br />kW</> : ''}
                                                                 </strong>
-                                                            </th>
-                                                            <th width="5%">
+                                                            </td>
+                                                            <td width="5%">
                                                                 <strong>
                                                                     {buildingSummaryData?.[0]?.heating != null ? <><span className="heating-text">{((buildingSummaryData[0].heating) / 1000).toFixed(1)}</span> <br />kW</> : ''}
                                                                 </strong>
-                                                            </th>
-                                                            <th width="5%"></th>
-                                                            <th width="8%"></th>
-                                                            <th width="8%"></th>
+                                                            </td>
+                                                            <td width="5%"></td>
+                                                            <td width="8%"></td>
+                                                            <td width="8%"></td>
 
                                                         </tr>
                                                     </tfoot>

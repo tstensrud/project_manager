@@ -20,6 +20,13 @@ function Project () {
     useEffect(() => {
         const projectName = data?.data?.ProjectName;
         setActiveProjectName(projectName);
+        
+        const activeProjectData = {
+            projectName: data?.data?.ProjectName,
+            projectId: data?.data?.uid
+        }
+
+        localStorage.setItem("projectData", JSON.stringify(activeProjectData))
     },[data]);
     
     return (

@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
+import useFetch from './hooks/useFetch';
 
 const GlobalContext = createContext();
 
@@ -43,7 +44,7 @@ const GlobalProvider = ({ children }) => {
             localStorage.setItem("theme", "light");
         }
     }, [darkmode]);
-
+    
     return (
         <GlobalContext.Provider value={value}>
             {children}

@@ -21,8 +21,11 @@ function Navbar() {
     // useEffects
     useEffect(() => {
         refetchUserInfo();
-        const projectId = localStorage.getItem("projectid");
+        const projectData = JSON.parse(localStorage.getItem("projectData"))
+        const projectId = projectData.projectId;
+        const projectName = projectData.projectName;
         setActiveProject(projectId);
+        setActiveProjectName(projectName);
     }, []);
 
     useEffect(() => {
@@ -44,7 +47,7 @@ function Navbar() {
         setDisplayMenuContainer(false);
         setDisplayDashboardContainer(false);
     }
-
+    
     return (
         <>
             {
@@ -56,40 +59,37 @@ function Navbar() {
                                     <div onMouseEnter={handleShowProjectMenu} onMouseLeave={handleHideProjectMenu} className="project-menu-container">
                                         <div className="menu-sub-container">
                                             <div className="menu-sub-sub-container">
+                                                <div className="menu-item-title">Prosjekt</div>
+                                                <div className="menu-link-container"><Link className="menu-link" to={`project/${activeProject}`}>Prosjektoversikt</Link></div>
+                                                <div className="menu-link-container"><Link className="menu-link" to={`buildings/${activeProject}`}>Bygg</Link></div>
+                                                <div className="menu-link-container"><Link className="menu-link" to={`rooms/${activeProject}`}>Romliste</Link></div>
+                                            </div>
+                                            <div className="menu-sub-sub-container">
                                                 <div className="menu-item-title">Ventilasjon</div>
                                                 <div className="menu-link-container"><Link className="menu-link" to={`ventsystems/${activeProject}`}>Systemer</Link></div>
                                                 <div className="menu-link-container"><Link className="menu-link" to={`ventilation/${activeProject}`}>Luftmengdetabell</Link></div>
                                             </div>
-
                                             <div className="menu-sub-sub-container">
                                                 <div className="menu-item-title">Energiberegninger</div>
                                                 <div className="menu-link-container"><Link className="menu-link" to={`heating/${activeProject}`}>Varmetapsberegninger</Link></div>
                                                 <div className="menu-link-container"><Link className="menu-link" to={`cooling/${activeProject}`}>Kjølebehovsberegninger</Link></div>
                                             </div>
+                                        </div>
 
+                                        <div className="menu-sub-container">
                                             <div className="menu-sub-sub-container">
                                                 <div className="menu-item-title">Sanitær</div>
                                                 <div className="menu-link-container"><Link className="menu-link" to={`sanitary/${activeProject}`}>Sammendrag</Link></div>
                                                 <div className="menu-link-container"><Link className="menu-link" to={`sanitary/equipment/${activeProject}`}>Sanitærutstyr</Link></div>
                                                 <div className="menu-link-container"><Link className="menu-link" to={`sanitary/shafts/${activeProject}`}>Sanitærsjakter</Link></div>
                                             </div>
-                                        </div>
-
-                                        <div className="menu-sub-container">
-                                            <div className="menu-sub-sub-container">
-                                                <div className="menu-item-title">Prosjekt</div>
-                                                <div className="menu-link-container"><Link className="menu-link" to={`project/${activeProject}`}>Prosjektoversikt</Link></div>
-                                                <div className="menu-link-container"><Link className="menu-link" to={`buildings/${activeProject}`}>Bygg</Link></div>
-                                                <div className="menu-link-container"><Link className="menu-link" to={`rooms/${activeProject}`}>Romliste</Link></div>
-
-                                            </div>
-
                                             <div className="menu-sub-sub-container">
                                                 <div className="menu-item-title">Annet</div>
                                                 <div className="menu-link-container"><Link className="menu-link" to={`settings/${activeProject}`}>Innstillinger</Link></div>
                                                 <div className="menu-link-container"><Link className="menu-link" to={`reports/${activeProject}`}>Rapporter</Link></div>
                                             </div>
                                         </div>
+
                                     </div>
                                     <div onClick={handleShadeClick} className="background-shader">
                                     </div>
@@ -171,7 +171,7 @@ function Navbar() {
                         </div>
                         <div className="toggle-switch">
                             <input onClick={toggleDarkModeContainer} type="checkbox" id="toggle" />
-                            <label for="toggle" className="slider"></label>
+                            <label htmlFor="toggle" className="slider"></label>
                         </div>
                         <div style={{ display: "flex", marginLeft: "10px" }}>
                             <SunIcon />

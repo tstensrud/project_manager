@@ -84,6 +84,7 @@
   position: relative;
 }
 
+
 .table-title {
   color: var(--primary-color);
   font-size: 13px;
@@ -156,7 +157,7 @@
 }
 
 .summary-row {
-  background-color: var(--table-hover);
+  background-color: var(--secondary-color);
 }
 
 .supplyCell {
@@ -212,7 +213,7 @@
 }
 
 .fl-table-summary-sub-title {
-  background-color: var(--table-hover);
+  background-color: var(--tertiary-color);
 }
 
 
@@ -297,6 +298,8 @@
   z-index: 1000;
   width: 600px;
   overflow-y: auto;
+  border-radius: var(--default-border-radius);
+
 }
 
 .room-info-ventilation-popup {

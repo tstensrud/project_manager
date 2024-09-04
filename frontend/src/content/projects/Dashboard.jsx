@@ -19,15 +19,13 @@ function Dashboard() {
   useEffect(() => {
     setActiveProject('0');
     setActiveProjectName('');
-    localStorage.removeItem("projectid");
-    localStorage.removeItem("projectname");
+    localStorage.removeItem("projectData");
   }, []);
 
   const handleChange = (e) => {
     const projectId = e.target.value;
     setProjectId(projectId);
     setActiveProject(projectId);
-    localStorage.setItem("projectid", projectId);
   }
 
   const handleSubmit = (e) => {

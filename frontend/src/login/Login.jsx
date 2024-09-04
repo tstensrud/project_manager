@@ -65,8 +65,7 @@ function Login(props) {
                                 <p className="message">Structor TS prosjekter</p>
                                 <p>
                                     <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-post" />
-                                    </p>
-                                    <p>
+                                    <br />
                                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passord" />
                                 </p>
 
