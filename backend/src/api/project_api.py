@@ -464,8 +464,6 @@ def ventilation_update_room(project_uid, room_uid, cooling):
     if updated_vent_calc is False:
         return jsonify({"success": False, "error": "Kunne ikke oppdatere ventilasjonsberegninger"})
 
-    
-           
     if cooling == "1":
         dbo.calculate_total_cooling_for_room(room_uid)
     
@@ -715,7 +713,6 @@ def update_room_sanitary(project_uid, room_uid):
 def get_sanitary_building_summary(project_uid, building_uid):
     building = dbo.get_building(building_uid)
     if building:
-        print("Starting timer")
         curve = building.graph_curve
         building_sanitary_totals = sc.sum_flows_building(building_uid, curve)
         totals = {
@@ -755,7 +752,6 @@ def update_curve(project_uid, building_uid):
 @project_api_bp.route('/excel/<sheet>/', methods=['GET'])
 @jwt_required()
 def ventilation_excel(project_uid, sheet):
-    print(sheet)
     if sheet == "ventilation":
         file = excel.generate_excel_report(project_uid, vent=True)
     elif sheet == "heating":

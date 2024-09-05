@@ -1,5 +1,4 @@
 import React, { createContext, useEffect, useState } from 'react';
-import useFetch from './hooks/useFetch';
 
 const GlobalContext = createContext();
 

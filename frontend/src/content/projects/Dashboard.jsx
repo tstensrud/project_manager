@@ -44,38 +44,36 @@ function Dashboard() {
           loading && loading === true ? (
             <LoadingSpinner />
           ) : (
-            <>
-              <div className="flex-container-row">
-                <div className="content-card">
-                  <div className="content-card-container">
-                    <h2 className="card-title">Velg prosjekt</h2>
-                    <form className="custom-form profile-form" onSubmit={handleSubmit}>
-                      <p className="info">Velg prosjekt å jobbe på fra menyen under, eller opprett nytt prosjekt fra menyen over: Dashboard - Nytt prosjekt</p>
-                      <p className="info">
-                        <select className="card-select" ref={inputRef} onChange={handleChange}>
-                          <option>- Velg prosjekt -</option>
-                          {Array.isArray(data?.data) ? (
-                            data.data.map((project) => (
-                              <option key={project.ProjectName} value={project.uid}>{project.ProjectNumber} {project.ProjectName}</option>
-                            ))
-                          ) : (
-                            <>{data.data}</>
-                          )}
-                        </select>
-                      </p>
-                      <p>
-                        <button type="submit" className="card-button">
-                          Gå til valgt prosjekt
-                        </button>
-                      </p>
-                    </form>
-                  </div>
-                  <div>
-                    {error && error.message}
-                  </div>
+            <div className="flex-container-row">
+              <div className="content-card">
+                <div className="content-card-container">
+                  <h2 className="card-title">Velg prosjekt</h2>
+                  <form className="custom-form profile-form" onSubmit={handleSubmit}>
+                    <p className="info">Velg prosjekt å jobbe på fra menyen under, eller opprett nytt prosjekt fra menyen over: Dashboard - Nytt prosjekt</p>
+                    <p className="info">
+                      <select className="card-select" ref={inputRef} onChange={handleChange}>
+                        <option>- Velg prosjekt -</option>
+                        {Array.isArray(data?.data) ? (
+                          data.data.map((project) => (
+                            <option key={project.ProjectName} value={project.uid}>{project.ProjectNumber} {project.ProjectName}</option>
+                          ))
+                        ) : (
+                          <>{data.data}</>
+                        )}
+                      </select>
+                    </p>
+                    <p>
+                      <button type="submit" className="card-button">
+                        Gå til valgt prosjekt
+                      </button>
+                    </p>
+                  </form>
+                </div>
+                <div>
+                  {error && error.message}
                 </div>
               </div>
-            </>
+            </div>
           )
         }
       </div>

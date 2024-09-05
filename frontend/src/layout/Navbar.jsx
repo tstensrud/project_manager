@@ -22,10 +22,13 @@ function Navbar() {
     useEffect(() => {
         refetchUserInfo();
         const projectData = JSON.parse(localStorage.getItem("projectData"))
-        const projectId = projectData.projectId;
-        const projectName = projectData.projectName;
-        setActiveProject(projectId);
-        setActiveProjectName(projectName);
+        if (projectData) {
+            const projectId = projectData.projectId;
+            const projectName = projectData.projectName;
+            setActiveProject(projectId);
+            setActiveProjectName(projectName);
+        }
+
     }, []);
 
     useEffect(() => {

@@ -498,13 +498,13 @@ def check_if_roomnumber_exists(building_uid, room_number) -> bool:
     return False
 
 def update_room_data(room_uid: int, data) -> bool:
-    print(data)
+    #print(data)
     room = get_room(room_uid)
     room_columns = {column.key for column in inspect(models.Rooms).mapper.column_attrs}
     for column in room_columns:
         for key, value in data.items():
             if column == key:
-                print(f"Setting {value} into {column} for room {room}")
+                #print(f"Setting {value} into {column} for room {room}")
                 setattr(room, column, value)
 
                 if key == "area" or key == "room_population":
@@ -520,7 +520,7 @@ def update_room_data(room_uid: int, data) -> bool:
         db.session.commit()
         return True
     except Exception as e:
-        print("Commit failed")
+        #print("Commit failed")
         db.session.rollback()
         globals.log(f"update_room_data(): {e}")
         return False
@@ -559,6 +559,9 @@ def update_ventilation_calculations(room_uid: int) -> bool:
         room.air_chosen = round((room.air_supply / room.area), 1)
     else:
         room.air_chosen = 0.0
+    
+    if room.system_uid:
+        update_system_airflows(room.system_uid)
     try:
         db.session.commit()
         return True
@@ -753,7 +756,7 @@ def update_airflow_changed_system(system_uid_new: int, system_uid_old: int) -> b
         return False
 
 def update_system_info(system_uid: int, data: dict) -> bool:
-    print(f"Received data: {data}")
+    #print(f"Received data: {data}")
     system = get_system(system_uid)
     processed_data = {}
     for key, value in data.items():
@@ -862,12 +865,12 @@ def update_room_type_data(data, room_uid: str) -> bool:
     room_columns = {column.key for column in inspect(models.RoomTypes).mapper.column_attrs}
     for key in room_columns:
         if key == processed_data_list[0]:
-            print(f"Setting {processed_data[key]} into {key} for room {room}")
+            #print(f"Setting {processed_data[key]} into {key} for room {room}")
             setattr(room, key, processed_data[key])
 
             project_rooms_with_room_type = db.session.query(models.Rooms).filter(models.Rooms.room_type_uid == room_uid).all()
             for project_room in project_rooms_with_room_type:
-                print("Changing project rooms")
+                #print("Changing project rooms")
                 setattr(project_room, key, processed_data[key])
                 update_ventilation_calculations(project_room.uid)
             break
@@ -875,7 +878,7 @@ def update_room_type_data(data, room_uid: str) -> bool:
         db.session.commit()
         return True
     except Exception as e:
-        print("Commit failed")
+        #print("Commit failed")
         db.session.rollback()
         globals.log(f"update_room_type_data(): {e}")
         return False
@@ -1078,11 +1081,9 @@ def calculate_total_heat_loss_for_room(room_uid: int) -> bool:
 def get_all_rooms_building(building_uid: int) -> list[models.Rooms]:
     rooms = db.session.query(models.Rooms).join(models.Buildings).filter(
         models.Buildings.uid == building_uid).all()
-    if not rooms:
-        print(f"No rooms found for building_uid: {building_uid}")
-    else:
-        print(f"Found {len(rooms)} rooms for building_uid: {building_uid}")
-    return rooms
+    if rooms:
+        return rooms
+    return None
 
 def sum_heatloss_demand_building_floor(building_uid: str, floor: str) -> float:
     heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(and_(

@@ -74,12 +74,10 @@ select:focus {
 
 .form-button:hover {
   border-color: var(--form-element-hover);
-  font-weight: 500;
 }
 
 .form-button:focus {
   border-color: var(--form-element-hover);
-  font-weight: 500;
 }
 
 .table-sorting-button {
@@ -485,12 +483,10 @@ input[type="file"]::file-selector-button:active {
 
 .card-button:hover {
   border-color: var(--form-element-hover);
-  font-weight: 500;
 }
 
 .card-button:focus {
   border-color: var(--form-element-hover);
-  font-weight: 500;
 }
 
 /* Container for input and label */
