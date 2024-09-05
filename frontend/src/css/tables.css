@@ -173,17 +173,6 @@
 }
 
 /* Summaries */
-
-.popup {
-  position: absolute;
-  background: #333;
-  color: var(--primary-color);
-  padding: 5px;
-  border-radius: var(--default-border-radius);
-  white-space: nowrap;
-  z-index: 10;
-}
-
 .fl-table-summary {
   color: var(--primary-color);
   font-size: 13px;
@@ -236,58 +225,43 @@
 }
 
 /* Room data table*/
-.fl-table-room-data {
-  color: var(--primary-color);
-  font-size: 13px;
-  font-weight: normal;
-  border-radius: var(--default-border-radius);
-  border-collapse: collapse;
+.room-data-row-container {
+  display: flex;
   width: 100%;
-  white-space: nowrap;
-  background-color: var(--table-background-color);
-}
-
-.fl-table-room-data td, .fl-table-room-data th {
-  text-align: center;
-  padding-top: 5px;
+  padding-top: 10px;
   padding-bottom: 5px;
   padding-left: 20px;
-  box-sizing: border-box;
-  text-align: left;
+  border-bottom: var(--default-border);
+  background-color: var(--secondary-color);
 }
 
-
-.fl-table-room-data td {
-  border-top: var(--default-border);
-  font-size: 13px;
-  min-width: 220px;
-  overflow: hidden;
-  position: relative;
+.room-data-row-container:hover {
+  background-color: var(--tertiary-color);
 }
 
-.fl-table-room-data-sub-title {
-  background-color: var(--table-hover);
+.room-data-row-left {
+  display: flex;
+  width: 50%;
 }
 
-
-.fl-table-room-data thead th {
-  color: var(--primary-color);
-  background-color: var(--table-hover);
-  top: 0;
-  height: 25px;
-  position: sticky;
-  z-index: 1;
+.room-data-row-right {
+  display: flex;
+  justify-content: end;
+  width: 50%;
+  padding-right: 15px;
+  font-size: 15px;
 }
 
-.fl-table-room-data td:nth-child(odd) {
-  width: 20%;
+.room-data-header {
+  font-size: 18px;
+  font-weight: 500;
+  width: 100%;
 }
 
-.fl-table-room-data tr:hover {
-  background-color: var(--table-hover);
-  color: var(--primary-color);
+.room-data-row {
+  font-size: 15px;
+  width: 100%;
 }
-
 
 .room-info-ventilation-container {
   position: fixed;
@@ -299,19 +273,12 @@
   width: 600px;
   overflow-y: auto;
   border-radius: var(--default-border-radius);
-
-}
-
-.room-info-ventilation-popup {
-  position: relative;
-  width: 100%;
-  font-size: 14px;
 }
 
 .room-data-close-btn {
-  position: absolute;
+  display: flex;
+  right: 15px;
   color: var(--primary-color);
-  top: 0px;
   right: 15px;
   font-size: 20px;
   cursor: pointer;

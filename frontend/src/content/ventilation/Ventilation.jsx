@@ -141,26 +141,26 @@ function Ventilation() {
                                                                         <div className="table-wrapper">
 
                                                                             <div className="table-title">
-                                                                                <h3>Etasje {floor}</h3>                                                                            
+                                                                                <h3>Etasje {floor}</h3>
                                                                             </div>
 
                                                                             <table className="fl-table">
                                                                                 <tbody>
                                                                                     <tr>
-                                                                                        <td style={{border: "0px"}} width="2%"></td>
-                                                                                        <td style={{border: "0px"}} width="10%"></td>
-                                                                                        <td style={{border: "0px"}} width="6%"></td>
-                                                                                        <td style={{border: "0px"}} width="6%"></td>
-                                                                                        <td style={{border: "0px"}} width="6%"></td>
-                                                                                        <td style={{border: "0px"}} width="6%"></td>
-                                                                                        <td style={{border: "0px"}} width="6%"></td>
-                                                                                        <td style={{border: "0px"}} width="6%"></td>
-                                                                                        <td style={{border: "0px"}} width="6%"></td>
-                                                                                        <td style={{border: "0px"}} width="6%"></td>
-                                                                                        <td style={{border: "0px"}} width="6%"></td>
-                                                                                        <td style={{border: "0px"}} width="34%"></td>
+                                                                                        <td style={{ border: "0px" }} width="2%"></td>
+                                                                                        <td style={{ border: "0px" }} width="10%"></td>
+                                                                                        <td style={{ border: "0px" }} width="6%"></td>
+                                                                                        <td style={{ border: "0px" }} width="6%"></td>
+                                                                                        <td style={{ border: "0px" }} width="6%"></td>
+                                                                                        <td style={{ border: "0px" }} width="6%"></td>
+                                                                                        <td style={{ border: "0px" }} width="6%"></td>
+                                                                                        <td style={{ border: "0px" }} width="6%"></td>
+                                                                                        <td style={{ border: "0px" }} width="6%"></td>
+                                                                                        <td style={{ border: "0px" }} width="6%"></td>
+                                                                                        <td style={{ border: "0px" }} width="6%"></td>
+                                                                                        <td style={{ border: "0px" }} width="34%"></td>
                                                                                     </tr>
-                                                                                    
+
                                                                                     {
                                                                                         sortedBuildings && sortedBuildings.length > 0 ? (
                                                                                             sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={12} roomId={room.uid} systems={ventSystemData} />)
@@ -179,7 +179,9 @@ function Ventilation() {
                                                                                                     .filter(key => key === floor)
                                                                                                     .map(key => (
                                                                                                         <React.Fragment key={key}>
-                                                                                                            <strong>{Number(buildingSummaryData[0].floor_summaries[key].demand.toFixed(0)).toLocaleString()}</strong>
+                                                                                                            <strong>
+                                                                                                                {Number(buildingSummaryData[0].floor_summaries[key].demand.toFixed(0)).toLocaleString()}
+                                                                                                            </strong>
                                                                                                         </React.Fragment>
                                                                                                     ))
                                                                                             }
@@ -192,7 +194,11 @@ function Ventilation() {
                                                                                                     .filter(key => key === floor)
                                                                                                     .map(key => (
                                                                                                         <React.Fragment key={key}>
-                                                                                                            <span className="supply-text">{Number(buildingSummaryData[0].floor_summaries[key].supply.toFixed(0)).toLocaleString()}</span>
+                                                                                                            <span className="supply-text">
+                                                                                                                <strong>
+                                                                                                                    {Number(buildingSummaryData[0].floor_summaries[key].supply.toFixed(0)).toLocaleString()}
+                                                                                                                </strong>
+                                                                                                            </span>
                                                                                                         </React.Fragment>
                                                                                                     ))
                                                                                             }
@@ -204,7 +210,11 @@ function Ventilation() {
                                                                                                     .filter(key => key === floor)
                                                                                                     .map(key => (
                                                                                                         <React.Fragment key={key}>
-                                                                                                            <span className="extract-text">{Number(buildingSummaryData[0].floor_summaries[key].extract.toFixed(0)).toLocaleString()}</span>
+                                                                                                            <span className="extract-text">
+                                                                                                                <strong>
+                                                                                                                    {Number(buildingSummaryData[0].floor_summaries[key].extract.toFixed(0)).toLocaleString()}
+                                                                                                                </strong>
+                                                                                                            </span>
                                                                                                         </React.Fragment>
                                                                                                     ))
                                                                                             }
@@ -255,7 +265,6 @@ function Ventilation() {
                                                     </>
                                                 )
                                             }
-
                                         </>
                                     )
                                 ) : (<span></span>)

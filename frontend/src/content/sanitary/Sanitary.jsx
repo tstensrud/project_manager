@@ -27,7 +27,8 @@ function Sanitary() {
                                 ) : (
                                     data && data.building_data && Object.keys(data.building_data).map((key) => (
                                         <BuildingSummary buildingUid={data.building_data[key].uid} projectId={projectId} key={data.building_data[key].uid} />
-                                    )))
+                                    )
+                                ))
                             }
                         </div>
                     )

@@ -201,8 +201,7 @@ function Rooms() {
                                                                         <tr>
                                                                             <th width="2%">#</th>
                                                                             <th width="12%">Bygg</th>
-                                                                            <th width="4%">Etasje</th>
-                                                                            <th width="6%">Romnr</th>
+                                                                            <th width="10%">Romnr</th>
                                                                             <th width="15%">Romtype</th>
                                                                             <th width="10%">Romnavn</th>
                                                                             <th width="5%">Areal <br /> m<sup>2</sup></th>
@@ -218,6 +217,11 @@ function Rooms() {
                                                                 floors && floors.map(floor => (
                                                                     <React.Fragment key={floor}>
                                                                         <div className="table-wrapper">
+                                                                            
+                                                                            <div className="table-title">
+                                                                                <h3>Etasje {floor}</h3>
+                                                                            </div>
+
                                                                             <table className="fl-table">
                                                                                 <tbody>
                                                                                     {

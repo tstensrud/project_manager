@@ -1,26 +1,17 @@
 function RoomDataRow(props) {
     return (
-        <tr>
-            {props.rowName === "Presiseringer" ? (
-                <>
-                    <td className="grey-text" style={{ wordWrap: "break-word", wordBreak: "break-all", whiteSpace: "normal" }}>
+        <div className="room-data-row-container">
+            <div className="room-data-row-left">
+                <div className="room-data-row">
+                    <span className="grey-text">
                         {props.rowName}
-                    </td>
-                    <td>
-                        {props.children}
-                    </td>
-                </>
-            ) : (
-                <>
-                    <td className="grey-text">
-                        {props.rowName}
-                    </td>
-                    <td>
-                        {props.children}
-                    </td>
-                </>
-            )}
-        </tr>
+                    </span>
+                </div>
+            </div>
+            <div className="room-data-row-right">
+                <strong>{props.children}</strong>
+            </div>
+        </div>
     );
 }
 

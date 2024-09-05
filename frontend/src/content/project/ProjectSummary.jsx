@@ -19,7 +19,7 @@ function ProjectSummary({ projectId }) {
                                 {
                                     data && data.data ? (
                                         <>
-                                            <CardTitle svg={<StarIcon />} title={<>{data && data.data.ProjectName} oppsummert</>} />
+                                            <CardTitle svg={<StarIcon />} title={<>{data && data.data.ProjectName}</>} />
                                             <div className="content-card-inner-container">
                                                 <div style={{ marginBottom: "10px" }} className="grey-text">
                                                     <h4>Prosjektbeskrivelse</h4>

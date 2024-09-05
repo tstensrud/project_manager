@@ -125,12 +125,15 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
                         </>
                     ) : (
                         <>
-                            <td style={{ cursor: 'pointer' }} width="2%" onClick={handleOnMarkedRow}><MarkRowIcon /></td>
-                            {/* <td style={{ width: "50px" }}>{allRoomData ? allRoomData.Floor : ''}</td> */}
+                            <td style={{ cursor: 'pointer' }} width="2%" onClick={handleOnMarkedRow}>
+                                <MarkRowIcon />
+                            </td>
                             <td width="12%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ /*cursor: 'pointer',*/ textTransform: 'uppercase' }}>
                                 <strong>{allRoomData ? allRoomData.RoomNumber : ''}</strong>
                                 <br />
-                                <span className="table-text-grey">{allRoomData ? allRoomData.RoomName : ''}</span>
+                                <span className="table-text-grey">
+                                    {allRoomData ? allRoomData.RoomName : ''}
+                                </span>
                             </td>
                             {renderEditableCell("shaft", "5%")}
                             {renderEditableCell("sink_1_14_inch", "5%")}

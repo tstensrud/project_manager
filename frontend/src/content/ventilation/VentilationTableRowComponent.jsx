@@ -168,28 +168,48 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
                         <>
                             {
                                 Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="loading-text" key={index}>#### <br/></td>
+                                    <td className="loading-text" key={index}>#### <br /></td>
                                 ))
                             }
                         </>
                     ) : (
                         <>
-                        
-                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}><MarkRowIcon /></td>
+
+                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>
+                                <MarkRowIcon />
+                            </td>
                             {/* <td width="2%">{allRoomData ? allRoomData.Floor : ''}</td> */}
                             <td width="10%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer', textTransform: 'uppercase' }}>
-                                <strong><span className="table-link">{allRoomData ? allRoomData.RoomNumber : ''}</span></strong>
+                                <strong>
+                                    <span className="table-link">
+                                        {allRoomData ? allRoomData.RoomNumber : ''}
+                                    </span>
+                                </strong>
                                 <br />
-                                <span className="table-text-grey">{allRoomData ? allRoomData.RoomName : ''}</span>
+                                <span className="table-text-grey">
+                                    {allRoomData ? allRoomData.RoomName : ''}
+                                </span>
                             </td>
-                            <td width="6%">{ventData ? (ventData.vent_data.AirPersonSum).toFixed(0) : ''} </td>
-                            <td width="6%">{ventData ? (ventData.vent_data.AirEmissionSum).toFixed(0) : ''}</td>
-                            <td width="6%">{ventData ? ventData.vent_data.AirProcess : ''}</td>
-                            <td width="6%">{ventData ? (ventData.vent_data.AirDemand).toFixed(0) : ''}</td>
+                            <td width="6%">
+                                {ventData ? (ventData.vent_data.AirPersonSum).toFixed(0) : ''}
+                            </td>
+                            <td width="6%">
+                                {ventData ? (ventData.vent_data.AirEmissionSum).toFixed(0) : ''}
+                            </td>
+                            <td width="6%">
+                                {ventData ? ventData.vent_data.AirProcess : ''}
+                            </td>
+                            <td width="6%">
+                                {ventData ? (ventData.vent_data.AirDemand).toFixed(0) : ''}
+                            </td>
                             {renderEditableCell("AirSupply", "supplyCell", "6%")}
                             {renderEditableCell("AirExtract", "extractCell", "6%")}
-                            <td width="6%">{ventData ? ventData.vent_data.AirChosen : ''}</td>
-                            <td width="6%">{calculateMinAirFlow()}</td>
+                            <td width="6%">
+                                {ventData ? ventData.vent_data.AirChosen : ''}
+                            </td>
+                            <td width="6%">
+                                {calculateMinAirFlow()}
+                            </td>
                             <td width="6%">
                                 <select value={currentSystemName} name="systemUid" className="table-select" onChange={handleSystemChange}>
                                     {currentSystemName && currentSystemName !== null ? (<option key="0">{currentSystemName}</option>) : ''}
@@ -202,7 +222,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
                                 {ventData && ventData.vent_data.AirSupply && ventData.vent_data.AirExtract < ventData.vent_data.AirDemand ? (<>For lite luft. </>) : (<></>)}
                                 {ventData && ventData.vent_data.AirSupply !== ventData.vent_data.AirExtract ? (<>Ubalanse i rom. </>) : (<></>)}
                             </td>
-                            
+
                         </>
                     )
                 }

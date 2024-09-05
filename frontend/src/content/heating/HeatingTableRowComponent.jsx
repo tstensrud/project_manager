@@ -122,12 +122,19 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
                         </>
                     ) : (
                         <>
-                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}><MarkRowIcon /></td>
-                            {/* <td width="2%">{heatingData ? heatingData.room_data.Floor : ''}</td> */}
+                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>
+                                <MarkRowIcon />
+                            </td>
                             <td width="5%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
-                                <strong><span className="table-link">{heatingData ? heatingData.room_data.RoomNumber : ''}</span></strong>
+                                <strong>
+                                    <span className="table-link">
+                                        {heatingData ? heatingData.room_data.RoomNumber : ''}
+                                    </span>
+                                </strong>
                                 <br />
-                                <span className="table-text-grey">{heatingData ? heatingData.room_data.RoomName : ''}</span>
+                                <span className="table-text-grey">
+                                    {heatingData ? heatingData.room_data.RoomName : ''}
+                                </span>
                             </td>
                             {renderEditableCell("RoomHeight", "5%")}
                             {renderEditableCell("OuterWallArea", "5%")}
@@ -136,12 +143,28 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
                             {renderEditableCell("RoofArea", "5%")}
                             {renderEditableCell("FloorGroundArea", "5%")}
                             {renderEditableCell("FloorAirArea", "5%")}
-                            <td width="5%"><strong>{heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}</strong></td>
-                            <td width="5%">{heatingData ? heatingData.heating_data.ChosenHeating : ''}</td>
-                            <td width="5%">{heatingData && heatingData ? (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1) : ''}</td>
+                            <td width="5%">
+                                <strong>
+                                    {heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}
+                                </strong>
+                            </td>
+                            <td width="5%">
+                                {heatingData ? heatingData.heating_data.ChosenHeating : ''}
+                            </td>
+                            <td width="5%">
+                                {heatingData && heatingData ? (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1) : ''}
+                            </td>
                             {renderEditableCell("HeatSource", "8%")}
                             <td width="10%">
-                                {heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum ? (<><strong>NB!</strong> For lite valgt varme</>) : (<></>)}
+                                {
+                                    heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum ? (
+                                        <>
+                                            <strong>NB!</strong> For lite valgt varme
+                                        </>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
                             </td>
                         </>
                     )

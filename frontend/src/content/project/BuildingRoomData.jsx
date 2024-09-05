@@ -22,7 +22,7 @@ function BuildingRoomData({ projectId }) {
                                         data && data.building_data !== null && data.building_data !== undefined ? (
                                             <>
                                                 <div style={{ marginBottom: "10px" }} className="grey-text">
-                                                    <h4>Ventilasjonssystemer</h4>
+                                                    <h4>Bygg og areal</h4>
                                                 </div>
                                                 <div style={{ marginBottom: "20px" }}>
                                                     {

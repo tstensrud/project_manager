@@ -16,13 +16,14 @@
 .popup-show {
     display: block;
     position: fixed;
-    top: 15%;
+    top: 25%;
     left: 50%;
     font-size: 18px;
     transform: translate(-50%, -20%);
-    background-color: #41787a;
-    color: white;
-    border: 1px solid #ccc;
+    background-color: var(--tertiary-color);
+    color: var(--primary-color);
+    border: var(--default-border);
+    border-radius: var(--default-border-radius);
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
@@ -36,7 +37,7 @@
     position: absolute;
     top: 10px;
     right: 15px;
-    color: #ffffff;
+    color: var(--primary-color);
     font-size: 25px;
     font-weight: bold;
     cursor: pointer;
@@ -44,7 +45,7 @@
 
 .popup-close:hover,
 .popup-close:focus {
-    color: var(--navbar-active-link);
+    color: var(--accent-color);
     text-decoration: none;
     cursor: pointer;
 }

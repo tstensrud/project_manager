@@ -51,6 +51,7 @@ function Settings() {
                                 <h4>Prosjektbeskrivelse</h4>
                                 <textarea className="form-text-area" key="desc" value={data && data.data.ProjectDescription} readOnly />
                                 <h4>Kravspesifikasjon</h4>
+                                <p>
                                 <select className="card-select" name="project_specification" onChange={handleOnSpecChange}>
                                     <option value="none">- Velg -</option>
 
@@ -65,6 +66,7 @@ function Settings() {
                                     }
 
                                 </select>
+                                </p>
                                 <p>
                                     <button type="submit" className="card-button">
                                         Oppdater

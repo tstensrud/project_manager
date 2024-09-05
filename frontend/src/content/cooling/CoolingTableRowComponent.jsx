@@ -143,13 +143,15 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
                         </>
                     ) : (
                         <>
-                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}><MarkRowIcon /></td>
-                            {/* <td>{coolingData ? coolingData.room_data.Floor : ''}</td> */}
+                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>
+                                <MarkRowIcon />
+                            </td>
                             <td width="5%">
                                 {coolingData ? coolingData.room_data.RoomNumber : ''}
                                 <br />
-                                <span className="table-text-grey">{coolingData ? coolingData.room_data.RoomName : ''}</span>
-
+                                <span className="table-text-grey">
+                                    {coolingData ? coolingData.room_data.RoomName : ''}
+                                </span>
                             </td>
                             {renderEditableCell("RoomTempSummer", "5%")}
                             {renderEditableCell("VentairTempSummer", "5%")}
@@ -158,9 +160,15 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
                             {renderEditableCell("InternalHeatloadEquipment", "5%")}
                             {renderEditableCell("SunAdition", "5%")}
                             {renderEditableCell("SunReduction", "5%")}
-                            <td width="5%">{coolingData ? coolingData.cooling_data.SumInternalHeatLoad : ''}</td>
+                            <td width="5%">
+                                {coolingData ? coolingData.cooling_data.SumInternalHeatLoad : ''}
+                            </td>
                             {renderEditableCell("CoolingEquipment", "5%")}
-                            <td width="5%"><strong>{coolingData ? (coolingData.cooling_data.CoolingSum).toFixed(0) : ''}</strong></td>
+                            <td width="5%">
+                                <strong>
+                                    {coolingData ? (coolingData.cooling_data.CoolingSum).toFixed(0) : ''}
+                                </strong>
+                            </td>
                             <td width="5%">
                                 {extraAirNeeded}
                             </td>

@@ -437,9 +437,9 @@ def ventilation_update_room(project_uid, room_uid, cooling):
         key = globals.camelcase_to_snake(key)
 
         if key == "air_supply" or key == "air_extract":
-            try:
-                converted_value = globals.replace_and_convert_to_float(str(value))
-            except ValueError as e:
+            
+            converted_value = globals.replace_and_convert_to_float(str(value))
+            if converted_value is False:
                 return jsonify({"error": "Tilluft og avtrekk må kun inneholde tall"})
             processed_data[key] = converted_value
         

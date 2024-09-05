@@ -168,7 +168,6 @@ def simultanius_drainage(sum: float, graph_curve: str) -> float:
 def simultanius_tap_water(sum: float, largest_outlet: float) -> float:
     if sum == 0:
         return 0
-    #print(f"Calculating simultanious tap water. Sum water: {sum}. Largest outlet: {largest_outlet}")
     if largest_outlet > sum:
         return largest_outlet
     else:
@@ -178,9 +177,7 @@ def simultanius_tap_water(sum: float, largest_outlet: float) -> float:
 '''
 Pipe size calculations
 '''
-def pipesize_drainage_vertical(flow: float) -> str:
-    #pipe_sizes_iron = ["75", "110", "135", "160", "210", "275"]
-    
+def pipesize_drainage_vertical(flow: float) -> str:    
     if 0 < flow <= 2.4:
         return "75"
     elif 2.4 < flow <= 7.5:
@@ -199,25 +196,17 @@ def pipesize_drainage_vertical(flow: float) -> str:
         return "0"
 
 def pipesize_drainage_1_60(flow: float) -> str:
-    #pipe_sizes_iron = ["75", "110", "135", "160", "210", "275"]
-    #print(f"Flow for drainage pipe size check 1:60: {flow}")
     if 0 < flow <= 0.9:
-        #print(f"Flow is {flow}, pipe-size: 75")
         return "75"
     elif 0.9 < flow <= 3.2:
-        #print(f"Flow is {flow}, pipe-size: 110")
         return "110"
     elif 3.2 < flow <= 5.5:
-        #print(f"Flow is {flow}, pipe-size: 135")
         return "135"
     elif 5.5 < flow <= 9.0:
-        #print(f"Flow is {flow}, pipe-size: 160")
         return "160"
     elif 9.0 < flow <= 20.0:
-        #print(f"Flow is {flow}, pipe-size: 210")
         return "210"
     elif 20.0 < flow <= 40.0:
-        #print(f"Flow is {flow}, pipe-size: 275")
         return "275"
     elif flow > 40:
         return "NB! Over 40L/s"

@@ -1,14 +1,21 @@
 function RoomDataRow(props) {
     return (
-        <tr>
-            <td className="grey-text">
-                {props.rowName}
-            </td>
-            <td>
-                {props.rowData}
-                {props.children}
-            </td>
-        </tr>
+
+        <div className="room-data-row-container">
+            <div className="room-data-row-left">
+                <div className="room-data-row">
+                    <span className="grey-text">
+                        {props.rowName}
+                    </span>
+                </div>
+            </div>
+            <div className="room-data-row-right">
+                <strong>
+                    {props.rowData}
+                    {props.children}
+                </strong>
+            </div>
+        </div>
     );
 }
 

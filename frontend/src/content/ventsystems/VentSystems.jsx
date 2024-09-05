@@ -66,7 +66,7 @@ function VentSystems() {
                     systemsLoading && systemsLoading === true ? (
                         <LoadingSpinner />
                     ) : (
-                        <>
+                        <div style={{ display: "flex" }}>
                             <div className="split-container-left">
                                 <form id="system" onSubmit={handleSubmitNewSystem} role="form">
                                     <div className="input-container">
@@ -97,7 +97,7 @@ function VentSystems() {
                                             <option value="0">Ingen</option>
                                         </select>
                                     </p>
-                                    <p style={{display: "flex", textAlign: "center", alignItems: "center"}}>
+                                    <p style={{ display: "flex", textAlign: "center", alignItems: "center" }}>
                                         Spesialsystem&nbsp;
                                         <input type="checkbox" onChange={handleCheckBoxChange} name="special_system" tabIndex="6" />
                                     </p>
@@ -149,7 +149,7 @@ function VentSystems() {
                                     ) : (<></>)
                                 }
                             </div>
-                        </>
+                        </div>
                     )
                 }
 

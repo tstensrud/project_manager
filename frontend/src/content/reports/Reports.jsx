@@ -1,4 +1,4 @@
-import { Link, UNSAFE_NavigationContext, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 // Hooks
 import useFetchExcel from '../../hooks/useFetchExcel'
@@ -6,7 +6,6 @@ import useFetchExcel from '../../hooks/useFetchExcel'
 // Components
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeaderIcon from '../../assets/svg/reportsIcon.svg?react';
-import { useEffect } from 'react';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 
 
@@ -15,7 +14,6 @@ function Reports() {
     const { response: ventResponse, loading: ventLoading, error: ventError, handleSubmit: submitVentilation } = useFetchExcel(`/project_api/${projectId}/excel/ventilation/`);
     const { response: heatingResponse, loading: heatingLoading, error: heatingError, handleSubmit: submitHeating } = useFetchExcel(`/project_api/${projectId}/excel/heating/`);
     const { response: coolingResponse, loading: coolingLoading, error: coolingError, handleSubmit: submitCooling } = useFetchExcel(`/project_api/${projectId}/excel/cooling/`);
-    //console.log(response)
 
     const handleGetVentSheet = (e) => {
         e.preventDefault(e);
@@ -36,9 +34,6 @@ function Reports() {
         e.preventDefault();
     }
 
-
-
-
     return (
         <>
             <div className="main-content">
@@ -58,9 +53,8 @@ function Reports() {
                                     <Link to="#" onClick={handleGetCoolingSheet}>Kjølebehov</Link>
                                 </li>
                                 <li>
-                                    <Link to="#" onClick={handleGetHeatingSheet}>Sanitærutstyr</Link>
+                                    <Link to="#" /* onClick={handleGetSanitarySheet }*/>Sanitærutstyr</Link>
                                 </li>
-
                             </ul>
                         </div>
                     </div>
@@ -70,58 +64,57 @@ function Reports() {
                     <div className="content-card">
                         <div className="content-card-container">
                             <h3>Klartgjorte filer</h3>
-                            {ventLoading && ventLoading === true || heatingLoading && heatingLoading === true ? (
-                                <>
-                                    Genererer fil <LoadingSpinner />
-                                </>
-                            ) : (
-                                <>
-                                    <span style={{ display: "flex", width: "100%", flexDirection: "column" }}>
-                                        {
-                                            ventError && ventError || heatingError && heatingError ? (
-                                                <>
-                                                    <p>
-                                                        {ventError}
-                                                    </p>
-                                                    <p>
-                                                        {heatingError}
-                                                    </p>
-                                                </>
-                                            ) : (<></>)
-                                        }
+                            {
+                                ventLoading && ventLoading === true || heatingLoading && heatingLoading === true ? (
+                                    <>
+                                        Genererer fil <LoadingSpinner />
+                                    </>
+                                ) : (
+                                    <>
+                                        <span style={{ display: "flex", width: "100%", flexDirection: "column" }}>
+                                            {
+                                                ventError && ventError || heatingError && heatingError ? (
+                                                    <>
+                                                        <p>
+                                                            {ventError}
+                                                        </p>
+                                                        <p>
+                                                            {heatingError}
+                                                        </p>
+                                                    </>
+                                                ) : (<></>)
+                                            }
 
-                                        {
-                                            ventResponse && ventResponse.success === true ? (
-                                                <span>
-                                                    -&nbsp;<Link to={ventResponse.data}>Luftmengdetabell.xlsx</Link>
-                                                </span>
-                                            ) : (<>{ventResponse && ventResponse.message}</>)
-                                        }
+                                            {
+                                                ventResponse && ventResponse.success === true ? (
+                                                    <span>
+                                                        -&nbsp;<Link to={ventResponse.data}>Luftmengdetabell.xlsx</Link>
+                                                    </span>
+                                                ) : (<>{ventResponse && ventResponse.message}</>)
+                                            }
 
-                                        {
-                                            heatingResponse && heatingResponse.success === true ? (
-                                                <span>
-                                                    -&nbsp;<Link to={heatingResponse.data}>Varmetapsberegning.xlsx</Link>
-                                                </span>
-                                            ) : (<>{heatingResponse && heatingResponse.message}</>)
-                                        }
+                                            {
+                                                heatingResponse && heatingResponse.success === true ? (
+                                                    <span>
+                                                        -&nbsp;<Link to={heatingResponse.data}>Varmetapsberegning.xlsx</Link>
+                                                    </span>
+                                                ) : (<>{heatingResponse && heatingResponse.message}</>)
+                                            }
 
-                                        {
-                                            coolingResponse && coolingResponse.success === true ? (
-                                                <span>
-                                                    -&nbsp;<Link to={coolingResponse.data}>Kjøleberegning.xlsx</Link>
-                                                </span>
-                                            ) : (<>{coolingResponse && coolingResponse.message}</>)
-                                        }
-                                    </span>
-                                </>
-                            )}
-
+                                            {
+                                                coolingResponse && coolingResponse.success === true ? (
+                                                    <span>
+                                                        -&nbsp;<Link to={coolingResponse.data}>Kjøleberegning.xlsx</Link>
+                                                    </span>
+                                                ) : (<>{coolingResponse && coolingResponse.message}</>)
+                                            }
+                                        </span>
+                                    </>
+                                )
+                            }
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </>
     );

@@ -9,9 +9,7 @@
   --secondary-color: rgb(18, 28, 38);
   --tertiary-color: rgb(12, 18, 25);
   --accent-color: #00FFA7;
-  
   --default-border: 1px solid rgb(43, 53, 64);
-
   --inner-card-backgrounnd-color: rgba(33, 50, 68, 0.432);
   --table-header: var(--secondary-color);
   --table-footer: #161F29;
@@ -36,18 +34,14 @@
   --form-table-button-border: 2px solid rgb(43, 53, 64);
   --form-table-button-hover-background: var(--tertiary-color);
   --form-element-card-background-color: var(--tertiary-color);
-
 }
-
 
 .light:root {
   --primary-color: black;
   --secondary-color: white;
   --tertiary-color: #EFF1F6;
   --accent-color: #ec2828;
-  
   --default-border: 1px solid rgb(0, 0, 0);
-
   --table-header: var(--secondary-color);
   --table-footer: #161F29;
   --table-background-color: var(--secondary-color);
@@ -90,6 +84,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  text-decoration: none;
+  color: var(--accent-color);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 .app-container {
   display: flex;
   flex-direction: column;
@@ -101,7 +104,7 @@ body {
 
 .main-content {
   flex: 1 0 92%;
-  overflow-y: hidden;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -116,7 +119,7 @@ body {
   background-color: var(--tertiary-color);
   color: var(--primary-color);
   display: flex;
-  height: 50px;
+  height: 5%;
 }
 
 .sub-header {
@@ -126,8 +129,8 @@ body {
   border-bottom: var(--default-border);
   background-color: var(--tertiary-color);
   color: var(--primary-color);
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .main-content {
@@ -153,39 +156,6 @@ body {
   width: 100%;
 }
 
-.flex-container-center {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.building-summary {
-  display: float;
-  position: left;
-  border-radius: var(--default-border-radius);
-  padding: 4px 8px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-size: 14px;
-  color: var(--primary-color);
-  position: relative;
-  background-color: var(--system-summary);
-  max-width: 500px;
-}
-
-.ventilation-system-sorting-container {
-  display: flex;
-  margin-bottom: 20px;
-  align-items: center;
-}
-
-.building-selector-container {
-  float: left;
-  margin: 20px;
-}
-
 .system-summary {
   max-width: 250px;
   float: left;
@@ -209,20 +179,6 @@ body {
   padding: 5px;
   background-color: var(--primary-color);
   padding-left: 20px;
-}
-
-.login-div {
-  width: 400px;
-  height: 400px;
-  margin-bottom: 100px;
-  background-color: var(--sidebar);
-  color: var(--primary-color);
-  border-radius: var(--default-border-radius);
-  padding: 10px;
-  display: grid;
-  text-align: center;
-  place-items: center;
-
 }
 
 .text-container {
@@ -273,7 +229,6 @@ body {
 
 .supply-text {
   color: #2ba972;
-  text-align: left;
 }
 
 .extract-text {
@@ -284,15 +239,10 @@ body {
   color: #FF7F27;
 }
 
-
 .p-description {
   color: var(--primary-color);
   font-size: 14px;
   font-weight: 0px;
-}
-
-.p-menu-item {
-  margin-top: 50px;
 }
 
 .heating-settings {
@@ -303,26 +253,14 @@ body {
 }
 
 .split-container-left {
-  float: left;
-  padding-left: 50px;
+  padding-left: 20px;
   padding-top: 20px;
-  width: 12%;
+  width: 10%;
 }
 
 .split-container-right {
-  float: right;
   padding-top: 20px;
-  width: 88%;
-}
-
-
-.float-container {
-  display: flex;
-  float: left;
-  height: 100%;
-  width: 80%;
-  overflow-y: hidden;
-  overflow-x: auto;
+  width: 90%;
 }
 
 .container-flex-column {
@@ -339,58 +277,6 @@ body {
   justify-content: center;
 }
 
-.float-container-bottom {
-  display: flex;
-  float: left;
-  height: 100%;
-  width: 300px;
-  justify-content: flex-start;
-  align-items: end;
-}
-
-.float-container-bottom-right {
-  display: flex;
-  float: left;
-  align-items: end;
-  justify-content: flex-end;
-  height: 100%;
-  width: 20%;
-  margin-right: 10px;
-}
-
-.float-container-bottom-smaller {
-  display: flex;
-  float: left;
-  align-items: end;
-  justify-content: flex-end;
-  height: 100%;
-  width: 45%;
-}
-
-.flash-div {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: var(--sidebar);
-  color: var(--primary-color);
-  padding: 10px;
-  max-width: 500px;
-  max-height: 100px;
-}
-
-.placeholder-text {
-  color: var(--sidebar);
-}
-
-
-a {
-  text-decoration: none;
-  color: var(--accent-color);
-}
-
-a:hover {
-  text-decoration: underline;
-}
 
 
 /* Navigation */
@@ -439,7 +325,7 @@ a:hover {
 
 .navbar-button-container {
   display: flex; 
-  padding-left: 50px; 
+  padding-left: 20px; 
   justify-content: flex-start; 
   align-items: center; 
   min-width: 380px;
@@ -529,7 +415,7 @@ a:hover {
 
 .navbar-button-container-right {
   display: flex;
-  padding-right: 50px;
+  padding-right: 20px;
   justify-content: end;
   text-align: end;
   min-width: 380px;
@@ -603,7 +489,7 @@ h4 {
 }
 
 .sanitary-building-summary-equipment-container:hover {
-  background-color: var(--navbar-active-link);
+  background-color: var(--table-hover);
   color: var(--navbar-active-font-color);
 }
 
@@ -716,6 +602,7 @@ input:checked + .slider::before {
 
 .content-card {
   max-width: 1000px;
+  min-width: 400px;
   background-color: var(--secondary-color);
   border-radius: var(--default-border-radius);
   margin-left: 20px;
