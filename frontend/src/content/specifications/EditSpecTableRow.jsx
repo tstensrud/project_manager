@@ -105,7 +105,7 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
 
     return (
         <>
-            {response && response.error ? <MessageBox message={response.error} /> : null}
+            {response?.error && <MessageBox message={response.error} />}
             <tr>
                 {
                     roomLoading && roomLoading === true ? (

@@ -59,7 +59,7 @@ function Buildings() {
                     ) : (
                         <>
                             {
-                                data && data.building_data === null ? (
+                                data?.building_data === null ? (
                                     <p className="p-description">{data.error}</p>
                                 ) : (
                                     data && data.building_data && Object.keys(data.building_data).map((key, index) => (

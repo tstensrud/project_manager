@@ -19,16 +19,15 @@ function BuildingRoomData({ projectId }) {
                             ) : (
                                 <>
                                     {
-                                        data && data.building_data !== null && data.building_data !== undefined ? (
+                                        data?.building_data ? (
                                             <>
-                                                <div style={{ marginBottom: "10px" }} className="grey-text">
+                                                <div className="grey-text mb--10">
                                                     <h4>Bygg og areal</h4>
                                                 </div>
-                                                <div style={{ marginBottom: "20px" }}>
+                                                <div className="mb-20">
                                                     {
-                                                        data && data.building_data.map((building, index) => (
-                                                            <>
-                                                                <div style={{ display: "flex", flexDirection: "row" }}>
+                                                        data?.building_data.map((building, index) => (
+                                                                <div key={index} className="flex flex-row">
                                                                     <div style={{ display: "flex", width: "50%" }}>
                                                                         {building.BuildingName}
                                                                     </div>
@@ -36,20 +35,18 @@ function BuildingRoomData({ projectId }) {
                                                                         {building.area.toLocaleString()} m<sup>2</sup>
                                                                     </div>
                                                                 </div>
-                                                            </>
                                                         ))
                                                     }
                                                 </div>
-                                                <div style={{ marginBottom: "10px" }} className="grey-text">
+                                                <div className="grey-text mb-10">
                                                     <h4>Antall rom prosjektert</h4>
                                                 </div>
                                                 <div>
-                                                    {data && data.rooms}
+                                                    {data?.rooms}
                                                 </div>
-
                                             </>
                                         ) : (
-                                            <>{data && data.error}</>
+                                            <>{data?.error}</>
                                         )
                                     }
                                 </>

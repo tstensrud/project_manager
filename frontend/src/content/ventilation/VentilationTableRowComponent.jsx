@@ -137,10 +137,11 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
         const min = ventData && ventData.vent_data.AirMinimum;
         const area = allRoomData && allRoomData.Area;
         const emission = ventData && ventData.vent_data.AirEmissionSum;
-        const controlls = ventData && ventData.vent_data.RoomControl;
-        const roomControll = ventData && controlls.slice(0, 3).toUpperCase();
+        const controls = ventData && ventData.vent_data.RoomControl;
+        const cav = ventData && controls.toUpperCase().includes("CAV");
+        const vav = ventData && controls.toUpperCase().includes("VAV");
 
-        if (roomControll === "CAV") {
+        if (cav) {
             if (supply !== 0) {
                 minimumAir = supply;
             } else {
@@ -148,13 +149,14 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
             }
         }
 
-        if (roomControll === "VAV") {
+        if (vav) {
             if (emission > (min * area)) {
                 minimumAir = emission;
             } else {
                 minimumAir = min * area;
             }
         }
+
         return minimumAir.toFixed(0);
     }
 

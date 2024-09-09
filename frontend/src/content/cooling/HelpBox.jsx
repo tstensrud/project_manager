@@ -2,11 +2,11 @@ function HelpBox() {
     return (
         <>
             <h3>Kjølebehov</h3>
-            <h4>#</h4>
+            <h4 className="grey-text">#</h4>
             <p>
-                Kolonne 1 er merket med "#". Du kan klikke på dette symbolet for å markere raden ved behov.
+                Kolonne 1 er merket med "#". Du kan klikke på binders-symbolet for å markere raden ved behov.
             </p>
-            <h4>Redigerbare kolonner</h4>
+            <h4 className="grey-text">Redigerbare kolonner</h4>
             <p>
                 Følgende kolonner er redigerbare:
             </p>
@@ -21,7 +21,7 @@ function HelpBox() {
                 <li>Kjøling ustyr</li>
             </ul>
 
-            <h4>Ekstra vent</h4>
+            <h4 className="grey-text">Ekstra vent</h4>
             <p>
                 Denne kolonnen viser hvor mye ekstra tilluft som må til for å klare kjøling basert på de kjøledataene som er lagt inn.
             </p>

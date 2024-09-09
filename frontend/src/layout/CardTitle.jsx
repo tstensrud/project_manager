@@ -1,11 +1,11 @@
 function CardTitle(props) {
     return (
         <>
-            <div style={{ display: "flex", width: "100%" }}>
-                <div style={{ display: "flex", alignItems: "center", textAlign: "center", marginRight: "10px" }}>
+            <div className="flex w-full">
+                <div className="flex align-center text-center mr-10">
                     {props.svg}
                 </div>
-                <div style={{ display: "flex", alignItems: "center", textAlign: "center", fontSize: "23px" }}>
+                <div className="flex align-center text-center text-card-title">
                     {props.title}
                 </div>
             </div>

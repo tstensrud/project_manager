@@ -30,9 +30,7 @@ function Settings() {
 
     }
 
-    if (loading) return <>Loading</>;
-    if (error || changeSpecError) return <>Feil ved lasting av data</>
-
+    
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektinnstillinger"} projectName={data && data.data.ProjectName} projectNumber={data && data.data.ProjectNumber} />

@@ -203,10 +203,15 @@ def delete_spec(spec_uid):
 @jwt_required()
 def update_room(room_uid):
     data = request.get_json()
+    print(data)
     if data:
         processed_data = {}
         float_values = ["air_per_person", "air_emission", "air_process", "air_minimum"]
         for key, value in data.items():
+            if key == "room_control":
+                if "vav" in value.lower() and "cav" in value.lower():
+                    return jsonify({"success": False, "error": "Styring må ha enten CAV eller VAV, ikke begge deler"})
+                
             escaped_value = escape(value).strip()
             if key in float_values:
                 converted_value = replace_and_convert_to_float(escaped_value)

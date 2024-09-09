@@ -20,11 +20,16 @@ function TodoItem({ user, itemData }) {
 
     }, []);
 
+    useEffect(() => {
+        if (response?.success === true) {
+            setTodoClass("todo-completed");
+            setButtonClass("todo-list-button-complete");
+        }
+    }, [response]);
+
     const handleComplete = async (e) => {
         console.log(data)
         await handleSubmit(e);
-        setTodoClass("todo-completed");
-        setButtonClass("todo-list-button-complete");
     }
 
     return (

@@ -122,7 +122,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
 
     return (
         <>
-            {response && response.error ? <MessageBox message={response.error} /> : null}
+            {response?.error && <MessageBox message={response.error} />}
             <tr className={markedRow}>
                 {
                     roomLoading && roomLoading === true ? (

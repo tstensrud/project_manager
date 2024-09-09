@@ -15,7 +15,7 @@ def refresh_expiring_jwts(response):
     try:
         exp_timestamp = get_jwt()["exp"]
         now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        target_timestamp = datetime.timestamp(now + timedelta(hours=24))
         if target_timestamp > exp_timestamp:
             access_token = create_access_token(identity=get_jwt_identity())
             data = response.get_json()
@@ -97,7 +97,7 @@ def todo_item_complete(project_uid):
     item_uid = data["item_id"]
     uuid = data["completed_by"]
     if dbo.set_todo_item_completed(item_uid, uuid):
-        response = {"success": "Huskepunkt utført"}
+        response = {"success": True, "message": "Huskepunkt utført"}
     else:
         response = {"error": "Kunne ikke merke huskepunkt utført"}
     return jsonify(response)
@@ -367,12 +367,12 @@ def update_system(project_uid, system_uid):
     for key, value in data.items():
         key = globals.camelcase_to_snake(key)
         if key == "air_flow":
-            try:
-                convert = float(value)
-            except ValueError:
+            converted_value = globals.replace_and_convert_to_float(value.strip())
+            if converted_value is False:
                 return jsonify({"error": "Viftekapasitet må kun inneholde tall"})
-        globals.replace_and_convert_to_float(value)
-        processed_data[key] = value.strip()
+            processed_data[key] = converted_value
+        else:
+            processed_data[key] = value.strip()
     dbo.update_system_info(system_uid, processed_data)
     
     return jsonify({"success": True})

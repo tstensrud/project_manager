@@ -79,7 +79,7 @@ function BuildingSummary({ buildingUid, projectId }) {
                         <LoadingSpinner />
                     ) : (
                         <>
-                            <div style={{ display: "flex", width: "100%", flexDirection: "row" }}>
+                            <div className="flex w-full flex-row">
                                 <div style={{marginRight: "20px"}}>
                                 Avløpskurve: 
                                 </div>
@@ -100,34 +100,34 @@ function BuildingSummary({ buildingUid, projectId }) {
                             <h3>Oppsummering vannmengder</h3>
                             <div className="content-card-inner-container">
                                 <div className="sanitary-building-summary-equipment-header">
-                                    <div style={{ display: "flex", justifyContent: "start", width: "100%" }}>
+                                    <div className="flex justify-start w-full">
                                         <strong>Spillvann</strong>
                                     </div>
                                 </div>
 
                                 <div className="sanitary-building-summary-equipment-container">
-                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                    <div className="flex justify-start w-70-percent">
                                         Vannmengde
                                     </div>
-                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                    <div className="flex justify-end w-30-percent">
                                         {buildingSummaryData && buildingSummaryData.totals.drainage.total.toFixed(2)} L/s
                                     </div>
                                 </div>
 
                                 <div className="sanitary-building-summary-equipment-container">
-                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                    <div className="flex justify-start w-70-percent">
                                         Rørdim. (MA) 1:60
                                     </div>
-                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                    <div className="flex justify-end w-30-percent">
                                         {buildingSummaryData && buildingSummaryData.totals.drainage.pipe_siz_1_60} mm
                                     </div>
                                 </div>
 
                                 <div className="sanitary-building-summary-equipment-container">
-                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                    <div className="flex justify-start w-70-percent">
                                         Rørdim. (MA) vertikal
                                     </div>
-                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                    <div className="flex justify-end w-30-percent">
                                         {buildingSummaryData && buildingSummaryData.totals.drainage.pipe_size_vertical} mm
                                     </div>
                                 </div>
@@ -135,50 +135,50 @@ function BuildingSummary({ buildingUid, projectId }) {
 
                             <div className="content-card-inner-container">
                                 <div className="sanitary-building-summary-equipment-header">
-                                    <div style={{ display: "flex", justifyContent: "start", width: "100%" }}>
+                                    <div className="flex justify-start w-full">
                                         <strong>Kaldtvann</strong>
                                     </div>
                                 </div>
 
                                 <div className="sanitary-building-summary-equipment-container">
-                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                    <div className="flex justify-start w-70-percent">
                                         Vannmengde
                                     </div>
-                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                    <div className="flex justify-end w-30-percent">
                                         {buildingSummaryData && buildingSummaryData.totals.cw.total.toFixed(2)} L/s
                                     </div>
                                 </div>
 
                                 <div className="sanitary-building-summary-equipment-container">
-                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                    <div className="flex justify-start w-70-percent">
                                         Rørdim. (Cu)
                                     </div>
-                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                    <div className="flex justify-end w-30-percent">
                                         {buildingSummaryData && buildingSummaryData.totals.cw.pipe_size} mm
                                     </div>
                                 </div>
                             </div>
                             <div className="content-card-inner-container">
                                 <div className="sanitary-building-summary-equipment-header">
-                                    <div style={{ display: "flex", justifyContent: "start", width: "100%" }}>
+                                    <div className="flex justify-start w-full">
                                         <strong>Varmtvann</strong>
                                     </div>
                                 </div>
 
                                 <div className="sanitary-building-summary-equipment-container">
-                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                    <div className="flex justify-start w-70-percent">
                                         Vannmengde
                                     </div>
-                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                    <div className="flex justify-end w-30-percent">
                                         {buildingSummaryData && buildingSummaryData.totals.ww.total.toFixed(2)} L/s
                                     </div>
                                 </div>
 
                                 <div className="sanitary-building-summary-equipment-container">
-                                    <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                    <div className="flex justify-start w-70-percent">
                                         Rørdim. (Cu)
                                     </div>
-                                    <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                    <div className="flex justify-end w-30-percent">
                                         {buildingSummaryData && buildingSummaryData.totals.ww.pipe_size} mm
                                     </div>
                                 </div>
@@ -188,9 +188,9 @@ function BuildingSummary({ buildingUid, projectId }) {
                                 {
                                     buildingSummaryData && Object.entries(buildingSummaryData && buildingSummaryData.building_data.sanitary_summary).map((equip, index) => (
                                         <div className="sanitary-building-summary-equipment-container" key={index}>
-                                            <div style={{ display: "flex", justifyContent: "start", width: "70%" }}>
+                                            <div className="flex justify-start w-70-percent">
                                                 {translateEquipment(equip[0])}</div>
-                                            <div style={{ display: "flex", justifyContent: "end", width: "30%" }}>
+                                            <div className="flex justify-end w-30-percent">
                                                 {equip[1]} stk
                                             </div>
                                         </div>

@@ -100,8 +100,8 @@ function NewRoomSpec() {
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText="Nytt rom til kravspesifikasjon" projectName={data && data.spec_name} />
             <div className='main-content'>
-                {response && response.success ? <><MessageBox message={response.success} /> </> : ''}
-                {response && response.error ? <><MessageBox message={response.error} /> </> : ''}
+                {response?.success && <><MessageBox message={response.success} /> </>}
+                {response?.error && <><MessageBox message={response.error} /> </>}
 
                 {
                     showHelpBox === true ? (

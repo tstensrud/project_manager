@@ -115,7 +115,6 @@ function Rooms() {
     const handleOnSubmit = async (e) => {
         e.preventDefault();
         if (!newRoomData.buildingUid) {
-            console.log("Velg bygg");
             buildingRef.current.focus();
             return;
         }
@@ -134,7 +133,7 @@ function Rooms() {
 
     return (
         <>
-            {newRoomDataResponse && newRoomDataResponse.error && newRoomDataResponse.error !== null ? (<MessageBox message={newRoomDataResponse.error} />) : (<></>)}
+            {newRoomDataResponse?.error ? (<MessageBox message={newRoomDataResponse.error} />) : (<></>)}
             <SubTitleComponent svg={<RoomIcon />} headerText={"Romskjema"} projectName={""} projectNumber={""} />
             <div className='main-content'>
                 {
@@ -168,7 +167,7 @@ function Rooms() {
                             </div>
                             <div className="container-above-table-rooms-bottom">
                                 {/*<button key="all" name="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;*/}
-                                {buildingData && buildingData.building_data !== undefined && Object.keys(buildingData.building_data).map((key, index) => (
+                                {buildingData?.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                                     <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
                                         {buildingData.building_data[key].BuildingName}&nbsp;
                                     </button>

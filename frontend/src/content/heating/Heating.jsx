@@ -76,8 +76,8 @@ function Heating() {
 
     return (
         <>
-            {roomError && roomError.error && roomError.error !== null ? (<MessageBox message={roomError.error} />) : (<></>)}
-            {buildingDataError && buildingDataError.error && buildingDataError.error !== null ? (<MessageBox message={buildingDataError.error} />) : (<></>)}
+            {roomError?.error && roomError.error !== null ? (<MessageBox message={roomError.error} />) : (<></>)}
+            {buildingDataError?.error && buildingDataError.error !== null ? (<MessageBox message={buildingDataError.error} />) : (<></>)}
             <SubTitleComponent svg={<HeatingIcon />} headerText={"Varmetapsberegninger"} projectName={""} projectNumber={""} />
             <div className='main-content'>
                 {

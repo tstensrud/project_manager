@@ -97,6 +97,7 @@
     border-bottom: var(--default-border);
 }
 
+
 .todo-popup-listitem-form {
     background-color: #e9e9e9;
     color: var(--primary-color);
@@ -191,7 +192,8 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    background-color: rgba(156, 156, 156, 0.295);
+    left: 0;
+    top: 15%;
 }
 
 .help-box-container {
@@ -214,6 +216,7 @@
     height: 50%;
     overflow-y: auto;
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.301);
+    border: var(--default-border);
 }
 
 .help-box-card-header {
@@ -231,3 +234,4 @@
     display: flex;
     flex-direction: column;
 }
+

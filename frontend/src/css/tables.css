@@ -19,7 +19,7 @@
   z-index: 10;
 }
 
-.table-wrapper{
+.table-wrapper {
   display: flex;
   flex-direction: column;
   margin-left: 20px;
@@ -33,7 +33,7 @@
   margin-bottom: 20px;
 }
 
-.table-wrapper-tiny{
+.table-wrapper-tiny {
   margin: 20px 1px 0px 0px;
   overflow-y: hidden;
   overflow-x: hidden;
@@ -41,7 +41,7 @@
   width: 300px;
 }
 
-.table-wrapper-tiny:hover{
+.table-wrapper-tiny:hover {
   margin: 10px 1px 0px 0px;
 }
 
@@ -68,7 +68,8 @@
   table-layout: fixed;
 }
 
-.fl-table td, .fl-table th {
+.fl-table td,
+.fl-table th {
   text-align: center;
   padding-top: 3px;
   padding-bottom: 3px;
@@ -107,6 +108,7 @@
   background-color: var(--table-header);
   letter-spacing: 0.025rem;
 }
+
 .fl-table tr:nth-child(even) {
   background-color: var(--table-row-even);
 }
@@ -183,7 +185,8 @@
   background-color: var(--table-background-color);
 }
 
-.fl-table-summary td, .fl-table-summary th {
+.fl-table-summary td,
+.fl-table-summary th {
   text-align: center;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -265,7 +268,7 @@
 
 .room-info-ventilation-container {
   position: fixed;
-  box-shadow: 5px 1px 20px   black;
+  box-shadow: 5px 1px 20px black;
   border: var(--default-border);
   left: 25%;
   top: 15%;

@@ -67,8 +67,8 @@ class Projects(db.Model):
     specification = db.Column(db.String(50))
 
     todo_item = db.relationship('TodoItem', backref='project', uselist=False, lazy=True)
-    buildings = db.relationship('Buildings', backref='project_buildings', uselist=False, lazy=True)
-    ventilation_systems = db.relationship('VentilationSystems', backref='project_ventilation_systems', uselist=False, lazy=True)
+    buildings = db.relationship('Buildings', backref='project', uselist=False, lazy=True)
+    ventilation_systems = db.relationship('VentilationSystems', backref='project', uselist=False, lazy=True)
     
     def get_json(self):
         return {
@@ -218,8 +218,8 @@ class Rooms(db.Model):
     def get_json_room_data(self):
         building = db.session.query(Buildings).filter(Buildings.uid == self.building_uid).first()
         building_name = building.building_name
+
         return {
-            
             "id": self.id,
             "uid": self.uid,
             "BuildingUid": self.building_uid,
@@ -233,6 +233,7 @@ class Rooms(db.Model):
             "RoomPopulation": self.room_population,
             "Comments": self.comments
         }
+    
     def get_json_ventilation_data(self):
             system = db.session.query(VentilationSystems).filter(VentilationSystems.uid == self.system_uid).first()
             if system:
@@ -261,6 +262,7 @@ class Rooms(db.Model):
                 "DbNeighbour": self.db_neighbour,
                 "DbCorridor": self.db_corridor
             }
+    
     def get_json_heating_data(self):
         return {
             "OuterWallArea": self.outer_wall_area,
@@ -279,6 +281,7 @@ class Rooms(db.Model):
             "ChosenHeating": self.chosen_heating,
             "HeatSource": self.heat_source
         }
+    
     def get_json_cooling_data(self):
         return {
             "RoomTempSummer": self.room_temp_summer,
@@ -295,6 +298,7 @@ class Rooms(db.Model):
             "CoolingEquipment": self.cooling_equipment,
             "CoolingSum": self.cooling_sum
     }
+
     def get_json_sanitary_data(self):
         return {
             "shaft": self.shaft,
@@ -354,6 +358,7 @@ class Specifications(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     uid = db.Column(db.String(250), unique=True)
     name = db.Column(db.String(50), nullable=False)
+
     room_types = db.relationship("RoomTypes", backref="specifications", lazy=True)
 
     def get_json(self):

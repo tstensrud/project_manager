@@ -44,7 +44,7 @@ function Ventilation() {
     }, [activeSortButton, buildingData]);
 
     useEffect(() => {
-        setSortedBuildings(roomData && roomData.room_data && roomData.room_data.filter((room) => room.BuildingUid === buildingId));
+        setSortedBuildings(roomData?.room_data && roomData.room_data.filter((room) => room.BuildingUid === buildingId));
     }, [roomData]);
 
     useEffect(() => {

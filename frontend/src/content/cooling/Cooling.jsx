@@ -75,8 +75,8 @@ function Cooling() {
 
     return (
         <>
-            {roomError && roomError.error && roomError.error !== null ? (<MessageBox message={roomError.error} />) : (<></>)}
-            {buildingDataError && buildingDataError.error && buildingDataError.error !== null ? (<MessageBox message={buildingDataError.error} />) : (<></>)}
+            {roomError?.error && roomError.error !== null ? (<MessageBox message={roomError.error} />) : (<></>)}
+            {buildingDataError?.error && buildingDataError?.error !== null ? (<MessageBox message={buildingDataError.error} />) : (<></>)}
             <SubTitleComponent svg={<CoolingIcon />} headerText={"Kjølebehovsberegninger"} projectName={""} projectNumber={""} />
             <div className='main-content'>
                 {
@@ -87,7 +87,7 @@ function Cooling() {
                             <div className="text-container-above-tables">
                                 {activeSortButton !== null && activeSortButton !== "all" ? <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate} buildingUid={activeSortButton} /> : ''}&nbsp;
                                 {
-                                    buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
+                                    buildingData?.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                                         <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
                                             {buildingData.building_data[key].BuildingName}
                                         </button>

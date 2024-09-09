@@ -43,8 +43,8 @@ function CoolingSettings ({setShowHeatingSettings: setShowCoolingSettings, build
 
     return (
         <>
-        {response && response.error && response.error !== null ? (<MessageBox message={response.error} /> ) : (<></>)}
-        {error && error.error && error.error !== null ? (<MessageBox message={error.error} /> ) : (<></>)}
+        {response?.error && response.error !== null ? (<MessageBox message={response.error} /> ) : (<></>)}
+        {error?.error && error.error !== null ? (<MessageBox message={error.error} /> ) : (<></>)}
 
             <div className="settings-popup">
                 <div className="todo-popup-header">

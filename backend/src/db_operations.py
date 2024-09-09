@@ -746,7 +746,6 @@ def update_airflow_changed_system(system_uid_new: int, system_uid_old: int) -> b
     new_system.air_flow_extract = summarize_system_extract(system_uid_new)
     old_system.air_flow_supply = summarize_system_supply(system_uid_old)
     old_system.air_flow_extract = summarize_system_extract(system_uid_old)
-
     try:
         db.session.commit()
         return True
@@ -756,19 +755,14 @@ def update_airflow_changed_system(system_uid_new: int, system_uid_old: int) -> b
         return False
 
 def update_system_info(system_uid: int, data: dict) -> bool:
-    #print(f"Received data: {data}")
     system = get_system(system_uid)
-    processed_data = {}
-    for key, value in data.items():
-        processed_data[key] = value
-
-    processed_data_list = list(processed_data.keys())
+    processed_data_list = list(data.keys())
 
     table_columns = {column.key for column in inspect(models.VentilationSystems).mapper.column_attrs}
     
     for key in table_columns:
         if key == processed_data_list[0]:
-            setattr(system, key, processed_data[key])
+            setattr(system, key, data[key])
             break
     try:
         db.session.commit()
@@ -849,7 +843,6 @@ def delete_specification(spec_uid: str) -> bool:
     return False
 
 # Get data for a specific roomtype in a specification
-
 def get_room_type(room_type_uid: int, specification: str) -> models.RoomTypes:
     room_data_object = db.session.query(models.RoomTypes).filter(and_(
         models.RoomTypes.specification_uid == specification, models.RoomTypes.uid == room_type_uid)).first()
@@ -1135,8 +1128,7 @@ def set_standard_cooling_settings(room_uid: int, data) -> bool:
         db.session.rollback()
         return False
 
-def calculate_heat_loads_for_room(room_uid: int) -> bool:
-    room = get_room(room_uid)
+def calculate_heat_loads_for_room(room: models.Rooms) -> bool:
     room.sum_internal_heatload_lights = room.internal_heatload_lights * room.area
     room.sum_internal_heatload_people = room.internal_heatload_people * room.room_population
     room.sum_internal_heatload = (room.sun_adition * room.sun_reduction) + room.internal_heatload_equipment
@@ -1149,24 +1141,24 @@ def calculate_heat_loads_for_room(room_uid: int) -> bool:
         return False
 
 def calculate_total_cooling_for_room(room_uid: int) -> bool:
-    if calculate_heat_loads_for_room(room_uid):
-        room = get_room(room_uid)
+    room = get_room(room_uid)
+    if room:
+        if calculate_heat_loads_for_room(room):
+            heatload_sun = room.sun_adition * room.sun_reduction
+            sum_internal_heat_loads = room.sum_internal_heatload_people + room.sum_internal_heatload_lights + room.internal_heatload_equipment + heatload_sun
+            cooling_from_vent = 0.35 * room.air_supply * (room.room_temp_summer - room.ventair_temp_summer)
+            sum_cooling = cooling_from_vent + room.cooling_equipment
 
-        heatload_sun = room.sun_adition * room.sun_reduction
-        sum_internal_heat_loads = room.sum_internal_heatload_people + room.sum_internal_heatload_lights + room.internal_heatload_equipment + heatload_sun
-        cooling_from_vent = 0.35 * room.air_supply * (room.room_temp_summer - room.ventair_temp_summer)
-        sum_cooling = cooling_from_vent + room.cooling_equipment
-
-        room.cooling_ventilationair = round(cooling_from_vent, 1)
-        room.sum_internal_heatload = round(sum_internal_heat_loads, 1)
-        room.cooling_sum = round(sum_cooling,1)
-        try:
-            db.session.commit()
-            return True
-        except Exception as e:
-            globals.log(f"cooling calculatiosn: {e}")
-            db.session.rollback()
-            return False
+            room.cooling_ventilationair = round(cooling_from_vent, 1)
+            room.sum_internal_heatload = round(sum_internal_heat_loads, 1)
+            room.cooling_sum = round(sum_cooling,1)
+            try:
+                db.session.commit()
+                return True
+            except Exception as e:
+                globals.log(f"Failure in calculate_total_cooling_for_room(): {e}")
+                db.session.rollback()
+                return False
     return False
 
 def sum_cooling_from_equipment_project(project_uid: str) -> float:

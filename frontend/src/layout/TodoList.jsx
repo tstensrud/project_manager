@@ -38,19 +38,19 @@ function TodoList({ setShowTodoList }) {
     return (
         <div id="todo-popup" className="todo-popup">
             <div className="todo-popup-header">
-                <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
+                <div className="flex justify-end w-full">
                     <span onClick={(e) => handleClick(e, setShowTodoList)} className="todo-close-btn">&times;</span>
                 </div>
                 <div>
                     Huskeliste
                 </div>
             </div>
-            <div className="todo-popup-item-container" id="todo-popup-item-container">
+            <div className="todo-popup-item-container">
                 <form id="todoItem" onSubmit={submitTodoItem}>
                     <div className="todo-popup-listitem-form ">
                         <input name="todo_content" type="text" className="todo-input" placeholder="Nytt huskepunkt" onChange={handleInputChange} />
                     </div>
-                    <div className="todo-popup-listitem">
+                    <div className="todo-popup-header">
                         <button className="todo-list-button">Legg til</button>
                     </div>
                 </form>
@@ -73,6 +73,7 @@ function TodoList({ setShowTodoList }) {
                         </>
                     )
                 }
+                
             </div>
         </div>
     );

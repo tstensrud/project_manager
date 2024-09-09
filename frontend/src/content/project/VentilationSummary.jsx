@@ -21,25 +21,25 @@ function VentilationSummary({ projectId }) {
                                     {
                                         systemsData && data ? (
                                             <>
-                                                <div style={{ marginBottom: "20px" }}>
-                                                    <div style={{ marginBottom: "10px" }} className="grey-text">
+                                                <div className="mb-20">
+                                                    <div className="grey-text mb-10">
                                                         <h4>Ventilasjonssystemer</h4>
                                                     </div>
                                                     {systemsData.systems_data && systemsData.systems_data.map((system, index) => (
-                                                        <div key={index} style={{ display: "flex", flexDirection: "row" }}>
-                                                            <div style={{ display: "flex", width: "100%" }}>
+                                                        <div key={index} className="flex flex-row">
+                                                            <div className="flex w-full">
                                                                 {system.SystemName}
                                                             </div>
                                                         </div>
                                                     ))}
                                                 </div>
-                                                <div style={{ marginBottom: "10px" }} className="grey-text">
+                                                <div className="mb-10 grey-text">
                                                     <h4>Prosjektert luftmengde</h4>
                                                 </div>
                                                 {
                                                     data.ventdata ? (
                                                         <>
-                                                            <div style={{ display: "flex", width: "100%", flexDirection: "row" }}>
+                                                            <div className="flex flex-row w-full">
                                                                 {data.ventdata.toLocaleString()} m<sup>3</sup>/h
                                                             </div>
                                                         </>
