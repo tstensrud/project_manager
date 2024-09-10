@@ -69,8 +69,9 @@ function Navbar() {
                                             </div>
                                             <div className="menu-sub-sub-container">
                                                 <div className="menu-item-title">Ventilasjon</div>
-                                                <div className="menu-link-container"><Link className="menu-link" to={`ventsystems/${activeProject}`}>Systemer</Link></div>
                                                 <div className="menu-link-container"><Link className="menu-link" to={`ventilation/${activeProject}`}>Luftmengdetabell</Link></div>
+                                                <div className="menu-link-container"><Link className="menu-link" to={`ventsystems/${activeProject}`}>Ventilasjonssystemer</Link></div>
+                                                <div className="menu-link-container"><Link className="menu-link" to={`ventsystems/${activeProject}/new`}>Legg til system</Link></div>
                                             </div>
                                             <div className="menu-sub-sub-container">
                                                 <div className="menu-item-title">Energiberegninger</div>

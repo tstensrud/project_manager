@@ -31,7 +31,6 @@ def refresh_expiring_jwts(response):
 #   PROJECT 
 # 
 #    
-
 @project_api_bp.route('/', methods=['GET'])
 @jwt_required()
 def project(project_uid):
@@ -61,18 +60,24 @@ def settings(project_uid):
 @jwt_required()
 def set_spec(project_uid):
     data = request.get_json()
-    spec_uid = data["project_specification"].strip()
-    if dbo.set_project_specification(project_uid, spec_uid):
-        return jsonify({"message": "Success"})
-    else:
-        return jsonify({"message": "Failed to set specification"})
+    if data:
+        for key, value in data.items():
+            if key == "project_specification":
+                new_spec = dbo.set_project_specification(project_uid, value)
+                if new_spec is False:
+                    return jsonify({"success": False, "message": "Kunne ikke oppdatere kravspesifikasjon"})
+            if key == "description":
+                new_desc = dbo.update_project_description(project_uid, value)
+                if new_desc is False:
+                    return jsonify({"success": False, "message": "Kunne ikke oppdatere beskrivelse"})
+        return jsonify({"success": True, "message": "Prosjektdata oppdatert"})
+    return jsonify({"success": False, "message": "Mottok ingen data"})
 
 #
 #
 #   TODO ITEMS
 #
 #
-
 @project_api_bp.route('/todo/', methods=['GET'])
 @jwt_required()
 def todo(project_uid):
@@ -346,18 +351,19 @@ def new_system(project_uid):
     else:
         special_system = ""
     
-    system_h_ex_in = data["heat_exchange"].strip()
-    if system_h_ex_in == "none":
-        return jsonify({"error", "Du velge type gjenvinner"})
+    if "heat_exchange" not in data:
+        return jsonify({"error": "Du må velge type gjenvinner"})
+    system_h_ex_in = data["heat_exchange"]
     if system_h_ex_in != "0":
         system_h_ex = system_h_ex_in.capitalize()
-    else: system_h_ex = None
+    else:
+        system_h_ex = None
 
     new_system = dbo.new_ventilation_system(project.uid, system_number, placement, service_area, system_h_ex, airflow, special_system)
     if new_system:
-        return jsonify({"success": True})
+        return jsonify({"success": True, "message": "System opprettet"})
     else:
-        return jsonify({"error", "Kunne ikke opprette nytt system"})
+        return jsonify({"success": False, "message": "Kunne ikke opprette nytt system"})
 
 @project_api_bp.route('/update_system/<system_uid>/', methods=['PATCH'])
 @jwt_required()

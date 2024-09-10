@@ -142,36 +142,54 @@ function Rooms() {
                     ) : (
                         <>
                             <div className="container-above-table-rooms-top">
-                                <form id="new_room" onSubmit={handleOnSubmit}>
-                                    <select ref={buildingRef} name="buildingUid" onChange={handleFormChange} tabIndex="1">
-                                        <option key="0" value="">- Velg bygg -</option>
-                                        {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
-                                            <option key={index} value={buildingData.building_data[key].uid}>{buildingData.building_data[key].BuildingName}</option>
-                                        ))}
-                                    </select>
-                                    &nbsp; &nbsp;
-                                    <input className="input-short" type="text" name="floor" onChange={handleFormChange} placeholder="Etasje" tabIndex="2" required /> &nbsp; &nbsp;
-                                    <input ref={inputRoomNumberRef} className="input-short" type="text" name="roomNumber" onChange={handleFormChange} placeholder="Romnr." tabIndex="3" required /> &nbsp; &nbsp;
-                                    <select ref={roomTypeRef} onChange={handleFormChange} name="roomType" tabIndex="4">
-                                        <option key="0" value="">- Velg romtype -</option>
-                                        {roomTypeData && roomTypeData.spec_room_type_data !== undefined && roomTypeData.spec_room_type_data.map(type => (
-                                            <option key={type.uid} value={type.uid}>{type.name}</option>
-                                        ))};
-                                    </select>
-                                    &nbsp; &nbsp;
-                                    <input ref={inputRoomNameRef} type="text" name="roomName" onChange={handleFormChange} placeholder="Romnavn" tabIndex="5" required /> &nbsp; &nbsp;
-                                    <input ref={inputAreaRef} className="input-short" type="text" name="roomArea" onChange={handleFormChange} placeholder="Areal" tabIndex="6" required /> &nbsp; &nbsp;
-                                    <input ref={inputPopRef} className="input-short" type="text" name="roomPeople" onChange={handleFormChange} placeholder="Personer" tabIndex="7" required /> &nbsp; &nbsp;
-                                    <button className="form-button" type="submit" tabIndex="7">Legg til</button>
+                                <form onSubmit={handleOnSubmit}>
+                                    <div className="flex flex-row w-full">
+                                        <div className="mr-10">
+                                            <select ref={buildingRef} name="buildingUid" onChange={handleFormChange} tabIndex="1">
+                                                <option key="0" value="">- Velg bygg -</option>
+                                                {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
+                                                    <option key={index} value={buildingData.building_data[key].uid}>{buildingData.building_data[key].BuildingName}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <div className="mr-10">
+                                            <input className="input-short" type="text" name="floor" onChange={handleFormChange} placeholder="Etasje" tabIndex="2" required />
+                                        </div>
+                                        <div className="mr-10">
+                                            <input ref={inputRoomNumberRef} className="input-short" type="text" name="roomNumber" onChange={handleFormChange} placeholder="Romnr." tabIndex="3" required />
+                                        </div>
+                                        <div className="mr-10">
+                                            <select ref={roomTypeRef} onChange={handleFormChange} name="roomType" tabIndex="4">
+                                                <option key="0" value="">- Velg romtype -</option>
+                                                {roomTypeData && roomTypeData.spec_room_type_data !== undefined && roomTypeData.spec_room_type_data.map(type => (
+                                                    <option key={type.uid} value={type.uid}>{type.name}</option>
+                                                ))};
+                                            </select>
+                                        </div>
+                                        <div className="mr-10">
+                                            <input ref={inputRoomNameRef} type="text" name="roomName" onChange={handleFormChange} placeholder="Romnavn" tabIndex="5" required />
+                                        </div>
+                                        <div className="mr-10">
+                                            <input ref={inputAreaRef} className="input-short" type="text" name="roomArea" onChange={handleFormChange} placeholder="Areal" tabIndex="6" required />
+                                        </div>
+                                        <div className="mr-10">
+                                            <input ref={inputPopRef} className="input-short" type="text" name="roomPeople" onChange={handleFormChange} placeholder="Personer" tabIndex="7" required />
+                                        </div>
+                                        <div className="mr-10">
+                                            <button className="form-button" type="submit" tabIndex="7">Legg til</button>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                             <div className="container-above-table-rooms-bottom">
-                                {/*<button key="all" name="all" onClick={sortButtonClick} className={activeSortButton === "all" ? `table-sorting-button-active` : `table-sorting-button`}>Alle</button> &nbsp;*/}
-                                {buildingData?.building_data && Object.keys(buildingData.building_data).map((key, index) => (
+                                {
+                                buildingData?.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                                     <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
                                         {buildingData.building_data[key].BuildingName}&nbsp;
                                     </button>
-                                ))}
+                                ))
+                                }
 
                             </div>
                             {
@@ -216,7 +234,7 @@ function Rooms() {
                                                                 floors && floors.map(floor => (
                                                                     <React.Fragment key={floor}>
                                                                         <div className="table-wrapper">
-                                                                            
+
                                                                             <div className="table-title">
                                                                                 <h3>Etasje {floor}</h3>
                                                                             </div>

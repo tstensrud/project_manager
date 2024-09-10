@@ -28,6 +28,7 @@ import SanitaryEquipment from './content/sanitary/SanitaryEquipment';
 import SanitaryShafts from './content/sanitary/SanitaryShafts';
 import Sanitary from './content/sanitary/Sanitary';
 import Reports from './content/reports/Reports';
+import NewSystem from './content/ventsystems/NewSystem';
 
 function App() {
 
@@ -56,6 +57,7 @@ function App() {
               <Route path="buildings/:projectId" element={<ProtectedRoute element={<Buildings />} />} />
               <Route path="rooms/:projectId" element={<ProtectedRoute element={<Rooms />} />} />
               <Route path="ventilation/:projectId" element={<ProtectedRoute element={<Ventilation />} />} />
+              <Route path="ventsystems/:projectId/new" element={<ProtectedRoute element={<NewSystem />} />} />
               <Route path="ventsystems/:projectId" element={<ProtectedRoute element={<VentSystems />} />} />
               <Route path="heating/:projectId" element={<ProtectedRoute element={<Heating />} />} />
               <Route path="cooling/:projectId" element={<ProtectedRoute element={<Cooling />} />} />

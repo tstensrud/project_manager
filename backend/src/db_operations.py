@@ -88,6 +88,17 @@ def summarize_project_airflow(project_uid: str) -> float:
             models.Rooms.project_uid == project_uid).scalar()
     return airflow
 
+def update_project_description(project_uid: str, description: str) -> bool:
+    project = get_project(project_uid)
+    project.project_description = description
+    try:
+        db.session.commit()
+        return True
+    except Exception as e:
+        db.session.rollback()
+        globals.log(f"Could not update project description: {e}")
+        return False
+    
 '''
 TODO-list
 '''

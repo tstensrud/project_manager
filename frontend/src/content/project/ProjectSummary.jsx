@@ -24,7 +24,7 @@ function ProjectSummary({ projectId }) {
                                                 <div className="mb-10 grey-text">
                                                     <h4>Prosjektbeskrivelse</h4>
                                                 </div>
-                                                <div className="mb-20">
+                                                <div className="mb-20 pre-wrap">
                                                     {data && data.data.ProjectDescription}
                                                 </div>
 

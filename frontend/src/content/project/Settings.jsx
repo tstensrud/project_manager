@@ -11,26 +11,38 @@ function Settings() {
     const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
     const { data, loading, error } = useFetch(`/project_api/${projectId}/settings/`);
     const { data: specData, loading: specLoading, error: specError } = useFetch(`/specifications/get_specifications/`);
-    const { data: changeSpecData, setData: setSpecData, error: changeSpecError, handleSubmit: changeSpecSubmit } = useUpdateData(`/project_api/${projectId}/settings/update_project/`);
+    const { data: updatedProjectData, setData: setUpdatedProjectData, response: updatedDataResponse, error: updatedProjectDataError, handleSubmit: updateProjectDataSubmit } = useUpdateData(`/project_api/${projectId}/settings/update_project/`);
 
-    const [chosenSpec, setChosenSpec] = useState();
+    const [description, setDescription] = useState();
     const navigate = useNavigate();
 
-    const handleOnSpecChange = (e) => {
+    // useEffects
+    useEffect(() => {
+        setDescription(data?.data?.ProjectDescription);
+    },[data]);
+
+    useEffect(() => {
+        if (updatedDataResponse?.success && updatedDataResponse.success === true) {
+            navigate(`/project/${projectId}`);
+        }
+    },[updatedDataResponse]);
+
+    // Handlers
+    const handleChange = (e) => {
         e.preventDefault();
-        setSpecData({
-            ...changeSpecData,
+        setUpdatedProjectData({
+            ...updatedProjectData,
             [e.target.name]: e.target.value,
         });
+        if (e.target.name === "description") {
+            setDescription(e.target.value);
+        }
     }
 
-    const handleOnSubmit = (e) => {
-        changeSpecSubmit(e);
-        navigate(`/project/${projectId}`);
-
+    const handleOnSubmit = async (e) => {
+        await updateProjectDataSubmit(e);
     }
 
-    
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektinnstillinger"} projectName={data && data.data.ProjectName} projectNumber={data && data.data.ProjectNumber} />
@@ -47,10 +59,10 @@ function Settings() {
                                 <h4>Prosjektnavn</h4>
                                 <input className="card-input" type="text" name="project_name" key="name" value={data && data.data.ProjectName} readOnly />
                                 <h4>Prosjektbeskrivelse</h4>
-                                <textarea className="form-text-area" key="desc" value={data && data.data.ProjectDescription} readOnly />
+                                <textarea className="form-text-area" name="description" onChange={handleChange} value={description}/>
                                 <h4>Kravspesifikasjon</h4>
                                 <p>
-                                <select className="card-select" name="project_specification" onChange={handleOnSpecChange}>
+                                <select className="card-select" name="project_specification" onChange={handleChange}>
                                     <option value="none">- Velg -</option>
 
                                     {

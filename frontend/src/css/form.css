@@ -176,7 +176,7 @@ select:focus {
 }
 
 .form-text-area {
-  background: var(--secondary-color);
+  background: var(--tertiary-color);
   border: var(--form-border);
   border-radius: 5px;
   color: var(--primary-color);
@@ -413,7 +413,7 @@ input[type="file"]::file-selector-button:active {
 .input-container-input {
   width: 100%;
   padding: 10px;
-  background-color: var(--form-background-color);
+  background-color: var(--form-element-card-background-color);
   border: var(--form-border);
   border-radius: var(--form-elements-border-radius);
   outline: none;
