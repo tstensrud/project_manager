@@ -1,6 +1,4 @@
-import { useState } from 'react';
 import Draggable from 'react-draggable';
-
 import RoomDataRow from './RoomDataRow';
 
 function RoomData({ roomData, ventData, setShowRoomData }) {
@@ -16,26 +14,27 @@ function RoomData({ roomData, ventData, setShowRoomData }) {
     const min = ventData.vent_data.AirMinimum;
     const area = roomData.Area;
     const emission = ventData.vent_data.AirEmissionSum;
-    const controlls = ventData.vent_data.RoomControl;
-    const roomControll = controlls.slice(0, 3).toUpperCase();
+    const controls = ventData.vent_data.RoomControl;
+    const cav = controls.toUpperCase().includes("CAV");
+    const vav = controls.toUpperCase().includes("VAV");
 
-    if (roomControll === "CAV") {
+    if (cav) {
       if (supply !== 0) {
         minimumAir = supply;
       } else {
         minimumAir = extract;
       }
-      return minimumAir;
     }
 
-    if (roomControll === "VAV") {
+    if (vav) {
       if (emission > (min * area)) {
         minimumAir = emission;
       } else {
         minimumAir = min * area;
       }
-      return minimumAir;
+
     }
+    return minimumAir.toFixed(0);
   }
 
   return (

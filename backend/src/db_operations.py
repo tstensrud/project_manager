@@ -544,10 +544,19 @@ def initial_ventilation_calculations(room_uid: int) -> bool:
     room = get_room(room_uid)
     room.air_person_sum = round((room.room_population * room.air_per_person),1)
     room.air_emission_sum = round((room.area * room.air_emission), 1)
-    room.air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process), 1)
-    #print(f"AIR DEMAND: {room.air_demand}")
-    room.air_supply = round((math.ceil(room.air_demand / 10) * 10), 1)
-    #print(f"AIR SUPPLY: {room.air_supply}")
+    
+    # Check if the minimum requirement per sqm is > person + emission + process. Set demand to largest of the two
+    air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process), 1)
+    room_calculated_minimum = room.air_minimum * room.area
+    set_airflow = 0
+    if room_calculated_minimum > air_demand:
+        set_airflow = room_calculated_minimum
+    else:
+        set_airflow = air_demand
+    room.air_demand = round(set_airflow, 1)
+    
+    
+    room.air_supply = round((math.ceil(set_airflow / 10) * 10), 1)
     room.air_extract = room.air_supply
     if room.area > 0:
         room.air_chosen = round((room.air_supply / room.area), 1)
@@ -565,7 +574,17 @@ def update_ventilation_calculations(room_uid: int) -> bool:
     room = get_room(room_uid)
     room.air_person_sum = round((room.room_population * room.air_per_person),1)
     room.air_emission_sum = round((room.area * room.air_emission), 1)
-    room.air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process),1)
+    
+    # Check if the minimum requirement per sqm is > person + emission + process. Set demand to largest of the two
+    air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process),1)
+    room_calculated_minimum = room.area * room.air_minimum
+    set_airflow = 0
+    if room_calculated_minimum > air_demand:
+        set_airflow = room_calculated_minimum
+    else:
+        set_airflow = air_demand
+    room.air_demand = round(set_airflow, 1)
+
     if room.area > 0:
         room.air_chosen = round((room.air_supply / room.area), 1)
     else:

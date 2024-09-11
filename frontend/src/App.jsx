@@ -29,6 +29,7 @@ import SanitaryShafts from './content/sanitary/SanitaryShafts';
 import Sanitary from './content/sanitary/Sanitary';
 import Reports from './content/reports/Reports';
 import NewSystem from './content/ventsystems/NewSystem';
+import CalculatorSpeedAirflowDucts from './content/calculators/CalculatorSpeedAirflowDucts';
 
 function App() {
 
@@ -65,6 +66,7 @@ function App() {
               <Route path="sanitary/equipment/:projectId" element={<ProtectedRoute element={<SanitaryEquipment />} />} />
               <Route path="sanitary/shafts/:projectId" element={<ProtectedRoute element={<SanitaryShafts />} />} />
               <Route path="reports/:projectId" element={<ProtectedRoute element={<Reports />} />} />
+              <Route path="calculator/ductflow" element={<ProtectedRoute element={<CalculatorSpeedAirflowDucts />}/>}/>
             </Route>
           </>)}
         <Route path="*" element={<Login setToken={setToken} />} />

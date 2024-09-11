@@ -120,6 +120,12 @@ function Navbar() {
                                     <div className="menu-link-container"><Link className="menu-link" to={`specifications/`}>Kravspesifikasjoner</Link></div>
                                     <div className="menu-link-container"><Link className="menu-link" to={'newspecification'}>Ny kravspesifikasjon</Link></div>
                                 </div>
+
+                                <div className="menu-sub-sub-container">
+                                    <div className="menu-item-title">Kalkulatorer</div>
+                                    <div className="menu-link-container"><Link className="menu-link" to={`calculator/ductflow`}>Lufthastighet kanaler</Link></div>
+                                </div>
+
                             </div>
 
                             <div className="menu-sub-container">
