@@ -1,14 +1,17 @@
-import { GlobalContext } from '../../GlobalContext';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState, useContext, useRef } from 'react';
 
+// hooks ++
+import { GlobalContext } from '../../GlobalContext';
 import useFetch from '../../hooks/useFetch'
 import useSubmitData from '../../hooks/useSubmitData'
 
+// components
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import HeaderIcon from '../../assets/svg/ventSystemIcon.svg?react';
+import HeaderIcon from '../../assets/svg/ventSystemIcon.jsx';
 import MessageBox from '../../layout/MessageBox';
-import LoadingSpinner from '../../layout/LoadingSpinner';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import ContentCard from '../../layout/ContentCard.jsx';
 
 
 function NewSystem() {
@@ -56,60 +59,58 @@ function NewSystem() {
     const fanCapacityRef = useRef(null);
     const heatExRef = useRef(null);
     const specialSystemRef = useRef(null);
-    
+
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Legg til nytt ventilasjonssystem"} projectName={""} projectNumber={""} />
-            <div className="main-content">
+            <MainContentContainer>
                 {systemResponse?.error && systemResponse.error !== null && (<MessageBox message={systemResponse.error} />)}
                 {systemResponse?.success && systemResponse.success === true && (<MessageBox message={systemResponse.message} />)}
-                <div className="flex-container-row">
-                    <div className="content-card">
-                        <div className="content-card-container">
-                            <h3>Legg til nytt ventilasjonssystem</h3>
-                            <form id="system" onSubmit={handleSubmitNewSystem} role="form">
-                                <div className="input-container">
-                                    <input ref={systemNumberRef} className="input-container-input" onChange={handleFormChange} name="systemNumber" type="text" tabIndex="1" placeholder="360.001" required />
-                                    <label for="input-field" className="input-label-left">Systemnummer</label>
-                                </div>
+                <div className="flex justify-center flex-row w-full">
+                    <ContentCard>
+                        <h3>Legg til nytt ventilasjonssystem</h3>
+                        <form id="system" onSubmit={handleSubmitNewSystem} role="form">
+                            <div className="relative mt-5 w-full">
+                                <input ref={systemNumberRef} className="w-full p-3 bg-tertiary-color border-form-border-color rounded-lg outline-none focus:border-form-focus-border-color" onChange={handleFormChange} name="systemNumber" type="text" tabIndex="1" placeholder="360.001" required />
+                                <label for="input-field" className="input-label-left">Systemnummer</label>
+                            </div>
 
-                                <div className="input-container">
-                                    <input ref={placementRef} className="input-container-input" onChange={handleFormChange} name="placement" type="text" tabIndex="2" required />
-                                    <label for="input-field" className="input-label-left">Aggregatplassering</label>
-                                </div>
+                            <div className="relative mt-5 w-full">
+                                <input ref={placementRef} className="w-full p-3 bg-tertiary-color border-form-border-color rounded-lg outline-none focus:border-form-focus-border-color" onChange={handleFormChange} name="placement" type="text" tabIndex="2" required />
+                                <label for="input-field" className="input-label-left">Aggregatplassering</label>
+                            </div>
 
-                                <div className="input-container">
-                                    <input ref={serviceAreaRef} className="input-container-input" onChange={handleFormChange} name="serviceArea" type="text" tabIndex="3" required />
-                                    <label for="input-field" className="input-label-left">Betjeningsområde</label>
-                                </div>
+                            <div className="relative mt-5 w-full">
+                                <input ref={serviceAreaRef} className="w-full p-3 bg-tertiary-color border-form-border-color rounded-lg outline-none focus:border-form-focus-border-color" onChange={handleFormChange} name="serviceArea" type="text" tabIndex="3" required />
+                                <label for="input-field" className="input-label-left">Betjeningsområde</label>
+                            </div>
 
-                                <div className="input-container">
-                                    <input ref={fanCapacityRef} className="input-container-input" onChange={handleFormChange} name="airflow" type="text" tabIndex="4" required />
-                                    <label for="input-field" className="input-label-left">Viftekapasitet m<sup>3</sup>/h <br /></label>
-                                </div>
-                                <p>
-                                    <select ref={heatExRef} className="card-select" onChange={handleFormChange} name="heat_exchange" tabIndex="5">
-                                        <option value="none">- Gjenvinner -</option>
-                                        <option value="R">Roterende</option>
-                                        <option value="P">Plate/kryss</option>
-                                        <option value="B">Batteri</option>
-                                        <option value="0">Ingen</option>
-                                    </select>
-                                </p>
-                                <p style={{ display: "flex", textAlign: "center", alignItems: "center" }}>
-                                    Spesialsystem&nbsp;
-                                    <input ref={specialSystemRef} type="checkbox" onChange={handleCheckBoxChange} name="special_system" tabIndex="6" />
-                                </p>
+                            <div className="relative mt-5 w-full">
+                                <input ref={fanCapacityRef} className="w-full p-3 bg-tertiary-color border-form-border-color rounded-lg outline-none focus:border-form-focus-border-color" onChange={handleFormChange} name="airflow" type="text" tabIndex="4" required />
+                                <label for="input-field" className="input-label-left">Viftekapasitet m<sup>3</sup>/h <br /></label>
+                            </div>
+                            <p>
+                                <select ref={heatExRef} className="card-select" onChange={handleFormChange} name="heat_exchange" tabIndex="5">
+                                    <option value="none">- Gjenvinner -</option>
+                                    <option value="R">Roterende</option>
+                                    <option value="P">Plate/kryss</option>
+                                    <option value="B">Batteri</option>
+                                    <option value="0">Ingen</option>
+                                </select>
+                            </p>
+                            <p style={{ display: "flex", textAlign: "center", alignItems: "center" }}>
+                                Spesialsystem&nbsp;
+                                <input ref={specialSystemRef} type="checkbox" onChange={handleCheckBoxChange} name="special_system" tabIndex="6" />
+                            </p>
 
-                                <p>
-                                    <button className="card-button" tabIndex="7">Legg til</button>
-                                </p>
+                            <p>
+                                <button className="card-button" tabIndex="7">Legg til</button>
+                            </p>
 
-                            </form>
-                        </div>
-                    </div>
+                        </form>
+                    </ContentCard>
                 </div>
-            </div>
+            </MainContentContainer >
         </>
     );
 }

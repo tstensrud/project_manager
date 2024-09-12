@@ -12,7 +12,10 @@ import useDeleteData from '../../hooks/useDeleteData'
 import MessageBox from '../../layout/MessageBox';
 
 // Svg
-import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
+import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import TableButton from "../../layout/tableelements/TableButton.jsx";
 
 
 function RoomTableRowComponent({ roomId, totalColumns }) {
@@ -30,7 +33,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     const [editingCell, setEditingCell] = useState(null);
     const [editedData, setEditedData] = useState(null);
     const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
-    const [cellClass, setRowClass] = useState("");
+    //const [cellClass, setRowClass] = useState("");
 
     // Row marking
     const [markedRow, setMarkedRow] = useState('');
@@ -66,7 +69,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     const onDelete = async (e) => {
         await deleteSubmit(e);
         setDisabledDeleteButton(true);
-        setRowClass("deleted-row")
+        //setRowClass("text-deleted-row line-through")
         setUndoButton(true);
         setUndoDeleteData({ "undo": true });
     }
@@ -89,34 +92,28 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('marked-row');
+            setMarkedRow('bg-marked-row text-primary-color');
         } else {
             setMarkedRow('');
         }
     };
 
     const renderEditableCell = (cellName, width) => (
-        <td width={width} className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
-            {editingCell === cellName && roomData ? (
-                <input
-                    type="text"
-                    className="table-input"
-                    value={roomData[cellName]}
-                    onChange={(e) => handleChange(e, cellName)}
-                    onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
-                    autoFocus
-                />
-            ) : (
-                roomData ? roomData.room_data[cellName] : ''
-            )}
-        </td>
+        <TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
+            {
+                editingCell === cellName && roomData ? (
+                    <EditableInputField value={roomData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+                ) : (
+                    roomData ? roomData.room_data[cellName] : ''
+                )
+            }
+        </TableTDelement>
     );
 
     const handleUndo = async (e) => {
         await handleSubmit(e);
         setUndoButton(false);
-        setRowClass("");
+        //setRowClass("");
 
     }
 
@@ -129,31 +126,36 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
                         <>
                             {
                                 Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="loading-text" key={index}>####</td>
+                                    <td className="blur-sm opacity-50" key={index}>####</td>
                                 ))
                             }
                         </>
                     ) : (
                         <>
-                            <td width="2%" className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>
+                            <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
                                 <MarkRowIcon />
-                            </td>
-                            <td width="12%" className={cellClass}>
+                            </TableTDelement>
+
+                            <TableTDelement width="12%">
                                 {roomData ? roomData.room_data.BuildingName : ''}
-                            </td>
+                            </TableTDelement>
+
                             {renderEditableCell("RoomNumber", "10%")}
-                            <td width="15%" className={cellClass}>
+                            <TableTDelement width="15%">
                                 {roomData ? roomData.room_data.RoomTypeName : ''}
-                            </td>
+                            </TableTDelement>
                             {renderEditableCell("RoomName", "10%")}
                             {renderEditableCell("Area", "5%")}
                             {renderEditableCell("RoomPopulation", "5%")}
                             {renderEditableCell("Comments", "30%")}
-                            <td className={cellClass} width="10%">
+                            <TableTDelement width="10%">
                                 {
-                                    undoButton ? <><button onClick={handleUndo} className="table-button">Angre</button></> : <><button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button></>
+                                    undoButton ?
+                                    <TableButton clickFunction={handleUndo} buttonText="Angre" disabled={false} />
+                                     : 
+                                    <TableButton clickFunction={onDelete} buttonText="Slett" />
                                 }
-                            </td>
+                            </TableTDelement>
                         </>
                     )
                 }

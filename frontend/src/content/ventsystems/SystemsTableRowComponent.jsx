@@ -13,7 +13,7 @@ import MessageBox from '../../layout/MessageBox';
 import DeleteBox from './DeleteBox';
 
 // SVG
-import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
 
 function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
     const { projectId } = useParams();
@@ -97,7 +97,7 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
     }
 
     const renderEditableCell = (cellName) => (
-        <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+        <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)}>
             {editingCell === cellName && systemData ? (
 
                 <input
@@ -126,13 +126,13 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
                         <>
                             {
                                 Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="loading-text">###</td>
+                                    <td className="blur-sm opacity-50">###</td>
                                 ))
                             }
                         </>
                     ) : (
                         <>
-                            <td className={cellClass} style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}><MarkRowIcon /></td>
+                            <td className={cellClass} onClick={handleOnMarkedRow}><MarkRowIcon /></td>
                             <td className={cellClass}>{systemData ? systemData.system_data.SystemName : ''}</td>
                             {renderEditableCell("Location")}
                             {renderEditableCell("ServiceArea")}

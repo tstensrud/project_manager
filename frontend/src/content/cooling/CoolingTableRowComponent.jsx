@@ -10,7 +10,7 @@ import useUpdateData from '../../hooks/useUpdateData';
 import MessageBox from '../../layout/MessageBox';
 
 // SVG
-import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
 
 
 function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, index }) {
@@ -105,7 +105,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
     }
 
     const renderEditableCell = (cellName, width) => (
-        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} className="cursor-pointer">
             {editingCell === cellName && coolingData ? (
                 <input
                     type="text"
@@ -137,19 +137,19 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
                         <>
                             {
                                 Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="loading-text" key={index}>####</td>
+                                    <td className="blur-sm opacity-50" key={index}>####</td>
                                 ))
                             }
                         </>
                     ) : (
                         <>
-                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>
+                            <td width="2%" className="cursor-pointer" onClick={handleOnMarkedRow}>
                                 <MarkRowIcon />
                             </td>
                             <td width="5%">
                                 {coolingData ? coolingData.room_data.RoomNumber : ''}
                                 <br />
-                                <span className="table-text-grey">
+                                <span className="text-grey-text">
                                     {coolingData ? coolingData.room_data.RoomName : ''}
                                 </span>
                             </td>

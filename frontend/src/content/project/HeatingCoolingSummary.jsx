@@ -1,5 +1,9 @@
+// Hooks
 import useFetch from '../../hooks/useFetch'
-import HeatingIcon from '../../assets/svg/heatingIcon.svg?react';
+
+// Components
+import ContentCard from '../../layout/ContentCard';
+import HeatingIcon from '../../assets/svg/heatingIcon.jsx';
 import CardTitle from '../../layout/CardTitle';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 
@@ -8,22 +12,22 @@ function HeatingSummary({ projectId }) {
     
     return (
         <>
-            <div className="content-card">
-                <div className="content-card-container">
+        <ContentCard>
+
                     {
                         loading && loading === true ? (
                             <LoadingSpinner />
                         ) : (
                             <>
                                 <CardTitle svg={<HeatingIcon />} title="Varme- og kjøledata" />
-                                <div className="content-card-inner-container">
-                                    <div className="grey-text mb-10">
+                                <div className="border-0 p-3 rounder-lg">
+                                    <div className="text-grey-text mb-1">
                                         <h4>Prosjektert varmetap</h4>
                                     </div>
-                                    <div className="mb-20">
+                                    <div className="mb-10">
                                         {data && ((data.heating_data / 1000).toFixed(2)).toLocaleString()} kW
                                     </div>
-                                    <div className="grey-text mb-10">
+                                    <div className="text-grey-text mb-1">
                                         <h4>Tilført kjøling</h4>
                                     </div>
                                     <div>
@@ -33,9 +37,7 @@ function HeatingSummary({ projectId }) {
                             </>
                         )
                     }
-
-                </div>
-            </div>
+            </ContentCard>
         </>
     );
 }

@@ -1,147 +1,3 @@
-select {
-  padding: 1px 15px;
-  background-color: var(--form-background-color);
-  border: var(--form-border);
-  color: var(--primary-color);
-  font-size: 14px;
-  line-height: 24px;
-  padding: 0px 12px 0px 12px;
-  height: 36px;
-  transition: 0.2s;
-  max-width: 190px;
-  border-radius: var(--form-elements-border-radius);
-  outline: 0;
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-select:hover {
-  border-color: var(--form-element-hover);
-}
-
-select:focus {
-  border-color: var(--form-focus-color);
-}
-
-.card-select {
-  background-color: var(--form-element-card-background-color);
-  border: var(--form-border);
-  border-radius: var(--form-elements-border-radius);
-  color: var(--primary-color);
-  font-size: 14px;
-  padding-left: 20px;
-  padding-right: 20px;
-  height: 36px;
-  transition: 0.2s;
-  outline: 0;
-}
-
-.table-select {
-  padding: 1px 10px;
-  background-color: var(--table-background-color);
-  border: var(--form-border);
-  color: var(--primary-color);
-  font-size: 12px;
-  line-height: 20px;
-  height: 28px;
-  background-size: 16px;
-  background-repeat: no-repeat;
-  background-position: left 10px center;
-  transition: 0.2s;
-  border-radius: var(--form-elements-border-radius);
-}
-
-.form-button {
-  font-family: "Roboto", sans-serif;
-  text-transform: uppercase;
-  outline: 0;
-  background: var(--form-background-color);
-  border: var(--form-border);
-  padding-left: 20px;
-  padding-right: 20px;
-  color: var(--primary-color);
-  font-size: 14px;
-  -webkit-transition: all 0.3 ease;
-  transition: all 0.3 ease;
-  cursor: pointer;
-  border-radius: var(--form-elements-border-radius);
-  height: 36px;
-}
-
-.form-button:hover {
-  border-color: var(--form-element-hover);
-}
-
-.form-button:focus {
-  border-color: var(--form-element-hover);
-}
-
-.table-sorting-button {
-  font-family: "Roboto", sans-serif;
-  text-transform: uppercase;
-  outline: 0;
-  height: 45px;
-  background: var(--secondary-color);
-  border-radius: var(--form-elements-border-radius);
-  border: var(--form-border);
-  padding-left: 20px;
-  padding-right: 20px;
-  color: var(--primary-color);
-  font-size: 14px;
-  font-weight: 800;
-  -webkit-transition: all 0.3 ease;
-  transition: all 0.3 ease;
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.table-sorting-button:hover {
-  color: var(--primary-color);
-  border-color: var(--form-element-hover);
-}
-
-.table-sorting-button-active {
-  font-family: "Roboto", sans-serif;
-  text-transform: uppercase;
-  height: 45px;
-  outline: 0;
-  background-color: var(--table-background-color);
-  border-radius: var(--form-elements-border-radius);
-  border: var(--form-border);
-  border-color: var(--form-focus-color);
-  padding-left: 20px;
-  padding-right: 20px;
-  color: var(--primary-color);
-  font-size: 14px;
-  font-weight: 800;
-  -webkit-transition: all 0.3 ease;
-  transition: all 0.3 ease;
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.table-button {
-  color: var(--primary-color);
-  width: fit-content;
-  text-transform: uppercase;
-  line-height: 20px;
-  padding: 1px 5px;
-  outline: none;
-  border: var(--form-table-button-border);
-  background-color: var(--form-background-color);
-  font-size: 14px;
-  cursor: pointer;
-  transition-duration: 0.25s;
-  border-radius: var(--form-elements-border-radius);
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-.table-button:hover {
-  border-color: var(--form-element-hover);
-  background-color: var(--form-table-button-hover-background);
-}
-
 .todo-list-button {
   color: var(--primary-color);
   width: fit-content;
@@ -150,7 +6,7 @@ select:focus {
   border: var(--form-border);
   padding: 1px 5px;
   outline: none;
-  background-color: var(--form-element-card-background-color);
+  background-color: var(--tertiary-color);
   font-size: 14px;
   cursor: pointer;
   transition-duration: 0.25s;
@@ -173,27 +29,6 @@ select:focus {
   cursor: pointer;
   transition-duration: 0.25s;
   border-radius: var(--form-elements-border-radius);
-}
-
-.form-text-area {
-  background: var(--tertiary-color);
-  border: var(--form-border);
-  border-radius: 5px;
-  color: var(--primary-color);
-  font-size: 15px;
-  line-height: 20px;
-  padding: 0px 0px 0px 5px;
-  height: 15em;
-  width: 50em;
-}
-
-.form-text-area:hover {
-  border-color: var(--form-element-hover);
-}
-
-.form-text-area:focus {
-  border-color: var(--form-focus-color);
-  outline: none;
 }
 
 .table-input {
@@ -235,34 +70,6 @@ select:focus {
   position: absolute;
 }
 
-input[type="checkbox"] {
-  outline: 0;
-  background: #f2f2f2;
-  border: 1px solid black;
-  width: 15px;
-  margin: 0;
-}
-
-input[type="checkbox"]:focus {
-  box-shadow: 0 0 0 1px var(--form-element-hover)
-}
-
-input {
-  font-family: "Roboto", sans-serif;
-  outline: 0;
-  background-color: var(--form-background-color);
-  width: 500px;
-  border: var(--form-border);
-  color: var(--primary-color);
-  margin: 0 0 15px;
-  padding-left: 20px;
-  padding-right: 20px;
-  box-sizing: border-box;
-  font-size: 14px;
-  border-radius: var(--form-elements-border-radius);
-  height: 36px;
-}
-
 .input-short {
   font-family: "Roboto", sans-serif;
   outline: 0;
@@ -281,23 +88,6 @@ input {
 input:focus,
 .input-short:focus {
   border-color: var(--form-focus-color);
-}
-
-.card-input {
-  font-family: "Roboto", sans-serif;
-  outline: 0;
-  background-color: var(--tertiary-color);
-  width: 500px;
-  border: var(--form-border);
-  margin: 0 0 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
-  box-sizing: border-box;
-  font-size: 14px;
-  border-radius: var(--form-elements-border-radius);
-  width: 100%;
 }
 
 .input-heating {
@@ -330,19 +120,6 @@ input:focus,
   background-color: var(--form-background-color);
 }
 
-input:placeholder {
-  color: var(--primary-color);
-  font-size: 14px;
-}
-
-input:hover {
-  border-color: var(--form-element-hover);
-}
-
-input:focus {
-  outline: none;
-  border-color: var(--form-focus-color);
-}
 
 input[type="file"] {
   width: 400px;
@@ -379,7 +156,7 @@ input[type="file"]::file-selector-button:active {
 }
 
 .card-button {
-  background-color: var(--form-element-card-background-color);
+  background-color: var(--tertiary-color);
   border: var(--form-border);
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
@@ -404,24 +181,6 @@ input[type="file"]::file-selector-button:active {
 }
 
 /* Container for input and label */
-.input-container {
-  position: relative;
-  margin-top: 20px;
-  width: 100%;
-}
-
-.input-container-input {
-  width: 100%;
-  padding: 10px;
-  background-color: var(--form-element-card-background-color);
-  border: var(--form-border);
-  border-radius: var(--form-elements-border-radius);
-  outline: none;
-}
-
-.input-container-input:focus {
-  border: var(--form-focus-border);
-}
 
 .input-label {
   position: absolute;

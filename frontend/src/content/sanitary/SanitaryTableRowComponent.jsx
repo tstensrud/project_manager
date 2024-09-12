@@ -10,7 +10,7 @@ import useUpdateData from '../../hooks/useUpdateData';
 import MessageBox from '../../layout/MessageBox';
 
 // SVG
-import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
 
 
 function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData, totalColumns }) {
@@ -86,7 +86,7 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
     }
 
     const renderEditableCell = (cellName, width) => (
-        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} className="cursor-pointer">
             {editingCell === cellName && sanitaryData ? (
                 <input
                     type="text"
@@ -119,19 +119,19 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
                         <>
                             {
                                 Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="loading-text" key={index}>####</td>
+                                    <td className="blur-sm opacity-50" key={index}>####</td>
                                 ))
                             }
                         </>
                     ) : (
                         <>
-                            <td style={{ cursor: 'pointer' }} width="2%" onClick={handleOnMarkedRow}>
+                            <td className="cursor-pointer" width="2%" onClick={handleOnMarkedRow}>
                                 <MarkRowIcon />
                             </td>
                             <td width="12%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ /*cursor: 'pointer',*/ textTransform: 'uppercase' }}>
                                 <strong>{allRoomData ? allRoomData.RoomNumber : ''}</strong>
                                 <br />
-                                <span className="table-text-grey">
+                                <span className="text-grey-text">
                                     {allRoomData ? allRoomData.RoomName : ''}
                                 </span>
                             </td>

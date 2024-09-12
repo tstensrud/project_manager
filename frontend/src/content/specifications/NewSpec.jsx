@@ -1,8 +1,14 @@
 import { useState } from 'react';
-import useSubmitData from '../../hooks/useSubmitData'
 import { Link } from 'react-router-dom';
+
+// hooks ++
+import useSubmitData from '../../hooks/useSubmitData'
+
+// components
 import SubTitleComponent from "../../layout/SubTitleComponent";
-import HeaderIcon from '../../assets/svg/newSpecIcon.svg?react';
+import HeaderIcon from '../../assets/svg/newSpecIcon.jsx';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import ContentCard from '../../layout/ContentCard.jsx';
 
 function NewSpec() {
 
@@ -27,35 +33,33 @@ function NewSpec() {
         <>
 
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Ny kravspesifikasjon"} projectName={""} projectNumber={""} />
-            <div className="main-content">
-                <div className="flex-container-row">
-                    <div className="content-card">
-                        <div className="content-card-container">
-                            <h2 className="card-title">Opprett ny kravspesifikasjon</h2>
-                            <p>Skriv inn navnet på kravspesifikasjonen du vil opprette. Gi den et beskrivende navn slik at det er lett å forstå hva det gjelder.
-                            </p>
+            <MainContentContainer>
+                <div className="flex justify-center flex-row w-full">
+                    <ContentCard>
+                        <h2>Opprett ny kravspesifikasjon</h2>
+                        <p>Skriv inn navnet på kravspesifikasjonen du vil opprette. Gi den et beskrivende navn slik at det er lett å forstå hva det gjelder.
+                        </p>
+                        <p>
+                            Er det en generell kravspesfikasjon som kan benyttes i flere prosjetker, bruk for eksempel et navn som: <br />
+                            - SKOK - omsorgsboliger, 2024. <br />
+                            Er det en mer prosjektspesifik kravspesifikasjon bruk et navn som: <br />
+                            - Brekketunet bolig, Obos, 2024
+                        </p>
+                        <form onSubmit={submitNewSpec}>
                             <p>
-                                Er det en generell kravspesfikasjon som kan benyttes i flere prosjetker, bruk for eksempel et navn som: <br />
-                                - SKOK - omsorgsboliger, 2024. <br />
-                                Er det en mer prosjektspesifik kravspesifikasjon bruk et navn som: <br />
-                                - Brekketunet bolig, Obos, 2024
+                                <input className="card-input" name="spec_name" onChange={handleInputChange} type="text" placeholder="Navn på kravspesifikasjon" />
+                                <button type="submit" className="card-button">Legg til</button>
                             </p>
-                            <form onSubmit={submitNewSpec}>
-                                <p>
-                                    <input className="card-input" name="spec_name" onChange={handleInputChange} type="text" placeholder="Navn på kravspesifikasjon" />
-                                    <button type="submit" className="card-button">Legg til</button>
-                                </p>
-                            </form>
-                            <p>
-                                {response && response.error ? (<>{response.error}</>) : (<></>)}
-                            </p>
-                            <p>
-                                {response && response.response !== null ? (<>{response.response}: <Link to={`/specifications/${response.data}`}>{specName}</Link></>) : (<></>)}
-                            </p>
-                        </div>
-                    </div>
+                        </form>
+                        <p>
+                            {response && response.error ? (<>{response.error}</>) : (<></>)}
+                        </p>
+                        <p>
+                            {response && response.response !== null ? (<>{response.response}: <Link to={`/specifications/${response.data}`}>{specName}</Link></>) : (<></>)}
+                        </p>
+                    </ContentCard>
                 </div>
-            </div>
+            </MainContentContainer>
         </>
     );
 }

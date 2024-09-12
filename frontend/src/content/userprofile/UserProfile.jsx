@@ -4,21 +4,22 @@ import { GlobalContext } from '../../GlobalContext';
 
 import useFetch from '../../hooks/useFetch'
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import AccountIcon from '../../assets/svg/accountIcon.svg?react'
+import AccountIcon from '../../assets/svg/accountIcon.jsx'
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
 
-function UserProfile () {
-    const {userUuid,} = useContext(GlobalContext);
-    const {data, refetch} = useFetch(`/user/${userUuid}/`);
+function UserProfile() {
+    const { userUuid, } = useContext(GlobalContext);
+    const { data, refetch } = useFetch(`/user/${userUuid}/`);
 
     return (
         <>
             <SubTitleComponent svg={<AccountIcon />} headerText={"Brukerkonto"} projectName={""} projectNumber={""} />
-            <div className='main-content'>
-                <div className="flex-container-row">
+            <MainContentContainer>
+                <div className="flex justify-center flex-row w-full">
 
                     <div className="cards">
                         <div className="information [ card ]">
-                            <h2 className="card-title">Brukerinfo</h2>
+                            <h2>Brukerinfo</h2>
                             {data && data.error ? <><h3>{data.error}</h3></> : ''}
                             {data && data.user ?
                                 <>
@@ -31,7 +32,7 @@ function UserProfile () {
                         </div>
                     </div>
                 </div>
-            </div>
+            </MainContentContainer>
         </>
     );
 }

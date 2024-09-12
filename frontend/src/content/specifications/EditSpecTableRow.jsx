@@ -85,7 +85,7 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
     }
 
     const renderEditableCell = (cellName) => (
-        <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+        <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)}>
             {editingCell === cellName && roomData ? (
                 <input
                     type="text"
@@ -112,7 +112,7 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
                         <>
                             {
                                 Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="loading-text" key={index}>####</td>
+                                    <td className="blur-sm opacity-50" key={index}>####</td>
                                 ))
                             }
                         </>

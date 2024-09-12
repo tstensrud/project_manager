@@ -3,12 +3,13 @@ import { useParams } from 'react-router-dom';
 
 import useFetch from '../../hooks/useFetch.jsx'
 
-import TapwaterIcon from '../../assets/svg/tapWaterIcon.svg?react';
+import TapwaterIcon from '../../assets/svg/tapWaterIcon.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
 import TableTop from '../../layout/TableTop.jsx';
 import SanitaryShaftTableRowComponent from './SanitaryShaftTableRowComponent.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import HelpBoxShafts from './HelpBoxShafts.jsx';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
 
 function SanitaryShafts() {
     const { projectId } = useParams();
@@ -20,8 +21,8 @@ function SanitaryShafts() {
     return (
         <>
             <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitærsjakter"} projectName={""} projectNumber={""} />
-            <div className='main-content'>
-                <div className="text-container-above-tables no-print">
+            <MainContentContainer>
+                <div className="overflow-y-hidden flex justify-center items-center mr-5 ml-5 h-32 no-print">
 
                 </div>
 
@@ -33,7 +34,7 @@ function SanitaryShafts() {
                     ) : (
                         <>
                             <TableTop info={<HelpBoxShafts />} />
-                            <div className="table-wrapper">
+                            <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
                                 <table className="fl-table">
                                     <thead>
                                         <tr>
@@ -73,7 +74,7 @@ function SanitaryShafts() {
                         </>
                     )}
 
-            </div>
+            </MainContentContainer>
 
         </>
     );

@@ -58,8 +58,8 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
             {response?.error && response.error !== null ? (<MessageBox message={response.error} />) : (<></>)}
             {error?.error && error.error !== null ? (<MessageBox message={error.error} />) : (<></>)}
 
-            <div className="settings-popup">
-                <div className="todo-popup-header">
+            <div className="flex fixed top-0 left-0 h-full bg-secondary-color text-primary-color shadow-lg shadow-background-shade justify-start z-[1000] w-80 text-base">
+                <div className="flex flex-col border-b-default-border-color p-1 relative font-extrabold">
                     <div style={{display: "flex", width: "100%", justifyContent: "flex-end"}}>
                         <span onClick={(e) => handleClick(e, setShowHeatingSettings)} className="todo-close-btn">&times;</span>
                     </div>
@@ -68,7 +68,7 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                         Varmeinnstillinger bygg {data && data.building_data.BuildingName}
                     </div>
                 </div>
-                <div className="settings-popup-item-container">
+                <div className="flex fixed top-0 left-0 h-full bg-secondary-color text-primary-color shadow-lg shadow-background-shade justify-start z-[1000] w-80 text-base-item-container">
                     <form name="building_heating_settings" onSubmit={handleSubmit}>
                         Innetempertaur (C&#176;) <br />
                         <input name="inside_temp" placeholder={data && data.building_data.InsideTemp} className="input-heating" onChange={handleFormChange} /><br />

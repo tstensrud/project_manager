@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Form, useParams } from 'react-router-dom';
+
+// Hooks
 import useFetch from '../../hooks/useFetch'
 import useUpdateData from '../../hooks/useUpdateData';
+
+// Components
 import MessageBox from '../../layout/MessageBox';
+import FormButton from '../../layout/formelements/FormButton';
 
 
 
@@ -46,9 +51,9 @@ function CoolingSettings ({setShowHeatingSettings: setShowCoolingSettings, build
         {response?.error && response.error !== null ? (<MessageBox message={response.error} /> ) : (<></>)}
         {error?.error && error.error !== null ? (<MessageBox message={error.error} /> ) : (<></>)}
 
-            <div className="settings-popup">
-                <div className="todo-popup-header">
-                    <div style={{display: "flex", width: "100%", justifyContent: "flex-end"}}>
+            <div className="flex fixed top-0 left-0 h-full bg-secondary-color text-primary-color shadow-lg shadow-background-shade justify-start z-[1000] w-80 text-base">
+                <div className="flex flex-col border-b-default-border-color p-1 relative font-extrabold">
+                    <div className="flex w-full justify-end">
                     <span onClick={(e) => handleClick(e, setShowCoolingSettings)} className="todo-close-btn">&times;</span>
                     </div>
                     
@@ -56,7 +61,7 @@ function CoolingSettings ({setShowHeatingSettings: setShowCoolingSettings, build
                     Kjøleinnstillinger bygg {data && data.building_data.BuildingName}
                     </div>
                 </div>
-                <div className="settings-popup-item-container">
+                <div className="flex fixed top-0 left-0 h-full bg-secondary-color text-primary-color shadow-lg shadow-background-shade justify-start z-[1000] w-80 text-base-item-container">
                     <p>
                         <strong>NB!</strong> Disse verdiene settes for alle rom i bygget. Du kan etterpå justere enkeltrom med egne verdier ved behov.
                     </p>
@@ -73,8 +78,8 @@ function CoolingSettings ({setShowHeatingSettings: setShowCoolingSettings, build
                         <input name="SunAdition" placeholder="1" className="input-heating" onChange={handleFormChange} /><br />
                         Solreduksjon  (0-1,0)<br />
                         <input name="SunReduction" placeholder="0,5" className="input-heating" onChange={handleFormChange} /><br />
-                        <p>
-                            <button className="form-button" type="submit">Oppdater</button>
+                        <p> 
+                            <FormButton buttonText="Oppdater" />
                         </p>
                     </form>
                 </div>

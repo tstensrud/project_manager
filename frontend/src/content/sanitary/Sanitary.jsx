@@ -1,10 +1,11 @@
 import { useParams } from 'react-router-dom';
 
 import useFetch from '../../hooks/useFetch'
-import TapwaterIcon from '../../assets/svg/tapWaterIcon.svg?react';
+import TapwaterIcon from '../../assets/svg/tapWaterIcon.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
 import BuildingSummary from './BuildingSummary';
 import LoadingSpinner from '../../layout/LoadingSpinner';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
 
 function Sanitary() {
     const { projectId } = useParams();
@@ -15,15 +16,15 @@ function Sanitary() {
     return (
         <>
             <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitæranlegg - oppsummering"} projectName={""} projectNumber={""} />
-            <div className='main-content'>
+            <MainContentContainer>
                 {
                     loading && loading === true ? (
                         <LoadingSpinner />
                     ) : (
-                        <div className="flex-container-row">
+                        <div className="flex justify-center flex-row w-full">
                             {
                                 data && data.building_data === null ? (
-                                    <p className="p-description">{data.error}</p>
+                                    <p className="text-primary-color text-xs">{data.error}</p>
                                 ) : (
                                     data && data.building_data && Object.keys(data.building_data).map((key) => (
                                         <BuildingSummary buildingUid={data.building_data[key].uid} projectId={projectId} key={data.building_data[key].uid} />
@@ -33,7 +34,7 @@ function Sanitary() {
                         </div>
                     )
                 }
-            </div>
+            </MainContentContainer>
         </>
     );
 }

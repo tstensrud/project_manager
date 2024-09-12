@@ -119,7 +119,7 @@
 
 .todo-completed {
     text-decoration: line-through;
-    background-color: var(--table-background-color);
+    background-color: var(--secondary-color);
     color: var(--primary-color);
     padding: 5px;
     position: relative;
@@ -128,23 +128,6 @@
 }
 
 /* Settings window for cooling and heating*/
-
-.settings-popup {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    background-color: var(--secondary-color);
-    color: var(--primary-color);
-    box-shadow: 5px 1px 20px black;
-    justify-content: flex-start;
-    flex-direction: column;
-    align-items: flex-start;
-    z-index: 1000;
-    width: 300px;
-    font-size: 14px;
-}
 
 .settings-popup-item-container {
     overflow-y: auto;
@@ -185,53 +168,5 @@
     text-align: center;
 }
 
-.help-box-wrapper {
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    left: 0;
-    top: 15%;
-}
 
-.help-box-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    margin-top: 2%;
-    align-items: center;
-}
-
-.help-box-card {
-    background-color: var(--tertiary-color);
-    display: flex;
-    flex-direction: column;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: var(--default-border-radius);
-    width: 30%;
-    height: 50%;
-    overflow-y: auto;
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.301);
-    border: var(--default-border);
-}
-
-.help-box-card-header {
-    width: 100%;
-    background-color: var(--tertiary-color);
-    display: flex;
-    justify-content: flex-end;
-    position: sticky;
-    top: 0;
-    padding-top: 10px;
-}
-
-.help-box-card-item {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
 

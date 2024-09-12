@@ -1,9 +1,15 @@
 import { useState } from 'react';
 
+// hooks
 import useFetch from '../../hooks/useFetch'
 import useUpdateData from '../../hooks/useUpdateData'
+
+// components
 import LoadingSpinner from '../../layout/LoadingSpinner';
-import BuildingIcon from '../../assets/svg/building.svg?react';
+import BuildingIcon from '../../assets/svg/building.jsx';
+import ContentCard from '../../layout/ContentCard.jsx';
+import SummaryHeader from './components/SummaryHeader.jsx'
+import EquipmentContainer from './components/EquipmentContainer.jsx';
 
 function BuildingSummary({ buildingUid, projectId }) {
 
@@ -63,28 +69,28 @@ function BuildingSummary({ buildingUid, projectId }) {
     }
 
     return (
-        <div className="content-card">
-            <div className="content-card-container">
-                <div style={{ display: "flex", width: "400px", marginBottom: "20px" }}>
-                    <div style={{ display: "flex", width: "40%" }}>
-                        <BuildingIcon />
-                    </div>
-                    <div style={{ display: "flex", width: "60%", textAlign: "center", alignItems: "center", justifyContent: "end", fontSize: "25px" }}>
-                        {buildingSummaryData && buildingSummaryData.building_data.BuildingName}
-                    </div>
+        <ContentCard>
+            <div style={{ display: "flex", width: "400px", marginBottom: "20px" }}>
+                <div style={{ display: "flex", width: "40%" }}>
+                    <BuildingIcon />
                 </div>
+                <div style={{ display: "flex", width: "60%", textAlign: "center", alignItems: "center", justifyContent: "end", fontSize: "25px" }}>
+                    {buildingSummaryData && buildingSummaryData.building_data.BuildingName}
+                </div>
+            </div>
 
-                {
-                    buildingSummaryDataLoading && buildingSummaryDataLoading === true ? (
-                        <LoadingSpinner />
-                    ) : (
-                        <>
-                            <div className="flex w-full flex-row">
-                                <div style={{marginRight: "20px"}}>
-                                Avløpskurve: 
-                                </div>
-                                <strong>{buildingSummaryData && buildingSummaryData.building_data.GraphCurve}</strong>
+            {
+                buildingSummaryDataLoading && buildingSummaryDataLoading === true ? (
+                    <LoadingSpinner />
+                ) : (
+                    <>
+                        <div className="flex w-full flex-row">
+                            <div className="mr-5">
+                                Avløpskurve:
                             </div>
+                            <strong>{buildingSummaryData && buildingSummaryData.building_data.GraphCurve}</strong>
+                        </div>
+                        <div className="mb-1">
                             <form onSubmit={handleCurveSubmit}>
                                 <p>
                                     <select className="card-select" onChange={handleCurveChange}>
@@ -96,112 +102,42 @@ function BuildingSummary({ buildingUid, projectId }) {
                                     <button className="card-button" type="submit">Oppdater</button>
                                 </p>
                             </form>
+                        </div>
 
-                            <h3>Oppsummering vannmengder</h3>
-                            <div className="content-card-inner-container">
-                                <div className="sanitary-building-summary-equipment-header">
-                                    <div className="flex justify-start w-full">
-                                        <strong>Spillvann</strong>
-                                    </div>
-                                </div>
+                        <h3>Oppsummering vannmengder</h3>
+                        <div className="border-0 p-1 rounder-lg">
+                            <SummaryHeader header="Spillvann" />
+                            <EquipmentContainer type="Vannmengde">{buildingSummaryData && buildingSummaryData.totals.drainage.total.toFixed(2)} L/s</EquipmentContainer>
+                            <EquipmentContainer type="Rørdim. (MA) 1:60">{buildingSummaryData && buildingSummaryData.totals.drainage.pipe_siz_1_60} mm</EquipmentContainer>
+                            <EquipmentContainer type="Rørdim. (MA) vertikal">{buildingSummaryData && buildingSummaryData.totals.drainage.pipe_size_vertical} mm</EquipmentContainer>
+                        </div>
 
-                                <div className="sanitary-building-summary-equipment-container">
-                                    <div className="flex justify-start w-70-percent">
-                                        Vannmengde
-                                    </div>
-                                    <div className="flex justify-end w-30-percent">
-                                        {buildingSummaryData && buildingSummaryData.totals.drainage.total.toFixed(2)} L/s
-                                    </div>
-                                </div>
+                        <div className="border-0 p-1 rounder-lg">
+                            <SummaryHeader header="Kaldtvann" />
+                            <EquipmentContainer type="Vannmengde">{buildingSummaryData && buildingSummaryData.totals.cw.total.toFixed(2)} L/s</EquipmentContainer>
+                            <EquipmentContainer type="Rørdim. (Cu)">{buildingSummaryData && buildingSummaryData.totals.cw.pipe_size} mm</EquipmentContainer>
+                        </div>
 
-                                <div className="sanitary-building-summary-equipment-container">
-                                    <div className="flex justify-start w-70-percent">
-                                        Rørdim. (MA) 1:60
-                                    </div>
-                                    <div className="flex justify-end w-30-percent">
-                                        {buildingSummaryData && buildingSummaryData.totals.drainage.pipe_siz_1_60} mm
-                                    </div>
-                                </div>
+                        <div className="border-0 p-1 rounder-lg">
+                            <SummaryHeader header="Varmtvann" />
+                            <EquipmentContainer type="Vannmengde">{buildingSummaryData && buildingSummaryData.totals.ww.total.toFixed(2)} L/s</EquipmentContainer>
+                            <EquipmentContainer type="Rørdim. (Cu)">{buildingSummaryData && buildingSummaryData.totals.ww.pipe_size} mm</EquipmentContainer>
+                        </div>
 
-                                <div className="sanitary-building-summary-equipment-container">
-                                    <div className="flex justify-start w-70-percent">
-                                        Rørdim. (MA) vertikal
-                                    </div>
-                                    <div className="flex justify-end w-30-percent">
-                                        {buildingSummaryData && buildingSummaryData.totals.drainage.pipe_size_vertical} mm
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="content-card-inner-container">
-                                <div className="sanitary-building-summary-equipment-header">
-                                    <div className="flex justify-start w-full">
-                                        <strong>Kaldtvann</strong>
-                                    </div>
-                                </div>
-
-                                <div className="sanitary-building-summary-equipment-container">
-                                    <div className="flex justify-start w-70-percent">
-                                        Vannmengde
-                                    </div>
-                                    <div className="flex justify-end w-30-percent">
-                                        {buildingSummaryData && buildingSummaryData.totals.cw.total.toFixed(2)} L/s
-                                    </div>
-                                </div>
-
-                                <div className="sanitary-building-summary-equipment-container">
-                                    <div className="flex justify-start w-70-percent">
-                                        Rørdim. (Cu)
-                                    </div>
-                                    <div className="flex justify-end w-30-percent">
-                                        {buildingSummaryData && buildingSummaryData.totals.cw.pipe_size} mm
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="content-card-inner-container">
-                                <div className="sanitary-building-summary-equipment-header">
-                                    <div className="flex justify-start w-full">
-                                        <strong>Varmtvann</strong>
-                                    </div>
-                                </div>
-
-                                <div className="sanitary-building-summary-equipment-container">
-                                    <div className="flex justify-start w-70-percent">
-                                        Vannmengde
-                                    </div>
-                                    <div className="flex justify-end w-30-percent">
-                                        {buildingSummaryData && buildingSummaryData.totals.ww.total.toFixed(2)} L/s
-                                    </div>
-                                </div>
-
-                                <div className="sanitary-building-summary-equipment-container">
-                                    <div className="flex justify-start w-70-percent">
-                                        Rørdim. (Cu)
-                                    </div>
-                                    <div className="flex justify-end w-30-percent">
-                                        {buildingSummaryData && buildingSummaryData.totals.ww.pipe_size} mm
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="mt-4">
                             <h3>Installert sanitærustyr</h3>
-                            <div className="content-card-inner-container">
+                            <div className="border-0 p-1 rounder-lg">
                                 {
                                     buildingSummaryData && Object.entries(buildingSummaryData && buildingSummaryData.building_data.sanitary_summary).map((equip, index) => (
-                                        <div className="sanitary-building-summary-equipment-container" key={index}>
-                                            <div className="flex justify-start w-70-percent">
-                                                {translateEquipment(equip[0])}</div>
-                                            <div className="flex justify-end w-30-percent">
-                                                {equip[1]} stk
-                                            </div>
-                                        </div>
+                                        <EquipmentContainer type={translateEquipment(equip[0])} key={index}>{equip[1]} stk</EquipmentContainer>
                                     ))
                                 }
                             </div>
-                        </>
-                    )
-                }
-            </div>
-        </div>
+                        </div>
+                    </>
+                )
+            }
+        </ContentCard>
     );
 }
 

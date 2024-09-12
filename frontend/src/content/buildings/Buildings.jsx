@@ -1,12 +1,18 @@
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 
+// Hooks
 import useFetch from '../../hooks/useFetch'
-import SubTitleComponent from '../../layout/SubTitleComponent';
+
+// Components
+import MainContentContainer from '../../layout/MainContentContainer.jsx'
+import FormButton from '../../layout/formelements/FormButton.jsx';
+import SubTitleComponent from '../../layout/SubTitleComponent.jsx'
 import BuildingSummary from './BuildingSummary';
 import useSubmitData from '../../hooks/useSubmitData'
-import HeaderIcon from '../../assets/svg/buildingIcon.svg?react';
+import HeaderIcon from '../../assets/svg/buildingIcon.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner';
+import InputField from '../../layout/formelements/InputField.jsx';
 
 function Buildings() {
     const { projectId } = useParams();
@@ -34,25 +40,23 @@ function Buildings() {
 
     return (<>
         <SubTitleComponent svg={<HeaderIcon />} headerText={"Bygg"} projectName={""} projectNumber={""} />
-        <div className="main-content">
+        <MainContentContainer>
 
-            <div className="container-above-table-rooms-top">
-                <form className="custom-form profile-form" onSubmit={handleFormSubmit}>
-
-                    <input onChange={handleChange} type="text" value={formInput} name="buildingName" placeholder="Navn på bygg. Eks.: A, Hovedbygg" />
+            <div className="flex h-20 items-center justify-center text-center flex-row">
+                <form onSubmit={handleFormSubmit}>
+                    <InputField changeFunction={handleChange} value={formInput} name="buildingName" placeholder="Navn på bygg. Eks.: A, Hovedbygg" />
                     &nbsp;&nbsp;
-                    <button type="submit" className="form-button">Legg til </button>
-
+                    <FormButton buttonText="Legg til"/>
                 </form>
             </div>
 
-            <div className="flex-container-row">
+            <div className="flex justify-center flex-row w-full">
 
 
                 {
                     loading && loading === true ? (
                         <>
-                            <span className="loading-text">####</span>
+                            <span className="blur-sm opacity-50">####</span>
                             <br />
                             <LoadingSpinner />
                         </>
@@ -60,7 +64,7 @@ function Buildings() {
                         <>
                             {
                                 data?.building_data === null ? (
-                                    <p className="p-description">{data.error}</p>
+                                    <p className=" text-primary-color text-xs">{data.error}</p>
                                 ) : (
                                     data && data.building_data && Object.keys(data.building_data).map((key, index) => (
                                         <BuildingSummary refetchBuildingData={refetchBuildingData} key={index} buildingData={data.building_data[key]} />
@@ -70,10 +74,8 @@ function Buildings() {
                         </>
                     )
                 }
-
-
             </div>
-        </div>
+        </MainContentContainer>
     </>
     );
 }

@@ -1,6 +1,13 @@
 import { useState } from 'react';
-import HeaderIcon from '../../assets/svg/ventSystemIcon.svg?react';
+
+// Components
+import ContentCard from '../../layout/ContentCard';
+import HeaderIcon from '../../assets/svg/ventSystemIcon.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import CardInputField from '../../layout/formelements/CardInputField.jsx';
+import CardButton from '../../layout/formelements/CardButton.jsx';
+import CardSelect from '../../layout/formelements/CardSelect.jsx';
 
 function CalculatorSpeedAirflowDucts() {
     const [diameter, setDiameter] = useState(0);
@@ -42,82 +49,86 @@ function CalculatorSpeedAirflowDucts() {
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Kalkulator - lufthastighet kanaler"} projectName={""} projectNumber={""} />
-            <div className="main-content">
-                <div className="flex-container-row">
-                    <div className="content-card">
-                        <div className="content-card-container">
-                            <h2 className="card-title">Lufthastighet kanaler</h2>
-                            <div className="input-container">
-                                <input onChange={(e) => setAirflow(e.target.value)} className="input-container-input" name="airflow" placeholder='Luftmengde m3/h' />
-                                <label htmlFor="input-field" className="input-label">Luftmengde m<sup>3</sup>/h</label>
-                            </div>
-
-                            <h3>Spirokanal</h3>
-                            <div className="input-container">
-                                <select onChange={handleDiameterChange} className="card-select" name="diameter">
-                                    <option>- Kanaldimensjon -</option>
-                                    <option value="80">Ø 80</option>
-                                    <option value="100">Ø 100</option>
-                                    <option value="125">Ø 125</option>
-                                    <option value="160">Ø 160</option>
-                                    <option value="200">Ø 200</option>
-                                    <option value="250">Ø 250</option>
-                                    <option value="315">Ø 315</option>
-                                    <option value="400">Ø 400</option>
-                                    <option value="500">Ø 500</option>
-                                    <option value="630">Ø 630</option>
-                                    <option value="800">Ø 800</option>
-                                    <option value="1000">Ø 1000</option>
-                                    <option value="1250">Ø 1250</option>
-                                </select>
-                            </div>
-
-                            <div className="input-container">
-                                <h3>Firkantkanal</h3>
-                            </div>
-                            <div className="input-container">
-                                <input onChange={(e) => setWidth(e.target.value)} name="width" className="input-container-input" placeholder='Bredde mm' />
-                                <label htmlFor="input-field" className="input-label">Bredde mm</label>
-                            </div>
-                            <div className="input-container">
-                                <input onChange={(e) => setHeight(e.target.value)} name="height" className="input-container-input" placeholder='Høyde mm' />
-                                <label htmlFor="input-field" className="input-label">Høyde mm</label>
-                            </div>
-                            <div className="input-container">
-                                <button onClick={calculate} className="card-button">Beregn</button>
-                            </div>
-                            <div className="input-container">
-                                <h3>Hastigheter</h3>
-                                <br />
-                                {warning}
-                                {
-                                    resultCiruclar !== 0 &&
-                                    <div className="flex flex-row w-full">
-                                        <div className="grey-text w-half">
-                                            Spirokanal:
-                                        </div>
-                                        <div>
-                                            <strong>{resultCiruclar} m/s</strong>
-                                        </div>
-                                    </div>
-                                }
-                                <br />
-                                {
-                                    resultSquare !== 0 &&
-                                    <div className="flex flex-row w-full">
-                                        <div className="grey-text w-half">
-                                            Firkantkanal:
-                                        </div>
-                                        <div>
-                                            <strong>{resultSquare} m/s</strong>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
+            <MainContentContainer>
+                <div className="flex justify-center flex-row w-full">
+                    <ContentCard>
+                        <h2>Lufthastighet kanaler</h2>
+                        <div className="mt-3">
+                            Luftmengde m3/h
                         </div>
-                    </div>
+                        <div className="relative w-full">
+                            <CardInputField changeFunction={(e) => setAirflow(e.target.value)} name="airflow" placeholder="Luftmengde m3/h" />
+                        </div>
+
+                        <h3>Spirokanal</h3>
+                        <div className="relative mt-5 w-full">
+                            <CardSelect changeFunction={handleDiameterChange} name="diameter">
+                                <option>- Kanaldimensjon -</option>
+                                <option value="80">Ø 80</option>
+                                <option value="100">Ø 100</option>
+                                <option value="125">Ø 125</option>
+                                <option value="160">Ø 160</option>
+                                <option value="200">Ø 200</option>
+                                <option value="250">Ø 250</option>
+                                <option value="315">Ø 315</option>
+                                <option value="400">Ø 400</option>
+                                <option value="500">Ø 500</option>
+                                <option value="630">Ø 630</option>
+                                <option value="800">Ø 800</option>
+                                <option value="1000">Ø 1000</option>
+                                <option value="1250">Ø 1250</option>
+                            </CardSelect>
+                        </div>
+
+                        <div className="relative mt-5 w-full">
+                            <h3>Firkantkanal</h3>
+                        </div>
+                        <div className="mt-3">
+                            Bredde i mm
+                        </div>
+                        <div className="relative w-full">
+                            <CardInputField changeFunction={(e) => setWidth(e.target.value)} name="width" placeholder="Bredde mm" />
+                        </div>
+                        <div className="mt-3">
+                            Høyde i mm
+                        </div>
+                        <div className="relative w-full">
+                            <CardInputField changeFunction={(e) => setHeight(e.target.value)} name="height" placeholder="Høyde mm" />
+                        </div>
+                        <div className="relative mt-5 w-full">
+                            <CardButton clickFunction={calculate} buttonText="Beregn" />
+                        </div>
+                        <div className="relative mt-5 w-full">
+                            <h3>Beregnede hastigheter</h3>
+                            <br />
+                            {warning}
+                            {
+                                resultCiruclar !== 0 &&
+                                <div className="flex flex-row w-full">
+                                    <div className="grey-text w-1/2">
+                                        Spirokanal:
+                                    </div>
+                                    <div>
+                                        <strong>{resultCiruclar} m/s</strong>
+                                    </div>
+                                </div>
+                            }
+                            <br />
+                            {
+                                resultSquare !== 0 &&
+                                <div className="flex flex-row w-full">
+                                    <div className="grey-text w-1/2">
+                                        Firkantkanal:
+                                    </div>
+                                    <div>
+                                        <strong>{resultSquare} m/s</strong>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </ContentCard>
                 </div>
-            </div>
+            </MainContentContainer >
         </>
     );
 }

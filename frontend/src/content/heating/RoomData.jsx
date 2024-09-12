@@ -10,15 +10,15 @@ function RoomData({ heatingData, setShowRoomData }) {
   return (
     <>
       <Draggable>
-        <div className="room-info-ventilation-container" style={{ cursor: 'move' }}>
+        <div className="fixed shadow-lg shadow-background-shade border border-default-border-color left-[25%] top-[15%] z-[1000] w-[600px] overflow-y-auto rounded-lg cursor-move">
 
-          <div className="room-data-row-container">
-            <div className="room-data-row-left">
-              <div className="room-data-header">
-                {heatingData.room_data.RoomNumber} - <span className="table-text-grey">{heatingData.room_data.RoomName}</span>
+          <div className="flex w-full pt-3 pb-1 pl-5 border-b border-b-default-border-color bg-secondary-color hover:bg-tertiary-color">
+            <div className="flex w-1/2">
+              <div className="text-lg font-semibold w-full">
+                {heatingData.room_data.RoomNumber} - <span className="text-grey-text">{heatingData.room_data.RoomName}</span>
               </div>
             </div>
-            <div className="room-data-row-right">
+            <div className="flex justify-end w-1/2 pr-4 text-base">
               <span onClick={(e) => handleClick(e, setShowRoomData)} className="room-data-close-btn">
                 &times;
               </span>
@@ -29,9 +29,9 @@ function RoomData({ heatingData, setShowRoomData }) {
           <RoomDataRow rowName="Bygg" rowData={heatingData.building_data.BuildingName} />
           <RoomDataRow rowName="Areal" rowData={``}>{heatingData.room_data.Area} m<sup>2</sup></RoomDataRow>
 
-          <div className="room-data-row-container">
-            <div className="room-data-row-left">
-              <div className="room-data-header">
+          <div className="flex w-full pt-3 pb-1 pl-5 border-b border-b-default-border-color bg-secondary-color hover:bg-tertiary-color">
+            <div className="flex w-1/2">
+              <div className="text-lg font-semibold w-full">
                 Grunnlagsdata varme
               </div>
             </div>
@@ -52,9 +52,9 @@ function RoomData({ heatingData, setShowRoomData }) {
           <RoomDataRow rowName="Luftmengde" rowData={``}>{heatingData.heating_data.FloorAirArea} m<sup>2</sup></RoomDataRow>
 
 
-          <div className="room-data-row-container">
-            <div className="room-data-row-left">
-              <div className="room-data-header">
+          <div className="flex w-full pt-3 pb-1 pl-5 border-b border-b-default-border-color bg-secondary-color hover:bg-tertiary-color">
+            <div className="flex w-1/2">
+              <div className="text-lg font-semibold w-full">
                 Varmetap
               </div>
             </div>
@@ -68,9 +68,9 @@ function RoomData({ heatingData, setShowRoomData }) {
           <RoomDataRow rowName="Varmetap totalt" rowData={`${heatingData.heating_data.HeatLossSum.toFixed(2)} W`} />
           <RoomDataRow rowName="Prosjektert varme" rowData={`${heatingData.heating_data.ChosenHeating.toFixed(2)} W`} />
 
-          <div className="room-data-row-container">
-            <div className="room-data-row-left">
-              <div className="room-data-header">
+          <div className="flex w-full pt-3 pb-1 pl-5 border-b border-b-default-border-color bg-secondary-color hover:bg-tertiary-color">
+            <div className="flex w-1/2">
+              <div className="text-lg font-semibold w-full">
                 Annet
               </div>
             </div>

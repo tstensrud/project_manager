@@ -2,10 +2,10 @@ function CardTitle(props) {
     return (
         <>
             <div className="flex w-full">
-                <div className="flex align-center text-center mr-10">
+                <div className="flex items-center text-center mr-3">
                     {props.svg}
                 </div>
-                <div className="flex align-center text-center text-card-title">
+                <div className="flex items-center text-center text-2xl">
                     {props.title}
                 </div>
             </div>

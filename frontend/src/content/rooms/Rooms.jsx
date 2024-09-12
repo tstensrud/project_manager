@@ -6,13 +6,23 @@ import useFetch from '../../hooks/useFetch'
 import useSubmitData from '../../hooks/useSubmitData'
 import { customSortFloors } from '../../utils/customSortFloors.js'
 
-import RoomIcon from '../../assets/svg/roomsIcon.svg?react'
+// components
+import RoomIcon from '../../assets/svg/roomsIcon.jsx'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import RoomTableRowComponent from "./RoomTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 import TableTop from '../../layout/TableTop';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import HelpBox from './HelpBox.jsx';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import FormButton from '../../layout/formelements/FormButton.jsx';
+import InputField from '../../layout/formelements/InputField.jsx';
+import SelectElement from '../../layout/formelements/SelectElement.jsx';
+import SortingButton from '../../layout/formelements/SortingButton.jsx';
+import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.jsx'
+import Table from '../../layout/tableelements/Table.jsx';
+import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
+
 
 
 function Rooms() {
@@ -135,67 +145,74 @@ function Rooms() {
         <>
             {newRoomDataResponse?.error ? (<MessageBox message={newRoomDataResponse.error} />) : (<></>)}
             <SubTitleComponent svg={<RoomIcon />} headerText={"Romskjema"} projectName={""} projectNumber={""} />
-            <div className='main-content'>
+            <MainContentContainer>
                 {
                     roomLoading === true || roomTypeLoading === true || buildingDataLoading === true ? (
                         <LoadingSpinner />
                     ) : (
                         <>
-                            <div className="container-above-table-rooms-top">
+                            <div className="flex h-20 items-center justify-center text-center flex-row w-full">
                                 <form onSubmit={handleOnSubmit}>
                                     <div className="flex flex-row w-full">
-                                        <div className="mr-10">
-                                            <select ref={buildingRef} name="buildingUid" onChange={handleFormChange} tabIndex="1">
+                                        <div className="mr-2">
+                                            <SelectElement ref={buildingRef} name="buildingUid" changeFunction={handleFormChange} tabIndex={1}>
                                                 <option key="0" value="">- Velg bygg -</option>
                                                 {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                                                     <option key={index} value={buildingData.building_data[key].uid}>{buildingData.building_data[key].BuildingName}</option>
                                                 ))}
-                                            </select>
+                                            </SelectElement>
                                         </div>
 
-                                        <div className="mr-10">
-                                            <input className="input-short" type="text" name="floor" onChange={handleFormChange} placeholder="Etasje" tabIndex="2" required />
+                                        <div className="mr-2 w-24">
+                                            <InputField name="floor" changeFunction={handleFormChange} placeholder="Etasje" tabIndex={2} required={true} />
                                         </div>
-                                        <div className="mr-10">
-                                            <input ref={inputRoomNumberRef} className="input-short" type="text" name="roomNumber" onChange={handleFormChange} placeholder="Romnr." tabIndex="3" required />
+                                        <div className="mr-2 w-36">
+                                            <InputField ref={inputRoomNumberRef} name="roomNumber" changeFunction={handleFormChange} placeholder="Romnr" tabIndex={3} required={true} />
                                         </div>
-                                        <div className="mr-10">
-                                            <select ref={roomTypeRef} onChange={handleFormChange} name="roomType" tabIndex="4">
+                                        <div className="mr-2">
+                                            <SelectElement ref={roomTypeRef} name="roomType" changeFunction={handleFormChange} tabIndex={4}>
                                                 <option key="0" value="">- Velg romtype -</option>
                                                 {roomTypeData && roomTypeData.spec_room_type_data !== undefined && roomTypeData.spec_room_type_data.map(type => (
                                                     <option key={type.uid} value={type.uid}>{type.name}</option>
                                                 ))};
-                                            </select>
+                                            </SelectElement>
                                         </div>
-                                        <div className="mr-10">
-                                            <input ref={inputRoomNameRef} type="text" name="roomName" onChange={handleFormChange} placeholder="Romnavn" tabIndex="5" required />
+                                        <div className="mr-2 w-52">
+                                            <InputField ref={inputRoomNameRef} name="roomName" changeFunction={handleFormChange} placeholder="Romnavn" tabIndex={5} required={true} />
                                         </div>
-                                        <div className="mr-10">
-                                            <input ref={inputAreaRef} className="input-short" type="text" name="roomArea" onChange={handleFormChange} placeholder="Areal" tabIndex="6" required />
+                                        <div className="mr-2 w-24">
+                                            <InputField ref={inputAreaRef} name="roomArea" changeFunction={handleFormChange} placeholder="Areal" tabIndex={6} required={true} />
                                         </div>
-                                        <div className="mr-10">
-                                            <input ref={inputPopRef} className="input-short" type="text" name="roomPeople" onChange={handleFormChange} placeholder="Personer" tabIndex="7" required />
+                                        <div className="mr-2 w-24">
+                                            <InputField ref={inputPopRef} name="roomPeople" changeFunction={handleFormChange} placeholder="Personer" tabIndex={7} required={true} />
                                         </div>
-                                        <div className="mr-10">
-                                            <button className="form-button" type="submit" tabIndex="7">Legg til</button>
+                                        <div className="mr-2">
+                                            <FormButton buttonText="Legg til" tabIndex={7} />
                                         </div>
                                     </div>
                                 </form>
                             </div>
-                            <div className="container-above-table-rooms-bottom">
-                                {
-                                buildingData?.building_data && Object.keys(buildingData.building_data).map((key, index) => (
-                                    <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
-                                        {buildingData.building_data[key].BuildingName}&nbsp;
-                                    </button>
-                                ))
-                                }
 
+                            <div className="flex flex-row w-full justify-center">
+                                {
+                                    buildingData?.building_data && Object.keys(buildingData.building_data).map((key, index) => (
+                                        <div key={index}>
+                                            {
+                                                activeSortButton === buildingData.building_data[key].uid ? (
+                                                    <SortingButton name={buildingData.building_data[key].uid} buttonText={buildingData.building_data[key].BuildingName} sortButtonClick={sortButtonClick} />
+                                                ) : (
+                                                    <ActiveSortingButton name={buildingData.building_data[key].uid} buttonText={buildingData.building_data[key].BuildingName} sortButtonClick={sortButtonClick} />
+                                                )
+                                            }
+                                        </div>
+                                    ))
+                                }
                             </div>
+
                             {
                                 activeSortButton === null ? (
                                     <>
-                                        <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                        <div className="w-full flex justify-center mt-12">
                                             Velg bygg
                                         </div>
                                     </>
@@ -204,42 +221,42 @@ function Rooms() {
                                         {
                                             roomData ? (
                                                 roomData.room_data === null ? (
-                                                    <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                                    <div className="w-full flex justify-center mt-12">
                                                         Ingen rom lagt til
                                                     </div>
                                                 ) : (
                                                     <>
 
                                                         <TableTop info={<HelpBox />} />
-                                                        <div className="table-container">
-                                                            <div className="table-header-wrapper">
-                                                                <table className="fl-table">
+                                                        <div className="flex flex-col h-[80%] overflow-y-auto">
+                                                            <div className="sticky ml-5 mr-5 mt-0 top-0 bg-secondary-color z-10">
+                                                                <Table>
                                                                     <thead>
                                                                         <tr>
-                                                                            <th width="2%">#</th>
-                                                                            <th width="12%">Bygg</th>
-                                                                            <th width="10%">Romnr</th>
-                                                                            <th width="15%">Romtype</th>
-                                                                            <th width="10%">Romnavn</th>
-                                                                            <th width="5%">Areal <br /> m<sup>2</sup></th>
-                                                                            <th width="5%">Personer</th>
-                                                                            <th width="30%">Kommentarer</th>
-                                                                            <th width="10%">Slett Rom</th>
+                                                                            <TableTHelement width="2%" text="#"/>
+                                                                            <TableTHelement width="12%" text="Bygg" />
+                                                                            <TableTHelement width="10%" text="Romnr"/>
+                                                                            <TableTHelement width="15%" text="Romtype"/>
+                                                                            <TableTHelement width="10%" text="Romnavn"/>
+                                                                            <TableTHelement width="5%" text="Areal"/>
+                                                                            <TableTHelement width="5%" text="Personer"/>
+                                                                            <TableTHelement width="30%" text="Kommentarer"/>
+                                                                            <TableTHelement width="10%" text="Slett Rom"/>
                                                                         </tr>
                                                                     </thead>
-                                                                </table>
+                                                                </Table>
                                                             </div>
 
                                                             {
                                                                 floors && floors.map(floor => (
                                                                     <React.Fragment key={floor}>
-                                                                        <div className="table-wrapper">
+                                                                        <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
 
-                                                                            <div className="table-title">
+                                                                            <div className="text-primary-color text-xs border-none w-full max-w-full bg-secondary-color flex justify-center">
                                                                                 <h3>Etasje {floor}</h3>
                                                                             </div>
 
-                                                                            <table className="fl-table">
+                                                                            <Table>
                                                                                 <tbody>
                                                                                     {
                                                                                         sortedBuildings && sortedBuildings.length > 0 ? (
@@ -247,7 +264,7 @@ function Rooms() {
                                                                                         ) : (<></>)
                                                                                     }
                                                                                 </tbody>
-                                                                            </table>
+                                                                            </Table>
                                                                         </div>
 
                                                                     </React.Fragment>
@@ -264,7 +281,7 @@ function Rooms() {
                         </>
                     )
                 }
-            </div>
+            </MainContentContainer>
         </>
     );
 }

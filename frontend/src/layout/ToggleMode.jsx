@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import MoonIcon from '../assets/svg/moonIcon.svg?react';
+import MoonIcon from '../assets/svg/moonIcon.jsx';
 
 function ToggleMode() {
     

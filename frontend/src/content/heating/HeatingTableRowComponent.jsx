@@ -11,7 +11,7 @@ import RoomData from './RoomData';
 import MessageBox from '../../layout/MessageBox';
 
 // SVG
-import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
 
 
 function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState, totalColumns }) {
@@ -89,7 +89,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
     }
 
     const renderEditableCell = (cellName, width) => (
-        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
+        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} className="cursor-pointer">
             {editingCell === cellName && heatingData ? (
                 <input
                     type="text"
@@ -116,23 +116,23 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
                         <>
                             {
                                 Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="loading-text" key={index}>####</td>
+                                    <td className="blur-sm opacity-50" key={index}>####</td>
                                 ))
                             }
                         </>
                     ) : (
                         <>
-                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>
+                            <td width="2%" className="cursor-pointer" onClick={handleOnMarkedRow}>
                                 <MarkRowIcon />
                             </td>
-                            <td width="5%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer' }}>
+                            <td width="5%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} className="cursor-pointer">
                                 <strong>
-                                    <span className="table-link">
+                                    <span className="text-accent-color">
                                         {heatingData ? heatingData.room_data.RoomNumber : ''}
                                     </span>
                                 </strong>
                                 <br />
-                                <span className="table-text-grey">
+                                <span className="text-grey-text">
                                     {heatingData ? heatingData.room_data.RoomName : ''}
                                 </span>
                             </td>

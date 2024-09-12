@@ -4,13 +4,16 @@ import { useParams, Link } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch.jsx'
 import { customSortFloors } from '../../utils/customSortFloors.js'
 
-import TapwaterIcon from '../../assets/svg/tapWaterIcon.svg?react';
+import TapwaterIcon from '../../assets/svg/tapWaterIcon.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
 import SanitaryTableRowComponent from "./SanitaryTableRowComponent.jsx";
 import MessageBox from '../../layout/MessageBox.jsx';
 import TableTop from '../../layout/TableTop.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import HelpBox from './HelpBox.jsx';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import SortingButton from '../../layout/formelements/SortingButton.jsx';
+import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.jsx'
 
 //import BuildingSummary from './BuildingSummary';
 
@@ -75,13 +78,13 @@ function SanitaryEquipment() {
             {childMessage.error && <MessageBox message={childMessage.error} />}
 
             <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitærutstyr"} projectName={""} projectNumber={""} />
-            <div className='main-content'>
+            <MainContentContainer>
                 {
                     roomDataLoading === true ? (
                         <LoadingSpinner />
                     ) : (
                         <>
-                            <div className="text-container-above-tables no-print">
+                            <div className="overflow-y-hidden flex justify-center items-center mr-5 ml-5 h-32 no-print">
                                 {
                                     buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                                         <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
@@ -93,21 +96,21 @@ function SanitaryEquipment() {
                             {
                                 roomData ? (
                                     roomData.room_data === null ? (
-                                        <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                        <div className="w-full flex justify-center mt-12">
                                             Ingen rom lagt til
                                         </div>
                                     ) : (
                                         <>
                                             {
                                                 activeSortButton === null ? (
-                                                    <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                                    <div className="w-full flex justify-center mt-12">
                                                         Velg bygg
                                                     </div>
                                                 ) : (
                                                     <>
                                                         <TableTop info={<HelpBox />} />
-                                                        <div className="table-container">
-                                                            <div className="table-header-wrapper">
+                                                        <div className="flex flex-col h-[80%] overflow-y-auto">
+                                                            <div className="sticky ml-5 mr-5 mt-0 top-0 rounded-bl-lg rounded-br-lg bg-secondary-color z-10">
                                                                 <table className="fl-table">
                                                                     <thead>
                                                                         <tr>
@@ -138,9 +141,9 @@ function SanitaryEquipment() {
                                                             {
                                                                 floors && floors.map(floor => (
                                                                     <React.Fragment key={floor}>
-                                                                        <div className="table-wrapper">
+                                                                        <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
 
-                                                                            <div className="table-title">
+                                                                            <div className="text-primary-color text-xs border-none w-full max-w-full bg-secondary-color flex justify-center">
                                                                                 <h3>Etasje {floor}</h3>
                                                                             </div>
                                                                             
@@ -151,7 +154,7 @@ function SanitaryEquipment() {
                                                                                             sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <SanitaryTableRowComponent index={index} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={18} roomId={room.uid} />)
                                                                                         ) : (<></>)
                                                                                     }
-                                                                                    <tr className="summary-row">
+                                                                                    <tr className="bg-secondary-color">
                                                                                         <td width="2%">
                                                                                             <br />
                                                                                             <br />
@@ -214,7 +217,7 @@ function SanitaryEquipment() {
                                                                     </React.Fragment>
                                                                 ))}
                                                             <div style={{ marginBottom: "30px" }}>
-                                                                <div className="table-wrapper">
+                                                                <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
                                                                     <table className="fl-table">
                                                                         <tfoot>
                                                                             <tr>
@@ -253,7 +256,7 @@ function SanitaryEquipment() {
                         </>
                     )
                 }
-            </div>
+            </MainContentContainer>
         </>
     );
 }

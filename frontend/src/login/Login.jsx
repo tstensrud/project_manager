@@ -58,9 +58,9 @@ function Login(props) {
                 loading && loading === true ? (
                     <LoadingSpinner />
                 ) : (
-                    <div className="card-container">
+                    <div>
                         <form onSubmit={logMeIn}>
-                            <div style={{ display: "flex", flexDirection: "column" }}>
+                            <div className="flex flex-col">
 
                                 <p className="message">Structor TS prosjekter</p>
                                 <p>

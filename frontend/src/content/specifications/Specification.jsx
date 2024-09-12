@@ -8,11 +8,12 @@ import useFetch from '../../hooks/useFetch'
 
 // SVG
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import HeaderIcon from '../../assets/svg/specificationsIcon.svg?react';
-import EditIcon from '../../assets/svg/editIcon.svg?react';
+import HeaderIcon from '../../assets/svg/specificationsIcon.jsx';
+import EditIcon from '../../assets/svg/editIcon.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import TableTop from '../../layout/TableTop';
 import Helpbox from './HelpBox';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
 
 
 function Specification() {
@@ -46,30 +47,30 @@ function Specification() {
             setFile('');
         }
     }
-    
+
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Kravspesifikasjon"} projectName={data && data.spec_name} projectNumber={""} />
 
-            <div className="main-content">
+            <MainContentContainer>
                 {
                     loading && loading === true ? (
                         <LoadingSpinner />
                     ) : (
                         <>
-                            <div className="text-container-above-tables-spec">
-                                <div className='container-flex-column-spec'>
+                            <div className="overflow-y-hidden flex justify-center items-center mr-5 ml-5 h-32-spec">
+                                <div className='container-flex-col-spec'>
                                     <form onSubmit={handleFileSubmit}>
                                         Last opp csv-fil med rom data. <Link to={`/specifications/${suid}/new_room`}>Eller legg inn enkeltrom her.</Link><br />
                                         <input type="file" accept='.csv' onChange={handleFileChange} disabled={true} /> &nbsp; &nbsp; <button type="submit" className="form-button" disabled>Last opp</button>
                                     </form>
                                 </div>
-                                <div style={{ display: "flex", flex: "1", justifyContent: "end", alignItems: "center", marginRight: "20px"}}>
+                                <div style={{ display: "flex", flex: "1", justifyContent: "end", alignItems: "center", marginRight: "20px" }}>
                                     <Link to={`/specifications/edit/${suid}/${data.spec_name}`}>Rediger kravspesifikasjon</Link>  &nbsp; <EditIcon />
                                 </div>
                             </div>
                             <TableTop info={<Helpbox />} />
-                            <div className="table-wrapper">
+                            <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
                                 <table className="fl-table">
                                     <thead>
                                         <tr>
@@ -120,8 +121,7 @@ function Specification() {
                         </>
                     )
                 }
-            </div>
-
+            </MainContentContainer>
         </>
     );
 }

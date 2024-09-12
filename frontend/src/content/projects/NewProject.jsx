@@ -1,20 +1,35 @@
 import { useEffect, useState, useContext } from 'react';
+import { Form, useNavigate } from 'react-router-dom';
+
+// Hooks ++
 import { GlobalContext } from '../../GlobalContext';
 import useSubmitData from '../../hooks/useSubmitData'
+
+// Components
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import { useNavigate } from 'react-router-dom';
-import HeaderIcon from '../../assets/svg/newProjectIcon.svg?react';
+import ContentCard from '../../layout/ContentCard.jsx';
+import HeaderIcon from '../../assets/svg/newProjectIcon.jsx';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import CardButton from '../../layout/formelements/CardButton.jsx';
+import CardInputField from '../../layout/formelements/CardInputField.jsx';
+import TextArea from '../../layout/formelements/TextArea.jsx';
 
 function NewProject() {
 
-    const {data, setData, response, loading, error, handleSubmit} = useSubmitData('/projects/new_project/');
-    const navigate = useNavigate();
     const { activeProject, setActiveProject, setActiveProjectName } = useContext(GlobalContext);
+    const { data, setData, response, loading, error, handleSubmit } = useSubmitData('/projects/new_project/');
+    const navigate = useNavigate();
 
     useEffect(() => {
         setActiveProject(null);
         setActiveProjectName(null)
-    },[])
+    }, []);
+
+    useEffect(() => {
+        if (response?.success && response.success === true) {
+            navigate(`/dashboard`);
+        }
+    },[response])
 
     // Handlers
     const handleChange = (e) => {
@@ -26,55 +41,47 @@ function NewProject() {
 
     const submitProject = async (e) => {
         await handleSubmit(e);
-        setData('');
-        navigate(`/dashboard`);
+        setData('');   
     }
-
+    
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Opprett nytt prosjekt"} projectName={""} projectNumber={""} />
-            <div className="main-content">
-                <div className="flex-container-row">
-                    {error && <p>Error: {error.message}</p>}
-
-                    <div className="content-card">
-                        <div className="content-card-container">
-                            <h2 className="card-title">Opprett nytt prosjekt</h2>
-                            <form className="custom-form profile-form" onSubmit={submitProject}>
-                                <p>
-                                    Prosjektnummer <br />
-                                    <input
-                                        name="projectNumber"
-                                        className="card-input"
-                                        onChange={handleChange}
-                                        type="text"
-                                        placeholder="Prosjektnummer" />
-                                </p>
-                                <p>
-                                    Prosjektnavn <br />
-                                    <input
-                                        name="projectName"
-                                        className="card-input"
-                                        onChange={handleChange}
-                                        type="text"
-                                        placeholder="Navn på prosjekt" />
-                                </p>
-                                <p>
-                                    Prosjektbeskrivelse <br />
-                                    <textarea
-                                        name="projectDescription"
-                                        onChange={handleChange}
-                                        className="form-text-area">
-                                    </textarea>
-                                </p>
-                                <button type="submit" className="card-button" disabled={loading}>
-                                    Legg til
-                                </button>
-                            </form>
+            <MainContentContainer>
+                <div className="flex justify-center flex-row w-full">
+                    <ContentCard>
+                        <div>
+                        <h2>Opprett nytt prosjekt</h2>
+                        <form onSubmit={submitProject}>
+                            <div className="mt-3">
+                                Prosjektnummer
+                            </div>
+                            <CardInputField name="projectNumber" placeholder="Prosjektnummer" changeFunction={handleChange} tabIndex={1} required={true} />
+                            <div className="mt-3">
+                                Prosjektnavn
+                            </div>
+                            <div>
+                                <CardInputField name="projectName" placeholder="Navn på prosjekt" changeFunction={handleChange} tabIndex={2} required={true} />
+                            </div>
+                            <div className="mt-3">
+                                Prosjektbeskrivelse
+                            </div>
+                            <div>
+                                <TextArea name="projectDescription" changeFunction={handleChange} tabIndex={3}  required={true}/>
+                            </div>
+                            <div className="mt-3">
+                                <CardButton buttonText="Legg til" tabIndex={4}/>
+                            </div>
+                        </form>
                         </div>
-                    </div>
+                        <div>
+                            {
+                                response?.success === false && <>{response.message}</>
+                            }
+                        </div>
+                    </ContentCard>
                 </div>
-            </div>
+            </MainContentContainer>
         </>
     );
 }

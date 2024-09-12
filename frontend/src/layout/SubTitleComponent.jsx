@@ -7,20 +7,18 @@ function SubTitleComponent(props) {
     const { activeProject } = useContext(GlobalContext);
 
     return (
-        <div className="sub-header">
-            <div style={{ display: "flex", height: "50px" }}>
-                <div style={{ display: "flex", alignItems: "center", textAlign: "center", marginRight: "20px" }}>
+        <div className="w-full flex items-center border-t border-t-default-border-color border-b border-b-default-border-color bg-tertiary-color text-primary-color pl-5 pr-5">
+            <div className="flex h-12">
+                <div className="flex items-center text-center mr-5">
                     {props.svg}
                 </div>
-                <div style={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-                    <h3>
-                        {props.headerText}
-                        {props.projectName && props.projectName !== "" ? (<> - {props.projectName}</>) : (<></>)}
-                        {props.projectNumber && props.projectNumber !== "" ? (<>- {props.projectNumber}</>) : (<></>)}
-                    </h3>
+                <div className="flex items-center text-center text-xl font-semibold">
+                    {props.headerText}
+                    {props.projectName && props.projectName !== "" ? (<> - {props.projectName}</>) : (<></>)}
+                    {props.projectNumber && props.projectNumber !== "" ? (<>- {props.projectNumber}</>) : (<></>)}
                 </div>
             </div>
-            <div style={{ display: "flex", justifyContent: "end", flex: "1" }}>
+            <div className="flex justify-end flex-1">
                 {
                     (activeProject && activeProject !== "0") ? (
                         <TodoButton />

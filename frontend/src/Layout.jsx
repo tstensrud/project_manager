@@ -11,7 +11,7 @@ function Layout() {
     return (
         <>
             <Header/>
-            <div className="app-container">
+            <div className="flex flex-col h-full bg-secondary-color text-primary-color">
                 <Outlet />
             </div>
         </>

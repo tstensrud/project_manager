@@ -1,60 +1,60 @@
 import { Link } from 'react-router-dom';
+
+// Hooks
 import useFetch from '../../hooks/useFetch'
-import StarIcon from '../../assets/svg/starIcon.svg?react';
+
+// Components
+import StarIcon from '../../assets/svg/starIcon.jsx';
 import CardTitle from '../../layout/CardTitle';
 import LoadingSpinner from '../../layout/LoadingSpinner';
+import ContentCard from '../../layout/ContentCard';
 
 function ProjectSummary({ projectId }) {
     const { data, loading, error } = useFetch(`/project_api/${projectId}/`)
 
     return (
-        <>
-            <div className="content-card">
-                <div className="content-card-container">
-                    {
-                        loading && loading === true ? (
-                            <LoadingSpinner />
-                        ) : (
-                            <>
-                                {
-                                    data && data.data ? (
-                                        <>
-                                            <CardTitle svg={<StarIcon />} title={<>{data?.data.ProjectName}</>} />
-                                            <div className="content-card-inner-container">
-                                                <div className="mb-10 grey-text">
-                                                    <h4>Prosjektbeskrivelse</h4>
-                                                </div>
-                                                <div className="mb-20 pre-wrap">
-                                                    {data && data.data.ProjectDescription}
-                                                </div>
+        <ContentCard>
+            {
+                loading && loading === true ? (
+                    <LoadingSpinner />
+                ) : (
+                    <>
+                        {
+                            data && data.data ? (
+                                <>
+                                    <CardTitle svg={<StarIcon />} title={<>{data?.data.ProjectName}</>} />
+                                    <div className="border-0 p-3 rounder-lg">
+                                        <div className="mb-1 text-grey-text">
+                                            <h4>Prosjektbeskrivelse</h4>
+                                        </div>
+                                        <div className="mb-10 pre-wrap">
+                                            {data && data.data.ProjectDescription}
+                                        </div>
 
-                                                <div className="grey-text mb-10">
-                                                    <h4>Kravspesifikasjon</h4>
-                                                </div>
+                                        <div className="text-grey-text mb-1">
+                                            <h4>Kravspesifikasjon</h4>
+                                        </div>
 
-                                                <div className="mb-20">
-                                                    <Link to={`/specifications/${data.data.SpecUid}`}>{data?.data?.SpecificationName}</Link>
-                                                </div>
-                                                <div className="grey-text mb-10">
-                                                    <h4>Prosjektert areal</h4>
-                                                </div>
-                                                <div>
-                                                    {data?.data?.area !== null && data?.data?.area.toLocaleString()} m<sup>2</sup>
-                                                </div>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>{data?.error}</>
-                                    )
-                                }
-                            </>
-                        )
-                    }
+                                        <div className="mb-10">
+                                            <Link to={`/specifications/${data.data.SpecUid}`}>{data?.data?.SpecificationName}</Link>
+                                        </div>
+                                        <div className="text-grey-text mb-1">
+                                            <h4>Prosjektert areal</h4>
+                                        </div>
+                                        <div>
+                                            {data?.data?.area !== null && data?.data?.area.toLocaleString()} m<sup>2</sup>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <>{data?.error}</>
+                            )
+                        }
+                    </>
+                )
+            }
 
-
-                </div>
-            </div>
-        </>
+        </ContentCard>
     );
 }
 export default ProjectSummary;

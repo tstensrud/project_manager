@@ -40,15 +40,15 @@ function RoomData({ roomData, ventData, setShowRoomData }) {
   return (
     <>
       <Draggable>
-        <div className="room-info-ventilation-container" style={{ cursor: 'move' }}>
+        <div className="fixed shadow-lg shadow-background-shade border border-default-border-color left-[25%] top-[15%] z-[1000] w-[600px] overflow-y-auto rounded-lg cursor-move" style={{ cursor: 'move' }}>
 
-          <div className="room-data-row-container">
-            <div className="room-data-row-left">
-              <div className="room-data-header">
-                {roomData.RoomNumber} - <span className="table-text-grey">{roomData.RoomName}</span>
+          <div className="flex w-full pt-3 pb-1 pl-5 border-b border-b-default-border-color bg-secondary-color hover:bg-tertiary-color">
+            <div className="flex w-1/2">
+              <div className="text-lg font-semibold w-full">
+                {roomData.RoomNumber} - <span className="text-grey-text">{roomData.RoomName}</span>
               </div>
             </div>
-            <div className="room-data-row-right">
+            <div className="flex justify-end w-1/2 pr-4 text-base">
               <span onClick={(e) => handleClick(e, setShowRoomData)} className="room-data-close-btn">
                 &times;
               </span>
@@ -61,9 +61,9 @@ function RoomData({ roomData, ventData, setShowRoomData }) {
           <RoomDataRow rowName="Antall personer">{roomData.RoomPopulation} stk.</RoomDataRow>
           <RoomDataRow rowName="Kommentar">{roomData.Comments}</RoomDataRow>
 
-          <div className="room-data-row-container">
-            <div className="room-data-row-left">
-              <div className="room-data-header">
+          <div className="flex w-full pt-3 pb-1 pl-5 border-b border-b-default-border-color bg-secondary-color hover:bg-tertiary-color">
+            <div className="flex w-1/2">
+              <div className="text-lg font-semibold w-full">
                 Ventilasjonsdata oppsummert
               </div>
             </div>
@@ -72,14 +72,14 @@ function RoomData({ roomData, ventData, setShowRoomData }) {
           <RoomDataRow rowName="System">{ventData.vent_data.SystemName}</RoomDataRow>
           <RoomDataRow rowName="Beregnet luftmengde">{ventData.vent_data.AirDemand} m<sup>3</sup>/h</RoomDataRow>
           <RoomDataRow rowName="Beregnet luftmengde min.">{calculateMinAirFlow()} m<sup>3</sup>/h</RoomDataRow>
-          <RoomDataRow rowName="Valgt tilluft"><span className="supply-text">{ventData.vent_data.AirSupply}</span> m<sup>3</sup>/h</RoomDataRow>
-          <RoomDataRow rowName="Valgt avtrekk"><span className="extract-text">{ventData.vent_data.AirExtract}</span> m<sup>3</sup>/h</RoomDataRow>
+          <RoomDataRow rowName="Valgt tilluft"><span className="text-supply-color">{ventData.vent_data.AirSupply}</span> m<sup>3</sup>/h</RoomDataRow>
+          <RoomDataRow rowName="Valgt avtrekk"><span className="text-extract-color">{ventData.vent_data.AirExtract}</span> m<sup>3</sup>/h</RoomDataRow>
           <RoomDataRow rowName="Summert personbelastning">{ventData.vent_data.AirPersonSum} m<sup>3</sup>/h</RoomDataRow>
           <RoomDataRow rowName="Summert emisjonsbelastning">{ventData.vent_data.AirEmissionSum} m<sup>3</sup>/h</RoomDataRow>
 
-          <div className="room-data-row-container">
-            <div className="room-data-row-left">
-              <div className="room-data-header">
+          <div className="flex w-full pt-3 pb-1 pl-5 border-b border-b-default-border-color bg-secondary-color hover:bg-tertiary-color">
+            <div className="flex w-1/2">
+              <div className="text-lg font-semibold w-full">
                 Grunnlagsdata ventilasjon
               </div>
             </div>

@@ -2,14 +2,22 @@ import { useParams, Link } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 import { useState, useRef, useContext, useEffect } from 'react';
 
+// hooks ++
 import useSubmitData from '../../hooks/useSubmitData'
 import useFetch from '../../hooks/useFetch'
-import HeaderIcon from '../../assets/svg/specificationsIcon.svg?react';
+
+// components
+import HeaderIcon from '../../assets/svg/specificationsIcon.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import MessageBox from '../../layout/MessageBox';
-import TableTop from '../../layout/TableTop';
-import HelpIcon from '../../assets/svg/helpIcon.svg?react';
+import HelpIcon from '../../assets/svg/helpIcon.jsx';
 import HelpBoxNewRoom from './HelpBoxNewRoom';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import ContentCard from '../../layout/ContentCard.jsx';
+import CardSelect from '../../layout/formelements/CardSelect.jsx';
+import CardInputField from '../../layout/formelements/CardInputField.jsx';
+import CardButton from '../../layout/formelements/CardButton.jsx';
+import CheckBox from '../../layout/formelements/CheckBox.jsx';
 
 function NewRoomSpec() {
     const { suid } = useParams();
@@ -48,7 +56,7 @@ function NewRoomSpec() {
     useEffect(() => {
         setData({ "vav": "1", "ventilation_principle": "Omrøring", "heat_ex": "R", "co2": false, "temp": false, "movement": false, "moisture": false, "time": false, "notes": '' })
     }, [submitted]);
-
+    
     const handleInputChange = (e) => {
         setData({
             ...newData,
@@ -98,147 +106,166 @@ function NewRoomSpec() {
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText="Nytt rom til kravspesifikasjon" projectName={data && data.spec_name} />
-            <div className='main-content'>
+            <MainContentContainer>
                 {response?.success && <><MessageBox message={response.success} /> </>}
                 {response?.error && <><MessageBox message={response.error} /> </>}
 
                 {
-                    showHelpBox === true ? (
-                        <div className="help-box-wrapper">
-                            <div className="help-box-container">
-                                <div className="help-box-card">
-                                    <div className="help-box-card-header">
+                    showHelpBox === true && (
+                        <div className="fixed h-full w-full justify-center items-center z-[1000] left-0 top-[15%]">
+                            <div className="w-full h-full flex flex-col mt-[2%] items-center">
+                                <div className="bg-tertiary-color flex flex-col pl-5 pr-5 rounded-lg w-[30%] h-[50%] overflow-y-auto shadow-lg shadow-background-shade border border-default-border-color">
+                                    <div className="w-full bg-tertiary-color flex justify-end sticky top-0 pt-3">
                                         <Link to="#" onClick={toggleHelpBox}>Lukk</Link>
                                     </div>
-                                    <div className="help-box-card-item">
+                                    <div className="w-full flex flex-col">
                                         <HelpBoxNewRoom />
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    ) : (<></>)
+                    )
                 }
 
                 <form onSubmit={submitNewData}>
-                    <div className="flex-container-row">
-                        <div className="content-card">
-                            <div className="content-card-container">
-                                <div style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
-                                    <Link onClick={toggleHelpBox} to="#"><HelpIcon /></Link>
-                                </div>
-                                <h2 className="card-title">Fyll inn romdata - <Link to={`/specifications/${suid}`} >{data && data.spec_name}</Link></h2>
+                    <div className="flex justify-center flex-row w-full">
 
-                                <div className="input-container">
-                                    <input className="input-container-input" ref={roomTypeRef} onChange={handleInputChange} name="room_type" type="text" tabIndex="1" placeholder="eks: Kontor" required/>
-                                    <label for="input-field" className="input-label">Romtype</label>
-                                </div>
-
-                                <h4>Luftmengdekrav</h4>
-                                <div className="input-container">
-                                    <input className="input-container-input" ref={airPerPersonRef} onChange={handleInputChange} name="air_per_person" type="text" tabIndex="2" placeholder="m3/pers" />{response && response.error_air_per_person ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
-                                    <label for="input-field" className="input-label">Personbelastning</label>
-                                </div>
-
-                                <div className="input-container">
-                                    <input className="input-container-input" ref={airEmissionRef} onChange={handleInputChange} name="air_emission" type="text" tabIndex="3" placeholder="m3/h" />{response && response.error_air_emission ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
-                                    <label for="input-field" className="input-label">Emisjon</label>
-                                </div>
-
-                                <div className="input-container">
-                                    <input className="input-container-input" ref={airProcessRef} onChange={handleInputChange} name="air_process" type="text" tabIndex="4" placeholder="m3/h" />{response && response.error_air_process ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
-                                    <label for="input-field" className="input-label">Prosess</label>
-                                </div>
-
-                                <div className="input-container">
-                                    <input className="input-container-input" ref={airMinimumRef} onChange={handleInputChange} name="air_minimum" type="text" tabIndex="5" placeholder="m3/h" />{response && response.error_air_minimum ? (<>&nbsp; NB! Kun tall i luftmengder</>) : ''}
-                                    <label for="input-field" className="input-label">Minimum luftmengde</label>
-                                </div>
-
-                                <h4>Ventilasjonsprinsipp</h4>
-                                <p style={{ marginBottom: "5px" }}>
-                                    <select className="card-select" ref={ventilationPrincipleRef} tabIndex="6" onChange={handleInputChange} name="ventilation_principle">
-                                        <option value="Omrøring">Omrøring</option>
-                                        <option value="Fortrengning">Fortrengning</option>
-                                        <option value="Annet">Annet</option>
-                                    </select>
-                                </p>
-
-
-                                <h4>Gjenvinner</h4>
-                                <p style={{ marginBottom: "0px" }}>
-                                    <select className="card-select" ref={heatExRef} onChange={handleInputChange} name="heat_ex" tabIndex="7">
-                                        <option value="R">Roterenede</option>
-                                        <option value="P">Kryss/plate</option>
-                                        <option value="B">Batteri</option>
-                                    </select>
-                                </p>
+                        <ContentCard>
+                            <div className="flex justify-start w-full mb-2">
+                                <Link onClick={toggleHelpBox} to="#"><HelpIcon /></Link>
                             </div>
-                        </div>
+                            <h2>Fyll inn romdata - <Link to={`/specifications/${suid}`} >{data && data.spec_name}</Link></h2>
 
-                        <div className="content-card">
-                            <div className="content-card-container">
-                                <div style={{ width: "500px" }}></div>
-                                <h4>Lydkrav</h4>
-                                
-                                <div className="input-container">
-                                    <input className="input-container-input" ref={dbTechnicalRef} onChange={handleInputChange} name="db_technical" type="text" tabIndex="8" placeholder="dB" />
-                                    <label for="input-field" className="input-label">Minimum luftmengde</label>
-                                </div>
+                            <div className="relative mt-5 w-full">
+                                <div>Romtype</div>
+                                <CardInputField ref={roomTypeRef} changeFunction={handleInputChange} name="room_type" placeholder="eks: Kontor" tabIndex="1" required={true} />
+                            </div>
 
-                                <div className="input-container">
-                                    <input className="input-container-input" ref={dbNeighbourRef} onChange={handleInputChange} name="db_neighbour" type="text" tabIndex="9" placeholder="dB" />
-                                    <label for="input-field" className="input-label">Minimum luftmengde</label>
+                            <h4>Luftmengdekrav</h4>
+                            <div className="relative mt-1 w-full">
+                                <div>Personbelastning</div>
+                                <CardInputField ref={airPerPersonRef} changeFunction={handleInputChange} name="air_per_person" placeholder="m3/pers" tabIndex="2" required={true} />
+                                <div>
+                                    {response && response.error_air_per_person && <>NB! Kun tall i luftmengder</>}
                                 </div>
+                            </div>
 
-                                <div className="input-container">
-                                    <input className="input-container-input" ref={dbCorridorRef} onChange={handleInputChange} name="db_corridor" type="text" tabIndex="10" placeholder="dB" />
-                                    <label for="input-field" className="input-label">Minimum luftmengde</label>
+                            <div className="relative mt-5 w-full">
+                                <div>Emisjon</div>
+                                <CardInputField ref={airEmissionRef} changeFunction={handleInputChange} name="air_emission" placeholder="m3/h" tabIndex="3" required={true} />
+                                <div>
+                                    {response && response.error_air_emission && <>NB! Kun tall i luftmengder</>}
                                 </div>
-                                
-                                <h4>Romstyring</h4>
-                                <div className="checkbox-group">
-                                    <p>
-                                        <select className="card-select" ref={vavRef} onChange={handleInputChange} name="vav" tabIndex="11">
-                                            <option value="1">VAV</option>
-                                            <option value="0">CAV</option>
-                                        </select>
-                                    </p>
-                                </div>
-                                <br /><br />
-                                <div className="checkbox-group">
-                                    <label htmlFor="temp">CO2</label>
-                                    <input ref={co2Ref} type="checkbox" onChange={handleCheckChange} name="co2" tabIndex="13" />
-                                </div>
-                                <div className="checkbox-group">
-                                    <label htmlFor="temp">Temp</label>
-                                    <input ref={tempRef} type="checkbox" onChange={handleCheckChange} name="temp" tabIndex="14" />
-                                </div>
-                                <div className="checkbox-group">
-                                    <label htmlFor="movement">Bevegelse</label>
-                                    <input ref={movementRef} type="checkbox" onChange={handleCheckChange} name="movement" tabIndex="15" />
-                                </div>
-                                <div className="checkbox-group">
-                                    <label htmlFor="moisture">Fukt</label>
-                                    <input ref={moistureRef} type="checkbox" onChange={handleCheckChange} name="moisture" tabIndex="16" />
-                                </div>
-                                <div className="checkbox-group">
-                                    <label htmlFor="time">Tid</label>
-                                    <input ref={timeRef} type="checkbox" onChange={handleCheckChange} name="time" tabIndex="17" />
-                                </div>
+                            </div>
 
-                                <div className="input-container">
-                                    <input className="input-container-input" ref={notesRef} onChange={handleInputChange} name="notes" type="text" tabIndex="18" placeholder="Presiseringer " />
-                                    <label for="input-field" className="input-label">Minimum luftmengde</label>
+                            <div className="relative mt-5 w-full">
+                                <div>Prosess</div>
+                                <CardInputField ref={airProcessRef} changeFunction={handleInputChange} name="air_process" placeholder="m3/h" tabIndex="4" required={false} />
+                                <div>
+                                    {response && response.error_air_process && <>NB! Kun tall i luftmengder</>}
                                 </div>
+                            </div>
 
+                            <div className="relative mt-5 w-full">
+                                <div>Minimum luftmengde</div>
+                                <CardInputField ref={airMinimumRef} changeFunction={handleInputChange} name="air_minimum" placeholder="m3/h" tabIndex="5" required={false} />
+                                <div>
+                                    {response && response.error_air_minimum && <>NB! Kun tall i luftmengder</>}
+                                </div>
+                            </div>
+
+                            <h4>Ventilasjonsprinsipp</h4>
+                            <div>
+                                <CardSelect ref={ventilationPrincipleRef} changeFunction={handleInputChange} name="ventilation_principle" tabIndex="6">
+                                    <option value="Omrøring">Omrøring</option>
+                                    <option value="Fortrengning">Fortrengning</option>
+                                    <option value="Annet">Annet</option>
+                                </CardSelect>
+                            </div>
+
+
+                            <h4>Gjenvinner</h4>
+                            <div>
+                                <CardSelect ref={heatExRef} changeFunction={handleInputChange} name="heat_ex" tabIndex="7">
+                                    <option value="R">Roterenede</option>
+                                    <option value="P">Kryss/plate</option>
+                                    <option value="B">Batteri</option>
+                                </CardSelect>
+                            </div>
+                        </ContentCard>
+
+                        <ContentCard>
+                            <h4>Lydkrav</h4>
+
+                            <div className="relative mt-5 w-full">
+                                <div>dB teknisk</div>
+                                <CardInputField ref={dbTechnicalRef} changeFunction={handleInputChange} name="db_technical" placeholder="dB" tabIndex="8" required={false} />
+                            </div>
+
+                            <div className="relative mt-5 w-full">
+                                <div>dB til naborom</div>
+                                <CardInputField ref={dbNeighbourRef} changeFunction={handleInputChange} name="db_neighbour" placeholder="dB" tabIndex="9" required={false} />
+                            </div>
+
+                            <div className="relative mt-5 w-full">
+                                <div>dB mot korridorsone</div>
+                                <CardInputField ref={dbCorridorRef} changeFunction={handleInputChange} name="db_corridor" placeholder="dB" tabIndex="10" required={false} />
+                            </div>
+
+                            <h4>Romstyring</h4>
+                            <div className="checkbox-group">
                                 <p>
-                                    <button type="submit" className="card-button" tabIndex="19">Legg til</button>
+                                    <CardSelect ref={vavRef} changeFunction={handleInputChange} name="vav" tabIndex="11">
+                                        <option value="1">VAV</option>
+                                        <option value="0">CAV</option>
+                                    </CardSelect>
                                 </p>
                             </div>
-                        </div>
+                            <div className="mt-3">
+                                <div className="flex flex-row">
+                                    <div className="w-1/3">CO2</div>
+                                    <div className="flex flex-1">
+                                        <CheckBox ref={co2Ref} changeFunction={handleCheckChange} name="co2" tabIndex="12" />
+                                    </div>
+                                </div>
+                                <div className="flex flex-row">
+                                    <div className="w-1/3">Temperatur</div>
+                                    <div className="flex flex-1">
+                                        <CheckBox ref={tempRef} changeFunction={handleCheckChange} name="temp" tabIndex="13" />
+                                    </div>
+                                </div>
+                                <div className="flex flex-row">
+                                    <div className="w-1/3">Bevegelese</div>
+                                    <div className="flex flex-1">
+                                        <CheckBox ref={movementRef} changeFunction={handleCheckChange} name="movement" tabIndex="14" />
+                                    </div>
+                                </div>
+                                <div className="flex flex-row">
+                                    <div className="w-1/3">Fukt</div>
+                                    <div className="flex flex-1">
+                                        <CheckBox ref={moistureRef} changeFunction={handleCheckChange} name="moisture" tabIndex="15" />
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-row">
+                                    <div className="w-1/3">Tid</div>
+                                    <div className="flex flex-1">
+                                        <CheckBox ref={timeRef} changeFunction={handleCheckChange} name="time" tabIndex="16" />
+                                    </div>
+                                </div>
+
+                                <div className="relative mt-5 w-full">
+                                    <div>Presiseringer</div>
+                                    <CardInputField ref={notesRef} changeFunction={handleInputChange} name="notes" placeholder="Presiseringer" tabIndex="18" required={false} />
+                                </div>
+                            </div>
+                            <div className="mt-3">
+                                <CardButton tabIndex="19" buttonText="Legg til" />
+                            </div>
+                        </ContentCard>
                     </div>
                 </form>
-            </div>
+            </MainContentContainer>
 
         </>
     );

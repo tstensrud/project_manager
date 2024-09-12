@@ -5,12 +5,13 @@ import { useEffect, useState, useContext } from 'react';
 import useFetch from '../../hooks/useFetch'
 
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import HeaderIcon from '../../assets/svg/ventSystemIcon.svg?react';
+import HeaderIcon from '../../assets/svg/ventSystemIcon.jsx';
 import SystemsTableRowComponent from "./SystemsTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 import TableTop from '../../layout/TableTop';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import HelpBox from './HelpBox';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
 
 function VentSystems() {
     const { projectId } = useParams();
@@ -18,12 +19,12 @@ function VentSystems() {
 
     // Hooks
     const { data: receivedSystemsData, loading: systemsLoading, error: systemsError, refetch: systemsRefetch } = useFetch(`/project_api/${projectId}/systems/`);
-    
+
     // States
     const [childMessage, setChildMessage] = useState('');
 
     // Handlers
-     const handleChildMessage = (msg) => {
+    const handleChildMessage = (msg) => {
         if (msg === "deleted") {
             systemsRefetch();
         }
@@ -36,8 +37,8 @@ function VentSystems() {
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Ventilasjonssytemer"} projectName={""} projectNumber={""} />
 
-            <div className="main-content">
-                
+            <MainContentContainer>
+
                 {childMessage && <MessageBox message={childMessage} />}
                 {
                     systemsLoading && systemsLoading === true ? (
@@ -46,7 +47,7 @@ function VentSystems() {
                         <>
 
                             <div className="flex w-full align-center justify-center mb-20">
-                                
+
                             </div>
                             {
                                 receivedSystemsData ? (
@@ -55,7 +56,7 @@ function VentSystems() {
                                     ) : (
                                         <>
                                             <TableTop info={<HelpBox />} />
-                                            <div className="table-wrapper">
+                                            <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
                                                 <table className="fl-table">
                                                     <thead>
                                                         <tr>
@@ -90,8 +91,7 @@ function VentSystems() {
                         </>
                     )
                 }
-
-            </div>
+            </MainContentContainer>
         </>
     );
 }

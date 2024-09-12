@@ -4,7 +4,8 @@ import { useParams } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch'
 import { customSortFloors } from '../../utils/customSortFloors.js'
 
-import CoolingIcon from '../../assets/svg/coolingIcon.svg?react'
+// Components
+import CoolingIcon from '../../assets/svg/coolingIcon.jsx'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import CoolingTableRowComponent from './CoolingTableRowComponent';
 import MessageBox from '../../layout/MessageBox';
@@ -12,12 +13,12 @@ import ToggleSettingsButton from './ToggleSettingsButton';
 import TableTop from '../../layout/TableTop.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import HelpBox from './HelpBox.jsx';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import SortingButton from '../../layout/formelements/SortingButton.jsx';
+import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.jsx'
 
 function Cooling() {
     const { projectId } = useParams();
-
-    // Error messages from child component
-    const [childMessage, setChildMessage] = useState('');
 
     // Fetches
     const { data: roomData, loading: roomDataLoading, error: roomError, refetch: roomRefetch } = useFetch(`/project_api/${projectId}/rooms/`);
@@ -78,13 +79,13 @@ function Cooling() {
             {roomError?.error && roomError.error !== null ? (<MessageBox message={roomError.error} />) : (<></>)}
             {buildingDataError?.error && buildingDataError?.error !== null ? (<MessageBox message={buildingDataError.error} />) : (<></>)}
             <SubTitleComponent svg={<CoolingIcon />} headerText={"Kjølebehovsberegninger"} projectName={""} projectNumber={""} />
-            <div className='main-content'>
+            <MainContentContainer>
                 {
                     roomDataLoading === true || buildingDataLoading === true ? (
                         <LoadingSpinner />
                     ) : (
                         <>
-                            <div className="text-container-above-tables">
+                            <div className="overflow-y-hidden flex justify-center items-center mr-5 ml-5 h-32">
                                 {activeSortButton !== null && activeSortButton !== "all" ? <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate} buildingUid={activeSortButton} /> : ''}&nbsp;
                                 {
                                     buildingData?.building_data && Object.keys(buildingData.building_data).map((key, index) => (
@@ -96,14 +97,14 @@ function Cooling() {
                             </div>
                             {
                                 activeSortButton === null ? (
-                                    <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                    <div className="w-full flex justify-center mt-14">
                                         Velg bygg
                                     </div>
                                 ) : (
                                     <>
                                         <TableTop info={<HelpBox />} />
-                                        <div className="table-container">
-                                            <div className="table-header-wrapper">
+                                        <div className="flex flex-col h-[80%] overflow-y-auto">
+                                            <div className="sticky ml-5 mr-5 mt-0 top-0 rounded-bl-lg rounded-br-lg bg-secondary-color z-10">
                                                 <table className="fl-table">
                                                     <thead>
                                                         <tr>
@@ -130,9 +131,9 @@ function Cooling() {
                                             {
                                                 floors && floors.map(floor => (
                                                     <React.Fragment key={floor}>
-                                                        <div className="table-wrapper">
+                                                        <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
 
-                                                            <div className="table-title">
+                                                            <div className="text-primary-color text-xs border-none w-full max-w-full bg-secondary-color flex justify-center">
                                                                 <h3>Etasje {floor}</h3>
                                                             </div>
 
@@ -143,7 +144,7 @@ function Cooling() {
                                                                             sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} totalColumns={14} key={room.uid} roomId={room.uid} />)
                                                                         ) : (<></>)
                                                                     }
-                                                                    <tr className="summary-row">
+                                                                    <tr className="bg-secondary-color">
                                                                         <td>
                                                                             <br /><br />
                                                                         </td>
@@ -163,7 +164,7 @@ function Cooling() {
                         </>
                     )
                 }
-            </div >
+            </MainContentContainer>
         </>
     );
 }

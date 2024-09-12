@@ -2,7 +2,7 @@
 function FloorSummary({floor, supply, extract}) {
     return (
         <>
-            <div className="table-wrapper-tiny">
+            <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5-tiny">
                 <table className="fl-table-summary">
                     <thead>
                         <th>
@@ -18,7 +18,7 @@ function FloorSummary({floor, supply, extract}) {
                              Tilluft
                             </td>
                             <td>
-                             <span className="supply-text">{supply && supply}</span>  m<sup>3</sup>/h
+                             <span className="text-supply-color">{supply && supply}</span>  m<sup>3</sup>/h
                             </td>
                         </tr>
                         <tr>
@@ -26,7 +26,7 @@ function FloorSummary({floor, supply, extract}) {
                            Avtrekk
                             </td>
                             <td>
-                            <span className="extract-text">{extract && extract}</span>  m<sup>3</sup>/h
+                            <span className="text-extract-color">{extract && extract}</span>  m<sup>3</sup>/h
                             </td>
                         </tr>
                     </tbody>

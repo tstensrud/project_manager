@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch'
 import { customSortFloors } from '../../utils/customSortFloors.js'
 
-import HeatingIcon from '../../assets/svg/heatingIcon.svg?react'
+import HeatingIcon from '../../assets/svg/heatingIcon.jsx'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeatingTableRowComponent from './HeatingTableRowComponent';
 import MessageBox from '../../layout/MessageBox';
@@ -12,6 +12,10 @@ import ToggleSettingsButton from './ToggleSettingsButton';
 import TableTop from '../../layout/TableTop.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import HelpBox from './HelpBox.jsx';
+import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import SortingButton from '../../layout/formelements/SortingButton.jsx';
+import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.jsx'
+
 //import BuildingSummary from './BuildingSummary';
 
 function Heating() {
@@ -79,13 +83,13 @@ function Heating() {
             {roomError?.error && roomError.error !== null ? (<MessageBox message={roomError.error} />) : (<></>)}
             {buildingDataError?.error && buildingDataError.error !== null ? (<MessageBox message={buildingDataError.error} />) : (<></>)}
             <SubTitleComponent svg={<HeatingIcon />} headerText={"Varmetapsberegninger"} projectName={""} projectNumber={""} />
-            <div className='main-content'>
+            <MainContentContainer>
                 {
                     roomDataLoading && roomDataLoading === true ? (
                         <LoadingSpinner />
                     ) : (
                         <>
-                            <div className="text-container-above-tables">
+                            <div className="overflow-y-hidden flex justify-center items-center mr-5 ml-5 h-32">
                                 {activeSortButton !== null && activeSortButton !== "all" ? <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate} buildingUid={activeSortButton} /> : ''}
                                 &nbsp;
                                 {buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
@@ -96,14 +100,14 @@ function Heating() {
                             </div>
                             {
                                 activeSortButton === null ? (
-                                    <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                                    <div className="w-full flex justify-center mt-12">
                                         Velg bygg
                                     </div>
                                 ) : (
                                     <>
                                         <TableTop info={<HelpBox />} />
-                                        <div className="table-container">
-                                            <div className="table-header-wrapper">
+                                        <div className="flex flex-col h-[80%] overflow-y-auto">
+                                            <div className="sticky ml-5 mr-5 mt-0 top-0 rounded-bl-lg rounded-br-lg bg-secondary-color z-10">
                                                 <table className="fl-table">
                                                     <thead>
                                                         <tr>
@@ -129,11 +133,11 @@ function Heating() {
                                             {
                                                 floors && floors.map(floor => (
                                                     <React.Fragment key={floor}>
-                                                        <div className="table-wrapper">
-                                                            <div className="table-title">
+                                                        <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
+                                                            <div className="text-primary-color text-xs border-none w-full max-w-full bg-secondary-color flex justify-center">
                                                                 <h3>Etasje {floor}</h3>
                                                             </div>
-                                                            <table className="fl-table" id="roomsTableVentilation">
+                                                            <table className="fl-table">
                                                                 <tbody>
                                                                     <tr>
                                                                         <td style={{ border: "0px" }} width="2%"></td>
@@ -157,7 +161,7 @@ function Heating() {
                                                                         ) : (<></>)
                                                                     }
 
-                                                                    <tr className="summary-row">
+                                                                    <tr className="bg-secondary-color">
                                                                         <td width="2%">
                                                                             <br /><br />
                                                                         </td>
@@ -177,7 +181,7 @@ function Heating() {
                                                                                     .filter(key => key === floor)
                                                                                     .map(key => (
                                                                                         <React.Fragment key={key}>
-                                                                                            <span className="heating-text"><strong>{Number(buildingSummaryData[0].floor_summaries_heating[key].demand.toFixed(0)).toLocaleString()}</strong></span>
+                                                                                            <span className="text-heating-color"><strong>{Number(buildingSummaryData[0].floor_summaries_heating[key].demand.toFixed(0)).toLocaleString()}</strong></span>
                                                                                         </React.Fragment>
                                                                                     ))
                                                                             }
@@ -189,7 +193,7 @@ function Heating() {
                                                                                     .filter(key => key === floor)
                                                                                     .map(key => (
                                                                                         <React.Fragment key={key}>
-                                                                                            <span className="heating-text"><strong>{Number(buildingSummaryData[0].floor_summaries_heating[key].chosen.toFixed(0)).toLocaleString()}</strong></span>
+                                                                                            <span className="text-heating-color"><strong>{Number(buildingSummaryData[0].floor_summaries_heating[key].chosen.toFixed(0)).toLocaleString()}</strong></span>
                                                                                         </React.Fragment>
                                                                                     ))
                                                                             }
@@ -203,7 +207,7 @@ function Heating() {
                                                         </div>
                                                     </React.Fragment>
                                                 ))}
-                                            <div className="table-wrapper">
+                                            <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
                                                 <table className="fl-table">
                                                     <tfoot>
                                                         <tr>
@@ -221,12 +225,12 @@ function Heating() {
                                                             <td width="5%"></td>
                                                             <td width="5%">
                                                                 <strong>
-                                                                    {buildingSummaryData?.[0]?.heatingDemand != null ? <><span className="heating-text">{((buildingSummaryData[0].heatingDemand) / 1000).toFixed(1)}</span> <br />kW</> : ''}
+                                                                    {buildingSummaryData?.[0]?.heatingDemand != null ? <><span className="text-heating-color">{((buildingSummaryData[0].heatingDemand) / 1000).toFixed(1)}</span> <br />kW</> : ''}
                                                                 </strong>
                                                             </td>
                                                             <td width="5%">
                                                                 <strong>
-                                                                    {buildingSummaryData?.[0]?.heating != null ? <><span className="heating-text">{((buildingSummaryData[0].heating) / 1000).toFixed(1)}</span> <br />kW</> : ''}
+                                                                    {buildingSummaryData?.[0]?.heating != null ? <><span className="text-heating-color">{((buildingSummaryData[0].heating) / 1000).toFixed(1)}</span> <br />kW</> : ''}
                                                                 </strong>
                                                             </td>
                                                             <td width="5%"></td>
@@ -244,7 +248,7 @@ function Heating() {
                         </>
                     )
                 }
-            </div >
+            </MainContentContainer>
         </>
     );
 }

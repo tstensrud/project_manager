@@ -1,37 +1,5 @@
 /* Room lists */
 
-.table-container {
-  display: flex;
-  flex-direction: column;
-  height: 81%;
-  overflow-y: auto;
-}
-
-.table-header-wrapper {
-  position: sticky;
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-top: 0px;
-  top: 0;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  background-color: var(--table-background-color);
-  z-index: 10;
-}
-
-.table-wrapper {
-  display: flex;
-  flex-direction: column;
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-top: 0px;
-  height: auto;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  background-color: var(--table-background-color);
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.158);
-  margin-bottom: 20px;
-}
 
 .table-wrapper-tiny {
   margin: 20px 1px 0px 0px;
@@ -43,70 +11,6 @@
 
 .table-wrapper-tiny:hover {
   margin: 10px 1px 0px 0px;
-}
-
-.table-top-options {
-  background-color: var(--table-background-color);
-  position: sticky;
-  margin-left: 20px;
-  margin-right: 20px;
-  padding: 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-.fl-table {
-  color: var(--primary-color);
-  font-size: 13px;
-  font-weight: normal;
-  border: none;
-  border-collapse: collapse;
-  width: 100%;
-  max-width: 100%;
-  white-space: nowrap;
-  background-color: var(--table-background-color);
-  table-layout: fixed;
-}
-
-.fl-table td,
-.fl-table th {
-  text-align: center;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  box-sizing: border-box;
-}
-
-.fl-table td {
-  border-top: var(--table-border);
-  border-bottom: var(--table-border);
-  font-size: 13px;
-  font-weight: 400;
-  overflow: hidden;
-  position: relative;
-}
-
-
-.table-title {
-  color: var(--primary-color);
-  font-size: 13px;
-  font-weight: normal;
-  border: none;
-  width: 100%;
-  max-width: 100%;
-  background-color: var(--table-background-color);
-  display: flex;
-  justify-content: center;
-}
-
-.table-title td {
-  border-top: var(--table-border);
-  border-bottom: 0;
-  text-align: center;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  box-sizing: border-box;
-  background-color: var(--table-header);
-  letter-spacing: 0.025rem;
 }
 
 .fl-table tr:nth-child(even) {
@@ -135,7 +39,7 @@
   height: 25px;
   position: sticky;
   z-index: 1;
-  background-color: var(--table-background-color);
+  background-color: var(--secondary-color);
   color: var(--primary-color);
 }
 
@@ -154,13 +58,6 @@
   text-decoration: line-through;
 }
 
-.table-text-grey {
-  color: var(--grey-text);
-}
-
-.summary-row {
-  background-color: var(--secondary-color);
-}
 
 .supplyCell {
   background-color: #3ea578;
@@ -182,7 +79,7 @@
   border-radius: var(--default-border-radius);
   border-collapse: collapse;
   white-space: nowrap;
-  background-color: var(--table-background-color);
+  background-color: var(--secondary-color);
 }
 
 .fl-table-summary td,
@@ -228,56 +125,6 @@
 }
 
 /* Room data table*/
-.room-data-row-container {
-  display: flex;
-  width: 100%;
-  padding-top: 10px;
-  padding-bottom: 5px;
-  padding-left: 20px;
-  border-bottom: var(--default-border);
-  background-color: var(--secondary-color);
-}
-
-.room-data-row-container:hover {
-  background-color: var(--tertiary-color);
-}
-
-.room-data-row-left {
-  display: flex;
-  width: 50%;
-}
-
-.room-data-row-right {
-  display: flex;
-  justify-content: end;
-  width: 50%;
-  padding-right: 15px;
-  font-size: 15px;
-}
-
-.room-data-header {
-  font-size: 18px;
-  font-weight: 500;
-  width: 100%;
-}
-
-.room-data-row {
-  font-size: 15px;
-  width: 100%;
-}
-
-.room-info-ventilation-container {
-  position: fixed;
-  box-shadow: 5px 1px 20px black;
-  border: var(--default-border);
-  left: 25%;
-  top: 15%;
-  z-index: 1000;
-  width: 600px;
-  overflow-y: auto;
-  border-radius: var(--default-border-radius);
-}
-
 .room-data-close-btn {
   display: flex;
   right: 15px;

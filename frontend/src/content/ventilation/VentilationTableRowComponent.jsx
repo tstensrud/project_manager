@@ -12,7 +12,10 @@ import RoomData from './RoomData';
 import MessageBox from '../../layout/MessageBox';
 
 // SVG
-import MarkRowIcon from '../../assets/svg/MarkRowIcon.svg?react';
+import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
+import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import TableSelect from "../../layout/tableelements/TableSelect.jsx";
 
 
 function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoomData, totalColumns }) {
@@ -103,21 +106,15 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
     }
 
     const renderEditableCell = (cellName, cellClass, width) => (
-        <td width={width} className={cellClass} name={cellName} onClick={() => handleEdit(cellName)} style={{ cursor: 'pointer' }}>
-            {editingCell === cellName && ventData ? (
-                <input
-                    type="text"
-                    className="table-input"
-                    value={ventData[cellName]}
-                    onChange={(e) => handleChange(e, cellName)}
-                    onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
-                    autoFocus
-                />
-            ) : (
-                ventData ? ventData.vent_data[cellName] : ''
-            )}
-        </td>
+        <TableTDelement cellClass={cellClass} pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
+            {
+                editingCell === cellName && ventData ? (
+                    <EditableInputField value={ventData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+                ) : (
+                    ventData ? ventData.vent_data[cellName] : ''
+                )
+            }
+        </TableTDelement>
     );
 
     const handleSystemChange = (e) => {
@@ -170,60 +167,60 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
                         <>
                             {
                                 Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="loading-text" key={index}>#### <br /></td>
+                                    <td className="blur-sm opacity-50" key={index}>#### <br /></td>
                                 ))
                             }
                         </>
                     ) : (
                         <>
 
-                            <td width="2%" style={{ cursor: 'pointer' }} onClick={handleOnMarkedRow}>
+                            <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
                                 <MarkRowIcon />
-                            </td>
-                            {/* <td width="2%">{allRoomData ? allRoomData.Floor : ''}</td> */}
-                            <td width="10%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ cursor: 'pointer', textTransform: 'uppercase' }}>
+                            </TableTDelement>
+
+                            <TableTDelement pointer={true} width="10%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
                                 <strong>
-                                    <span className="table-link">
+                                    <span className="text-accent-color">
                                         {allRoomData ? allRoomData.RoomNumber : ''}
                                     </span>
                                 </strong>
                                 <br />
-                                <span className="table-text-grey">
+                                <span className="text-grey-text uppercase">
                                     {allRoomData ? allRoomData.RoomName : ''}
                                 </span>
-                            </td>
-                            <td width="6%">
+                            </TableTDelement>
+                            <TableTDelement width="6%">
                                 {ventData ? (ventData.vent_data.AirPersonSum).toFixed(0) : ''}
-                            </td>
-                            <td width="6%">
+                            </TableTDelement>
+                            <TableTDelement width="6%">
                                 {ventData ? (ventData.vent_data.AirEmissionSum).toFixed(0) : ''}
-                            </td>
-                            <td width="6%">
+                            </TableTDelement>
+                            <TableTDelement width="6%">
                                 {ventData ? ventData.vent_data.AirProcess : ''}
-                            </td>
-                            <td width="6%">
+                            </TableTDelement>
+                            <TableTDelement width="6%">
                                 {ventData ? (ventData.vent_data.AirDemand).toFixed(0) : ''}
-                            </td>
-                            {renderEditableCell("AirSupply", "supplyCell", "6%")}
-                            {renderEditableCell("AirExtract", "extractCell", "6%")}
-                            <td width="6%">
+                            </TableTDelement>
+                            {renderEditableCell("AirSupply", "supply", "6%")}
+                            {renderEditableCell("AirExtract", "extract", "6%")}
+                            <TableTDelement width="6%">
                                 {ventData ? ventData.vent_data.AirChosen : ''}
-                            </td>
-                            <td width="6%">
+                            </TableTDelement>
+                            <TableTDelement width="6%">
                                 {calculateMinAirFlow()}
-                            </td>
-                            <td width="6%">
-                                <select value={currentSystemName} name="systemUid" className="table-select" onChange={handleSystemChange}>
+                            </TableTDelement>
+                            <TableTDelement width="6%">
+                                <TableSelect value={currentSystemName} name="systemUid" changeFunction={handleSystemChange}>
                                     {currentSystemName && currentSystemName !== null ? (<option key="0">{currentSystemName}</option>) : ''}
                                     {systems && Object.keys(systems.systems_data).map((key, index) => (
                                         <option key={index} value={systems.systems_data[key].uid}>{systems.systems_data[key].SystemName}</option>
                                     ))}
-                                </select>
-                            </td>
-                            <td width="34%" className="comments-cell no-print">
+                                </TableSelect>
+                            </TableTDelement>
+                            <TableTDelement width="34%">
                                 {ventData && ventData.vent_data.AirSupply && ventData.vent_data.AirExtract < ventData.vent_data.AirDemand ? (<>For lite luft. </>) : (<></>)}
                                 {ventData && ventData.vent_data.AirSupply !== ventData.vent_data.AirExtract ? (<>Ubalanse i rom. </>) : (<></>)}
-                            </td>
+                            </TableTDelement>
 
                         </>
                     )

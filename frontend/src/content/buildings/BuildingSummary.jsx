@@ -7,11 +7,14 @@ import useDeleteData from '../../hooks/useDeleteData';
 
 // Components
 import CardTitle from '../../layout/CardTitle';
+import ContentCard from '../../layout/ContentCard';
+import CardButton from '../../layout/formelements/CardButton';
 
 // SVG imports
-import PlusIcon from '../../assets/svg/plusIcon.svg?react';
-import MinusIcon from '../../assets/svg/minusIcon.svg?react';
-import BuildingIcon from '../../assets/svg/buildingIcon.svg?react';
+import PlusIcon from '../../assets/svg/plusIcon.jsx';
+import MinusIcon from '../../assets/svg/minusIcon.jsx';
+import BuildingIcon from '../../assets/svg/buildingIcon.jsx';
+import CardInputField from '../../layout/formelements/CardInputField.jsx';
 
 function BuildingSummary({ refetchBuildingData, buildingData }) {
 
@@ -77,107 +80,104 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
 
     return (
 
-        <div className="content-card">
-            <div className="content-card-container">
-                {
-                    editBuildingContainer && editBuildingContainer === true ? (
-                        <>
-                            <form>
-                                <div style={{ display: "flex", flexDirection: "column" }}>
-                                    <div style={{ display: "flex" }}>
-                                        <input className="card-input" onChange={handleNameChange} type="text" name="buildingName" placeholder='Endre navn..' />
-                                    </div>
-                                    <div style={{ display: "flex" }}>
-                                        <button onClick={submitNameChange} className="card-button">Lagre</button>
-                                    </div>
+        <ContentCard>
+
+            {
+                editBuildingContainer && editBuildingContainer === true ? (
+                    <>
+                        <form onSubmit={submitNameChange}>
+                            <div className="flex flex-col">
+                                <div className="flex mb-1">
+                                    <CardInputField changeFunction={handleNameChange} name="buildingName" placeholder="Endre navn.."/>
                                 </div>
-                            </form>
-                            <div style={{ display: "flex", marginRight: "15px" }}>
-                                <span className="supply-text">
-                                    {response && response.error ? <>FEIL: {response.error}</> : ''}
-                                    {error && error ? <>{error}</> : ""}
-                                </span>
+                                <div className="flex">
+                                    <CardButton buttonText="Lagre"/>
+                                </div>
                             </div>
-                        </>
-                    ) : (
-                        <CardTitle svg={<BuildingIcon />} title={buildingName} />
-                    )
-                }
-                <div className="content-card-inner-container">
-                    <div style={{ marginBottom: "10px" }} className="grey-text">
-                        <h4>Prosjektert areal</h4>
-                    </div>
-
-                    <div style={{ marginBottom: "20px" }}>
-                        {area.toLocaleString()} m<sup>2</sup>
-                    </div>
-
-
-                    <div style={{ marginBottom: "10px" }} className="grey-text">
-                        <h4>Prosjektert luftmengde</h4>
-                    </div>
-
-                    <div style={{ marginBottom: "20px" }}>
-                        {PlusIcon && <PlusIcon />}
-                        <span className="supply-text"> {supplyAir.toLocaleString()} </span> m<sup>3</sup>/h
-                        <br />
-                        {MinusIcon && <MinusIcon />}
-                        <span className="extract-text"> {extractAir.toLocaleString()} </span> m<sup>3</sup>/h
-                    </div>
-
-                    <div style={{ marginBottom: "20px" }}>
-                        <div style={{ marginBottom: "10px" }} className="grey-text">
-                            <h4>Betjenes av ventilasjonssystem</h4>
+                        </form>
+                        <div className="flex mr-4">
+                            <span className="text-supply-color">
+                                {response && response.error ? <>FEIL: {response.error}</> : ''}
+                                {error && error ? <>{error}</> : ""}
+                            </span>
                         </div>
-                        {
-                            buildingData.systems.map((system, index) =>
-                                <div key={index} style={{ display: "flex", flexDirection: "row" }}>
-                                    <div style={{ display: "flex", width: "100%" }}>
-                                        {system}
-                                    </div>
-                                </div>
-                            )
-                        }
-                    </div>
-
-
-
-                    <div style={{ marginBottom: "10px" }} className="grey-text">
-                        <h4>Prosjektert varme</h4>
-                    </div>
-                    <div style={{ marginBottom: "20px" }}>
-                        {Number((heating / 1000).toFixed(2)).toLocaleString()} kW
-                    </div>
+                    </>
+                ) : (
+                    <CardTitle svg={<BuildingIcon />} title={buildingName} />
+                )
+            }
+            <div className="border-0 p-3 rounder-lg">
+                <div className="text-grey-text mb-3">
+                    <h4>Prosjektert areal</h4>
                 </div>
-                <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
-                    <div style={{ display: "flex", width: "100%", height: "100%", alignItems: "end", justifyContent: "end" }}>
-                        {
-                            editBuildingContainer && editBuildingContainer === true ? (
-                                <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                                    <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
-                                        <button onClick={handleDeleteBuilding} className="card-button">
-                                            Slett bygg
-                                        </button>
-                                        <div style={{ display: "flex", justifyContent: "end", flex: "1" }}>
-                                            <button onClick={closeEditOptions} className="card-button">
-                                                Avbryt
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        {
-                                            deleteResponse && deleteResponse.success === false ? deleteResponse.error : ''
-                                        }
-                                    </div>
-                                </div>
-                            ) : (
-                                <button onClick={showEditOptions} className="card-button">Rediger bygg</button>
-                            )
-                        }
+
+                <div className="mb-5">
+                    {area.toLocaleString()} m<sup>2</sup>
+                </div>
+
+
+                <div className="text-grey-text mb-3">
+                    <h4>Prosjektert luftmengde</h4>
+                </div>
+
+                <div className="mb-5">
+                    {PlusIcon && <PlusIcon />}
+                    <span className="text-supply-color"> {supplyAir.toLocaleString()} </span> m<sup>3</sup>/h
+                    <br />
+                    {MinusIcon && <MinusIcon />}
+                    <span className="text-extract-color"> {extractAir.toLocaleString()} </span> m<sup>3</sup>/h
+                </div>
+
+                <div className="mb-5">
+                    <div className="text-grey-text mb-3">
+                        <h4>Betjenes av ventilasjonssystem</h4>
                     </div>
+                    {
+                        buildingData.systems.map((system, index) =>
+                            <div key={index} className="flex flex-row">
+                                <div className="flex w-full">
+                                    {system}
+                                </div>
+                            </div>
+                        )
+                    }
+                </div>
+
+
+
+                <div className="text-grey-text mb-3">
+                    <h4>Prosjektert varme</h4>
+                </div>
+                <div className="mb-5">
+                    {Number((heating / 1000).toFixed(2)).toLocaleString()} kW
                 </div>
             </div>
-        </div>
+            <div className="flex flex-row h-full">
+                <div className="flex w-full h-full items-end justify-end">
+                    {
+                        editBuildingContainer && editBuildingContainer === true ? (
+                            <div className="flex flex-col w-full">
+                                <div className="flex flex-row w-full">
+                                    <CardButton buttonText="Slett bygg" clickFunction={handleDeleteBuilding} />
+                                    
+                                    <div className="flex justify-end flex-1">
+                                        <CardButton buttonText="Avbryt" clickFunction={closeEditOptions} />
+                                    </div>
+                                </div>
+                                <div>
+                                    {
+                                        deleteResponse && deleteResponse.success === false ? deleteResponse.error : ''
+                                    }
+                                </div>
+                            </div>
+                        ) : (
+                            <CardButton buttonText="Rediger bygg" clickFunction={showEditOptions} />
+                        )
+                    }
+                </div>
+            </div>
+
+        </ContentCard>
     );
 }
 
