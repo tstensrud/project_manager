@@ -12,7 +12,8 @@ import MessageBox from '../../layout/MessageBox';
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
-
+import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 
 function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState, totalColumns }) {
     const { projectId } = useParams();
@@ -77,7 +78,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('marked-row');
+            setMarkedRow('bg-marked-row text-primary-color');
         } else {
             setMarkedRow('');
         }
@@ -89,28 +90,22 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
     }
 
     const renderEditableCell = (cellName, width) => (
-        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} className="cursor-pointer">
-            {editingCell === cellName && heatingData ? (
-                <input
-                    type="text"
-                    className="table-input"
-                    value={heatingData[cellName]}
-                    onChange={(e) => handleChange(e, cellName)}
-                    onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
-                    autoFocus
-                />
-            ) : (
-                heatingData ? heatingData.heating_data[cellName] : ''
-            )}
-        </td>);
+        <TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
+            {
+                editingCell === cellName && heatingData ? (
+                    <EditableInputField value={heatingData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+                ) : (
+                    heatingData ? heatingData.heating_data[cellName] : ''
+                )
+            }
+        </TableTDelement>
+    );
 
     return (
         <>
             {showRoomData ? <RoomData heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
             {response && response.error !== null && response.error !== undefined ? <MessageBox message={response.error} /> : ''}
-            <tr className={markedRow}>
-
+            <tr className={`${markedRow} hover:bg-table-hover`}>
                 {
                     heatingLoading && heatingLoading === true ? (
                         <>
@@ -122,20 +117,17 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
                         </>
                     ) : (
                         <>
-                            <td width="2%" className="cursor-pointer" onClick={handleOnMarkedRow}>
+                            <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
                                 <MarkRowIcon />
-                            </td>
-                            <td width="5%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} className="cursor-pointer">
-                                <strong>
-                                    <span className="text-accent-color">
-                                        {heatingData ? heatingData.room_data.RoomNumber : ''}
-                                    </span>
-                                </strong>
-                                <br />
-                                <span className="text-grey-text">
+                            </TableTDelement>
+                            <TableTDelement pointer={true} width="5%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
+                                <div className="text-accent-color font-semibold">
+                                    {heatingData ? heatingData.room_data.RoomNumber : ''}
+                                </div>
+                                <div className="text-grey-text uppercase font-semibold">
                                     {heatingData ? heatingData.room_data.RoomName : ''}
-                                </span>
-                            </td>
+                                </div>
+                            </TableTDelement>
                             {renderEditableCell("RoomHeight", "5%")}
                             {renderEditableCell("OuterWallArea", "5%")}
                             {renderEditableCell("InnerWallArea", "5%")}
@@ -143,29 +135,29 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
                             {renderEditableCell("RoofArea", "5%")}
                             {renderEditableCell("FloorGroundArea", "5%")}
                             {renderEditableCell("FloorAirArea", "5%")}
-                            <td width="5%">
+                            <TableTDelement width="5%">
                                 <strong>
                                     {heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}
                                 </strong>
-                            </td>
-                            <td width="5%">
+                            </TableTDelement>
+                            
+                            <TableTDelement width="5%">
                                 {heatingData ? heatingData.heating_data.ChosenHeating : ''}
-                            </td>
-                            <td width="5%">
+                            </TableTDelement>
+                            <TableTDelement width="5%">
                                 {heatingData && heatingData ? (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1) : ''}
-                            </td>
+                            </TableTDelement>
                             {renderEditableCell("HeatSource", "8%")}
-                            <td width="10%">
+
+                            <TableTDelement width="10%">
                                 {
-                                    heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum ? (
+                                    heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum && (
                                         <>
                                             <strong>NB!</strong> For lite valgt varme
                                         </>
-                                    ) : (
-                                        <></>
                                     )
                                 }
-                            </td>
+                            </TableTDelement>
                         </>
                     )
                 }

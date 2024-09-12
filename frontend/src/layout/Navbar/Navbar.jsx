@@ -160,7 +160,7 @@ function Navbar() {
                 <div className="flex w-[60%] h-full justify-center items-center">
                     {
                         activeProjectName && activeProjectName ? (
-                            <div className="flex items-center text-center bg-primary-color rounded-3xl pl-10 pr-10 max-w-[70%] mt-1 mb-1 text-3xl font-semibold text-secondary-color">
+                            <div className="flex items-center justify-center text-center bg-primary-color rounded-3xl pl-10 pr-10 max-w-[70%] mt-1 mb-1 text-3xl font-semibold text-secondary-color">
                                 {activeProjectName}
                             </div>
                         ) : (<></>)

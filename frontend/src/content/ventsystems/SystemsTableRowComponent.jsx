@@ -11,6 +11,9 @@ import useDeleteData from '../../hooks/useDeleteData';
 // Components
 import MessageBox from '../../layout/MessageBox';
 import DeleteBox from './DeleteBox';
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
+import TableButton from "../../layout/tableelements/TableButton.jsx";
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -90,36 +93,29 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('marked-row');
+            setMarkedRow('bg-marked-row text-primary-color');
         } else {
             setMarkedRow('');
         }
     }
 
-    const renderEditableCell = (cellName) => (
-        <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)}>
-            {editingCell === cellName && systemData ? (
-
-                <input
-                    type="text"
-                    className="table-input"
-                    value={systemData[cellName]}
-                    onChange={(e) => handleChange(e, cellName)}
-                    onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
-                    autoFocus
-                />
-            ) : (
-                systemData ? systemData.system_data[cellName] : ''
-            )}
-        </td>
+    const renderEditableCell = (cellName, width) => (
+        <TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
+            {
+                editingCell === cellName && systemData ? (
+                    <EditableInputField value={systemData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+                ) : (
+                    systemData ? systemData.system_data[cellName] : ''
+                )
+            }
+        </TableTDelement>
     );
 
     return (
         <>
             {response && response.error !== null && response.error !== undefined ? (<MessageBox message={response.error} />) : (<></>)}
 
-            <tr className={markedRow}>
+            <tr className={`${markedRow} hover:bg-table-hover`}>
 
                 {
                     systemLoading && systemLoading === true ? (
@@ -132,16 +128,26 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
                         </>
                     ) : (
                         <>
-                            <td className={cellClass} onClick={handleOnMarkedRow}><MarkRowIcon /></td>
-                            <td className={cellClass}>{systemData ? systemData.system_data.SystemName : ''}</td>
-                            {renderEditableCell("Location")}
-                            {renderEditableCell("ServiceArea")}
-                            {renderEditableCell("AirFlow")}
-                            {renderEditableCell("HeatExchange")}
-                            <td className={cellClass}>{systemData ? systemData.system_data.AirFlowSupply : ''}</td>
-                            <td className={cellClass}>{systemData ? systemData.system_data.AirFlowExtract : ''}</td>
-                            <td className={cellClass}>{systemData ? systemData.system_data.SpecialSystem : ''}</td>
-                            <td className={cellClass}>
+                            <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
+                                <MarkRowIcon />
+                            </TableTDelement>
+                            <TableTDelement width="5%">
+                                {systemData ? systemData.system_data.SystemName : ''}
+                            </TableTDelement>
+                            {renderEditableCell("Location", "10%")}
+                            {renderEditableCell("ServiceArea", "10%")}
+                            {renderEditableCell("AirFlow", "7%")}
+                            {renderEditableCell("HeatExchange", "5%")}
+                            <TableTDelement width="7%">
+                                {systemData ? systemData.system_data.AirFlowSupply : ''}
+                            </TableTDelement>
+                            <TableTDelement width="7%">
+                                {systemData ? systemData.system_data.AirFlowExtract : ''}
+                            </TableTDelement>
+                            <TableTDelement width="5%">
+                                {systemData ? systemData.system_data.SpecialSystem : ''}
+                            </TableTDelement>
+                            <TableTDelement width="32%">
                                 {
                                     showDeleteDialog === true ? (
                                         <DeleteBox systemName={systemData && systemData.system_data.SystemName} setShowDeleteDialog={setShowDeleteDialog} deleteSystem={deleteSystem} />
@@ -150,10 +156,10 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
                                 {systemData && systemData.system_data.AirFlowSupply !== systemData.system_data.AirFlowExtract ? (<>Ubalanse på system. </>) : (<></>)}
                                 {systemData && systemData.system_data.AirFlowSupply > systemData.system_data.AirFlow ? (<>For mye tilluft. </>) : (<></>)}
                                 {systemData && systemData.system_data.AirFlowExtract > systemData.system_data.AirFlow ? (<>For mye avtrekk. </>) : (<></>)}
-                            </td>
-                            <td className={cellClass}>
-                                {showDeleteDialog === true ? (<></>) : (<button onClick={showDeleteBox} className="table-button" disabled={disabledDeleteButton}>Slett</button>)}
-                            </td>
+                            </TableTDelement>
+                            <TableTDelement width="10%">
+                                {showDeleteDialog === true ? (<></>) : (<TableButton clickFunction={showDeleteBox} buttonText="Slett" />)}
+                            </TableTDelement>
                         </>
                     )
                 }

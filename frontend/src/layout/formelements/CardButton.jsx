@@ -12,6 +12,7 @@ function CardButton(props) {
                             hover:border-form-element-hover 
                             focus:border-form-element-hover"
                         tabIndex={props.tabIndex}
+                        disabled={props.disabled}
                     >
                         {props.buttonText}
                     </button>
@@ -23,6 +24,7 @@ function CardButton(props) {
                             hover:border-form-element-hover 
                             focus:border-form-element-hover"
                         tabIndex={props.tabIndex}
+                        disabled={props.disabled}
                     >
                         {props.buttonText}
                     </button>

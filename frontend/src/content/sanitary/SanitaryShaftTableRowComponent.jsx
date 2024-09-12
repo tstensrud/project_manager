@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+// Components
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 function SanitaryShaftTableRowComponent({ data, shaft, floor, name }) {
 
     // Marking a row
@@ -8,24 +10,24 @@ function SanitaryShaftTableRowComponent({ data, shaft, floor, name }) {
     // Handlers
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('marked-row');
+            setMarkedRow('bg-marked-row text-primary-color');
         } else {
             setMarkedRow('');
         }
     }
 
     return (
-        <tr className={markedRow}>
-            <td style={{ cursor: 'pointer', height: "30px" }} onClick={handleOnMarkedRow}>{name}</td>
-            <td style={{ cursor: 'pointer', height: "30px" }} onClick={handleOnMarkedRow}>{shaft}</td>
-            <td style={{ cursor: 'pointer', height: "30px" }} onClick={handleOnMarkedRow}>{floor}</td>
-            <td style={{ cursor: 'pointer', height: "30px" }} onClick={handleOnMarkedRow}>{data.cumulative_sum_cold_water.toFixed(2)}</td>
-            <td style={{ cursor: 'pointer', height: "30px" }} onClick={handleOnMarkedRow}>{data.cumulative_sum_hot_water.toFixed(2)}</td>
-            <td style={{ cursor: 'pointer', height: "30px" }} onClick={handleOnMarkedRow}>{data.cumulative_sum_drainage.toFixed(2)}</td>
-            <td style={{ cursor: 'pointer', height: "30px" }} onClick={handleOnMarkedRow}>{data.pipe_size_cold_water}</td>
-            <td style={{ cursor: 'pointer', height: "30px" }} onClick={handleOnMarkedRow}>{data.pipe_size_warm_water}</td>
-            <td style={{ cursor: 'pointer', height: "30px" }} onClick={handleOnMarkedRow}>{data.pipe_size_1_60}</td>
-            <td style={{ cursor: 'pointer', height: "30px" }} onClick={handleOnMarkedRow}>{data.pipe_size_vertical}</td>
+        <tr className={`${markedRow} hover:bg-table-hover`}>
+            <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{name}</TableTDelement>
+            <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{shaft}</TableTDelement>
+            <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{floor}</TableTDelement>
+            <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{data.cumulative_sum_cold_water.toFixed(2)}</TableTDelement>
+            <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{data.cumulative_sum_hot_water.toFixed(2)}</TableTDelement>
+            <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{data.cumulative_sum_drainage.toFixed(2)}</TableTDelement>
+            <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{data.pipe_size_cold_water}</TableTDelement>
+            <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{data.pipe_size_warm_water}</TableTDelement>
+            <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{data.pipe_size_1_60}</TableTDelement>
+            <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{data.pipe_size_vertical}</TableTDelement>
         </tr>
     );
 }

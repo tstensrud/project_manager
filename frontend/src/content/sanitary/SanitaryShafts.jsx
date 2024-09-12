@@ -10,6 +10,9 @@ import SanitaryShaftTableRowComponent from './SanitaryShaftTableRowComponent.jsx
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import HelpBoxShafts from './HelpBoxShafts.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import Table from '../../layout/tableelements/Table.jsx';
+import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 
 function SanitaryShafts() {
     const { projectId } = useParams();
@@ -35,19 +38,19 @@ function SanitaryShafts() {
                         <>
                             <TableTop info={<HelpBoxShafts />} />
                             <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
-                                <table className="fl-table">
+                                <Table>
                                     <thead>
                                         <tr>
-                                            <th width="10%">Bygg</th>
-                                            <th width="10%">Sjakt</th>
-                                            <th width="10%">Etasje</th>
-                                            <th width="10%">Kaldtvann <br />(L/s)</th>
-                                            <th width="10%">Varmtvann <br />(L/s)</th>
-                                            <th width="10%">Spillvann<br />(L/s)</th>
-                                            <th width="10%">KV Cu <br />mm</th>
-                                            <th width="10%">VV Cu <br /> mm</th>
-                                            <th width="10%">SPV 1:60 <br />mm</th>
-                                            <th width="10%">SPV Stående <br />mm</th>
+                                            <TableTHelement width="10%">Bygg</TableTHelement>
+                                            <TableTHelement width="10%">Sjakt</TableTHelement>
+                                            <TableTHelement width="10%">Etasje</TableTHelement>
+                                            <TableTHelement width="10%">Kaldtvann <br />(L/s)</TableTHelement>
+                                            <TableTHelement width="10%">Varmtvann <br />(L/s)</TableTHelement>
+                                            <TableTHelement width="10%">Spillvann<br />(L/s)</TableTHelement>
+                                            <TableTHelement width="10%">KV Cu <br />mm</TableTHelement>
+                                            <TableTHelement width="10%">VV Cu <br /> mm</TableTHelement>
+                                            <TableTHelement width="10%">SPV 1:60 <br />mm</TableTHelement>
+                                            <TableTHelement width="10%">SPV Stående <br />mm</TableTHelement>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -62,14 +65,23 @@ function SanitaryShafts() {
                                                             );
                                                         })}
                                                         <tr key={buildingIndex}>
-                                                            <td style={{ height: "30px" }}></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                                            <TableTHelement width="10%" />
+                                                            <TableTHelement width="10%" />
+                                                            <TableTHelement width="10%" />
+                                                            <TableTHelement width="10%" />
+                                                            <TableTHelement width="10%" />
+                                                            <TableTHelement width="10%" />
+                                                            <TableTHelement width="10%" />
+                                                            <TableTHelement width="10%" />
+                                                            <TableTHelement width="10%" />
+                                                            <TableTHelement width="10%" />
                                                         </tr>
                                                     </React.Fragment>
                                                 ))
                                             ))
                                         }
                                     </tbody >
-                                </table>
+                                </Table>
                             </div>
                         </>
                     )}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 
+// Hooks and utils
 import useFetch from '../../hooks/useFetch'
 import { customSortFloors } from '../../utils/customSortFloors.js'
 
@@ -16,6 +17,9 @@ import HelpBox from './HelpBox.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import SortingButton from '../../layout/formelements/SortingButton.jsx';
 import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.jsx'
+import Table from '../../layout/tableelements/Table.jsx';
+import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 
 function Cooling() {
     const { projectId } = useParams();
@@ -89,9 +93,15 @@ function Cooling() {
                                 {activeSortButton !== null && activeSortButton !== "all" ? <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate} buildingUid={activeSortButton} /> : ''}&nbsp;
                                 {
                                     buildingData?.building_data && Object.keys(buildingData.building_data).map((key, index) => (
-                                        <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
-                                            {buildingData.building_data[key].BuildingName}
-                                        </button>
+                                        <div key={index}>
+                                            {
+                                                activeSortButton === buildingData.building_data[key].uid ? (
+                                                    <SortingButton name={buildingData.building_data[key].uid} buttonText={buildingData.building_data[key].BuildingName} sortButtonClick={sortButtonClick} />
+                                                ) : (
+                                                    <ActiveSortingButton name={buildingData.building_data[key].uid} buttonText={buildingData.building_data[key].BuildingName} sortButtonClick={sortButtonClick} />
+                                                )
+                                            }
+                                        </div>
                                     ))
                                 }
                             </div>
@@ -105,27 +115,26 @@ function Cooling() {
                                         <TableTop info={<HelpBox />} />
                                         <div className="flex flex-col h-[80%] overflow-y-auto">
                                             <div className="sticky ml-5 mr-5 mt-0 top-0 rounded-bl-lg rounded-br-lg bg-secondary-color z-10">
-                                                <table className="fl-table">
+                                                <Table>
                                                     <thead>
                                                         <tr>
-                                                            <th width="2%">#</th>
-                                                            {/*  <th width="5%">Etasje</th> */}
-                                                            <th width="5%">Romnr</th>
-                                                            <th width="5%">Romtemp <br /> &#176;C</th>
-                                                            <th width="5%">Temp vent<br /> &#176;C</th>
-                                                            <th width="5%">W/Pers</th>
-                                                            <th width="5%">Lys<br /> W/m<sup>2</sup></th>
-                                                            <th width="5%">Ustyr<br /> W/m<sup>2</sup></th>
-                                                            <th width="5%">Soltilskudd<br /> W/m<sup>2</sup></th>
-                                                            <th width="5%">Solreduksjon<br /> (0-1,0)</th>
-                                                            <th width="5%">&#8721; Internlast<br /> W</th>
-                                                            <th width="5%">Kjøling utstyr<br /> W</th>
-                                                            <th width="5%">&#8721; kjøling<br /> W</th>
-                                                            <th width="5%">Ekstra vent. <br />m<sup>3</sup>/h</th>
-                                                            <th width="34%">Merknad</th>
+                                                            <TableTHelement width="2%" text="#" />
+                                                            <TableTHelement width="5%">Romnr</TableTHelement>
+                                                            <TableTHelement width="5%">Romtemp <br /> &#176;C</TableTHelement>
+                                                            <TableTHelement width="5%">Temp vent<br /> &#176;C</TableTHelement>
+                                                            <TableTHelement width="5%">W/Pers</TableTHelement>
+                                                            <TableTHelement width="5%">Lys<br /> W/m<sup>2</sup></TableTHelement>
+                                                            <TableTHelement width="5%">Ustyr<br /> W/m<sup>2</sup></TableTHelement>
+                                                            <TableTHelement width="5%">Soltilskudd<br /> W/m<sup>2</sup></TableTHelement>
+                                                            <TableTHelement width="5%">Solreduksjon<br /> (0-1,0)</TableTHelement>
+                                                            <TableTHelement width="5%">&#8721; Internlast<br /> W</TableTHelement>
+                                                            <TableTHelement width="5%">Kjøling utstyr<br /> W</TableTHelement>
+                                                            <TableTHelement width="5%">&#8721; kjøling<br /> W</TableTHelement>
+                                                            <TableTHelement width="5%">Ekstra vent. <br />m<sup>3</sup>/h</TableTHelement>
+                                                            <TableTHelement width="34%">Merknad</TableTHelement>
                                                         </tr>
                                                     </thead>
-                                                </table>
+                                                </Table>
                                             </div>
 
                                             {
@@ -137,7 +146,7 @@ function Cooling() {
                                                                 <h3>Etasje {floor}</h3>
                                                             </div>
 
-                                                            <table className="fl-table">
+                                                            <Table>
                                                                 <tbody>
                                                                     {
                                                                         sortedBuildings && sortedBuildings.length > 0 ? (
@@ -145,13 +154,23 @@ function Cooling() {
                                                                         ) : (<></>)
                                                                     }
                                                                     <tr className="bg-secondary-color">
-                                                                        <td>
-                                                                            <br /><br />
-                                                                        </td>
-                                                                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                                                        <TableTDelement width="2%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="5%" />
+                                                                        <TableTDelement width="34%" />
                                                                     </tr>
                                                                 </tbody>
-                                                            </table>
+                                                            </Table>
                                                         </div>
                                                     </React.Fragment>
                                                 ))

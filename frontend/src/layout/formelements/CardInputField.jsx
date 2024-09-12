@@ -4,7 +4,7 @@ const CardInputField = forwardRef((props, ref) => {
     return (
         <input
             ref={ref}
-            className="bg-tertiary-color outline-none w-96 border-2 border-form-border-color text-primary-color pl-5 pr-5 text-sm rounded-3xl h-9 focus:border-form-focus-border-color hover:border-form-element-hover"
+            className="bg-tertiary-color outline-none w-auto border-2 border-form-border-color text-primary-color pl-5 pr-5 text-sm rounded-3xl h-9 focus:border-form-focus-border-color hover:border-form-element-hover"
             onChange={props.changeFunction}
             type="text"
             value={props.value}

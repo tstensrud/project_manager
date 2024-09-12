@@ -14,6 +14,9 @@ import HelpBox from './HelpBox.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import SortingButton from '../../layout/formelements/SortingButton.jsx';
 import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.jsx'
+import Table from '../../layout/tableelements/Table.jsx';
+import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 
 //import BuildingSummary from './BuildingSummary';
 
@@ -85,11 +88,17 @@ function SanitaryEquipment() {
                     ) : (
                         <>
                             <div className="overflow-y-hidden flex justify-center items-center mr-5 ml-5 h-32 no-print">
-                                {
-                                    buildingData && buildingData.building_data && Object.keys(buildingData.building_data).map((key, index) => (
-                                        <button key={index} name={buildingData.building_data[key].uid} onClick={sortButtonClick} className={activeSortButton === buildingData.building_data[key].uid ? `table-sorting-button-active` : `table-sorting-button`}>
-                                            {buildingData.building_data[key].BuildingName}
-                                        </button>
+                            {
+                                    buildingData?.building_data && Object.keys(buildingData.building_data).map((key, index) => (
+                                        <div key={index}>
+                                            {
+                                                activeSortButton === buildingData.building_data[key].uid ? (
+                                                    <SortingButton name={buildingData.building_data[key].uid} buttonText={buildingData.building_data[key].BuildingName} sortButtonClick={sortButtonClick} />
+                                                ) : (
+                                                    <ActiveSortingButton name={buildingData.building_data[key].uid} buttonText={buildingData.building_data[key].BuildingName} sortButtonClick={sortButtonClick} />
+                                                )
+                                            }
+                                        </div>
                                     ))
                                 }
                             </div>
@@ -111,31 +120,30 @@ function SanitaryEquipment() {
                                                         <TableTop info={<HelpBox />} />
                                                         <div className="flex flex-col h-[80%] overflow-y-auto">
                                                             <div className="sticky ml-5 mr-5 mt-0 top-0 rounded-bl-lg rounded-br-lg bg-secondary-color z-10">
-                                                                <table className="fl-table">
+                                                                <Table>
                                                                     <thead>
                                                                         <tr>
-                                                                            <th width="2%">#</th>
-                                                                            {/* <th width="2%">Etasje</th> */}
-                                                                            <th width="12%">Rom</th>
-                                                                            <th width="5%">Sjakt</th>
-                                                                            <th width="5%">1/14" servant</th>
-                                                                            <th width="5%">1" servant</th>
-                                                                            <th width="5%">Drikkefontene</th>
-                                                                            <th width="5%">Utslagsvask</th>
-                                                                            <th width="5%">WC</th>
-                                                                            <th width="5%">Urinal</th>
-                                                                            <th width="5%">Oppvaskmaskin</th>
-                                                                            <th width="5%">Dusjbatteri</th>
-                                                                            <th width="5%">Badekar</th>
-                                                                            <th width="5%">Vaskemaskin</th>
-                                                                            <th width="5%">Tappekran <br />inne</th>
-                                                                            <th width="5%">Tappekran <br />ute</th>
-                                                                            <th width="5%">Brannskap</th>
-                                                                            <th width="5%">Sluk<br />75mm</th>
-                                                                            <th width="5%">Sluk<br />110mm</th>
+                                                                            <TableTHelement width="2%" text="#" />
+                                                                            <TableTHelement width="12%">Rom</TableTHelement>
+                                                                            <TableTHelement width="5%">Sjakt</TableTHelement>
+                                                                            <TableTHelement width="5%">1/14" servant</TableTHelement>
+                                                                            <TableTHelement width="5%">1" servant</TableTHelement>
+                                                                            <TableTHelement width="5%">Drikkefontene</TableTHelement>
+                                                                            <TableTHelement width="5%">Utslagsvask</TableTHelement>
+                                                                            <TableTHelement width="5%">WC</TableTHelement>
+                                                                            <TableTHelement width="5%">Urinal</TableTHelement>
+                                                                            <TableTHelement width="5%">Oppvaskmaskin</TableTHelement>
+                                                                            <TableTHelement width="5%">Dusjbatteri</TableTHelement>
+                                                                            <TableTHelement width="5%">Badekar</TableTHelement>
+                                                                            <TableTHelement width="5%">Vaskemaskin</TableTHelement>
+                                                                            <TableTHelement width="5%">Tappekran <br />inne</TableTHelement>
+                                                                            <TableTHelement width="5%">Tappekran <br />ute</TableTHelement>
+                                                                            <TableTHelement width="5%">Brannskap</TableTHelement>
+                                                                            <TableTHelement width="5%">Sluk<br />75mm</TableTHelement>
+                                                                            <TableTHelement width="5%">Sluk<br />110mm</TableTHelement>
                                                                         </tr>
                                                                     </thead>
-                                                                </table>
+                                                                </Table>
                                                             </div>
 
                                                             {
@@ -147,7 +155,7 @@ function SanitaryEquipment() {
                                                                                 <h3>Etasje {floor}</h3>
                                                                             </div>
                                                                             
-                                                                            <table className="fl-table">
+                                                                            <Table>
                                                                                 <tbody>
                                                                                     {
                                                                                         sortedBuildings && sortedBuildings.length > 0 ? (
@@ -155,15 +163,12 @@ function SanitaryEquipment() {
                                                                                         ) : (<></>)
                                                                                     }
                                                                                     <tr className="bg-secondary-color">
-                                                                                        <td width="2%">
-                                                                                            <br />
-                                                                                            <br />
-                                                                                        </td>
-                                                                                        <td width="12%"></td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%">
+                                                                                        <TableTDelement width="2%" />
+                                                                                        <TableTDelement width="12%" />
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%">
                                                                                             {
                                                                                                 buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
                                                                                                 Object.keys(buildingSummaryData[0].floor_summaries)
@@ -175,8 +180,8 @@ function SanitaryEquipment() {
                                                                                                     ))
                                                                                             }
 
-                                                                                        </td>
-                                                                                        <td width="5%">
+                                                                                        </TableTDelement>
+                                                                                        <TableTDelement width="5%">
                                                                                             {
                                                                                                 buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
                                                                                                 Object.keys(buildingSummaryData[0].floor_summaries)
@@ -187,8 +192,8 @@ function SanitaryEquipment() {
                                                                                                         </React.Fragment>
                                                                                                     ))
                                                                                             }
-                                                                                        </td>
-                                                                                        <td width="5%">
+                                                                                        </TableTDelement>
+                                                                                        <TableTDelement width="5%">
                                                                                             {
                                                                                                 buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
                                                                                                 Object.keys(buildingSummaryData[0].floor_summaries)
@@ -199,50 +204,49 @@ function SanitaryEquipment() {
                                                                                                         </React.Fragment>
                                                                                                     ))
                                                                                             }
-                                                                                        </td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%"></td>
-                                                                                        <td width="5%"></td>
+                                                                                        </TableTDelement>
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%" />
+                                                                                        <TableTDelement width="5%" />
                                                                                     </tr>
                                                                                 </tbody>
-                                                                            </table>
+                                                                            </Table>
                                                                         </div>
                                                                     </React.Fragment>
                                                                 ))}
                                                             <div style={{ marginBottom: "30px" }}>
                                                                 <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
-                                                                    <table className="fl-table">
+                                                                    <Table>
                                                                         <tfoot>
                                                                             <tr>
-                                                                                <th width="2%"></th>
-                                                                                {/* <th></th> */}
-                                                                                <th width="12%"></th>
-                                                                                <th width="5%"></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData && buildingSummaryData?.[0]?.sanitary_summary.sink_1_14_inch != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.sink_1_14_inch)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.sink_large != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.sink_large)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.drinking_fountain != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.drinking_fountain)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.sink_utility != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.sink_utility)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.wc != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.wc)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.urinal != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.urinal)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.dishwasher != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.dishwasher)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.shower != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.shower)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.tub != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.tub)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.washing_machine != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.washing_machine)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.tap_water_outlet_inside != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.tap_water_outlet_inside)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.tap_water_outlet_outside != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.tap_water_outlet_outside)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.firehose != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.firehose)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.drain_75_mm != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.drain_75_mm)} <br /> stk</> : (<></>)}</strong></th>
-                                                                                <th width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.drain_110_mm != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.drain_110_mm)} <br /> stk</> : (<></>)}</strong></th>
+                                                                                <TableTDelement width="2%" />
+                                                                                <TableTDelement width="12%" />
+                                                                                <TableTDelement width="5%" />
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData && buildingSummaryData?.[0]?.sanitary_summary.sink_1_14_inch != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.sink_1_14_inch)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.sink_large != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.sink_large)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.drinking_fountain != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.drinking_fountain)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.sink_utility != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.sink_utility)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.wc != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.wc)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.urinal != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.urinal)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.dishwasher != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.dishwasher)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.shower != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.shower)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.tub != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.tub)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.washing_machine != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.washing_machine)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.tap_water_outlet_inside != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.tap_water_outlet_inside)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.tap_water_outlet_outside != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.tap_water_outlet_outside)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.firehose != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.firehose)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.drain_75_mm != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.drain_75_mm)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                                                                <TableTDelement width="5%"><strong>{buildingSummaryData?.[0]?.sanitary_summary.drain_110_mm != null ? <>{Number((buildingSummaryData[0]).sanitary_summary.drain_110_mm)} <br /> stk</> : (<></>)}</strong></TableTDelement>
                                                                             </tr>
                                                                         </tfoot>
-                                                                    </table>
+                                                                    </Table>
                                                                 </div>
                                                             </div>
                                                         </div>

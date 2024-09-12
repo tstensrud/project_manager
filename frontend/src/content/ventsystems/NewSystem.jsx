@@ -1,9 +1,7 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState, useContext, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 // hooks ++
-import { GlobalContext } from '../../GlobalContext';
-import useFetch from '../../hooks/useFetch'
 import useSubmitData from '../../hooks/useSubmitData'
 
 // components
@@ -12,6 +10,10 @@ import HeaderIcon from '../../assets/svg/ventSystemIcon.jsx';
 import MessageBox from '../../layout/MessageBox';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import ContentCard from '../../layout/ContentCard.jsx';
+import CardButton from '../../layout/formelements/CardButton';
+import CardInputField from '../../layout/formelements/CardInputField.jsx';
+import CardSelect from '../../layout/formelements/CardSelect.jsx';
+import CheckBox from '../../layout/formelements/CheckBox.jsx';
 
 
 function NewSystem() {
@@ -71,41 +73,45 @@ function NewSystem() {
                         <h3>Legg til nytt ventilasjonssystem</h3>
                         <form id="system" onSubmit={handleSubmitNewSystem} role="form">
                             <div className="relative mt-5 w-full">
-                                <input ref={systemNumberRef} className="w-full p-3 bg-tertiary-color border-form-border-color rounded-lg outline-none focus:border-form-focus-border-color" onChange={handleFormChange} name="systemNumber" type="text" tabIndex="1" placeholder="360.001" required />
-                                <label for="input-field" className="input-label-left">Systemnummer</label>
+                                <div>Systemnummer</div>
+                                <CardInputField ref={systemNumberRef} changeFunction={handleFormChange} name="systemNumber" type="text" tabIndex="1" placeholder="360.001" required />
                             </div>
 
                             <div className="relative mt-5 w-full">
-                                <input ref={placementRef} className="w-full p-3 bg-tertiary-color border-form-border-color rounded-lg outline-none focus:border-form-focus-border-color" onChange={handleFormChange} name="placement" type="text" tabIndex="2" required />
-                                <label for="input-field" className="input-label-left">Aggregatplassering</label>
+                                <div>Aggregatplassering</div>
+                                <CardInputField ref={placementRef} changeFunction={handleFormChange} name="placement" type="text" tabIndex="2" required />
                             </div>
 
                             <div className="relative mt-5 w-full">
-                                <input ref={serviceAreaRef} className="w-full p-3 bg-tertiary-color border-form-border-color rounded-lg outline-none focus:border-form-focus-border-color" onChange={handleFormChange} name="serviceArea" type="text" tabIndex="3" required />
-                                <label for="input-field" className="input-label-left">Betjeningsområde</label>
+                                <div>Betjeningsområde</div>
+                                <CardInputField ref={serviceAreaRef} changeFunction={handleFormChange} name="serviceArea" type="text" tabIndex="3" required />
                             </div>
 
                             <div className="relative mt-5 w-full">
-                                <input ref={fanCapacityRef} className="w-full p-3 bg-tertiary-color border-form-border-color rounded-lg outline-none focus:border-form-focus-border-color" onChange={handleFormChange} name="airflow" type="text" tabIndex="4" required />
-                                <label for="input-field" className="input-label-left">Viftekapasitet m<sup>3</sup>/h <br /></label>
+                                <div>Viftekapasitet m<sup>3</sup>/h <br /></div>
+                                <CardInputField ref={fanCapacityRef} changeFunction={handleFormChange} name="airflow" type="text" tabIndex="4" required />
                             </div>
-                            <p>
-                                <select ref={heatExRef} className="card-select" onChange={handleFormChange} name="heat_exchange" tabIndex="5">
+                            <div className="mt-5">
+                                <CardSelect ref={heatExRef} changeFunction={handleFormChange} name="heat_exchange" tabIndex="5">
                                     <option value="none">- Gjenvinner -</option>
                                     <option value="R">Roterende</option>
                                     <option value="P">Plate/kryss</option>
                                     <option value="B">Batteri</option>
                                     <option value="0">Ingen</option>
-                                </select>
-                            </p>
-                            <p style={{ display: "flex", textAlign: "center", alignItems: "center" }}>
-                                Spesialsystem&nbsp;
-                                <input ref={specialSystemRef} type="checkbox" onChange={handleCheckBoxChange} name="special_system" tabIndex="6" />
-                            </p>
+                                </CardSelect>
+                            </div>
+                            <div className="flex mt-5">
+                                <div className="w-32">
+                                    Spesialsystem
+                                </div>
+                                <div>
+                                    <CheckBox ref={specialSystemRef} onChange={handleCheckBoxChange} name="special_system" tabIndex="6" />
+                                </div>
+                            </div>
 
-                            <p>
-                                <button className="card-button" tabIndex="7">Legg til</button>
-                            </p>
+                            <div className="mt-5">
+                                <CardButton buttonText="Legg til" tabIndex="7" />
+                            </div>
 
                         </form>
                     </ContentCard>

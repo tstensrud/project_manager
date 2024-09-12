@@ -45,33 +45,12 @@
   input:checked + .slider::before {
     @apply transform translate-x-5;
   }
-}
-* {
-  box-sizing: border-box;
-}
 
+}
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100%;
   background-color: var(--secondary-color);
   color: var(--primary-color);
-}
-
-
-/* Loading stuff */
-
-.loading-spinner {
-  border: 4px solid var(--table-background-color);
-  border-radius: 50%;
-  border-top-color: var(--accent-color);
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }

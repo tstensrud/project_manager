@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useParams } from 'react-router-dom';
 
+// Hooks
 import useFetch from '../../hooks/useFetch'
 import { customSortFloors } from '../../utils/customSortFloors.js'
 
+// Components
 import VentilationIcon from '../../assets/svg/ventilationIcon.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import VentilationTableRowComponent from "./VentilationTableRowComponent";

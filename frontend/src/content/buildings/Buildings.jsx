@@ -42,17 +42,18 @@ function Buildings() {
         <SubTitleComponent svg={<HeaderIcon />} headerText={"Bygg"} projectName={""} projectNumber={""} />
         <MainContentContainer>
 
-            <div className="flex h-20 items-center justify-center text-center flex-row">
-                <form onSubmit={handleFormSubmit}>
-                    <InputField changeFunction={handleChange} value={formInput} name="buildingName" placeholder="Navn på bygg. Eks.: A, Hovedbygg" />
-                    &nbsp;&nbsp;
-                    <FormButton buttonText="Legg til"/>
-                </form>
-            </div>
+            <form onSubmit={handleFormSubmit}>
+                <div className="flex h-20 items-center justify-center text-center flex-row w-full">
+                    <div className="w-96 mr-5">
+                        <InputField changeFunction={handleChange} value={formInput} name="buildingName" placeholder="Navn på bygg. Eks.: A, Hovedbygg" />
+                    </div>
+                    <div>
+                        <FormButton buttonText="Legg til" />
+                    </div>
+                </div>
+            </form>
 
-            <div className="flex justify-center flex-row w-full">
-
-
+            <div className="flex justify-center flex-row flex-wrap w-full">
                 {
                     loading && loading === true ? (
                         <>

@@ -9,12 +9,12 @@ import useDeleteData from '../../hooks/useDeleteData';
 import CardTitle from '../../layout/CardTitle';
 import ContentCard from '../../layout/ContentCard';
 import CardButton from '../../layout/formelements/CardButton';
+import CardInputField from '../../layout/formelements/CardInputField.jsx';
 
 // SVG imports
 import PlusIcon from '../../assets/svg/plusIcon.jsx';
 import MinusIcon from '../../assets/svg/minusIcon.jsx';
 import BuildingIcon from '../../assets/svg/buildingIcon.jsx';
-import CardInputField from '../../layout/formelements/CardInputField.jsx';
 
 function BuildingSummary({ refetchBuildingData, buildingData }) {
 

@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import HeatingSettings from './HeatingSettings';
 
-function HeatingSettingsWindow({buildingUid, onSettingsButtonUpdate}) {
+// Components
+import HeatingSettings from './HeatingSettings';
+import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.jsx'
+
+function HeatingSettingsWindow({ buildingUid, onSettingsButtonUpdate }) {
     const [showHeatingSettings, setShowHeatingSettings] = useState(false);
     const [settingsUpdatedState, setSettingsUpdatedState] = useState(false);
 
@@ -16,9 +19,7 @@ function HeatingSettingsWindow({buildingUid, onSettingsButtonUpdate}) {
     }
     return (
         <>
-            <a  href="#" onClick={(e) => handleClick(e, setShowHeatingSettings)}>
-                <button className="table-sorting-button" type="submit">Varmedata</button>
-            </a>
+            <ActiveSortingButton sortButtonClick={(e) => handleClick(e, setShowHeatingSettings)} buttonText="Varmedata" />
             {showHeatingSettings && <HeatingSettings onSettingsUpdate={handleSettingsUpdate} key={buildingUid} buildingUid={buildingUid} showHeatingSettings={showHeatingSettings} setShowHeatingSettings={setShowHeatingSettings} />}
         </>
     );

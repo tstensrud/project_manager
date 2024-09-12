@@ -21,7 +21,7 @@ function Sanitary() {
                     loading && loading === true ? (
                         <LoadingSpinner />
                     ) : (
-                        <div className="flex justify-center flex-row w-full">
+                        <div className="flex justify-center flex-row w-full flex-wrap">
                             {
                                 data && data.building_data === null ? (
                                     <p className="text-primary-color text-xs">{data.error}</p>

@@ -7,6 +7,9 @@ import useFetch from '../../hooks/useFetch'
 
 // Components
 import MessageBox from '../../layout/MessageBox';
+import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import TableButton from "../../layout/tableelements/TableButton.jsx";
 
 function EditSpecTableRow({ roomUid, totalColumns }) {
 
@@ -84,8 +87,8 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
         //setUndoDeleteData({"undo": true});
     }
 
-    const renderEditableCell = (cellName) => (
-        <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)}>
+    const renderEditableCell = (cellName, width) => (
+/*         <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)}>
             {editingCell === cellName && roomData ? (
                 <input
                     type="text"
@@ -100,13 +103,23 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
             ) : (
                 roomData ? roomData.data[cellName] : ''
             )}
-        </td>
+        </td> */
+
+<TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
+{
+    editingCell === cellName && roomData ? (
+        <EditableInputField value={roomData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+    ) : (
+        roomData ? roomData.data[cellName] : ''
+    )
+}
+</TableTDelement>
     );
 
     return (
         <>
             {response?.error && <MessageBox message={response.error} />}
-            <tr>
+            <tr className="hover:bg-table-hover">
                 {
                     roomLoading && roomLoading === true ? (
                         <>
@@ -118,22 +131,22 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
                         </>
                     ) : (
                         <>
-                            {renderEditableCell("name")}
-                            {renderEditableCell("air_per_person")}
-                            {renderEditableCell("air_emission")}
-                            {renderEditableCell("air_process")}
-                            {renderEditableCell("air_minimum")}
-                            {renderEditableCell("ventilation_principle")}
-                            {renderEditableCell("heat_exchange")}
-                            {renderEditableCell("room_control")}
-                            {renderEditableCell("notes")}
-                            {renderEditableCell("db_technical")}
-                            {renderEditableCell("db_neighbour")}
-                            {renderEditableCell("db_corridor")}
-                            {renderEditableCell("comments")}
-                            <td>
-                                <button onClick={onDelete} className="table-button" disabled={disabledDeleteButton}>Slett</button>
-                            </td>
+                            {renderEditableCell("name", "15%")}
+                            {renderEditableCell("air_per_person", "5%")}
+                            {renderEditableCell("air_emission", "5%")}
+                            {renderEditableCell("air_process", "5%")}
+                            {renderEditableCell("air_minimum", "5%")}
+                            {renderEditableCell("ventilation_principle", "5%")}
+                            {renderEditableCell("heat_exchange", "5%")}
+                            {renderEditableCell("room_control", "5%")}
+                            {renderEditableCell("notes", "25%")}
+                            {renderEditableCell("db_technical", "5%")}
+                            {renderEditableCell("db_neighbour", "5%")}
+                            {renderEditableCell("db_corridor", "5%")}
+                            {renderEditableCell("comments", "5%")}
+                            <TableTDelement width="5%">
+                                <TableButton clickFunction={onDelete} buttonText="Slett" />
+                            </TableTDelement>
                         </>
                     )
                 }

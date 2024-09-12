@@ -14,6 +14,9 @@ import LoadingSpinner from '../../layout/LoadingSpinner';
 import TableTop from '../../layout/TableTop';
 import Helpbox from './HelpBox';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import Table from '../../layout/tableelements/Table.jsx';
+import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 
 
 function Specification() {
@@ -71,42 +74,42 @@ function Specification() {
                             </div>
                             <TableTop info={<Helpbox />} />
                             <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
-                                <table className="fl-table">
+                                <Table>
                                     <thead>
                                         <tr>
-                                            <th width="15%">Romtype</th>
-                                            <th width="5%">Luft per person<br />m<sup>3</sup>/h/pers</th>
-                                            <th width="5%">Emisjon<br />m<sup>3</sup>/m<sup>2</sup>/h</th>
-                                            <th width="5%">Prosess<br />m<sup>3</sup>/h</th>
-                                            <th width="5%">Luft minimum<br />m<sup>3</sup>/h</th>
-                                            <th width="5%">Vent.prinsipp</th>
-                                            <th width="5%">Gjenvinner</th>
-                                            <th width="5%">Styring</th>
-                                            <th width="30%">Presiseringer</th>
-                                            <th width="5%">dB teknisk</th>
-                                            <th width="5%">dB naborom</th>
-                                            <th width="5%">dB korridor</th>
-                                            <th width="5%">Kommentar</th>
+                                            <TableTHelement width="15%">Romtype</TableTHelement>
+                                            <TableTHelement width="5%">Luft per person<br />m<sup>3</sup>/h/pers</TableTHelement>
+                                            <TableTHelement width="5%">Emisjon<br />m<sup>3</sup>/m<sup>2</sup>/h</TableTHelement>
+                                            <TableTHelement width="5%">Prosess<br />m<sup>3</sup>/h</TableTHelement>
+                                            <TableTHelement width="5%">Luft minimum<br />m<sup>3</sup>/h</TableTHelement>
+                                            <TableTHelement width="5%">Vent.prinsipp</TableTHelement>
+                                            <TableTHelement width="5%">Gjenvinner</TableTHelement>
+                                            <TableTHelement width="5%">Styring</TableTHelement>
+                                            <TableTHelement width="30%">Presiseringer</TableTHelement>
+                                            <TableTHelement width="5%">dB teknisk</TableTHelement>
+                                            <TableTHelement width="5%">dB naborom</TableTHelement>
+                                            <TableTHelement width="5%">dB korridor</TableTHelement>
+                                            <TableTHelement width="5%">Kommentar</TableTHelement>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {
                                             data && data.data ? (
                                                 data.data.map((rowData, index) =>
-                                                    <tr key={index}>
-                                                        <td style={{ textAlign: "left", paddingLeft: "15px" }}>{rowData ? rowData.name : ''}</td>
-                                                        <td>{rowData ? rowData.air_per_person : ''}</td>
-                                                        <td>{rowData ? rowData.air_emission : ''}</td>
-                                                        <td>{rowData ? rowData.air_process : ''}</td>
-                                                        <td>{rowData ? rowData.air_minimum : ''}</td>
-                                                        <td>{rowData ? rowData.ventilation_principle : ''}</td>
-                                                        <td>{rowData ? rowData.heat_exchange : ''}</td>
-                                                        <td>{rowData ? rowData.room_control : ''}</td>
-                                                        <td style={{ textAlign: "left", paddingLeft: "15px", wordWrap: "break-word", wordBreak: "break-all", whiteSpace: "normal" }}>{rowData ? rowData.notes : ''}</td>
-                                                        <td>{rowData ? rowData.db_technical : ''}</td>
-                                                        <td>{rowData ? rowData.db_neighbour : ''}</td>
-                                                        <td>{rowData ? rowData.db_corridor : ''}</td>
-                                                        <td>{rowData ? rowData.comments : ''}</td>
+                                                    <tr className="hover:bg-table-hover" key={index}>
+                                                        <TableTDelement>{rowData ? rowData.name : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.air_per_person : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.air_emission : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.air_process : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.air_minimum : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.ventilation_principle : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.heat_exchange : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.room_control : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.notes : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.db_technical : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.db_neighbour : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.db_corridor : ''}</TableTDelement>
+                                                        <TableTDelement>{rowData ? rowData.comments : ''}</TableTDelement>
                                                     </tr>
                                                 )
                                             ) : (
@@ -116,7 +119,7 @@ function Specification() {
                                             )
                                         }
                                     </tbody>
-                                </table>
+                                </Table>
                             </div>
                         </>
                     )

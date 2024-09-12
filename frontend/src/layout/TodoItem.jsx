@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react';
+
+// Hooks
 import useUpdateData from '../hooks/useUpdateData';
+
+// Components
+import CardButton from './formelements/CardButton';
 
 function TodoItem({ user, itemData }) {
     const [projectId, setProjectId] = useState();
     const { data, response, setData, handleSubmit } = useUpdateData(`/project_api/${projectId}/todo_item_complete/`);
     const [todoClass, setTodoClass] = useState("todo-popup-listitem");
-    const [buttonClass, setButtonClass] = useState("todo-list-button");
+    const [completed, setCompleted] = useState(false);
 
 
     useEffect(() => {
@@ -22,25 +27,29 @@ function TodoItem({ user, itemData }) {
 
     useEffect(() => {
         if (response?.success === true) {
-            setTodoClass("todo-completed");
-            setButtonClass("todo-list-button-complete");
+            setTodoClass("line-through bg-secondary-color text-primary-color w-full border-b border-form-border-color p-2");
+            setCompleted(true);
         }
     }, [response]);
 
     const handleComplete = async (e) => {
-        console.log(data)
         await handleSubmit(e);
     }
 
     return (
-        <div className={todoClass}>
-            <p>{itemData.date} - {itemData.author_uid}</p>
-            <p>{itemData.content}</p>
-            <p>
-                <form>
-                    <button onClick={handleComplete} className={buttonClass}>Utført</button>
-                </form>
-            </p>
+        <div className="border-b border-t border-form-border-color">
+            <div className="w-full text-base font-semibold pl-2">{itemData.date} - {itemData.author_uid}</div>
+            <div className={completed ? "line-through bg-secondary-color text-base text-primary-color w-full border-form-border-color p-2" : "w-full text-base pl-2"}>{itemData.content}</div>
+            <div className="pl-2 pb-2 pt-2">
+                {
+                    !completed &&
+                    (
+                        <form>
+                            <CardButton clickFunction={handleComplete} buttonText="Utført" />
+                        </form>
+                    )
+                }
+            </div>
         </div>
     );
 }

@@ -11,6 +11,8 @@ import MessageBox from '../../layout/MessageBox';
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
+import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 
 
 function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData, totalColumns }) {
@@ -45,10 +47,6 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
 
 
     // Handlers
-    const sendMessageToParent = (msg) => {
-        msgToParent(msg);
-    }
-
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
     };
@@ -79,41 +77,29 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('marked-row');
+            setMarkedRow('bg-marked-row text-primary-color');
         } else {
             setMarkedRow('');
         }
     }
 
     const renderEditableCell = (cellName, width) => (
-        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} className="cursor-pointer">
-            {editingCell === cellName && sanitaryData ? (
-                <input
-                    type="text"
-                    className="table-input"
-                    value={sanitaryData[cellName]}
-                    onChange={(e) => handleChange(e, cellName)}
-                    onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
-                    autoFocus
-                />
-            ) : (
-                sanitaryData ? sanitaryData.sanitary_data[cellName] : ''
-            )}
-        </td>
+        <TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
+            {
+                editingCell === cellName && sanitaryData ? (
+                    <EditableInputField value={sanitaryData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+                ) : (
+                    sanitaryData ? sanitaryData.sanitary_data[cellName] : ''
+                )
+            }
+        </TableTDelement>
     );
-
-    const handleOpenRoomData = (e) => {
-        e.preventDefault();
-        setShowRoomData(!showRoomData);
-    }
-
 
     return (
         <>
 
             {response && response.error ? <MessageBox message={response.error} /> : null}
-            <tr className={markedRow}>
+            <tr className={`${markedRow} hover:bg-table-hover`}>
                 {
                     sanitaryLoading && sanitaryLoading === true ? (
                         <>
@@ -125,16 +111,18 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
                         </>
                     ) : (
                         <>
-                            <td className="cursor-pointer" width="2%" onClick={handleOnMarkedRow}>
+                            <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
                                 <MarkRowIcon />
-                            </td>
-                            <td width="12%" onClick={(e) => handleOpenRoomData(e, setShowRoomData)} style={{ /*cursor: 'pointer',*/ textTransform: 'uppercase' }}>
-                                <strong>{allRoomData ? allRoomData.RoomNumber : ''}</strong>
-                                <br />
-                                <span className="text-grey-text">
+                            </TableTDelement>
+
+                            <TableTDelement width="12%">
+                                <div className="font-semibold">
+                                {allRoomData ? allRoomData.RoomNumber : ''}
+                                </div>
+                                <div className="text-grey-text uppercase font-semibold">
                                     {allRoomData ? allRoomData.RoomName : ''}
-                                </span>
-                            </td>
+                                </div>
+                            </TableTDelement>
                             {renderEditableCell("shaft", "5%")}
                             {renderEditableCell("sink_1_14_inch", "5%")}
                             {renderEditableCell("sink_large", "5%")}

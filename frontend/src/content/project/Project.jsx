@@ -35,12 +35,9 @@ function Project() {
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektoversikt"} projectName={data && data.data.ProjectName} projectNumber={data && data.data.ProjectNumber} />
             <MainContentContainer>
-                <div className="flex justify-center flex-row w-full">
+                <div className="flex justify-center flex-row w-full flex-wrap">
                     <ProjectSummary projectId={projectId} />
                     <BuildingRoomData projectId={projectId} />
-                </div>
-
-                <div className="flex justify-center flex-row w-full">
                     <VentilationSummary projectId={projectId} />
                     <HeatingCoolingSummary projectId={projectId} />
                 </div>

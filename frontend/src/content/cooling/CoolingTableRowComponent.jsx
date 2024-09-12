@@ -11,6 +11,8 @@ import MessageBox from '../../layout/MessageBox';
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
+import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
+import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 
 
 function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, index }) {
@@ -86,7 +88,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('marked-row');
+            setMarkedRow('bg-marked-row text-primary-color');
         } else {
             setMarkedRow('');
         }
@@ -105,21 +107,15 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
     }
 
     const renderEditableCell = (cellName, width) => (
-        <td width={width} name={cellName} onClick={() => handleEdit(cellName)} className="cursor-pointer">
-            {editingCell === cellName && coolingData ? (
-                <input
-                    type="text"
-                    className="table-input"
-                    value={coolingData[cellName]}
-                    onChange={(e) => handleChange(e, cellName)}
-                    onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
-                    autoFocus
-                />
-            ) : (
-                coolingData ? coolingData.cooling_data[cellName] : ''
-            )}
-        </td>
+        <TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
+            {
+                editingCell === cellName && coolingData ? (
+                    <EditableInputField value={coolingData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+                ) : (
+                    coolingData ? coolingData.cooling_data[cellName] : ''
+                )
+            }
+        </TableTDelement>
     );
 
     const handleUpdateVentilation = async (e) => {
@@ -131,7 +127,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
     if (updateRoomDataResponse && updateRoomDataResponse.error !== null && updateRoomDataResponse.error !== undefined) return (<><MessageBox message={updateRoomDataResponse.error} /></>);
     return (
         <>
-            <tr className={markedRow}>
+            <tr className={`${markedRow} hover:bg-table-hover`}>
                 {
                     coolingLoading && coolingLoading === true ? (
                         <>
@@ -143,16 +139,17 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
                         </>
                     ) : (
                         <>
-                            <td width="2%" className="cursor-pointer" onClick={handleOnMarkedRow}>
+                            <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
                                 <MarkRowIcon />
-                            </td>
-                            <td width="5%">
-                                {coolingData ? coolingData.room_data.RoomNumber : ''}
-                                <br />
-                                <span className="text-grey-text">
+                            </TableTDelement>
+                            <TableTDelement width="5%">
+                                <div>
+                                    {coolingData ? coolingData.room_data.RoomNumber : ''}
+                                </div>
+                                <div className="text-grey-text">
                                     {coolingData ? coolingData.room_data.RoomName : ''}
-                                </span>
-                            </td>
+                                </div>
+                            </TableTDelement>
                             {renderEditableCell("RoomTempSummer", "5%")}
                             {renderEditableCell("VentairTempSummer", "5%")}
                             {renderEditableCell("InternalHeatloadPeople", "5%")}
@@ -160,31 +157,27 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
                             {renderEditableCell("InternalHeatloadEquipment", "5%")}
                             {renderEditableCell("SunAdition", "5%")}
                             {renderEditableCell("SunReduction", "5%")}
-                            <td width="5%">
+                            <TableTDelement width="5%">
                                 {coolingData ? coolingData.cooling_data.SumInternalHeatLoad : ''}
-                            </td>
+                            </TableTDelement>
                             {renderEditableCell("CoolingEquipment", "5%")}
-                            <td width="5%">
+                            <TableTDelement width="5%">
                                 <strong>
                                     {coolingData ? (coolingData.cooling_data.CoolingSum).toFixed(0) : ''}
                                 </strong>
-                            </td>
-                            <td width="5%">
+                            </TableTDelement>
+                            <TableTDelement width="5%">
                                 {extraAirNeeded}
-                            </td>
-                            <td width="34%">
+                            </TableTDelement>
+                            <TableTDelement width="34%">
                                 {
-                                    extraAirNeeded < 0 ? (
+                                    extraAirNeeded < 0 && (
                                         <>
                                             Det mangler {extraAirNeeded * -1} m3/h for å dekke kjøling ved luft. <Link to="" onClick={handleUpdateVentilation}>Oppdater luftmengde</Link>
                                         </>
-                                    ) : (
-                                        <>
-                                        </>
                                     )
-
                                 }
-                            </td>
+                            </TableTDelement>
                         </>
                     )
                 }

@@ -35,7 +35,11 @@ export default {
       "deleted-row" : "#aa4444"
     }
     ,
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Roboto', 'sans-serif'],
+      }
+    },
   },
   plugins: [],
 }

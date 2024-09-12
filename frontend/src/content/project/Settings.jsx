@@ -12,6 +12,10 @@ import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeaderIcon from '../../assets/svg/projectSettingsIcon.jsx';
 import ContentCard from '../../layout/ContentCard';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import CardButton from '../../layout/formelements/CardButton';
+import CardSelect from '../../layout/formelements/CardSelect';
+import CardInputField from '../../layout/formelements/CardInputField.jsx';
+import TextArea from '../../layout/formelements/TextArea.jsx';
 
 function Settings() {
     const { projectId } = useParams();
@@ -61,16 +65,22 @@ function Settings() {
                     <ContentCard>
                         <form onSubmit={handleOnSubmit}>
                             <h2 >Rediger prosjektinnstillinger</h2>
-                            <h4>Prosjektnummer</h4>
-                            <input className="card-input" type="text" name="project_number" key="number" value={data && data.data.ProjectNumber} readOnly />
-                            <p className="info"> </p>
-                            <h4>Prosjektnavn</h4>
-                            <input className="card-input" type="text" name="project_name" key="name" value={data && data.data.ProjectName} readOnly />
-                            <h4>Prosjektbeskrivelse</h4>
-                            <textarea className="form-text-area" name="description" onChange={handleChange} value={description} />
-                            <h4>Kravspesifikasjon</h4>
-                            <p>
-                                <select className="card-select" name="project_specification" onChange={handleChange}>
+                            <div>Prosjektnummer</div>
+                            <div>
+                                <CardInputField type="text" name="project_number" key="number" value={data && data.data.ProjectNumber} />
+                            </div>
+
+                            <div className="mt-3">Prosjektnavn</div>
+                            <div>
+                                <CardInputField type="text" name="project_name" key="name" value={data && data.data.ProjectName} />
+                            </div>
+                            <div className="mt-3">Prosjektbeskrivelse</div>
+                            <div>
+                                <TextArea className="form-text-area" name="description" changeFunction={handleChange} value={description} />
+                            </div>
+                            <div className="mt-3">Kravspesifikasjon</div>
+                            <div>
+                                <CardSelect name="project_specification" changeFunction={handleChange}>
                                     <option value="none">- Velg -</option>
 
                                     {
@@ -82,14 +92,12 @@ function Settings() {
                                             <option>Ingen spesifikasjoner</option>
                                         )
                                     }
+                                </CardSelect>
 
-                                </select>
-                            </p>
-                            <p>
-                                <button type="submit" className="card-button">
-                                    Oppdater
-                                </button>
-                            </p>
+                            </div>
+                            <div className="mt-3">
+                                <CardButton buttonText="Oppdater" />
+                            </div>
                         </form>
                     </ContentCard>
 

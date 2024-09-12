@@ -8,7 +8,9 @@ import useUpdateData from '../../hooks/useUpdateData'
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import BuildingIcon from '../../assets/svg/building.jsx';
 import ContentCard from '../../layout/ContentCard.jsx';
-import SummaryHeader from './components/SummaryHeader.jsx'
+import CardSelect from '../../layout/formelements/CardSelect.jsx';
+import CardButton from '../../layout/formelements/CardButton.jsx';
+import SummaryHeader from './components/SummaryHeader.jsx';
 import EquipmentContainer from './components/EquipmentContainer.jsx';
 
 function BuildingSummary({ buildingUid, projectId }) {
@@ -70,11 +72,11 @@ function BuildingSummary({ buildingUid, projectId }) {
 
     return (
         <ContentCard>
-            <div style={{ display: "flex", width: "400px", marginBottom: "20px" }}>
-                <div style={{ display: "flex", width: "40%" }}>
+            <div className="flex w-[400px] mb-5">
+                <div className="flex w-[40%]">
                     <BuildingIcon />
                 </div>
-                <div style={{ display: "flex", width: "60%", textAlign: "center", alignItems: "center", justifyContent: "end", fontSize: "25px" }}>
+                <div className="flex w-[60%] text-center items-center justify-end text-2xl">
                     {buildingSummaryData && buildingSummaryData.building_data.BuildingName}
                 </div>
             </div>
@@ -84,25 +86,26 @@ function BuildingSummary({ buildingUid, projectId }) {
                     <LoadingSpinner />
                 ) : (
                     <>
-                        <div className="flex w-full flex-row">
-                            <div className="mr-5">
+                        <div className="flex w-full flex-row mb-3 ">
+                            <div className="mr-3">
                                 Avløpskurve:
                             </div>
                             <strong>{buildingSummaryData && buildingSummaryData.building_data.GraphCurve}</strong>
                         </div>
-                        <div className="mb-1">
-                            <form onSubmit={handleCurveSubmit}>
-                                <p>
-                                    <select className="card-select" onChange={handleCurveChange}>
+                        <form onSubmit={handleCurveSubmit}>
+                            <div className="mb-1 flex flex-row mb-3">
+                                <div className="mr-3">
+                                    <CardSelect changeFunction={handleCurveChange}>
                                         <option value="">- Velg avløpskurve -</option>
                                         <option value="A">Kurve A</option>
                                         <option value="B">Kurve B</option>
-                                    </select>
-                                    &nbsp;&nbsp;&nbsp;
-                                    <button className="card-button" type="submit">Oppdater</button>
-                                </p>
-                            </form>
-                        </div>
+                                    </CardSelect>
+                                </div>
+                                <div>
+                                    <CardButton buttonText="Oppdater" />
+                                </div>
+                            </div>
+                        </form>
 
                         <h3>Oppsummering vannmengder</h3>
                         <div className="border-0 p-1 rounder-lg">

@@ -12,6 +12,8 @@ import TableTop from '../../layout/TableTop';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import HelpBox from './HelpBox';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import Table from '../../layout/tableelements/Table.jsx';
+import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 
 function VentSystems() {
     const { projectId } = useParams();
@@ -57,20 +59,20 @@ function VentSystems() {
                                         <>
                                             <TableTop info={<HelpBox />} />
                                             <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
-                                                <table className="fl-table">
+                                                <Table>
                                                     <thead>
                                                         <tr>
-                                                            <th width="2%">#</th>
-                                                            <th width="5%">Systemnr</th>
-                                                            <th width="10%">Plassering</th>
-                                                            <th width="10%">Betjeningsområde</th>
-                                                            <th width="7%">Viftekapasitet<br /> m<sup>3</sup>/h</th>
-                                                            <th width="5%">Gjenvinner</th>
-                                                            <th width="7%">Prosjektert tilluft<br /> m<sup>3</sup>/h</th>
-                                                            <th width="7%">Prosjektert avtrekk<br /> m<sup>3</sup>/h</th>
-                                                            <th width="5%">Spesialsystem</th>
-                                                            <th width="32%">Merknad</th>
-                                                            <th width="10%">Slett system</th>
+                                                            <TableTHelement width="2%" text="#"/>
+                                                            <TableTHelement width="5%" text="Systemnr"/>
+                                                            <TableTHelement width="10%" text="Plassering" />
+                                                            <TableTHelement width="10%" text="Betjeningsområde" />
+                                                            <TableTHelement width="7%">Viftekapasitet<br /> m<sup>3</sup>/h</TableTHelement>
+                                                            <TableTHelement width="5%" text="Gjenvinner" />
+                                                            <TableTHelement width="7%">Prosjektert tilluft<br /> m<sup>3</sup>/h</TableTHelement>
+                                                            <TableTHelement width="7%">Prosjektert avtrekk<br /> m<sup>3</sup>/h</TableTHelement>
+                                                            <TableTHelement width="5%" text="Spesialsystem" />
+                                                            <TableTHelement width="32%" text="Merknad" />
+                                                            <TableTHelement width="10%" text="Slett system" />
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -82,7 +84,7 @@ function VentSystems() {
                                                             )
                                                         }
                                                     </tbody>
-                                                </table>
+                                                </Table>
                                             </div>
                                         </>
                                     )

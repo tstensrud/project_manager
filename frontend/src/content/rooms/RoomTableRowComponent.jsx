@@ -114,13 +114,12 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
         await handleSubmit(e);
         setUndoButton(false);
         //setRowClass("");
-
     }
 
     return (
         <>
             {response?.error && <MessageBox message={response.error} />}
-            <tr className={markedRow}>
+            <tr className={`${markedRow} hover:bg-table-hover`}>
                 {
                     roomLoading && roomLoading === true ? (
                         <>

@@ -99,7 +99,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('marked-row');
+            setMarkedRow('bg-marked-row text-primary-color');
         } else {
             setMarkedRow('');
         }
@@ -161,7 +161,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
         <>
             {showRoomData ? <RoomData roomData={allRoomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
             {response && response.error ? <MessageBox message={response.error} /> : null}
-            <tr className={markedRow}>
+            <tr className={`${markedRow} hover:bg-table-hover`}>
                 {
                     ventLoading && ventLoading === true ? (
                         <>
