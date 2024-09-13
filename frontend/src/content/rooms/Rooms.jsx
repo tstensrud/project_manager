@@ -146,7 +146,7 @@ function Rooms() {
 
     return (
         <>
-            {newRoomDataResponse?.error ? (<MessageBox message={newRoomDataResponse.error} />) : (<></>)}
+            {newRoomDataResponse?.success === false && (<MessageBox message={newRoomDataResponse.message} />)}
             <SubTitleComponent svg={<RoomIcon />} headerText={"Romskjema"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 {

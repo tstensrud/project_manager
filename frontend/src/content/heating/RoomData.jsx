@@ -8,7 +8,7 @@ function RoomData({ heatingData, setShowRoomData }) {
   const handleClick = (e) => {
     setShowRoomData(false);
   }
-
+  
   return (
     <>
       <Draggable>
@@ -27,7 +27,7 @@ function RoomData({ heatingData, setShowRoomData }) {
 
           <RoomDataRow rowName="Temp. ventilasjon" rowData={``}>{heatingData.building_data.VentTemp} C&#176;</RoomDataRow>
           <RoomDataRow rowName="Luftmengde" rowData="">{heatingData.heating_data.Airflow} m3/h</RoomDataRow>
-          <RoomDataRow rowName="DUT" rowData={``} >{heatingData.building_data.VentTemp} C&#176;</RoomDataRow>
+          <RoomDataRow rowName="DUT" rowData={``} >{heatingData.building_data.Dut} C&#176;</RoomDataRow>
           <RoomDataRow rowName="Årsmiddeltemp" rowData={``}>{heatingData.building_data.YearMidTemp} C&#176;</RoomDataRow>
           <RoomDataRow rowName="Antall personer" rowData={`${heatingData.room_data.RoomPopulation} stk.`} />
           <RoomDataRow rowName="Areal yttervegg" rowData={``}>{heatingData.heating_data.OuterWallArea} m2</RoomDataRow>
