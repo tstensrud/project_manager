@@ -24,24 +24,24 @@ function BuildingRoomData({ projectId }) {
                                 {
                                     data?.building_data ? (
                                         <>
-                                            <div className="text-grey-text mb-1">
+                                            <div className="text-grey-text dark:text-dark-grey-text mb-1">
                                                 <h4>Bygg og areal</h4>
                                             </div>
                                             <div className="mb-10">
                                                 {
                                                     data?.building_data.map((building, index) => (
-                                                        <div key={index} className="flex flex-row">
+                                                        <div key={index} className="flex flex-row w-full">
                                                             <div className="flex w-1/2">
                                                                 {building.BuildingName}
                                                             </div>
-                                                            <div className="flex flex-1">
-                                                                {building.area.toLocaleString()} m<sup>2</sup>
+                                                            <div className="flex w-1/2 justify-end">
+                                                                {building.area.toLocaleString()} <div className="ml-1">m<sup>2</sup></div>
                                                             </div>
                                                         </div>
                                                     ))
                                                 }
                                             </div>
-                                            <div className="text-grey-text mb-1">
+                                            <div className="text-grey-text dark:text-dark-grey-text mb-1">
                                                 <h4>Antall rom prosjektert</h4>
                                             </div>
                                             <div>

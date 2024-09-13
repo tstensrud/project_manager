@@ -50,8 +50,8 @@ function CoolingSettings({ setShowHeatingSettings: setShowCoolingSettings, build
             {response?.error && response.error !== null ? (<MessageBox message={response.error} />) : (<></>)}
             {error?.error && error.error !== null ? (<MessageBox message={error.error} />) : (<></>)}
 
-            <div className="flex flex-col pl-3 pr-3 absolute top-1/2 rounded-lg border border-primary-color left-1/2 transform -translate-x-1/2 overflow-y-auto -translate-y-1/2 h-1/2 w-1/2 bg-secondary-color text-primary-color shadow-lg shadow-background-shade justify-start z-[1000] text-base">
-                <div className="flexsticky top-0 bg-secondary-color flex-col border-b-default-border-color p-1 font-extrabold w-full">
+            <div className="flex flex-col pl-3 pr-3 absolute top-1/2 rounded-lg border border-primary-color dark:border-dark-default-border-color left-1/2 transform -translate-x-1/2 overflow-y-auto -translate-y-1/2 h-1/2 w-[400px] bg-secondary-color dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color shadow-lg shadow-background-shade justify-start z-[1000] text-base">
+                <div className="flexsticky top-0 bg-secondary-color dark:bg-dark-secondary-color flex-col border-b-default-border-color p-1 font-extrabold w-full">
                     <div className="flex w-full justify-end">
                         <span onClick={(e) => handleClick(e, setShowCoolingSettings)} className="cursor-pointer hover:text-accent-color">&times;</span>
                     </div>
@@ -61,7 +61,7 @@ function CoolingSettings({ setShowHeatingSettings: setShowCoolingSettings, build
                     </div>
                 </div>
 
-                <div className="flex flex-col h-full text-primary-color justify-start w-full text-base-item-container">
+                <div className="flex flex-col h-full text-primary-color dark:text-dark-primary-color justify-start w-full text-base-item-container">
                     <div className="mb-3">
                         <strong>NB!</strong> Disse verdiene settes for alle rom i bygget. Du kan etterpå justere enkeltrom med egne verdier ved behov.
                     </div>

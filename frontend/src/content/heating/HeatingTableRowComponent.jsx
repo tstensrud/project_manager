@@ -47,6 +47,14 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
         }
     }, [heatingData]);
 
+    useEffect(() => {
+        if (response?.success && response.success === true) {
+            setData('');
+            heatingRefetch();
+            buildingReFetch();
+        }
+    },[response])
+
     // Handlers
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
@@ -67,9 +75,6 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
         if (e.key === "Enter") {
             await updateRoomData(e);
             handleBlur();
-            setData('');
-            heatingRefetch();
-            buildingReFetch();
         } if (e.key == "Escape") {
             handleBlur();
             return;
@@ -78,7 +83,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('bg-marked-row text-primary-color');
+            setMarkedRow('bg-marked-row dark:bg-dark-marked-row text-primary-color dark:text-dark-primary-color');
         } else {
             setMarkedRow('');
         }
@@ -100,12 +105,12 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
             }
         </TableTDelement>
     );
-
+    
     return (
         <>
             {showRoomData ? <RoomData heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
-            {response && response.error !== null && response.error !== undefined ? <MessageBox message={response.error} /> : ''}
-            <tr className={`${markedRow} hover:bg-table-hover`}>
+            {response?.success === false && <MessageBox message={response.message} />}
+            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
                     heatingLoading && heatingLoading === true ? (
                         <>
@@ -121,10 +126,10 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
                                 <MarkRowIcon />
                             </TableTDelement>
                             <TableTDelement pointer={true} width="5%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
-                                <div className="text-accent-color font-semibold">
+                                <div className="text-accent-color dark:text-dark-accent-color font-semibold">
                                     {heatingData ? heatingData.room_data.RoomNumber : ''}
                                 </div>
-                                <div className="text-grey-text uppercase font-semibold">
+                                <div className="text-grey-text dark:text-dark-grey-text uppercase font-semibold">
                                     {heatingData ? heatingData.room_data.RoomName : ''}
                                 </div>
                             </TableTDelement>

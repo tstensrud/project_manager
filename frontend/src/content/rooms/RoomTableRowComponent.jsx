@@ -54,6 +54,12 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
         }
     }, [roomData]);
 
+    useEffect(() => {
+        if (response?.success === true) {
+            setData('');
+            roomRefetch();
+        }
+    },[response])
     // Handlers
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
@@ -69,7 +75,6 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     const onDelete = async (e) => {
         await deleteSubmit(e);
         setDisabledDeleteButton(true);
-        //setRowClass("text-deleted-row line-through")
         setUndoButton(true);
         setUndoDeleteData({ "undo": true });
     }
@@ -82,8 +87,6 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
         if (e.key === "Enter") {
             await updateRoomData(e);
             handleBlur();
-            setData('');
-            roomRefetch();
         } if (e.key == "Escape") {
             handleBlur();
             return;
@@ -92,7 +95,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('bg-marked-row text-primary-color');
+            setMarkedRow('bg-marked-row dark:bg-dark-marked-row text-primary-color dark:text-dark-primary-color');
         } else {
             setMarkedRow('');
         }
@@ -118,8 +121,8 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
 
     return (
         <>
-            {response?.error && <MessageBox message={response.error} />}
-            <tr className={`${markedRow} hover:bg-table-hover`}>
+            {response?.success === false && <MessageBox message={response.message} />}
+            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
                     roomLoading && roomLoading === true ? (
                         <>

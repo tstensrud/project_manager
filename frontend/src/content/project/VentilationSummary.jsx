@@ -24,7 +24,7 @@ function VentilationSummary({ projectId }) {
                                 systemsData && data ? (
                                     <>
                                         <div className="mb-10">
-                                            <div className="text-grey-text mb-1">
+                                            <div className="text-grey-text dark:text-dark-grey-text mb-1">
                                                 <h4>Ventilasjonssystemer</h4>
                                             </div>
                                             {systemsData.systems_data && systemsData.systems_data.map((system, index) => (
@@ -35,14 +35,14 @@ function VentilationSummary({ projectId }) {
                                                 </div>
                                             ))}
                                         </div>
-                                        <div className="mb-1 text-grey-text">
+                                        <div className="mb-1 text-grey-text dark:text-dark-grey-text">
                                             <h4>Prosjektert luftmengde</h4>
                                         </div>
                                         {
                                             data.ventdata ? (
                                                 <>
                                                     <div className="flex flex-row w-full">
-                                                        {data.ventdata.toLocaleString()} m<sup>3</sup>/h
+                                                        {data.ventdata.toLocaleString()} <div className="ml-1">m<sup>3</sup>/h</div>
                                                     </div>
                                                 </>
                                             ) : (

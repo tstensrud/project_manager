@@ -10,7 +10,7 @@
     @apply overflow-hidden m-0 p-0 h-full w-full antialiased;
   }
   a {
-    @apply no-underline text-accent-color;
+    @apply no-underline text-accent-color dark:text-dark-accent-color;
   }
   a:hover {
     @apply underline;
@@ -31,11 +31,11 @@
 
 @layer components {
   .slider {
-    @apply absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-tertiary-color transition duration-300 border border-accent-color rounded-[20px];
+    @apply absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-tertiary-color dark:bg-dark-tertiary-color transition duration-300 border border-accent-color dark:border-dark-accent-color rounded-[20px];
   }
 
   .slider::before {
-    @apply absolute content-[""] h-[15px] w-[15px] left-[2px] top-[2px] bottom-[2px] bg-accent-color transition duration-300 rounded-[50%];
+    @apply absolute content-[""] h-[15px] w-[15px] left-[2px] top-[2px] bottom-[2px] bg-accent-color dark:bg-dark-accent-color transition duration-300 rounded-[50%];
   }
 
   input:checked + .slider {
@@ -51,6 +51,4 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: var(--secondary-color);
-  color: var(--primary-color);
 }

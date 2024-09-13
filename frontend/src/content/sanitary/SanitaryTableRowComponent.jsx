@@ -98,8 +98,8 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
     return (
         <>
 
-            {response && response.error ? <MessageBox message={response.error} /> : null}
-            <tr className={`${markedRow} hover:bg-table-hover`}>
+            {response?.success === false ? <MessageBox message={response.message} /> : null}
+            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
                     sanitaryLoading && sanitaryLoading === true ? (
                         <>
@@ -119,7 +119,7 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
                                 <div className="font-semibold">
                                 {allRoomData ? allRoomData.RoomNumber : ''}
                                 </div>
-                                <div className="text-grey-text uppercase font-semibold">
+                                <div className="text-grey-text dark:text-dark-grey-text uppercase font-semibold">
                                     {allRoomData ? allRoomData.RoomName : ''}
                                 </div>
                             </TableTDelement>

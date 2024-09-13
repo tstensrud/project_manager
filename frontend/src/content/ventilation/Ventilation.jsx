@@ -17,8 +17,11 @@ import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import SortingButton from '../../layout/formelements/SortingButton.jsx';
 import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.jsx'
 import Table from '../../layout/tableelements/Table.jsx';
+import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import TableContainer from '../../layout/tableelements/TableContainer.jsx';
+import TableWrapper from "../../layout/tableelements/TableWrapper.jsx";
 
 //import BuildingSummary from './BuildingSummary';
 
@@ -128,37 +131,29 @@ function Ventilation() {
                                                 ) : (
                                                     <>
                                                         <TableTop info={<HelpBox />} />
-                                                        <div className="flex flex-col h-[80%] overflow-y-auto">
-                                                            <div className="sticky ml-5 mr-5 mt-0 top-0 rounded-bl-lg rounded-br-lg bg-secondary-color z-10">
-                                                                <Table>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <TableTHelement width="2%" text="#" />
-                                                                            <TableTHelement width="10%" text="Rom" />
-                                                                            <TableTHelement width="6%">Sum personer<br />m³/h</TableTHelement>
-                                                                            <TableTHelement width="6%">Sum emisjon<br /> m³/h</TableTHelement>
-                                                                            <TableTHelement width="6%">Prosess <br />m³/h </TableTHelement>
-                                                                            <TableTHelement width="6%">Dimensjonert<br /> m³/h</TableTHelement>
-                                                                            <TableTHelement width="6%">Tilluft<br /> m³/h</TableTHelement>
-                                                                            <TableTHelement width="6%">Avtrekk<br /> m³/h</TableTHelement>
-                                                                            <TableTHelement width="6%">m³/m²</TableTHelement>
-                                                                            <TableTHelement width="6%">Min m³/h</TableTHelement>
-                                                                            <TableTHelement width="6%" text="System" />
-                                                                            <TableTHelement width="34%" text="Merknad" />
-                                                                        </tr>
-                                                                    </thead>
-                                                                </Table>
-                                                            </div>
-
+                                                        <TableContainer>
+                                                            <TableHeader>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <TableTHelement width="2%" text="#" />
+                                                                        <TableTHelement width="10%" text="Rom" />
+                                                                        <TableTHelement width="6%">Sum personer<br />m³/h</TableTHelement>
+                                                                        <TableTHelement width="6%">Sum emisjon<br /> m³/h</TableTHelement>
+                                                                        <TableTHelement width="6%">Prosess <br />m³/h </TableTHelement>
+                                                                        <TableTHelement width="6%">Dimensjonert<br /> m³/h</TableTHelement>
+                                                                        <TableTHelement width="6%">Tilluft<br /> m³/h</TableTHelement>
+                                                                        <TableTHelement width="6%">Avtrekk<br /> m³/h</TableTHelement>
+                                                                        <TableTHelement width="6%">m³/m²</TableTHelement>
+                                                                        <TableTHelement width="6%">Min m³/h</TableTHelement>
+                                                                        <TableTHelement width="6%" text="System" />
+                                                                        <TableTHelement width="34%" text="Merknad" />
+                                                                    </tr>
+                                                                </thead>
+                                                            </TableHeader>
                                                             {
                                                                 floors && floors.map(floor => (
                                                                     <React.Fragment key={floor}>
-                                                                        <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
-
-                                                                            <div className="text-primary-color text-xs border-none w-full max-w-full bg-secondary-color flex justify-center">
-                                                                                <h3>Etasje {floor}</h3>
-                                                                            </div>
-
+                                                                        <TableWrapper floor={floor}>
                                                                             <Table>
                                                                                 <tbody>
                                                                                     {
@@ -166,7 +161,7 @@ function Ventilation() {
                                                                                             sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <VentilationTableRowComponent index={index} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={12} roomId={room.uid} systems={ventSystemData} />)
                                                                                         ) : (<></>)
                                                                                     }
-                                                                                    <tr className="bg-secondary-color">
+                                                                                    <tr className="bg-secondary-color dark:bg-dark-secondary-color">
                                                                                         <TableTDelement width="2%" />
                                                                                         <TableTDelement width="10%" />
                                                                                         <TableTDelement width="6%" />
@@ -196,8 +191,8 @@ function Ventilation() {
                                                                                                     .map(key => (
                                                                                                         <React.Fragment key={key}>
                                                                                                             <span className="text-supply-color font-bold">
-                                                                                                                    {Number(buildingSummaryData[0].floor_summaries[key].supply.toFixed(0)).toLocaleString()}
-                                                                                                                    <br /> m<sup>3</sup>/h
+                                                                                                                {Number(buildingSummaryData[0].floor_summaries[key].supply.toFixed(0)).toLocaleString()}
+                                                                                                                <br /> m<sup>3</sup>/h
                                                                                                             </span>
                                                                                                         </React.Fragment>
                                                                                                     ))
@@ -223,29 +218,29 @@ function Ventilation() {
                                                                                         <TableTDelement width="6%" />
                                                                                         <TableTDelement width="6%" />
                                                                                         <TableTDelement width="34%">
-                                                                                        {
+                                                                                            {
                                                                                                 buildingSummaryData && buildingSummaryData[0]?.floor_summaries &&
                                                                                                 Object.keys(buildingSummaryData[0].floor_summaries)
                                                                                                     .filter(key => key === floor)
                                                                                                     .map(key => (
                                                                                                         <React.Fragment key={key}>
                                                                                                             <div className="font-semibold">
-                                                                                                            {buildingSummaryData[0].floor_summaries[key].supply < buildingSummaryData[0].floor_summaries[key].demand && 'For lite luftmengde ift dimensjonert. '}
-                                                                                                            {buildingSummaryData[0].floor_summaries[key].supply !== buildingSummaryData[0].floor_summaries[key].extract && 'Ubalanse i etasje.'}
+                                                                                                                {buildingSummaryData[0].floor_summaries[key].supply < buildingSummaryData[0].floor_summaries[key].demand && 'For lite luftmengde ift dimensjonert. '}
+                                                                                                                {buildingSummaryData[0].floor_summaries[key].supply !== buildingSummaryData[0].floor_summaries[key].extract && 'Ubalanse i etasje.'}
                                                                                                             </div>
                                                                                                         </React.Fragment>
                                                                                                     ))
-                                                                                            }    
+                                                                                            }
                                                                                         </TableTDelement>
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </Table>
-                                                                        </div>
+                                                                        </TableWrapper>
                                                                     </React.Fragment>
                                                                 ))
                                                             }
 
-                                                            <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
+                                                            <TableWrapper>
                                                                 <Table>
                                                                     <tbody>
                                                                         <tr>
@@ -273,8 +268,8 @@ function Ventilation() {
                                                                         </tr>
                                                                     </tbody>
                                                                 </Table>
-                                                            </div>
-                                                        </div>
+                                                            </TableWrapper>
+                                                        </TableContainer>
                                                     </>
                                                 )
                                             }

@@ -7,6 +7,7 @@ import useSubmitData from '../../hooks/useSubmitData'
 // components
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeaderIcon from '../../assets/svg/ventSystemIcon.jsx';
+import ThumbsUp from '../../assets/svg/thumbsUp.jsx';
 import MessageBox from '../../layout/MessageBox';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import ContentCard from '../../layout/ContentCard.jsx';
@@ -61,13 +62,12 @@ function NewSystem() {
     const fanCapacityRef = useRef(null);
     const heatExRef = useRef(null);
     const specialSystemRef = useRef(null);
-
+    console.log(systemResponse)
     return (
         <>
+            {systemResponse?.success && systemResponse.success === false && <MessageBox message={systemResponse.message} />}
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Legg til nytt ventilasjonssystem"} projectName={""} projectNumber={""} />
             <MainContentContainer>
-                {systemResponse?.error && systemResponse.error !== null && (<MessageBox message={systemResponse.error} />)}
-                {systemResponse?.success && systemResponse.success === true && (<MessageBox message={systemResponse.message} />)}
                 <div className="flex justify-center flex-row w-full">
                     <ContentCard>
                         <h3>Legg til nytt ventilasjonssystem</h3>
@@ -109,8 +109,18 @@ function NewSystem() {
                                 </div>
                             </div>
 
-                            <div className="mt-5">
-                                <CardButton buttonText="Legg til" tabIndex="7" />
+                            <div className="flex flex-row mt-5 items-center w-full">
+                                <div className="mr-5">
+                                    <CardButton buttonText="Legg til" tabIndex="7" />
+                                </div>
+                                <div className="flex flex-row">
+                                    {
+                                        systemResponse?.success === true && <><div className="mr-3">{systemResponse?.message}</div><ThumbsUp /></>
+                                    }
+                                    {
+                                        systemResponse?.success === false && <div className="text-accent-color dark:text-dark-accent-color">{systemResponse?.message}</div>
+                                    }
+                                </div>
                             </div>
 
                         </form>

@@ -20,6 +20,9 @@ import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.j
 import Table from '../../layout/tableelements/Table.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
+import TableHeader from '../../layout/tableelements/TableHeader.jsx';
+import TableContainer from '../../layout/tableelements/TableContainer.jsx';
 
 function Heating() {
     const { projectId } = useParams();
@@ -55,7 +58,6 @@ function Heating() {
             const floorSummaryKeys = Object.keys(buildingSummaryData[0].floor_summaries);
             const sortedKeys = customSortFloors(floorSummaryKeys);
             setFloors(sortedKeys);
-            //console.log(sortedKeys)
         }
     }, [buildingSummaryData]);
 
@@ -119,91 +121,86 @@ function Heating() {
                                 ) : (
                                     <>
                                         <TableTop info={<HelpBox />} />
-                                        <div className="flex flex-col h-[80%] overflow-y-auto">
-                                            <div className="sticky ml-5 mr-5 mt-0 top-0 rounded-bl-lg rounded-br-lg bg-secondary-color z-10">
-                                                <Table>
-                                                    <thead>
-                                                        <tr>
-                                                            <TableTHelement width="2%" text="#" />
-                                                            <TableTHelement width="5%">Romnr</TableTHelement>
-                                                            <TableTHelement width="5%">Høyde <br />m</TableTHelement>
-                                                            <TableTHelement width="5%">Yttervegg <br /> m<sup>2</sup></TableTHelement>
-                                                            <TableTHelement width="5%">Innervegg <br />m<sup>2</sup></TableTHelement>
-                                                            <TableTHelement width="5%">Vindu/dør <br />m<sup>2</sup></TableTHelement>
-                                                            <TableTHelement width="5%">Tak <br />m<sup>2</sup></TableTHelement>
-                                                            <TableTHelement width="5%">Gulv grunn <br />m<sup>2</sup></TableTHelement>
-                                                            <TableTHelement width="5%">Gulv fritt <br />m<sup>2</sup></TableTHelement>
-                                                            <TableTHelement width="5%">&#8721; varmetap<br /> W</TableTHelement>
-                                                            <TableTHelement width="5%">Valgt varme<br /> W</TableTHelement>
-                                                            <TableTHelement width="5%">W/m<sup>2</sup></TableTHelement>
-                                                            <TableTHelement width="8%">Varmekilde</TableTHelement>
-                                                            <TableTHelement width="10%">Merknad</TableTHelement>
-                                                        </tr>
-                                                    </thead>
-                                                </Table>
-                                            </div>
-
+                                        <TableContainer>
+                                            <TableHeader>
+                                                <thead>
+                                                    <tr>
+                                                        <TableTHelement width="2%" text="#" />
+                                                        <TableTHelement width="5%">Romnr</TableTHelement>
+                                                        <TableTHelement width="5%">Høyde <br />m</TableTHelement>
+                                                        <TableTHelement width="5%">Yttervegg <br /> m<sup>2</sup></TableTHelement>
+                                                        <TableTHelement width="5%">Innervegg <br />m<sup>2</sup></TableTHelement>
+                                                        <TableTHelement width="5%">Vindu/dør <br />m<sup>2</sup></TableTHelement>
+                                                        <TableTHelement width="5%">Tak <br />m<sup>2</sup></TableTHelement>
+                                                        <TableTHelement width="5%">Gulv grunn <br />m<sup>2</sup></TableTHelement>
+                                                        <TableTHelement width="5%">Gulv fritt <br />m<sup>2</sup></TableTHelement>
+                                                        <TableTHelement width="5%">&#8721; varmetap<br /> W</TableTHelement>
+                                                        <TableTHelement width="5%">Valgt varme<br /> W</TableTHelement>
+                                                        <TableTHelement width="5%">W/m<sup>2</sup></TableTHelement>
+                                                        <TableTHelement width="8%">Varmekilde</TableTHelement>
+                                                        <TableTHelement width="10%">Merknad</TableTHelement>
+                                                    </tr>
+                                                </thead>
+                                            </TableHeader>
                                             {
                                                 floors && floors.map(floor => (
                                                     <React.Fragment key={floor}>
-                                                        <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
-                                                            <div className="text-primary-color text-xs border-none w-full max-w-full bg-secondary-color flex justify-center">
-                                                                <h3>Etasje {floor}</h3>
-                                                            </div>
-                                                            <Table>
-                                                                <tbody>
+                                                            <TableWrapper floor={floor}>
+                                                                <Table>
+                                                                    <tbody>
 
-                                                                    {
-                                                                        sortedBuildings && sortedBuildings.length > 0 && (
-                                                                            sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <HeatingTableRowComponent index={index} buildingReFetch={buildingReFetch} settingsUpdateState={settingsUpdatedState} totalColumns={14} key={room.uid} roomId={room.uid} />)
-                                                                        )
-                                                                    }
+                                                                        {
+                                                                            sortedBuildings && sortedBuildings.length > 0 && (
+                                                                                sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <HeatingTableRowComponent index={index} buildingReFetch={buildingReFetch} settingsUpdateState={settingsUpdatedState} totalColumns={14} key={room.uid} roomId={room.uid} />)
+                                                                            )
+                                                                        }
 
-                                                                    <tr className="bg-secondary-color">
-                                                                        <TableTDelement width="2%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%">
-                                                                            {
-                                                                                buildingSummaryData && buildingSummaryData[0]?.floor_summaries_heating &&
-                                                                                Object.keys(buildingSummaryData[0].floor_summaries_heating)
-                                                                                    .filter(key => key === floor)
-                                                                                    .map(key => (
-                                                                                        <React.Fragment key={key}>
-                                                                                            <span className="text-heating-color"><strong>{Number(buildingSummaryData[0].floor_summaries_heating[key].demand.toFixed(0)).toLocaleString()}<br />W</strong></span>
-                                                                                        </React.Fragment>
-                                                                                    ))
-                                                                            }
-                                                                        </TableTDelement>
-                                                                        <TableTDelement width="5%">
-                                                                            {
-                                                                                buildingSummaryData && buildingSummaryData[0]?.floor_summaries_heating &&
-                                                                                Object.keys(buildingSummaryData[0].floor_summaries_heating)
-                                                                                    .filter(key => key === floor)
-                                                                                    .map(key => (
-                                                                                        <React.Fragment key={key}>
-                                                                                            <span className="text-heating-color"><strong>{Number(buildingSummaryData[0].floor_summaries_heating[key].chosen.toFixed(0)).toLocaleString()}<br />W</strong></span>
-                                                                                        </React.Fragment>
-                                                                                    ))
-                                                                            }
-                                                                        </TableTDelement>
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="8%" />
-                                                                        <TableTDelement width="10%" />
-                                                                    </tr>
-                                                                </tbody>
-                                                            </Table>
-                                                        </div>
+                                                                        <tr className="bg-secondary-color dark:bg-dark-secondary-color">
+                                                                            <TableTDelement width="2%" />
+                                                                            <TableTDelement width="5%" />
+                                                                            <TableTDelement width="5%" />
+                                                                            <TableTDelement width="5%" />
+                                                                            <TableTDelement width="5%" />
+                                                                            <TableTDelement width="5%" />
+                                                                            <TableTDelement width="5%" />
+                                                                            <TableTDelement width="5%" />
+                                                                            <TableTDelement width="5%" />
+                                                                            <TableTDelement width="5%">
+                                                                                {
+                                                                                    buildingSummaryData && buildingSummaryData[0]?.floor_summaries_heating &&
+                                                                                    Object.keys(buildingSummaryData[0].floor_summaries_heating)
+                                                                                        .filter(key => key === floor)
+                                                                                        .map(key => (
+                                                                                            <React.Fragment key={key}>
+                                                                                                <span className="text-heating-color"><strong>{Number(buildingSummaryData[0].floor_summaries_heating[key].demand.toFixed(0)).toLocaleString()}<br />W</strong></span>
+                                                                                            </React.Fragment>
+                                                                                        ))
+                                                                                }
+                                                                            </TableTDelement>
+                                                                            <TableTDelement width="5%">
+                                                                                {
+                                                                                    buildingSummaryData && buildingSummaryData[0]?.floor_summaries_heating &&
+                                                                                    Object.keys(buildingSummaryData[0].floor_summaries_heating)
+                                                                                        .filter(key => key === floor)
+                                                                                        .map(key => (
+                                                                                            <React.Fragment key={key}>
+                                                                                                <span className="text-heating-color"><strong>{Number(buildingSummaryData[0].floor_summaries_heating[key].chosen.toFixed(0)).toLocaleString()}<br />W</strong></span>
+                                                                                            </React.Fragment>
+                                                                                        ))
+                                                                                }
+                                                                            </TableTDelement>
+                                                                            <TableTDelement width="5%" />
+                                                                            <TableTDelement width="8%" />
+                                                                            <TableTDelement width="10%" />
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </Table>
+                                                            </TableWrapper>
                                                     </React.Fragment>
                                                 ))
                                             }
-                                            <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
+
+                                            <TableWrapper>
                                                 <Table>
                                                     <tfoot>
                                                         <tr>
@@ -234,8 +231,9 @@ function Heating() {
                                                         </tr>
                                                     </tfoot>
                                                 </Table>
-                                            </div>
-                                        </div>
+                                            </TableWrapper>
+
+                                        </TableContainer>
                                     </>
                                 )
                             }

@@ -19,7 +19,9 @@ import SortingButton from '../../layout/formelements/SortingButton.jsx';
 import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.jsx'
 import Table from '../../layout/tableelements/Table.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
-import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
+import TableHeader from '../../layout/tableelements/TableHeader.jsx';
+import TableContainer from '../../layout/tableelements/TableContainer.jsx';
 
 function Cooling() {
     const { projectId } = useParams();
@@ -113,39 +115,34 @@ function Cooling() {
                                 ) : (
                                     <>
                                         <TableTop info={<HelpBox />} />
-                                        <div className="flex flex-col h-[80%] overflow-y-auto">
-                                            <div className="sticky ml-5 mr-5 mt-0 top-0 rounded-bl-lg rounded-br-lg bg-secondary-color z-10">
-                                                <Table>
-                                                    <thead>
-                                                        <tr>
-                                                            <TableTHelement width="2%" text="#" />
-                                                            <TableTHelement width="5%">Romnr</TableTHelement>
-                                                            <TableTHelement width="5%">Romtemp <br /> &#176;C</TableTHelement>
-                                                            <TableTHelement width="5%">Temp vent<br /> &#176;C</TableTHelement>
-                                                            <TableTHelement width="5%">W/Pers</TableTHelement>
-                                                            <TableTHelement width="5%">Lys<br /> W/m<sup>2</sup></TableTHelement>
-                                                            <TableTHelement width="5%">Ustyr<br /> W/m<sup>2</sup></TableTHelement>
-                                                            <TableTHelement width="5%">Soltilskudd<br /> W/m<sup>2</sup></TableTHelement>
-                                                            <TableTHelement width="5%">Solreduksjon<br /> (0-1,0)</TableTHelement>
-                                                            <TableTHelement width="5%">&#8721; Internlast<br /> W</TableTHelement>
-                                                            <TableTHelement width="5%">Kjøling utstyr<br /> W</TableTHelement>
-                                                            <TableTHelement width="5%">&#8721; kjøling<br /> W</TableTHelement>
-                                                            <TableTHelement width="5%">Ekstra vent. <br />m<sup>3</sup>/h</TableTHelement>
-                                                            <TableTHelement width="34%">Merknad</TableTHelement>
-                                                        </tr>
-                                                    </thead>
-                                                </Table>
-                                            </div>
+                                        <TableContainer>
+
+                                            <TableHeader>
+                                                <thead>
+                                                    <tr>
+                                                        <TableTHelement width="2%" text="#" />
+                                                        <TableTHelement width="5%">Romnr</TableTHelement>
+                                                        <TableTHelement width="5%">Romtemp <br /> &#176;C</TableTHelement>
+                                                        <TableTHelement width="5%">Temp vent<br /> &#176;C</TableTHelement>
+                                                        <TableTHelement width="5%">W/Pers</TableTHelement>
+                                                        <TableTHelement width="5%">Lys<br /> W/m<sup>2</sup></TableTHelement>
+                                                        <TableTHelement width="5%">Ustyr<br /> W/m<sup>2</sup></TableTHelement>
+                                                        <TableTHelement width="5%">Soltilskudd<br /> W/m<sup>2</sup></TableTHelement>
+                                                        <TableTHelement width="5%">Solreduksjon<br /> (0-1,0)</TableTHelement>
+                                                        <TableTHelement width="5%">&#8721; Internlast<br /> W</TableTHelement>
+                                                        <TableTHelement width="5%">Kjøling utstyr<br /> W</TableTHelement>
+                                                        <TableTHelement width="5%">&#8721; kjøling<br /> W</TableTHelement>
+                                                        <TableTHelement width="5%">Ekstra vent. <br />m<sup>3</sup>/h</TableTHelement>
+                                                        <TableTHelement width="34%">Merknad</TableTHelement>
+                                                    </tr>
+                                                </thead>
+                                            </TableHeader>
+
 
                                             {
                                                 floors && floors.map(floor => (
                                                     <React.Fragment key={floor}>
-                                                        <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
-
-                                                            <div className="text-primary-color text-xs border-none w-full max-w-full bg-secondary-color flex justify-center">
-                                                                <h3>Etasje {floor}</h3>
-                                                            </div>
-
+                                                        <TableWrapper floor={floor}>
                                                             <Table>
                                                                 <tbody>
                                                                     {
@@ -153,30 +150,15 @@ function Cooling() {
                                                                             sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <CoolingTableRowComponent index={index} settingsUpdateState={settingsUpdatedState} totalColumns={14} key={room.uid} roomId={room.uid} />)
                                                                         ) : (<></>)
                                                                     }
-                                                                    <tr className="bg-secondary-color">
-                                                                        <TableTDelement width="2%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="5%" />
-                                                                        <TableTDelement width="34%" />
-                                                                    </tr>
+
                                                                 </tbody>
                                                             </Table>
-                                                        </div>
+                                                        </TableWrapper>
                                                     </React.Fragment>
                                                 ))
                                             }
 
-                                        </div>
+                                        </TableContainer>
                                     </>
                                 )
                             }

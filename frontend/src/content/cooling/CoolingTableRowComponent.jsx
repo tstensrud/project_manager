@@ -58,7 +58,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
             setData({});
             coolingRefetch();
         }
-    }, [updateVentDataResponse, updateRoomDataResponse])
+    }, [updateVentDataResponse, updateRoomDataResponse]);
 
     // Handlers
     const handleEdit = (cellName) => {
@@ -124,10 +124,10 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
         await updateVentilationDataSubmit(e);
     }
 
-    if (updateRoomDataResponse && updateRoomDataResponse.error !== null && updateRoomDataResponse.error !== undefined) return (<><MessageBox message={updateRoomDataResponse.error} /></>);
     return (
         <>
-            <tr className={`${markedRow} hover:bg-table-hover`}>
+        {updateRoomDataResponse?.success === false && <MessageBox message={updateRoomDataResponse.message} />}
+            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
                     coolingLoading && coolingLoading === true ? (
                         <>
@@ -146,7 +146,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
                                 <div>
                                     {coolingData ? coolingData.room_data.RoomNumber : ''}
                                 </div>
-                                <div className="text-grey-text">
+                                <div className="text-grey-text dark:text-dark-grey-text">
                                     {coolingData ? coolingData.room_data.RoomName : ''}
                                 </div>
                             </TableTDelement>

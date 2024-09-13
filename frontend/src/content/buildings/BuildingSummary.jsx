@@ -107,7 +107,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                 )
             }
             <div className="border-0 p-3 rounder-lg">
-                <div className="text-grey-text mb-3">
+                <div className="text-grey-text dark:text-dark-grey-text mb-3">
                     <h4>Prosjektert areal</h4>
                 </div>
 
@@ -116,7 +116,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                 </div>
 
 
-                <div className="text-grey-text mb-3">
+                <div className="text-grey-text dark:text-dark-grey-text mb-3">
                     <h4>Prosjektert luftmengde</h4>
                 </div>
 
@@ -129,7 +129,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                 </div>
 
                 <div className="mb-5">
-                    <div className="text-grey-text mb-3">
+                    <div className="text-grey-text dark:text-dark-grey-text mb-3">
                         <h4>Betjenes av ventilasjonssystem</h4>
                     </div>
                     {
@@ -145,7 +145,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
 
 
 
-                <div className="text-grey-text mb-3">
+                <div className="text-grey-text dark:text-dark-grey-text mb-3">
                     <h4>Prosjektert varme</h4>
                 </div>
                 <div className="mb-5">

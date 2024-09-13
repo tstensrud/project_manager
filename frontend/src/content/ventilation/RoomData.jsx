@@ -1,5 +1,7 @@
 import Draggable from 'react-draggable';
-import RoomDataRow from './RoomDataRow';
+import RoomDataRow from '../../layout/tableelements/RoomDataRow';
+import RoomDataRowTitle from '../../layout/tableelements/RoomDataRowTitle';
+import RoomDataMainTitle from '../../layout/tableelements/RoomDataMainTitle';
 
 function RoomData({ roomData, ventData, setShowRoomData }) {
 
@@ -40,34 +42,17 @@ function RoomData({ roomData, ventData, setShowRoomData }) {
   return (
     <>
       <Draggable>
-        <div className="fixed shadow-lg shadow-background-shade border border-default-border-color left-[25%] top-[15%] z-[1000] w-[600px] overflow-y-auto rounded-lg cursor-move" style={{ cursor: 'move' }}>
-
-          <div className="flex items-center w-full pt-1 pb-1 pl-5 border-b border-b-default-border-color bg-secondary-color hover:bg-tertiary-color">
-            <div className="flex w-1/2">
-              <div className="text-lg font-semibold w-full">
-                {roomData.RoomNumber} - <span className="text-grey-text">{roomData.RoomName}</span>
-              </div>
-            </div>
-            <div className="flex justify-end w-1/2 pr-4">
-              <span onClick={(e) => handleClick(e, setShowRoomData)} className="flex right-4 text-primary-color text-2xl font-bold cursor-pointer hover:text-accent-color">
-                &times;
-              </span>
-            </div>
-          </div>
+        <div className="fixed shadow-lg shadow-background-shade border border-default-border-color dark:border-dark-default-border-color left-[25%] top-[15%] z-[1000] w-[600px] overflow-y-auto rounded-lg cursor-move" style={{ cursor: 'move' }}>
+          
+          <RoomDataMainTitle roomNumber={roomData.RoomNumber}roomName={roomData.RoomName} clickFunction={(e) => handleClick(e, setShowRoomData)} />
 
           <RoomDataRow rowName="Romtype">{roomData.RoomTypeName}</RoomDataRow>
           <RoomDataRow rowName="Bygg">{roomData.BuildingName}</RoomDataRow>
           <RoomDataRow rowName="Areal">{roomData.Area} m2</RoomDataRow>
           <RoomDataRow rowName="Antall personer">{roomData.RoomPopulation} stk.</RoomDataRow>
           <RoomDataRow rowName="Kommentar">{roomData.Comments}</RoomDataRow>
-
-          <div className="flex w-full pt-1 pb-1 pl-5 border-b border-b-default-border-color bg-secondary-color hover:bg-tertiary-color">
-            <div className="flex w-1/2">
-              <div className="text-lg font-semibold w-full">
-                Ventilasjonsdata oppsummert
-              </div>
-            </div>
-          </div>
+          
+          <RoomDataRowTitle title="Ventilasjonsdata oppsummert" />
 
           <RoomDataRow rowName="System">{ventData.vent_data.SystemName}</RoomDataRow>
           <RoomDataRow rowName="Beregnet luftmengde">{ventData.vent_data.AirDemand} m3/h</RoomDataRow>
@@ -77,13 +62,7 @@ function RoomData({ roomData, ventData, setShowRoomData }) {
           <RoomDataRow rowName="Summert personbelastning">{ventData.vent_data.AirPersonSum} m3/h</RoomDataRow>
           <RoomDataRow rowName="Summert emisjonsbelastning">{ventData.vent_data.AirEmissionSum} m3/h</RoomDataRow>
 
-          <div className="flex w-full pt-1 pb-1 pl-5 border-b border-b-default-border-color bg-secondary-color hover:bg-tertiary-color">
-            <div className="flex w-1/2">
-              <div className="text-lg font-semibold w-full">
-                Grunnlagsdata ventilasjon
-              </div>
-            </div>
-          </div>
+          <RoomDataRowTitle title="Grunnlagsdata ventilasjon" />
 
           <RoomDataRow rowName="Luft per person">{ventData.vent_data.AirPerPerson} m3/pers</RoomDataRow>
           <RoomDataRow rowName="Emisjonsbelastning">{ventData.vent_data.AirEmission} m3/m2</RoomDataRow>

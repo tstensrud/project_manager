@@ -93,7 +93,7 @@ function BuildingSummary({ buildingUid, projectId }) {
                             <strong>{buildingSummaryData && buildingSummaryData.building_data.GraphCurve}</strong>
                         </div>
                         <form onSubmit={handleCurveSubmit}>
-                            <div className="mb-1 flex flex-row mb-3">
+                            <div className="mb-1 flex flex-row">
                                 <div className="mr-3">
                                     <CardSelect changeFunction={handleCurveChange}>
                                         <option value="">- Velg avløpskurve -</option>

@@ -68,6 +68,14 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
         ventRefetch();
     }, [systemResponse]);
 
+    useEffect(() => {
+        if (response?.success === true) {
+            setData('');
+            ventRefetch();
+            buildingReFetch();
+        }
+    },[response]);
+
     // Handlers
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
@@ -88,9 +96,6 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
         if (e.key === "Enter") {
             await updateRoomData(e);
             handleBlur();
-            setData('');
-            ventRefetch();
-            buildingReFetch();
         } if (e.key == "Escape") {
             handleBlur();
             return;
@@ -99,7 +104,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('bg-marked-row text-primary-color');
+            setMarkedRow('bg-marked-row dark:bg-dark-marked-row text-primary-color dark:text-dark-primary-color');
         } else {
             setMarkedRow('');
         }
@@ -160,8 +165,9 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
     return (
         <>
             {showRoomData ? <RoomData roomData={allRoomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
-            {response && response.error ? <MessageBox message={response.error} /> : null}
-            <tr className={`${markedRow} hover:bg-table-hover`}>
+            {response?.success === false && <MessageBox message={response.message} />}
+            {systemResponse?.success === false && <MessageBox message={systemResponse.message}/>}
+            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
                     ventLoading && ventLoading === true ? (
                         <>
@@ -180,12 +186,12 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
 
                             <TableTDelement pointer={true} width="10%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
                                 <strong>
-                                    <span className="text-accent-color">
+                                    <span className="text-accent-color dark:text-dark-accent-color">
                                         {allRoomData ? allRoomData.RoomNumber : ''}
                                     </span>
                                 </strong>
                                 <br />
-                                <span className="text-grey-text uppercase">
+                                <span className="text-grey-text dark:text-dark-grey-text uppercase">
                                     {allRoomData ? allRoomData.RoomName : ''}
                                 </span>
                             </TableTDelement>

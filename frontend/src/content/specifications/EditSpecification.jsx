@@ -18,6 +18,8 @@ import HelpBoxEdit from './HelpBoxEdit';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import Table from '../../layout/tableelements/Table.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
+import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
+import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 
 function EditSpecification() {
     const { suid, name } = useParams();
@@ -48,7 +50,7 @@ function EditSpecification() {
                 {
                     showDeleteDialog === true ? <DeleteBox deleteSpecification={deleteSpecification} setShowDeleteDialog={setShowDeleteDialog} /> : ""
                 }
-                <div className="w-full h-10 mt-3 flex flex-row items-center border-t-default-border-color border-b-default-border-color bg-tertiary-color text-primary-color pl-5 pr-5">
+                <div className="w-full h-10 mt-3 flex flex-row items-center bg-tertiary-color dark:bg-dark-tertiary-color text-primary-color dark:text-dark-primary-color pl-5 pr-5">
                     <div className="items-center text-center">
                         <h3>
                             <Link to={`/specifications/${suid}`}>{name}</Link>
@@ -59,8 +61,7 @@ function EditSpecification() {
                     </div>
                 </div>
                 <TableTop info={<HelpBoxEdit />} />
-                <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
-                    <Table>
+                    <TableHeader>
                         <thead>
                             <tr>
                                 <TableTHelement width="15%">Romtype</TableTHelement>
@@ -86,9 +87,7 @@ function EditSpecification() {
                                 ))
                             }
                         </tbody>
-                    </Table>
-
-                </div>
+                    </TableHeader>
             </MainContentContainer>
         </>
     );

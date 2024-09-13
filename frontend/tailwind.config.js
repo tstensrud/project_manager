@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -32,7 +33,30 @@ export default {
       "supply-color" : "#2ba972",
       "extract-color" : "#a92b3c",
       "heating-color" : "#FF7F27",
-      "deleted-row" : "#aa4444"
+      "deleted-row" : "#aa4444",
+
+      "dark-primary-color": "white",
+      "dark-secondary-color": "rgb(18, 28, 38)",
+      "dark-tertiary-color": "#0c1219",
+      "dark-accent-color": "#00FFA7",
+      "dark-default-border-color": "rgb(43, 53, 64)",
+      "dark-inner-card-backgrounnd-color": "rgba(33, 50, 68, 0.432)",
+      "dark-table-footer": "#161F29",
+      "dark-table-button-border": "#1f1c2e",
+      "dark-table-button-background": "rgb(18, 28, 38)",
+      "dark-table-border-color": "rgb(43, 53, 64)",
+      "dark-table-hover": "#4949495e",
+      "dark-marked-row": "#1e7e3659",
+      "dark-grey-text": "rgba(212, 212, 212, 0.644)",
+      "dark-system-summary": "rgba(89, 113, 157, 0.2)",
+      "dark-background-shade": "rgba(255, 255, 255, 0.329)",
+    
+      "dark-form-border-color": "rgb(43, 53, 64)",
+      "dark-form-focus-border-color": "#00FFA7",
+      "dark-form-background-color": "#0c1219",
+      "dark-form-element-hover": "#00FFA7",
+      "dark-form-focus-color": "#00FFA7",
+      "dark-form-table-button-border-color": "rgb(43, 53, 64)",
     }
     ,
     extend: {
@@ -72,10 +96,10 @@ export default {
   "dark-form-focus-color": "#00FFA7",
   "dark-form-table-button-border-color": "rgb(43, 53, 64)",
 
-        "supply-color" : "#2ba972",
-      "extract-color" : "#a92b3c",
-      "heating-color" : "#FF7F27",
-      "deleted-row" : "#aa4444"
+  "supply-color" : "#2ba972",
+  "extract-color" : "#a92b3c",
+  "heating-color" : "#FF7F27",
+  "deleted-row" : "#aa4444"
 
 
 }

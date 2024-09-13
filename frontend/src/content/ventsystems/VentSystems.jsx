@@ -12,8 +12,8 @@ import TableTop from '../../layout/TableTop';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import HelpBox from './HelpBox';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
-import Table from '../../layout/tableelements/Table.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
+import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 
 function VentSystems() {
     const { projectId } = useParams();
@@ -58,8 +58,8 @@ function VentSystems() {
                                     ) : (
                                         <>
                                             <TableTop info={<HelpBox />} />
-                                            <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
-                                                <Table>
+                                            
+                                                <TableHeader>
                                                     <thead>
                                                         <tr>
                                                             <TableTHelement width="2%" text="#"/>
@@ -84,8 +84,8 @@ function VentSystems() {
                                                             )
                                                         }
                                                     </tbody>
-                                                </Table>
-                                            </div>
+                                                </TableHeader>
+                                            
                                         </>
                                     )
                                 ) : (<></>)

@@ -2,11 +2,11 @@ function HelpBox() {
     return (
         <>
             <h3>Tabell for sanitærutstyr</h3>
-            <h4 className="text-grey-text">#</h4>
+            <h4 className="text-grey-text dark:text-dark-grey-text">#</h4>
             <p>
                 Kolonne 1 er merket med "#". Du kan klikke på binders-symbolet for å markere raden ved behov.
             </p>
-            <h4 className="text-grey-text">Sjakt</h4>
+            <h4 className="text-grey-text dark:text-dark-grey-text">Sjakt</h4>
             <p>
                 Hvis du ønsker å nummerere sjaktene i prosjektet kan du legge inn her hvilke sjakt hvert rom
                 kobles til. Under "Sanitærsjakter" fra prosjektmenyen
@@ -16,7 +16,7 @@ function HelpBox() {
             <p>
                 For eksempel kan du merke sjakt med "1", "A" eller et annet kjennetegn du velger fritt.
             </p>
-            <h4 className="text-grey-text">Sanitærutstyr</h4>
+            <h4 className="text-grey-text dark:text-dark-grey-text">Sanitærutstyr</h4>
             <p>
                 Alle felter under et sanitærustyr kan redigeres. Fyll inn antall utstyr for hvert rom.
                 Alle vannmengdeberegninger blir deretter gjort automatisk og antall ustyr vises oppsummert i

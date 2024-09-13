@@ -21,7 +21,10 @@ import SelectElement from '../../layout/formelements/SelectElement.jsx';
 import SortingButton from '../../layout/formelements/SortingButton.jsx';
 import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.jsx'
 import Table from '../../layout/tableelements/Table.jsx';
+import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
+import FloorTitleBar from '../../layout/tableelements/FloorTitleBar.jsx';
+import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
 
 
 
@@ -229,33 +232,25 @@ function Rooms() {
 
                                                         <TableTop info={<HelpBox />} />
                                                         <div className="flex flex-col h-[80%] overflow-y-auto">
-                                                            <div className="sticky ml-5 mr-5 mt-0 top-0 bg-secondary-color z-10">
-                                                                <Table>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <TableTHelement width="2%" text="#"/>
-                                                                            <TableTHelement width="12%" text="Bygg" />
-                                                                            <TableTHelement width="10%" text="Romnr"/>
-                                                                            <TableTHelement width="15%" text="Romtype"/>
-                                                                            <TableTHelement width="10%" text="Romnavn"/>
-                                                                            <TableTHelement width="5%" text="Areal"/>
-                                                                            <TableTHelement width="5%" text="Personer"/>
-                                                                            <TableTHelement width="30%" text="Kommentarer"/>
-                                                                            <TableTHelement width="10%" text="Slett Rom"/>
-                                                                        </tr>
-                                                                    </thead>
-                                                                </Table>
-                                                            </div>
-
+                                                            <TableHeader>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <TableTHelement width="2%" text="#" />
+                                                                        <TableTHelement width="12%" text="Bygg" />
+                                                                        <TableTHelement width="10%" text="Romnr" />
+                                                                        <TableTHelement width="15%" text="Romtype" />
+                                                                        <TableTHelement width="10%" text="Romnavn" />
+                                                                        <TableTHelement width="5%" text="Areal" />
+                                                                        <TableTHelement width="5%" text="Personer" />
+                                                                        <TableTHelement width="30%" text="Kommentarer" />
+                                                                        <TableTHelement width="10%" text="Slett Rom" />
+                                                                    </tr>
+                                                                </thead>
+                                                            </TableHeader>
                                                             {
                                                                 floors && floors.map(floor => (
                                                                     <React.Fragment key={floor}>
-                                                                        <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
-
-                                                                            <div className="text-primary-color text-xs border-none w-full max-w-full bg-secondary-color flex justify-center">
-                                                                                <h3>Etasje {floor}</h3>
-                                                                            </div>
-
+                                                                        <TableWrapper floor={floor}>
                                                                             <Table>
                                                                                 <tbody>
                                                                                     {
@@ -265,8 +260,7 @@ function Rooms() {
                                                                                     }
                                                                                 </tbody>
                                                                             </Table>
-                                                                        </div>
-
+                                                                        </TableWrapper>
                                                                     </React.Fragment>
                                                                 ))}
                                                         </div>

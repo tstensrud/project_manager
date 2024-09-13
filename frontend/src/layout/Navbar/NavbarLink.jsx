@@ -5,7 +5,7 @@ function NavbarLink(props) {
     return (
         <>
             <div className="mb-1">
-                <Link className="text-primary-color font-semibold hover:text-accent-color transition duration-200 hover:hover:no-underline" to={url}>
+                <Link className="text-primary-color dark:text-dark-primary-color hover:dark:text-dark-accent-color font-semibold hover:text-accent-color transition duration-200 hover:no-underline" to={url}>
                     {props.linkText}
                 </Link>
             </div>

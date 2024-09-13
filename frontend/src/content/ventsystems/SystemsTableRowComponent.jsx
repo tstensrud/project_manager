@@ -93,7 +93,7 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('bg-marked-row text-primary-color');
+            setMarkedRow('bg-marked-row dark:bg-dark-marked-row text-primary-color dark:text-dark-primary-color');
         } else {
             setMarkedRow('');
         }
@@ -115,7 +115,7 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
         <>
             {response && response.error !== null && response.error !== undefined ? (<MessageBox message={response.error} />) : (<></>)}
 
-            <tr className={`${markedRow} hover:bg-table-hover`}>
+            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
 
                 {
                     systemLoading && systemLoading === true ? (

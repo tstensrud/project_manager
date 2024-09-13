@@ -5,7 +5,17 @@ const CardSelect = forwardRef((props, ref) => {
         <select
             ref={ref}
             onChange={props.changeFunction}
-            className="bg-tertiary-color border-2 border-form-border-color rounded-3xl text-sm pl-5 pr-5 h-9 transition duration-200 outline-none hover:border-form-element-hover focus:border-form-focus-border-color"
+            className="
+            bg-tertiary-color
+            dark:bg-dark-tertiary-color
+            border-2 
+            border-form-border-color
+            dark:border-dark-form-border-color
+            rounded-3xl text-sm pl-5 pr-5 h-9 transition duration-200 outline-none 
+            focus:border-form-focus-border-color
+            focus:dark:border-dark-form-focus-border-color
+            hover:border-form-element-hover
+            dark:hover:border-dark-form-element-hover"
             name={props.name}
             tabIndex={props.tabIndex}
             >

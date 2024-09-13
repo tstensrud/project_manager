@@ -2,12 +2,12 @@ function HelpBoxNewRoom() {
     return (
         <>
             <h3>Nytt rom</h3>
-            <h4 className="text-grey-text">Romtype</h4>
+            <h4 className="text-grey-text dark:text-dark-grey-text">Romtype</h4>
             <p>
                 Fyll inn romtype. Et generelt navn, som for eksempel "Kontor" eller "Klasserom". Disse romtypene finner du igjen når du skal legge inn rom i prosjektet
             </p>
 
-            <h4 className="text-grey-text">Luftmengder</h4>
+            <h4 className="text-grey-text dark:text-dark-grey-text">Luftmengder</h4>
             <p>
                 Fyll inn luftmengdekravene som skal gjelde for kravspesifikasjonen. Bruk bare tall. Det er ikke nødvendig å angi "m3/h" eller liknende.
             </p>
@@ -15,7 +15,7 @@ function HelpBoxNewRoom() {
             <p>
                 Velg hvilket ventilasjonsprinsipp som er krav for dette rommet. Normalt er dette omrøring, men det kan være krav til fortrengning eller noe annet.
             </p>
-            <h4 className="text-grey-text">Gjenvinner</h4>
+            <h4 className="text-grey-text dark:text-dark-grey-text">Gjenvinner</h4>
             <p>
                 <ul>
                     <li>R = Roterende</li>
@@ -24,7 +24,7 @@ function HelpBoxNewRoom() {
                 </ul>
             </p>
             
-            <h4 className="text-grey-text">Lyd</h4>
+            <h4 className="text-grey-text dark:text-dark-grey-text">Lyd</h4>
             <p>
                 <ul>
                     <li>
@@ -39,7 +39,7 @@ function HelpBoxNewRoom() {
                 </ul>
             </p>
 
-            <h4 className="text-grey-text">Styring</h4>
+            <h4 className="text-grey-text dark:text-dark-grey-text">Styring</h4>
             <p>
                 <ul>
                     <li>VAV = Variable luftmengde</li>
@@ -50,7 +50,7 @@ function HelpBoxNewRoom() {
                     <li>F = Fukt</li>
                 </ul>
             </p>
-            <h4 className="text-grey-text">Presiseringer</h4>
+            <h4 className="text-grey-text dark:text-dark-grey-text">Presiseringer</h4>
             <p>
                 Her kan du notere ned spesifike ting for romtypen som er angitt av byggherre.
             </p>

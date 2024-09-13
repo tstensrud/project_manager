@@ -8,7 +8,7 @@ const GlobalProvider = ({ children }) => {
     const [userName, setUserName] = useState(null);
     const [activeProjectName, setActiveProjectName] = useState(null);
     const [token, setToken] = useState(null);
-    const [darkmode, setDarkmode] = useState(true);
+    const [darkMode, setDarkMode] = useState(true);
 
     const value = {
         activeProject,
@@ -21,28 +21,28 @@ const GlobalProvider = ({ children }) => {
         setActiveProjectName,
         token,
         setToken,
-        darkmode,
-        setDarkmode
+        darkMode,
+        setDarkMode
     };
 
     useEffect(() => {
         const theme = localStorage.getItem("theme");
         if (theme === "light") {
-            setDarkmode(false);
+            setDarkMode(false);
         } else {
-            setDarkmode(true);
+            setDarkMode(true);
         }
     }, []);
 
     useEffect(() => {
-        if (darkmode) {
-            document.documentElement.classList.remove("light");
+        if (darkMode) {
+            document.documentElement.classList.add("dark");
             localStorage.setItem("theme", "dark");
         } else {
-            document.documentElement.classList.add("light");
+            document.documentElement.classList.remove("dark");
             localStorage.setItem("theme", "light");
         }
-    }, [darkmode]);
+    }, [darkMode]);
     
     return (
         <GlobalContext.Provider value={value}>

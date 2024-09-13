@@ -17,7 +17,7 @@ function SanitaryShaftTableRowComponent({ data, shaft, floor, name }) {
     }
 
     return (
-        <tr className={`${markedRow} hover:bg-table-hover`}>
+        <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
             <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{name}</TableTDelement>
             <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{shaft}</TableTDelement>
             <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{floor}</TableTDelement>

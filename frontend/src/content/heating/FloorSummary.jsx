@@ -26,7 +26,7 @@ function FloorSummary({floor, chosen, demand, safety}) {
                                 Prosjektert
                             </td>
                             <td>
-                                {chosen && ((chosen / 1000).toFixed(1)).toLocaleString()} kW <span className="text-grey-text"> &nbsp;{safety && safety}% sikk.</span>
+                                {chosen && ((chosen / 1000).toFixed(1)).toLocaleString()} kW <span className="text-grey-text dark:text-dark-grey-text"> &nbsp;{safety && safety}% sikk.</span>
                             </td>
                         </tr>
                     </tbody>

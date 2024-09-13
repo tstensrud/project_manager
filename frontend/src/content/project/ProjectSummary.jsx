@@ -24,21 +24,21 @@ function ProjectSummary({ projectId }) {
                                 <>
                                     <CardTitle svg={<StarIcon />} title={<>{data?.data.ProjectName}</>} />
                                     <div className="border-0 p-3 rounder-lg">
-                                        <div className="mb-1 text-grey-text">
+                                        <div className="mb-1 text-grey-text dark:text-dark-grey-text">
                                             <h4>Prosjektbeskrivelse</h4>
                                         </div>
-                                        <div className="mb-10 pre-wrap">
+                                        <div className="mb-10 whitespace-pre-wrap">
                                             {data && data.data.ProjectDescription}
                                         </div>
 
-                                        <div className="text-grey-text mb-1">
+                                        <div className="text-grey-text dark:text-dark-grey-text mb-1">
                                             <h4>Kravspesifikasjon</h4>
                                         </div>
 
                                         <div className="mb-10">
                                             <Link to={`/specifications/${data.data.SpecUid}`}>{data?.data?.SpecificationName}</Link>
                                         </div>
-                                        <div className="text-grey-text mb-1">
+                                        <div className="text-grey-text dark:text-dark-grey-text mb-1">
                                             <h4>Prosjektert areal</h4>
                                         </div>
                                         <div>

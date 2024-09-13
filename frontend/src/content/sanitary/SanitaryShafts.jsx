@@ -12,7 +12,8 @@ import HelpBoxShafts from './HelpBoxShafts.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import Table from '../../layout/tableelements/Table.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
-import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
+
 
 function SanitaryShafts() {
     const { projectId } = useParams();
@@ -37,7 +38,7 @@ function SanitaryShafts() {
                     ) : (
                         <>
                             <TableTop info={<HelpBoxShafts />} />
-                            <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
+                            <TableWrapper>
                                 <Table>
                                     <thead>
                                         <tr>
@@ -82,7 +83,7 @@ function SanitaryShafts() {
                                         }
                                     </tbody >
                                 </Table>
-                            </div>
+                            </TableWrapper>
                         </>
                     )}
 

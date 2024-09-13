@@ -63,10 +63,10 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
             {response?.error && response.error !== null ? (<MessageBox message={response.error} />) : (<></>)}
             {error?.error && error.error !== null ? (<MessageBox message={error.error} />) : (<></>)}
 
-            <div className="flex flex-col pl-3 pr-3 absolute top-1/2 rounded-lg border border-primary-color left-1/2 transform -translate-x-1/2 overflow-y-auto -translate-y-1/2 h-1/2 w-1/2 bg-secondary-color text-primary-color shadow-lg shadow-background-shade justify-start z-[1000] text-base">
-                <div className="flex sticky top-0 bg-secondary-color flex-col border-b-default-border-color p-1 font-extrabold w-full">
+            <div className="flex flex-col pl-3 pr-3 absolute top-1/2 rounded-lg border border-primary-color dark:border-dark-default-border-color left-1/2 transform -translate-x-1/2 overflow-y-auto -translate-y-1/2 h-1/2 w-[700px] bg-secondary-color dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color shadow-lg shadow-background-shade justify-start z-[1000] text-base">
+                <div className="flex sticky top-0 bg-secondary-color dark:bg-dark-secondary-color flex-col border-default-border-color p-1 font-extrabold w-full">
                     <div className="flex w-full justify-end">
-                        <span onClick={(e) => handleClick(e, setShowHeatingSettings)} className="cursor-pointer hover:text-accent-color">&times;</span>
+                        <span onClick={(e) => handleClick(e, setShowHeatingSettings)} className="cursor-pointer hover:text-accent-color hover:dark:text-dark-accent-color">&times;</span>
                     </div>
 
                     <div className="w-full justify-center text-center">
@@ -74,7 +74,7 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                     </div>
                 </div>
 
-                <div className="flex flex-row h-full text-primary-color justify-start text-base">
+                <div className="flex flex-row h-full text-primary-color dark:text-dark-primary-color justify-start text-base">
                     <div className="flex flex-col w-1/2">
                         <form name="building_heating_settings" onSubmit={handleSubmit}>
                             <div>

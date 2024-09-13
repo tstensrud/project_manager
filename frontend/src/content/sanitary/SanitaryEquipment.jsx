@@ -17,8 +17,9 @@ import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.j
 import Table from '../../layout/tableelements/Table.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
-
-//import BuildingSummary from './BuildingSummary';
+import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
+import TableHeader from '../../layout/tableelements/TableHeader.jsx';
+import TableContainer from '../../layout/tableelements/TableContainer.jsx';
 
 function SanitaryEquipment() {
     const { projectId } = useParams();
@@ -87,7 +88,7 @@ function SanitaryEquipment() {
                         <LoadingSpinner />
                     ) : (
                         <>
-                            <div className="overflow-y-hidden flex justify-center items-center mr-5 ml-5 h-32 no-print">
+                            <div className="overflow-y-hidden flex justify-center items-center mr-5 ml-5 h-32">
                             {
                                     buildingData?.building_data && Object.keys(buildingData.building_data).map((key, index) => (
                                         <div key={index}>
@@ -118,9 +119,9 @@ function SanitaryEquipment() {
                                                 ) : (
                                                     <>
                                                         <TableTop info={<HelpBox />} />
-                                                        <div className="flex flex-col h-[80%] overflow-y-auto">
-                                                            <div className="sticky ml-5 mr-5 mt-0 top-0 rounded-bl-lg rounded-br-lg bg-secondary-color z-10">
-                                                                <Table>
+                                                        <TableContainer>
+                                                            
+                                                                <TableHeader>
                                                                     <thead>
                                                                         <tr>
                                                                             <TableTHelement width="2%" text="#" />
@@ -143,18 +144,13 @@ function SanitaryEquipment() {
                                                                             <TableTHelement width="5%">Sluk<br />110mm</TableTHelement>
                                                                         </tr>
                                                                     </thead>
-                                                                </Table>
-                                                            </div>
+                                                                </TableHeader>
+                                                            
 
                                                             {
                                                                 floors && floors.map(floor => (
                                                                     <React.Fragment key={floor}>
-                                                                        <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
-
-                                                                            <div className="text-primary-color text-xs border-none w-full max-w-full bg-secondary-color flex justify-center">
-                                                                                <h3>Etasje {floor}</h3>
-                                                                            </div>
-                                                                            
+                                                                        <TableWrapper floor={floor}>
                                                                             <Table>
                                                                                 <tbody>
                                                                                     {
@@ -162,7 +158,7 @@ function SanitaryEquipment() {
                                                                                             sortedBuildings.filter(room => room.Floor === floor).map((room, index) => <SanitaryTableRowComponent index={index} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={18} roomId={room.uid} />)
                                                                                         ) : (<></>)
                                                                                     }
-                                                                                    <tr className="bg-secondary-color">
+                                                                                    <tr className="bg-secondary-color dark:bg-dark-secondary-color">
                                                                                         <TableTDelement width="2%" />
                                                                                         <TableTDelement width="12%" />
                                                                                         <TableTDelement width="5%" />
@@ -218,11 +214,11 @@ function SanitaryEquipment() {
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </Table>
-                                                                        </div>
+                                                                        </TableWrapper>
                                                                     </React.Fragment>
                                                                 ))}
                                                             <div style={{ marginBottom: "30px" }}>
-                                                                <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color shadow-lg shadow-background-shade mb-5">
+                                                                <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color dark:bg-dark-secondary-color shadow-lg shadow-background-shade mb-5">
                                                                     <Table>
                                                                         <tfoot>
                                                                             <tr>
@@ -249,7 +245,7 @@ function SanitaryEquipment() {
                                                                     </Table>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </TableContainer>
                                                     </>
                                                 )
                                             }

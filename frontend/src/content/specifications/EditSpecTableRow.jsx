@@ -71,14 +71,6 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
         }
     };
 
-    const handleOnMarkedRow = () => {
-        if (markedRow === '') {
-            setMarkedRow('marked-row');
-        } else {
-            setMarkedRow('');
-        }
-    }
-
     const onDelete = async (e) => {
         await deleteSubmit(e);
         setDisabledDeleteButton(true);
@@ -88,38 +80,21 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
     }
 
     const renderEditableCell = (cellName, width) => (
-/*         <td className={cellClass} name={cellName} onClick={() => handleEdit(cellName)}>
-            {editingCell === cellName && roomData ? (
-                <input
-                    type="text"
-                    className="table-input"
-                    value={roomData[cellName]}
-                    onChange={(e) => handleChange(e, cellName)}
-                    onBlur={handleBlur}
-                    onKeyDown={handleKeyDown}
-                    placeholder="..."
-                    autoFocus
-                />
-            ) : (
-                roomData ? roomData.data[cellName] : ''
-            )}
-        </td> */
-
-<TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
-{
-    editingCell === cellName && roomData ? (
-        <EditableInputField value={roomData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
-    ) : (
-        roomData ? roomData.data[cellName] : ''
-    )
-}
-</TableTDelement>
+        <TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
+            {
+                editingCell === cellName && roomData ? (
+                    <EditableInputField value={roomData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+                ) : (
+                    roomData ? roomData.data[cellName] : ''
+                )
+            }
+        </TableTDelement>
     );
 
     return (
         <>
             {response?.error && <MessageBox message={response.error} />}
-            <tr className="hover:bg-table-hover">
+            <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover">
                 {
                     roomLoading && roomLoading === true ? (
                         <>
