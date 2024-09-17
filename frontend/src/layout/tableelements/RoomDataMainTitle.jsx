@@ -1,6 +1,6 @@
 function RoomDataMainTitle(props) {
     return (
-        <div className="flex items-center w-full pt-1 pb-1 pl-5 border-b border-default-border-color dark:border-default-border-color bg-secondary-color dark:bg-dark-secondary-color hover:bg-tertiary-color hover:dark:bg-dark-tertiary-color">
+        <div className="sticky top-0 flex items-center w-full pt-1 pb-1 pl-5 border-b border-default-border-color dark:border-default-border-color bg-tertiary-color dark:bg-dark-tertiary-color hover:bg-tertiary-color hover:dark:bg-dark-tertiary-color">
             <div className="flex w-1/2">
                 <div className="text-lg font-semibold w-full">
                     {props.roomNumber} - <span className="text-grey-text dark:text-dark-grey-text">{props.roomName}</span>

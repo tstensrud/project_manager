@@ -32,7 +32,7 @@ function VentilationTable({ projectId, buildingUid }) {
     return (
         <>
             {
-                loading || ventSystemDataLoading || buildingDataLoading ? (
+                loading ? (
                     <LoadingSpinner text="rom" />
                 ) : (
                     <TableContainer>
@@ -90,7 +90,7 @@ function VentilationTable({ projectId, buildingUid }) {
                                                                 .map(key => (
                                                                     <React.Fragment key={key}>
                                                                         <span className="font-bold">
-                                                                            {Number(buildingData?.data.floor_summaries[key].demand.toFixed(0)).toLocaleString()}
+                                                                            {Number(buildingData.data.floor_summaries[key].demand.toFixed(0)).toLocaleString()}
                                                                             <br /> m<sup>3</sup>/h
                                                                         </span>
                                                                     </React.Fragment>
@@ -100,13 +100,13 @@ function VentilationTable({ projectId, buildingUid }) {
                                                     </TableTDelement>
                                                     <TableTDelement width="6%">
                                                         {
-                                                            buildingData?.data && buildingData?.data?.floor_summaries &&
+                                                            buildingData?.data?.floor_summaries &&
                                                             Object.keys(buildingData?.data.floor_summaries)
                                                                 .filter(key => key === floor)
                                                                 .map(key => (
                                                                     <React.Fragment key={key}>
                                                                         <span className="text-supply-color font-bold">
-                                                                            {Number(buildingData?.data.floor_summaries[key].supply.toFixed(0)).toLocaleString()}
+                                                                            {Number(buildingData.data.floor_summaries[key].supply.toFixed(0)).toLocaleString()}
                                                                             <br /> m<sup>3</sup>/h
                                                                         </span>
                                                                     </React.Fragment>
@@ -115,13 +115,13 @@ function VentilationTable({ projectId, buildingUid }) {
                                                     </TableTDelement>
                                                     <TableTDelement width="6%">
                                                         {
-                                                            buildingData?.data && buildingData?.data?.floor_summaries &&
+                                                            buildingData?.data?.floor_summaries &&
                                                             Object.keys(buildingData?.data.floor_summaries)
                                                                 .filter(key => key === floor)
                                                                 .map(key => (
                                                                     <React.Fragment key={key}>
                                                                         <span className="text-extract-color font-bold">
-                                                                            {Number(buildingData?.data.floor_summaries[key].extract.toFixed(0)).toLocaleString()}
+                                                                            {Number(buildingData.data.floor_summaries[key].extract.toFixed(0)).toLocaleString()}
                                                                             <br /> m<sup>3</sup>/h
                                                                         </span>
                                                                     </React.Fragment>
@@ -134,14 +134,14 @@ function VentilationTable({ projectId, buildingUid }) {
                                                     <TableTDelement width="6%" />
                                                     <TableTDelement width="34%">
                                                         {
-                                                            buildingData?.data && buildingData?.data?.floor_summaries &&
+                                                            buildingData?.data?.floor_summaries &&
                                                             Object.keys(buildingData?.data.floor_summaries)
                                                                 .filter(key => key === floor)
                                                                 .map(key => (
                                                                     <React.Fragment key={key}>
                                                                         <div className="font-semibold">
-                                                                            {buildingData?.data.floor_summaries[key].supply < buildingData?.data.floor_summaries[key].demand && 'For lite luftmengde ift dimensjonert. '}
-                                                                            {buildingData?.data.floor_summaries[key].supply !== buildingData?.data.floor_summaries[key].extract && 'Ubalanse i etasje.'}
+                                                                            {buildingData.data.floor_summaries[key].supply < buildingData.data.floor_summaries[key].demand && 'For lite luftmengde ift dimensjonert. '}
+                                                                            {buildingData.data.floor_summaries[key].supply !== buildingData.data.floor_summaries[key].extract && 'Ubalanse i etasje.'}
                                                                         </div>
                                                                     </React.Fragment>
                                                                 ))

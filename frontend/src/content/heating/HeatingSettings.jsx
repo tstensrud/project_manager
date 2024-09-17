@@ -71,17 +71,20 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                     ) : (
                         <>
                             <div className="flex sticky top-0 bg-secondary-color dark:bg-dark-secondary-color flex-col border-default-border-color p-1 font-extrabold w-full">
-                                <div className="flex w-full justify-end">
-                                    <span onClick={handleCloseWindow} className="cursor-pointer text-2xl hover:text-accent-color hover:dark:text-dark-accent-color">&times;</span>
-                                </div>
+                                <div className="flex flex-row w-full items-center">
+                                    <div className="w-[10%]"></div>
+                                    <div className="flex flex-1 justify-center text-center">
+                                        Varmeparametre bygg {data && data.building_data.BuildingName}
+                                    </div>
+                                    <div className="flex w-[10%] justify-end">
+                                        <span onClick={handleCloseWindow} className="cursor-pointer text-2xl hover:text-accent-color hover:dark:text-dark-accent-color">&times;</span>
+                                    </div>
 
-                                <div className="w-full justify-center text-center">
-                                    Varmeinnstillinger bygg {data && data.building_data.BuildingName}
                                 </div>
                             </div>
 
                             <div className="flex flex-row h-full text-primary-color dark:text-dark-primary-color justify-start text-base">
-                                <div className="flex flex-col w-1/2">
+                                <div className="flex flex-col w-1/2 pl-3">
                                     <form name="building_heating_settings" onSubmit={handleSubmit}>
                                         <div>
                                             <h3>Oppdater varmedata</h3>
@@ -176,14 +179,14 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                                                 <CardInputField name="safety" placeholder={data && data.building_data.Safety} changeFunction={handleFormChange} />
                                             </div>
 
-                                            <div className="mt-2 mb-5">
+                                            <div className="mt-2 mb-10">
                                                 <CardButton buttonText="Oppdater" />
                                             </div>
                                         </div>
                                     </form>
                                 </div>
 
-                                <div className="flex flex-col w-1/2 items-end text-end">
+                                <div className="flex flex-col w-1/2 pr-3 items-end text-end">
                                     <form onSubmit={handleHeatSourceSubmit}>
                                         <div>
                                             <h3>Sett primærvarmekilde</h3>

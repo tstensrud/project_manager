@@ -16,6 +16,8 @@ import DeleteBox from './DeleteBox';
 import TableTop from '../../layout/TableTop';
 import HelpBoxEdit from './HelpBoxEdit';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import Table from '../../layout/tableelements/Table.jsx';
+import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
@@ -84,14 +86,18 @@ function EditSpecification() {
                                         <TableTHelement width="5%">Slett</TableTHelement>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {
-                                        data && data.data !== undefined && data.data !== null && data.data.map((uid) => (
-                                            <EditSpecTableRow key={uid} roomUid={uid} totalColumns={14} refetch={refetch} />
-                                        ))
-                                    }
-                                </tbody>
                             </TableHeader>
+                            <TableWrapper>
+                                <Table>
+                                    <tbody>
+                                        {
+                                            data?.data && data.data.map((uid) => (
+                                                <EditSpecTableRow key={uid} roomUid={uid} totalColumns={14} refetch={refetch} />
+                                            ))
+                                        }
+                                    </tbody>
+                                </Table>
+                            </TableWrapper>
                         </>
                     )
                 }

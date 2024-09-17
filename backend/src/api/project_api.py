@@ -109,12 +109,14 @@ def todo(project_uid):
 @jwt_required()
 def new_todo_item(project_uid, user_uuid):
     data = request.get_json()
-    content = data["todo_content"]
-    if dbo.new_todo_item(project_uid, user_uuid, content):
-        response = {"success": "Huskepunkt opprettet"}
-    else:
-        response = {"error": "Kunne ikke opprette huskepunkt"}
-    return jsonify(response)
+    if data:
+        content = data["todo_content"]
+        if dbo.new_todo_item(project_uid, user_uuid, content):
+            response = {"success": True, "message": "Huskepunkt opprettet"}
+        else:
+            response = {"success": False, "message": "Kunne ikke opprette huskepunkt"}
+        return jsonify(response)
+    return jsonify({"success": False, "message": "Ikke noe data mottatt"})
 
 @project_api_bp.route('/todo_item_complete/', methods=['PATCH'])
 @jwt_required()
@@ -125,7 +127,7 @@ def todo_item_complete(project_uid):
     if dbo.set_todo_item_completed(item_uid, uuid):
         response = {"success": True, "message": "Huskepunkt utført"}
     else:
-        response = {"error": "Kunne ikke merke huskepunkt utført"}
+        response = {"success": False, "message": "Kunne ikke merke huskepunkt utført"}
     return jsonify(response)
 #
 #
