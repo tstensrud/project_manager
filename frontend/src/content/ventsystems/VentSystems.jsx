@@ -1,9 +1,9 @@
-import { GlobalContext } from '../../GlobalContext';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState, useContext } from 'react';
 
+// Hooks
 import useFetch from '../../hooks/useFetch'
 
+// Components
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeaderIcon from '../../assets/svg/ventSystemIcon.jsx';
 import SystemsTableRowComponent from "./SystemsTableRowComponent";
@@ -17,34 +17,18 @@ import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 
 function VentSystems() {
     const { projectId } = useParams();
-    const { setActiveProject } = useContext(GlobalContext);
 
     // Hooks
     const { data: receivedSystemsData, loading: systemsLoading, error: systemsError, refetch: systemsRefetch } = useFetch(`/project_api/${projectId}/systems/`);
 
-    // States
-    const [childMessage, setChildMessage] = useState('');
-
-    // Handlers
-    const handleChildMessage = (msg) => {
-        if (msg === "deleted") {
-            systemsRefetch();
-        }
-        else if (msg !== undefined) {
-            setChildMessage(msg);
-        }
-    }
-
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Ventilasjonssytemer"} projectName={""} projectNumber={""} />
-
+            {systemsError && <MessageBox message={systemsError} />}
             <MainContentContainer>
-
-                {childMessage && <MessageBox message={childMessage} />}
                 {
                     systemsLoading && systemsLoading === true ? (
-                        <LoadingSpinner />
+                        <LoadingSpinner text="ventilasjonssystemer" />
                     ) : (
                         <>
 
@@ -78,7 +62,7 @@ function VentSystems() {
                                                     <tbody>
                                                         {
                                                             receivedSystemsData && receivedSystemsData.systems_data ? (
-                                                                receivedSystemsData.systems_data.map((system) => <SystemsTableRowComponent msgToParent={handleChildMessage} key={system.uid} systemId={system.uid} />)
+                                                                receivedSystemsData.systems_data.map((system) => <SystemsTableRowComponent systemsRefetch={systemsRefetch} key={system.uid} systemId={system.uid} />)
                                                             ) : (
                                                                 <></>
                                                             )

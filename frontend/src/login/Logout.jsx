@@ -19,6 +19,8 @@ function Logout(props) {
          props.token()
          localStorage.removeItem("user_uuid");
          localStorage.removeItem("username");
+         localStorage.removeItem("projectData");
+         localStorage.removeItem("theme");
          navigate('/');
       }).catch((error) => {
         if (error.response) {

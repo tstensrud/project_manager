@@ -10,6 +10,7 @@ import useDeleteData from '../../hooks/useDeleteData'
 
 // Components
 import MessageBox from '../../layout/MessageBox';
+import LoadingRow from '../../layout/tableelements/LoadingRow.jsx';
 
 // Svg
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -20,27 +21,24 @@ import TableButton from "../../layout/tableelements/TableButton.jsx";
 
 function RoomTableRowComponent({ roomId, totalColumns }) {
     const { projectId } = useParams();
-    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+    const { setActiveProject } = useContext(GlobalContext);
 
     // Initial fetches
     const { data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch } = useFetch(`/project_api/${projectId}/rooms/get_room/${roomId}/`);
 
     // Update and delete
-    const { data: updatedRoomData, response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
-    const { data: deleteRoomId, responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/project_api/${projectId}/rooms/delete_room/${roomId}/`);
+    const {  response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
+    const {  setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/project_api/${projectId}/rooms/delete_room/${roomId}/`);
 
     // Edit cells
     const [editingCell, setEditingCell] = useState(null);
-    const [editedData, setEditedData] = useState(null);
-    const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
-    //const [cellClass, setRowClass] = useState("");
 
     // Row marking
     const [markedRow, setMarkedRow] = useState('');
 
     // Undo
     const [undoButton, setUndoButton] = useState(false);
-    const { data: undoDelete, response: undoDeleteResponse, setData: setUndoDeleteData, handleSubmit } = useSubmitData(`/project_api/${projectId}/rooms/undo_delete/${roomId}/`);
+    const { setData: setUndoDeleteData, handleSubmit } = useSubmitData(`/project_api/${projectId}/rooms/undo_delete/${roomId}/`);
 
     // Use effects
     useEffect(() => {
@@ -48,18 +46,14 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
         setDeleteData({ "roomId": roomId });
     }, []);
 
-    useEffect(() => {
-        if (roomData) {
-            setEditedData('');
-        }
-    }, [roomData]);
 
     useEffect(() => {
         if (response?.success === true) {
             setData('');
             roomRefetch();
         }
-    },[response])
+    },[response]);
+
     // Handlers
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
@@ -74,7 +68,6 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
 
     const onDelete = async (e) => {
         await deleteSubmit(e);
-        setDisabledDeleteButton(true);
         setUndoButton(true);
         setUndoDeleteData({ "undo": true });
     }
@@ -116,22 +109,15 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     const handleUndo = async (e) => {
         await handleSubmit(e);
         setUndoButton(false);
-        //setRowClass("");
     }
 
     return (
         <>
             {response?.success === false && <MessageBox message={response.message} />}
-            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
+            <tr className={undoButton ? 'text-grey-text line-through' : `${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
                     roomLoading && roomLoading === true ? (
-                        <>
-                            {
-                                Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="blur-sm opacity-50" key={index}>####</td>
-                                ))
-                            }
-                        </>
+                        <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
                             <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
@@ -151,12 +137,14 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
                             {renderEditableCell("RoomPopulation", "5%")}
                             {renderEditableCell("Comments", "30%")}
                             <TableTDelement width="10%">
+                                <div className="pt-1 pb-1">
                                 {
                                     undoButton ?
                                     <TableButton clickFunction={handleUndo} buttonText="Angre" disabled={false} />
                                      : 
                                     <TableButton clickFunction={onDelete} buttonText="Slett" />
                                 }
+                                </div>
                             </TableTDelement>
                         </>
                     )

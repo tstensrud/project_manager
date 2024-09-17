@@ -1,6 +1,5 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
 
 // Hooks
 import useFetch from '../../hooks/useFetch';
@@ -14,11 +13,10 @@ import MessageBox from '../../layout/MessageBox';
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
 import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import LoadingRow from "../../layout/tableelements/LoadingRow.jsx";
 
-function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState, totalColumns }) {
+function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalColumns, buildingData, settingsUpdatedState }) {
     const { projectId } = useParams();
-    const { setActiveProject } = useContext(GlobalContext);
-
 
     // Initial fetches and refetch
     const { data: heatingData, loading: heatingLoading, refetch: heatingRefetch } = useFetch(`/project_api/${projectId}/heating/get_room/${roomId}/`);
@@ -39,7 +37,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
     // useEffects
     useEffect(() => { // Refetch upon received message theat heating settings has changed
         heatingRefetch();
-    }, [settingsUpdateState]);
+    }, [settingsUpdatedState]);
 
     useEffect(() => {
         if (heatingData) {
@@ -48,7 +46,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
     }, [heatingData]);
 
     useEffect(() => {
-        if (response?.success && response.success === true) {
+        if (response?.success === true) {
             setData('');
             heatingRefetch();
             buildingReFetch();
@@ -108,18 +106,12 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, settingsUpdateState
     
     return (
         <>
-            {showRoomData ? <RoomData heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
+            {showRoomData ? <RoomData buildingData={buildingData} roomData={allRoomData} heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
             {response?.success === false && <MessageBox message={response.message} />}
             <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
                     heatingLoading && heatingLoading === true ? (
-                        <>
-                            {
-                                Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="blur-sm opacity-50" key={index}>####</td>
-                                ))
-                            }
-                        </>
+                        <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
                             <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>

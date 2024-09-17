@@ -11,7 +11,7 @@ function Sanitary() {
     const { projectId } = useParams();
 
     // Hooks
-    const { data, loading, refetch } = useFetch(`/project_api/${projectId}/sanitary/buildings/`);
+    const { data, loading } = useFetch(`/project_api/${projectId}/sanitary/buildings/`);
 
     return (
         <>
@@ -19,7 +19,7 @@ function Sanitary() {
             <MainContentContainer>
                 {
                     loading && loading === true ? (
-                        <LoadingSpinner />
+                        <LoadingSpinner text="bygg" />
                     ) : (
                         <div className="flex justify-center flex-row w-full flex-wrap">
                             {

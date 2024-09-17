@@ -49,6 +49,7 @@ function RoomData({ roomData, ventData, setShowRoomData }) {
           <RoomDataRow rowName="Romtype">{roomData.RoomTypeName}</RoomDataRow>
           <RoomDataRow rowName="Bygg">{roomData.BuildingName}</RoomDataRow>
           <RoomDataRow rowName="Areal">{roomData.Area} m2</RoomDataRow>
+          <RoomDataRow rowName="Etasje">{roomData.Floor} </RoomDataRow>
           <RoomDataRow rowName="Antall personer">{roomData.RoomPopulation} stk.</RoomDataRow>
           <RoomDataRow rowName="Kommentar">{roomData.Comments}</RoomDataRow>
           

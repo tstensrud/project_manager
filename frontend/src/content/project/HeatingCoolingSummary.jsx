@@ -16,7 +16,7 @@ function HeatingSummary({ projectId }) {
 
                     {
                         loading && loading === true ? (
-                            <LoadingSpinner />
+                            <LoadingSpinner text="varme og kjøledata" />
                         ) : (
                             <>
                                 <CardTitle svg={<HeatingIcon />} title="Varme- og kjøledata" />

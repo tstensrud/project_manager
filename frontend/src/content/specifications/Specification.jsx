@@ -1,6 +1,5 @@
-import { GlobalContext } from '../../GlobalContext';
 import { useParams, Link } from 'react-router-dom';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 
 // Hooks
 import useSubmitFile from '../../hooks/useSubmitFile'
@@ -14,24 +13,18 @@ import LoadingSpinner from '../../layout/LoadingSpinner';
 import TableTop from '../../layout/TableTop';
 import Helpbox from './HelpBox';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
-import Table from '../../layout/tableelements/Table.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
-import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 
 
 function Specification() {
 
-    const { projectId } = useParams();
     const { suid } = useParams();
-    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
     // Hooks
     const { data, loading, error, refetch } = useFetch(`/specifications/get_spec_room_data/${suid}/`);
     const { file, response, error: fileError, setFile, handleSubmit } = useSubmitFile(`/specifications/new_rooms/${suid}/`);
-
-    const specName = data && data.spec_name;
 
     const [warning, setWarning] = useState('')
 
@@ -59,8 +52,8 @@ function Specification() {
 
             <MainContentContainer>
                 {
-                    loading && loading === true ? (
-                        <LoadingSpinner />
+                    loading ? (
+                        <LoadingSpinner text="romtyper" />
                     ) : (
                         <>
                             <div className="overflow-y-hidden flex justify-center items-center mr-5 ml-5 h-32-spec">

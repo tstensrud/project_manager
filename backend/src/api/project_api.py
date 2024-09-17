@@ -45,10 +45,22 @@ def project(project_uid):
         else:
             project_data["SpecificationName"] = None
         project_data["area"] = total_area
-        return jsonify({"data": project_data})
+        return jsonify({"success": True, "data": project_data})
     else:
         return jsonify({"error": "Fant ikke prosjekt"})
 
+@project_api_bp.route('/project_specification/', methods=['GET'])
+@jwt_required()
+def get_project_specification(project_uid: str):
+    project = dbo.get_project(project_uid)
+    if project:
+        specification = dbo.get_specification(project.specification)
+        if specification:
+            specification_data = specification.get_json()
+            return jsonify({"success": True, "data": specification_data})
+        return jsonify({"success": False, "message": "Ingen spesifikasjon satt"})
+    return jsonify({"success": False, "message": "Fant ikke prosjekt"})
+    
 @project_api_bp.route('/settings/', methods=['GET'])
 @jwt_required()
 def settings(project_uid):
@@ -60,17 +72,26 @@ def settings(project_uid):
 @jwt_required()
 def set_spec(project_uid):
     data = request.get_json()
+    project_number = None
+    project_description = None
+    project_name = None
     if data:
-        for key, value in data.items():
-            if key == "project_specification":
-                new_spec = dbo.set_project_specification(project_uid, value)
-                if new_spec is False:
-                    return jsonify({"success": False, "message": "Kunne ikke oppdatere kravspesifikasjon"})
-            if key == "description":
-                new_desc = dbo.update_project_description(project_uid, value)
-                if new_desc is False:
-                    return jsonify({"success": False, "message": "Kunne ikke oppdatere beskrivelse"})
-        return jsonify({"success": True, "message": "Prosjektdata oppdatert"})
+        if "project_number" in data:
+            number_exist = dbo.check_for_existing_project_number(data["project_number"].strip())
+            if number_exist:
+                return jsonify({"success": False, "message": "Prosjektnummeret finnes allerede"})
+            project_number = data.data["project_number"].strip()
+        if "project_specification" in data:
+            new_spec = dbo.set_project_specification(project_uid, data["project_specification"])
+            if new_spec is False:
+                return jsonify({"success": False, "message": "Kunne ikke oppdatere kravspesifikasjon"})
+        project_name = data.get("project_name", None)
+        project_description = data.get("description", None)
+        update = dbo.update_project_information(project_uid, project_number=project_number, project_description=project_description,project_name=project_name)
+        if update:
+            return jsonify({"success": True, "message": "Prosjektdata oppdatert"})
+        else:
+            return jsonify({"success": False, "message": "Kunne ikke oppdatere beskrivelse"})
     return jsonify({"success": False, "message": "Mottok ingen data"})
 
 #
@@ -124,18 +145,40 @@ def buildings(project_uid):
             building_data.append(dbo.get_building_data(building.uid, True, True, False))
         return jsonify({"building_data": building_data, "rooms": total_rooms})
 
+@project_api_bp.route('/buildings/get_building/<building_uid>/', methods=['GET'])
+@jwt_required()
+def get_building_data(project_uid: str, building_uid: str):
+    building_data = dbo.get_building_data(building_uid, False, False, False)
+    if building_data:
+        return jsonify({"success": True, "data": building_data})
+    return jsonify({"success": False, "message": "No building data found"})
+
+@project_api_bp.route('/buildings/get_project_buildings/', methods=['GET'])
+@jwt_required()
+def get_project_buildings(project_uid: str):
+    buildings = dbo.get_all_project_buildings(project_uid)
+    if buildings:
+        data = {}
+        for building in buildings:
+            data[building.building_name] = building.get_json()
+        return jsonify({"success": True, "message":" Building data", "data": data})
+    return jsonify({"success": False, "message": "Fant ingen bygg"})
+
 @project_api_bp.route('/buildings/new_building/', methods=["POST"])
 @jwt_required()
 def new_building(project_uid):
     data = request.get_json()
-    name = data["buildingName"]
     if not data:
-        return jsonify({"building_data": "No data received"})
+        return jsonify({"success": False, "message": "No data received"})
     else:
+        name = data["buildingName"]
+        duplicate_building_name = dbo.check_for_existing_building_name(project_uid, name)
+        if duplicate_building_name:
+            return jsonify({"success": False, "message": "Et bygg med dette navnet finnes allerede i prosjektet"})
         if dbo.new_building(project_uid, name):
-            return jsonify({"building_data": "Success"})
+            return jsonify({"success": True, "message": "Bygg opprettet"})
         else:
-            return jsonify({"building_data": "Could not add new building"})
+            return jsonify({"success": False, "message": "Kunne ikke legge til nytt bygg"})
 
 @project_api_bp.route('/buildings/edit/<building_uid>/', methods=['PATCH'])
 @jwt_required()
@@ -145,13 +188,13 @@ def edit_building(project_uid, building_uid):
         new_name = data["buildingName"].strip()
         exists = dbo.check_for_existing_building_name(project_uid, new_name)
         if exists:
-            return jsonify({"success": False, "error": "Et bygg med dette navnet finnes allerede"})
+            return jsonify({"success": False, "message": "Et bygg med dette navnet finnes allerede"})
         if dbo.edit_building_name(building_uid, new_name):
             return ({"success": True, "message": "Navn endret"})
         else:
-            return ({"success": False, "error": "Kunne ikke endre bygningsnavn"})
+            return ({"success": False, "message": "Kunne ikke endre bygningsnavn"})
     else:
-        return ({"success": False, "error": "Mottok ikke data"})
+        return ({"success": False, "message": "Mottok ikke data"})
 
 @project_api_bp.route('/buildings/delete/<building_uid>/', methods=['DELETE'])
 @jwt_required()
@@ -169,7 +212,7 @@ def delete_building(project_uid, building_uid):
 #   ROOMS
 #
 #
-@project_api_bp.route('/rooms/', methods=['GET', 'POST'])
+@project_api_bp.route('/rooms/', methods=['GET'])
 @jwt_required()
 def rooms(project_uid):
     project = dbo.get_project(project_uid)
@@ -183,47 +226,59 @@ def rooms(project_uid):
         else:
             return jsonify({"room_data": None, "spec": specification})
 
-    if request.method == "POST":
-        project_specification = project.specification
-        data = request.get_json()
-        if data:
-            data_fields = ["buildingUid", "roomType", "floor", "roomName", "roomNumber", "roomArea", "roomPeople"]
-            for key, value in data.items():
-                if key not in data_fields:
-                    return jsonify({"success": False, "message": "Feil i mottatt data"})
-                
-            building_uid = data["buildingUid"]
-            room_type_id = data["roomType"]
-            floor = data["floor"].strip()
-            name = data["roomName"].strip()
-            room_number = data["roomNumber"].strip()
+@project_api_bp.route('/rooms/new_room/<building_uid>/', methods=['POST'])
+@jwt_required()
+def new_room(project_uid: str, building_uid: str):
+    project = dbo.get_project(project_uid)
+    project_specification = project.specification
+    data = request.get_json()
+    if data:
+        data_fields = ["roomType", "floor", "roomName", "roomNumber", "roomArea", "roomPeople"]
+        for key, value in data.items():
+            if key not in data_fields:
+                return jsonify({"success": False, "message": "Feil i mottatt data"})
             
-            if dbo.check_if_roomnumber_exists(building_uid, room_number):
-                return jsonify({"success": False,"message": "Romnummer finnes allerede for dette bygget"})
-            
-            area = data["roomArea"].strip()
-            converted_area = globals.replace_and_convert_to_float(area)
-            if converted_area is False:
-                return jsonify({"success": False,"message": "Areal må kun inneholde tall"})
-  
-            people = data["roomPeople"].strip()
-            converted_people = globals.replace_and_convert_to_int(people)
-            if converted_people is False:
-                return jsonify({"success": False,"message": "Persontantall må kun inneholde tall"})
+        building_uid = building_uid
+        room_type_id = data["roomType"]
+        floor = data["floor"].strip()
+        name = data["roomName"].strip()
+        room_number = data["roomNumber"].strip()
         
-            vent_props = dbo.get_room_type(room_type_id, project_specification)
-            new_room_id = dbo.new_room(project.uid, building_uid, room_type_id, floor, room_number, name, converted_area, converted_people, 
-                                        vent_props.air_per_person, vent_props.air_emission,
-                                        vent_props.air_process, vent_props.air_minimum,
-                                        vent_props.ventilation_principle, vent_props.heat_exchange,
-                                        vent_props.room_control, vent_props.notes, vent_props.db_technical,
-                                        vent_props.db_neighbour, vent_props.db_corridor)
-            dbo.initial_ventilation_calculations(new_room_id)
+        if dbo.check_if_roomnumber_exists(building_uid, room_number):
+            return jsonify({"success": False,"message": "Romnummer finnes allerede for dette bygget"})
+        
+        area = data["roomArea"].strip()
+        converted_area = globals.replace_and_convert_to_float(area)
+        if converted_area is False:
+            return jsonify({"success": False,"message": "Areal må kun inneholde tall"})
 
-            return jsonify({"message": f"Rom opprettet: {new_room_id}"})
-        else:
-            return jsonify({"success": False, "message": "Mottok ingen data"})
+        people = data["roomPeople"].strip()
+        converted_people = globals.replace_and_convert_to_int(people)
+        if converted_people is False:
+            return jsonify({"success": False,"message": "Persontantall må kun inneholde tall"})
+    
+        vent_props = dbo.get_room_type(room_type_id, project_specification)
+        new_room_id = dbo.new_room(project.uid, building_uid, room_type_id, floor, room_number, name, converted_area, converted_people, 
+                                    vent_props.air_per_person, vent_props.air_emission,
+                                    vent_props.air_process, vent_props.air_minimum,
+                                    vent_props.ventilation_principle, vent_props.heat_exchange,
+                                    vent_props.room_control, vent_props.notes, vent_props.db_technical,
+                                    vent_props.db_neighbour, vent_props.db_corridor)
+        dbo.initial_ventilation_calculations(new_room_id)
 
+        return jsonify({"success": True, "message": f"Rom opprettet: {new_room_id}"})
+    else:
+        return jsonify({"success": False, "message": "Mottok ingen data"})
+
+@project_api_bp.route('/rooms/building/<building_uid>/', methods=['GET'])
+def get_rooms_in_building(project_uid: str, building_uid: str):
+    rooms = dbo.get_all_rooms_building(building_uid)
+    if rooms:
+        room_data = {}
+        for room in rooms:
+            room_data[room.uid] = room.get_json_room_data()
+        return jsonify({"success": True, "data": room_data})
+    return jsonify({"success": False, "message": "No rooms found"})
 
 @project_api_bp.route('/rooms/get_room/<room_uid>/', methods=['GET'])
 @jwt_required()
@@ -375,7 +430,7 @@ def update_system(project_uid, system_uid):
         if key == "air_flow":
             converted_value = globals.replace_and_convert_to_float(value.strip())
             if converted_value is False:
-                return jsonify({"error": "Viftekapasitet må kun inneholde tall"})
+                return jsonify({"success": False, "message": "Viftekapasitet må kun inneholde tall"})
             processed_data[key] = converted_value
         else:
             processed_data[key] = value.strip()
@@ -404,18 +459,14 @@ def ventilation(project_uid):
     total_air_flow = dbo.summarize_project_airflow(project_uid)
     return jsonify({"ventdata": total_air_flow})
 
-@project_api_bp.route('/ventilation/buildings/', methods=['GET'])
-@jwt_required()
-def get_ventilation_buildings(project_uid):
-    buildings = dbo.get_all_project_buildings(project_uid)
-    if buildings is None:
-        return jsonify({"error": "Ingen bygg lagt til enda"})
-    else:
-        building_data = []
-        for building in buildings:
-            building_data.append(dbo.get_building_data(building.uid, True, False, False))
-        return jsonify({"building_data": building_data})
-    
+@project_api_bp.route('/ventilation/building_data/<building_uid>/', methods=['GET'])
+def get_building_vent_data(project_uid: str, building_uid: str):
+    building_data = dbo.get_building_data(building_uid,True, False, False)
+    print(building_data)
+    if building_data:
+        return jsonify({"success": True, "data": building_data})
+    return jsonify({"success": False, "message":" No building data found"})
+
 @project_api_bp.route('/ventilation/get_room/<room_uid>/', methods=['GET'])
 @jwt_required()
 def ventilation_get_room(project_uid, room_uid):
@@ -474,6 +525,7 @@ def ventilation_update_room(project_uid, room_uid, cooling):
         dbo.calculate_total_cooling_for_room(room_uid)
     
     return jsonify({"success": True, "message": "Ventilasjonsdata oppdatert"})
+
 #
 #               
 #   HEATING
@@ -486,17 +538,12 @@ def heating(project_uid):
     total_cooling_equipment = dbo.sum_cooling_from_equipment_project(project_uid)
     return jsonify({"heating_data": total_heating, "cooling_data": total_cooling_equipment})
 
-@project_api_bp.route('/heating/buildings/', methods=['GET'])
-@jwt_required()
-def get_heating_buildings(project_uid):
-    buildings = dbo.get_all_project_buildings(project_uid)
-    if buildings is None:
-        return jsonify({"error": "Ingen bygg lagt til enda"})
-    else:
-        building_data = []
-        for building in buildings:
-            building_data.append(dbo.get_building_data(building.uid, False, True, False))
-        return jsonify({"building_data": building_data})
+@project_api_bp.route('/heating/building_data/<building_uid>/', methods=['GET'])
+def get_building_heating_data(project_uid, building_uid):
+    building_data = dbo.get_building_data(building_uid, False, True, False)
+    if building_data:
+        return jsonify({"success": True, "data": building_data})
+    return jsonify({"success": False, "message": "No building data found"})
 
 @project_api_bp.route('/heating/get_room/<room_uid>/', methods=['GET'])
 @jwt_required()
@@ -598,21 +645,16 @@ def get_room_cooling(project_uid, room_uid):
         room_data = room.get_json_room_data()
         room_cooling_data = room.get_json_cooling_data()
         room_cooling_data["Airflow"] = room.air_supply
-        return jsonify({"room_data": room_data, "cooling_data": room_cooling_data})
+        return jsonify({"success": True, "room_data": room_data, "cooling_data": room_cooling_data})
     else:
-        return ({"error": "Fant ikke rom"})
+        return ({"success": False, "message": "Fant ikke rom"})
 
-@project_api_bp.route('/cooling/buildings/', methods=['GET'])
-@jwt_required()
-def get_cooling_buildings(project_uid):
-    buildings = dbo.get_all_project_buildings(project_uid)
-    if buildings is None:
-        return jsonify({"error": "Ingen bygg lagt til enda"})
-    else:
-        building_data = []
-        for building in buildings:
-            building_data.append(dbo.get_building_data(building.uid, False, False, False))
-        return jsonify({"building_data": building_data})
+@project_api_bp.route('/cooling/building_data/<building_uid>/', methods=['GET'])
+def get_building_cooling_data(project_uid, building_uid):
+    building_data = dbo.get_building_data(building_uid, False, False, False)
+    if building_data:
+        return jsonify({"success": True, "data": building_data})
+    return jsonify({"success": False, "message": "No building data found"})
     
 @project_api_bp.route('/cooling/update_room/<room_uid>/', methods=['PATCH'])
 @jwt_required()
@@ -650,10 +692,10 @@ def update_all_rooms_cooling(project_uid, building_uid):
             value_checked = value.strip()
             converted_value = globals.replace_and_convert_to_float(value_checked)
             if converted_value is False:
-                return jsonify({"error": "Kun tall er tillatt i celler."})
+                return jsonify({"success": False, "message": "Kun tall er tillatt i celler."})
             if key == "sun_reduction":
                 if converted_value > 1:
-                    return jsonify({"error": "Solreduksjon kan være maks 1"})
+                    return jsonify({"success": False, "message": "Solreduksjon kan være maks 1"})
             processed_data[key] = converted_value
         rooms = dbo.get_all_rooms_building(building_uid)
         for room in rooms:
@@ -661,7 +703,7 @@ def update_all_rooms_cooling(project_uid, building_uid):
                 dbo.calculate_total_cooling_for_room(room.uid)
             else:
                 return jsonify({"error": "Kunne ikke oppdatere romdata"})
-    return jsonify({"success": "Romdata oppdatert"})
+    return jsonify({"success": True, "message": "Romdata oppdatert"})
 
 #
 #               
@@ -691,6 +733,13 @@ def get_buildings_sanitary(project_uid):
         for building in buildings:
             building_data.append(dbo.get_building_data(building.uid, False, False, True))
         return jsonify({"building_data": building_data})
+
+@project_api_bp.route('/sanitary/get_building/<building_uid>/', methods=['GET'])
+def get_sanitary_building_data(project_uid, building_uid):
+    building_data = dbo.get_building_data(building_uid, False, False, True)
+    if building_data:
+        return jsonify({"success": True, "data": building_data})
+    return jsonify({"success": False, "message": "No building data found"})
 
 @project_api_bp.route('/sanitary/update_room/<room_uid>/', methods=['PATCH'])
 @jwt_required()
@@ -745,14 +794,15 @@ def get_sanitary_building_summary(project_uid, building_uid):
 @project_api_bp.route('/sanitary/update_curve/<building_uid>/', methods=["PATCH"])
 @jwt_required()
 def update_curve(project_uid, building_uid):
-
     data = request.get_json()
     if data:
         curve = data["curve"]
-        dbo.update_building_graph_curve(building_uid, curve)
-        return jsonify({"success": True, "message": "curve received"})
+        updated_curve = dbo.update_building_graph_curve(building_uid, curve)
+        if updated_curve:
+            return jsonify({"success": True, "message": "Avløpskurve oppdatert"})
+        return jsonify({"success": False, "message": "Kunne ikke oppdatere avløpskurve"})
     else:
-        return jsonify({"success": False, "message": "No curve data received"})
+        return jsonify({"success": False, "message": "Mottok ingen data"})
 
 
 @project_api_bp.route('/excel/<sheet>/', methods=['GET'])

@@ -27,6 +27,7 @@ const SelectElement = forwardRef((props, ref) => {
                 hover:dark:border-dark-form-element-hover"
             name={props.name}
             tabIndex={props.tabIndex}
+            disabled={props.disabled}
         >
             {props.children}
         </select>

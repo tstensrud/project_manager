@@ -52,10 +52,10 @@ function NewSpec() {
                             </p>
                         </form>
                         <p>
-                            {response && response.error ? (<>{response.error}</>) : (<></>)}
+                            {response?.success === false && (<>{response.message}</>)}
                         </p>
                         <p>
-                            {response && response.response !== null ? (<>{response.response}: <Link to={`/specifications/${response.data}`}>{specName}</Link></>) : (<></>)}
+                            {response?.succes === true && (<>{response.response}: <Link to={`/specifications/${response.data}`}>{specName}</Link></>)}
                         </p>
                     </ContentCard>
                 </div>

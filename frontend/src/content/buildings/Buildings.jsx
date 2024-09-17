@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Hooks
 import useFetch from '../../hooks/useFetch'
@@ -13,14 +13,25 @@ import useSubmitData from '../../hooks/useSubmitData'
 import HeaderIcon from '../../assets/svg/buildingIcon.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import InputField from '../../layout/formelements/InputField.jsx';
+import MessageBox from '../../layout/MessageBox.jsx';
 
 function Buildings() {
     const { projectId } = useParams();
+    const buildingNameRef = useRef(null);
 
     // Hooks
     const { data, loading, refetch: refetchBuildingData } = useFetch(`/project_api/${projectId}/buildings/`);
-    const { buildingData, setData, handleSubmit } = useSubmitData(`/project_api/${projectId}/buildings/new_building/`);
+    const { data: buildingData, response: newBuildingResponse, setData, handleSubmit } = useSubmitData(`/project_api/${projectId}/buildings/new_building/`);
+
+    // States
     const [formInput, setFormInput] = useState('');
+
+    useEffect(() => {
+        if (newBuildingResponse?.success === true) {
+            refetchBuildingData();
+            setFormInput('');
+        }
+    }, [newBuildingResponse])
 
     // Handlers
     const handleChange = (e) => {
@@ -34,50 +45,52 @@ function Buildings() {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         await handleSubmit(e);
-        refetchBuildingData();
-        setFormInput('');
     }
 
-    return (<>
-        <SubTitleComponent svg={<HeaderIcon />} headerText={"Bygg"} projectName={""} projectNumber={""} />
-        <MainContentContainer>
-
-            <form onSubmit={handleFormSubmit}>
-                <div className="flex h-20 items-center justify-center text-center flex-row w-full">
-                    <div className="w-96 mr-5">
-                        <InputField changeFunction={handleChange} value={formInput} name="buildingName" placeholder="Navn på bygg. Eks.: A, Hovedbygg" />
-                    </div>
-                    <div>
-                        <FormButton buttonText="Legg til" />
-                    </div>
-                </div>
-            </form>
-
-            <div className="flex justify-center flex-row flex-wrap w-full">
+    return (
+        <>
+            <SubTitleComponent svg={<HeaderIcon />} headerText={"Bygg"} projectName={""} projectNumber={""} />
+            <MainContentContainer>
                 {
-                    loading && loading === true ? (
-                        <>
-                            <span className="blur-sm opacity-50">####</span>
-                            <br />
-                            <LoadingSpinner />
-                        </>
-                    ) : (
-                        <>
-                            {
-                                data?.building_data === null ? (
-                                    <p className=" text-primary-color text-xs">{data.error}</p>
-                                ) : (
-                                    data && data.building_data && Object.keys(data.building_data).map((key, index) => (
-                                        <BuildingSummary refetchBuildingData={refetchBuildingData} key={index} buildingData={data.building_data[key]} />
-                                    ))
-                                )
-                            }
-                        </>
-                    )
+                    newBuildingResponse?.success === false && <MessageBox message={newBuildingResponse.message} />
                 }
-            </div>
-        </MainContentContainer>
-    </>
+                <form onSubmit={handleFormSubmit}>
+                    <div className="flex flex-col w-full items-center justify-center text-center">
+                        <div className="flex h-20 flex-row w-full items-center justify-center text-center">
+                            <div className="mr-5 w-96">
+                                <InputField buildingNameRef={buildingNameRef} changeFunction={handleChange} value={formInput} name="buildingName" placeholder="Navn på bygg. Eks.: A, Hovedbygg" required={true} />
+                            </div>
+                            <div className="items-center justify-center text-center">
+                                <FormButton buttonText="Legg til" />
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+                <div className="flex justify-center flex-row flex-wrap w-full">
+                    {
+                        loading ? (
+                            <>
+                                <LoadingSpinner />
+                            </>
+                        ) : (
+                            <>
+                                {
+                                    data?.building_data === null ? (
+                                        <p className=" text-primary-color text-xs">{data.error}</p>
+                                    ) : (
+                                        data && data.building_data && Object.keys(data.building_data).map((key, index) => (
+                                            <BuildingSummary refetchBuildingData={refetchBuildingData} key={index} buildingData={data.building_data[key]} />
+                                        ))
+                                    )
+                                }
+                            </>
+                        )
+                    }
+                </div>
+            </MainContentContainer>
+        </>
     );
 }
 

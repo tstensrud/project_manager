@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import useDeleteData from '../../hooks/useDeleteData'
 
 // Hooks
@@ -11,23 +11,19 @@ import EditableInputField from "../../layout/tableelements/EditableInputField.js
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import TableButton from "../../layout/tableelements/TableButton.jsx";
 
-function EditSpecTableRow({ roomUid, totalColumns }) {
+function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
 
     // Initial room data fetch
     const { data: roomData, loading: roomLoading, error: roomDataError, refetch: roomRefetch } = useFetch(`/specifications/get_room_type_data/${roomUid}/`);
 
     // Update room type data and delete room
-    const { data: updatedRoomData, response, setData, handleSubmit: updateRoomData } = useUpdateData(`/specifications/update_room/${roomUid}/`);
-    const { data: deleteRoomId, responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/specifications/delete_room_type/${roomUid}/`);
+    const { data: updatedRoomData, response: updateRoomDataResponse, setData, handleSubmit: updateRoomData } = useUpdateData(`/specifications/update_room/${roomUid}/`);
+    const { data: deleteRoomId, response: responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/specifications/delete_room_type/${roomUid}/`);
 
     // Edit of cells
     const [editingCell, setEditingCell] = useState(null);
     const [editedData, setEditedData] = useState(null);
     const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
-    const [cellClass, setRowClass] = useState("");
-
-    // Marking a row
-    const [markedRow, setMarkedRow] = useState('');
 
     // useEffects
     useEffect(() => {
@@ -41,6 +37,18 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
         setDeleteData({ "roomId": roomUid });
     }, []);
 
+    useEffect(() => {
+        if (responseDeleteRoom?.success === true) {
+            refetch();
+        }
+    }, [responseDeleteRoom]);
+
+    useEffect(() => {
+        if (updateRoomDataResponse?.success === true) {
+            setData('');
+            roomRefetch();
+        }
+    }, [updateRoomDataResponse])
 
     // Handlers
     const handleChange = (e, cellName) => {
@@ -62,8 +70,6 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
         if (e.key === "Enter") {
             await updateRoomData(e);
             handleBlur();
-            setData('');
-            roomRefetch();
 
         } if (e.key == "Escape") {
             handleBlur();
@@ -74,9 +80,6 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
     const onDelete = async (e) => {
         await deleteSubmit(e);
         setDisabledDeleteButton(true);
-        setRowClass("deleted-row")
-        //setUndoButton(true);
-        //setUndoDeleteData({"undo": true});
     }
 
     const renderEditableCell = (cellName, width) => (
@@ -93,10 +96,10 @@ function EditSpecTableRow({ roomUid, totalColumns }) {
 
     return (
         <>
-            {response?.error && <MessageBox message={response.error} />}
+            {updateRoomDataResponse?.error && <MessageBox message={updateRoomDataResponse.error} />}
             <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover">
                 {
-                    roomLoading && roomLoading === true ? (
+                    roomLoading ? (
                         <>
                             {
                                 Array.from({ length: totalColumns }).map((_, index) => (

@@ -4,88 +4,69 @@ import { useParams } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch.jsx'
 
 import TapwaterIcon from '../../assets/svg/tapWaterIcon.jsx';
+import SanitaryShaftTable from './SanitaryShaftTable.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
 import TableTop from '../../layout/TableTop.jsx';
-import SanitaryShaftTableRowComponent from './SanitaryShaftTableRowComponent.jsx';
-import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import HelpBoxShafts from './HelpBoxShafts.jsx';
+import SortingButtons from '../../layout/SortingButtons.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
-import Table from '../../layout/tableelements/Table.jsx';
-import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
-import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
+import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
+
 
 
 function SanitaryShafts() {
     const { projectId } = useParams();
 
     // Initial fetch of data
-    const { data: buildingData, loading: buildingDataLoading } = useFetch(`/project_api/${projectId}/sanitary/buildings/`);
+    const { data: buildingData, loading } = useFetch(`/project_api/${projectId}/buildings/get_project_buildings/`);
 
-    //console.log(buildingData);
+    // Sorting
+    const [buildings, setBuildings] = useState([]);
+    const [currentBuilding, setCurrentBuilding] = useState(-1);
+
+
+    // useEffects
+    useEffect(() => {
+        if (buildingData?.success === true) {
+            const fetchedBuildingData = Object.keys(buildingData.data).map(key => buildingData.data[key])
+            setBuildings(fetchedBuildingData);
+        }
+    }, [buildingData]);
+
+
+    // Handlers
+    const sortButtonClick = (index) => {
+        setCurrentBuilding(index);
+    }
+
     return (
         <>
             <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitærsjakter"} projectName={""} projectNumber={""} />
             <MainContentContainer>
-                <div className="overflow-y-hidden flex justify-center items-center mr-5 ml-5 h-32 no-print">
-
-                </div>
-
                 {
-                    buildingDataLoading && buildingDataLoading === true ? (
-                        <div className="flex-container-center">
-                            <LoadingSpinner />
-                        </div>
+                    loading ? (
+                        <LoadingSpinner text="bygg" />
                     ) : (
                         <>
-                            <TableTop info={<HelpBoxShafts />} />
-                            <TableWrapper>
-                                <Table>
-                                    <thead>
-                                        <tr>
-                                            <TableTHelement width="10%">Bygg</TableTHelement>
-                                            <TableTHelement width="10%">Sjakt</TableTHelement>
-                                            <TableTHelement width="10%">Etasje</TableTHelement>
-                                            <TableTHelement width="10%">Kaldtvann <br />(L/s)</TableTHelement>
-                                            <TableTHelement width="10%">Varmtvann <br />(L/s)</TableTHelement>
-                                            <TableTHelement width="10%">Spillvann<br />(L/s)</TableTHelement>
-                                            <TableTHelement width="10%">KV Cu <br />mm</TableTHelement>
-                                            <TableTHelement width="10%">VV Cu <br /> mm</TableTHelement>
-                                            <TableTHelement width="10%">SPV 1:60 <br />mm</TableTHelement>
-                                            <TableTHelement width="10%">SPV Stående <br />mm</TableTHelement>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            buildingData && buildingData.building_data.map((building, buildingIndex) => (
-                                                Object.keys(building.shaft_summaries).map((shaft, shaftIndex) => (
-                                                    <React.Fragment key={shaftIndex}>
-                                                        {building.floors.map((floor, floorIndex) => {
-                                                            const summary = building.shaft_summaries[shaft][floor] || {};
-                                                            return (
-                                                                <SanitaryShaftTableRowComponent key={`${buildingIndex}-${shaftIndex}-${floorIndex}`} data={summary} shaft={shaft} floor={floor} name={building.BuildingName} />
-                                                            );
-                                                        })}
-                                                        <tr key={buildingIndex}>
-                                                            <TableTHelement width="10%" />
-                                                            <TableTHelement width="10%" />
-                                                            <TableTHelement width="10%" />
-                                                            <TableTHelement width="10%" />
-                                                            <TableTHelement width="10%" />
-                                                            <TableTHelement width="10%" />
-                                                            <TableTHelement width="10%" />
-                                                            <TableTHelement width="10%" />
-                                                            <TableTHelement width="10%" />
-                                                            <TableTHelement width="10%" />
-                                                        </tr>
-                                                    </React.Fragment>
-                                                ))
-                                            ))
-                                        }
-                                    </tbody >
-                                </Table>
-                            </TableWrapper>
+                            <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
+                            {
+                                currentBuilding === -1 ? (
+                                    <>
+                                        <div className="w-full flex justify-center mt-12">
+                                            Velg bygg
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <TableTop info={<HelpBoxShafts />} />
+                                        <SanitaryShaftTable projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                    </>
+                                )
+                            }
                         </>
-                    )}
+                    )
+                }
+
 
             </MainContentContainer>
 

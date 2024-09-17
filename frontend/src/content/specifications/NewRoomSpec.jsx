@@ -57,6 +57,30 @@ function NewRoomSpec() {
         setData({ "vav": "1", "ventilation_principle": "Omrøring", "heat_ex": "R", "co2": false, "temp": false, "movement": false, "moisture": false, "time": false, "notes": '' })
     }, [submitted]);
     
+    useEffect(() => {
+        if (response?.success === true) {
+            setData('');
+            setSubmitted(!submitted);
+            roomTypeRef.current.value = '';
+            airPerPersonRef.current.value = '';
+            airEmissionRef.current.value = '';
+            airProcessRef.current.value = '';
+            airMinimumRef.current.value = '';
+            ventilationPrincipleRef.current.value = ventilationPrincipleRef.current.options[0].value;
+            heatExRef.current.value = heatExRef.current.options[0].value;
+            vavRef.current.value = vavRef.current.options[0].value;
+            dbTechnicalRef.current.value = '';
+            dbNeighbourRef.current.value = '';
+            dbCorridorRef.current.value = '';
+            co2Ref.current.checked = false;
+            tempRef.current.checked = false;
+            movementRef.current.checked = false;
+            moistureRef.current.checked = false;
+            timeRef.current.checked = false;
+            notesRef.current.value = '';
+        }
+    },[response]);
+
     const handleInputChange = (e) => {
         setData({
             ...newData,
@@ -73,29 +97,7 @@ function NewRoomSpec() {
 
     const submitNewData = async (e) => {
         e.preventDefault();
-
-        //console.log(newData);
-        setData('');
-        setSubmitted(!submitted)
         await handleSubmit(e);
-
-        roomTypeRef.current.value = '';
-        airPerPersonRef.current.value = '';
-        airEmissionRef.current.value = '';
-        airProcessRef.current.value = '';
-        airMinimumRef.current.value = '';
-        ventilationPrincipleRef.current.value = ventilationPrincipleRef.current.options[0].value;
-        heatExRef.current.value = heatExRef.current.options[0].value;
-        vavRef.current.value = vavRef.current.options[0].value;
-        dbTechnicalRef.current.value = '';
-        dbNeighbourRef.current.value = '';
-        dbCorridorRef.current.value = '';
-        co2Ref.current.checked = false;
-        tempRef.current.checked = false;
-        movementRef.current.checked = false;
-        moistureRef.current.checked = false;
-        timeRef.current.checked = false;
-        notesRef.current.value = '';
     }
 
     const toggleHelpBox = (e) => {
@@ -107,8 +109,7 @@ function NewRoomSpec() {
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText="Nytt rom til kravspesifikasjon" projectName={data && data.spec_name} />
             <MainContentContainer>
-                {response?.success && <><MessageBox message={response.success} /> </>}
-                {response?.error && <><MessageBox message={response.error} /> </>}
+                {response?.error && <><MessageBox message={response.message} /> </>}
 
                 {
                     showHelpBox === true && (

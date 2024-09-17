@@ -1,5 +1,6 @@
 import math
 import datetime
+import time
 from sqlalchemy.inspection import inspect
 from sqlalchemy import func, and_, distinct, select
 from uuid import uuid4
@@ -88,16 +89,23 @@ def summarize_project_airflow(project_uid: str) -> float:
             models.Rooms.project_uid == project_uid).scalar()
     return airflow
 
-def update_project_description(project_uid: str, description: str) -> bool:
+def update_project_information(project_uid: str, project_number=None, project_name=None, project_description=None) -> bool:
     project = get_project(project_uid)
-    project.project_description = description
-    try:
-        db.session.commit()
-        return True
-    except Exception as e:
-        db.session.rollback()
-        globals.log(f"Could not update project description: {e}")
-        return False
+    if project:
+        if project_number:
+            project.project_number = project_number
+        if project_name:
+            project.project_name = project_name
+        if project_description:
+            project.project_description = project_description
+        try:
+            db.session.commit()
+            return True
+        except Exception as e:
+            globals.log(f"Could not update project information: {e}")
+            db.session.rollback()
+            return False
+    return False
     
 '''
 TODO-list
@@ -162,7 +170,9 @@ def get_building(building_uid: str) -> models.Buildings:
     return building
 
 def get_building_data(building_uid: str, include_ventilation: bool, include_heating: bool, include_sanitary: bool) -> dict:
-    building = db.session.query(models.Buildings).filter(models.Buildings.uid == building_uid).first()
+    building = get_building(building_uid)
+    if not building:
+        return {}
     building_data = building.get_json()
 
     floors = get_building_floors(building_uid)
@@ -284,6 +294,14 @@ def get_building_floors(building_uid: str) -> list[str]:
     cleaned_floors = [floor[0] for floor in floors]
     return cleaned_floors
 
+def get_all_rooms_building(building_uid: int) -> list[models.Rooms]:
+    rooms = db.session.query(models.Rooms).filter(
+        models.Rooms.building_uid == building_uid).order_by(
+                models.Rooms.room_number).all()
+    if rooms:
+        return rooms
+    return None
+
 def new_building(project_uid: str, building_name: str) -> bool:
     uid = globals.encode_uid_base64(uuid4())
     new_building = models.Buildings(uid=uid,
@@ -312,13 +330,13 @@ def new_building(project_uid: str, building_name: str) -> bool:
         db.session.rollback()
         return False
 
-def get_all_project_buildings(project_uid: int) -> list[models.Buildings]:
-    buildings = models.Buildings.query.filter(
+def get_all_project_buildings(project_uid: int):
+    buildings = db.session.query(models.Buildings).filter(
         models.Buildings.project_uid == project_uid).order_by(models.Buildings.building_name).all()
-    if buildings == []:
-        return None
-    else:
+    if buildings:
         return buildings
+    else:
+        return None
 
 def delete_building(building_uid: str) -> bool:
     rooms = db.session.query(models.Rooms).filter(models.Rooms.building_uid == building_uid).all()
@@ -823,7 +841,8 @@ Specifications
 
 def new_specifitaion(name: str):
     uid = globals.encode_uid_base64(uuid4())
-    specification = models.Specifications(uid=uid, name=name)
+    timestamp = int(time.time() * 1000)
+    specification = models.Specifications(uid=uid, name=name, created_at=timestamp, created_by="Admin")
     try:
         db.session.add(specification)
         db.session.commit()
@@ -846,7 +865,7 @@ def get_specification_by_name(name: str) -> models.Specifications:
     return spec
 
 # Get list of all specifications in database
-def get_specifications() -> list:
+def get_specifications() -> list[models.Specifications]:
     spec_list = []
     specifications = models.Specifications.query.all()
     for spec in specifications:
@@ -1101,12 +1120,6 @@ def calculate_total_heat_loss_for_room(room_uid: int) -> bool:
         db.session.rollback()
         return False
 
-def get_all_rooms_building(building_uid: int) -> list[models.Rooms]:
-    rooms = db.session.query(models.Rooms).join(models.Buildings).filter(
-        models.Buildings.uid == building_uid).all()
-    if rooms:
-        return rooms
-    return None
 
 def sum_heatloss_demand_building_floor(building_uid: str, floor: str) -> float:
     heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(and_(

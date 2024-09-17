@@ -1,6 +1,5 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
 
 // Hooks
 import useFetch from '../../hooks/useFetch';
@@ -13,19 +12,19 @@ import MessageBox from '../../layout/MessageBox';
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
 import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import LoadingRow from "../../layout/tableelements/LoadingRow.jsx";
 
 
-function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, index }) {
+function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }) {
     const { projectId } = useParams();
-    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
-    const [extraAirNeeded, setExtraAirNeeded] = useState(0)
 
+    const [extraAirNeeded, setExtraAirNeeded] = useState(0)
 
     // Initial fetches and refetch
     const { data: coolingData, loading: coolingLoading, error: coolingError, refetch: coolingRefetch } = useFetch(`/project_api/${projectId}/cooling/get_room/${roomId}/`);
 
     // Update data
-    const { data: updatedRoomData, response: updateRoomDataResponse, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/cooling/update_room/${roomId}/`);
+    const { response: updateRoomDataResponse, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/cooling/update_room/${roomId}/`);
     const { data: updateVentilationData, response: updateVentDataResponse, setData: setUpdateVentData, handleSubmit: updateVentilationDataSubmit } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomId}/1/`);
 
     // Edit of values
@@ -38,7 +37,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
     // useEffects
     useEffect(() => { // Refetch upon received message that cooling settings has changed
         coolingRefetch();
-    }, [settingsUpdateState]);
+    }, [settingsUpdatedState]);
 
     useEffect(() => {
         if (coolingData) {
@@ -48,12 +47,12 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
     }, [coolingData]);
 
     useEffect(() => {
-        if (updateVentDataResponse && updateVentDataResponse.success === true) {
+        if (updateVentDataResponse?.success === true) {
             console.log("Vent data response: ", updateVentDataResponse);
             setUpdateVentData({});
             coolingRefetch();
         }
-        if (updateRoomDataResponse && updateRoomDataResponse.success === true) {
+        if (updateRoomDataResponse?.success === true) {
             console.log("Room data response: ", updateRoomDataResponse);
             setData({});
             coolingRefetch();
@@ -126,17 +125,12 @@ function CoolingTableRowComponent({ roomId, settingsUpdateState, totalColumns, i
 
     return (
         <>
-        {updateRoomDataResponse?.success === false && <MessageBox message={updateRoomDataResponse.message} />}
+            {updateRoomDataResponse?.success === false && <MessageBox message={updateRoomDataResponse.message} />}
+            {coolingError && <MessageBox message={coolingError} /> }
             <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
                     coolingLoading && coolingLoading === true ? (
-                        <>
-                            {
-                                Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="blur-sm opacity-50" key={index}>####</td>
-                                ))
-                            }
-                        </>
+                        <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
                             <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>

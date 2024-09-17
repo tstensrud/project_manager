@@ -16,20 +16,25 @@ import CardButton from '../../layout/formelements/CardButton';
 import CardSelect from '../../layout/formelements/CardSelect';
 import CardInputField from '../../layout/formelements/CardInputField.jsx';
 import TextArea from '../../layout/formelements/TextArea.jsx';
+import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 
 function Settings() {
     const { projectId } = useParams();
-    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
     const { data, loading, error } = useFetch(`/project_api/${projectId}/settings/`);
     const { data: specData, loading: specLoading, error: specError } = useFetch(`/specifications/get_specifications/`);
     const { data: updatedProjectData, setData: setUpdatedProjectData, response: updatedDataResponse, error: updatedProjectDataError, handleSubmit: updateProjectDataSubmit } = useUpdateData(`/project_api/${projectId}/settings/update_project/`);
 
     const [description, setDescription] = useState();
+    const [projectNumber, setProjectNumber] = useState();
+    const [projectName, setProjectName] = useState();
+
     const navigate = useNavigate();
 
     // useEffects
     useEffect(() => {
         setDescription(data?.data?.ProjectDescription);
+        setProjectName(data?.data?.ProjectName);
+        setProjectNumber(data?.data?.ProjectNumber)
     }, [data]);
 
     useEffect(() => {
@@ -47,6 +52,10 @@ function Settings() {
         });
         if (e.target.name === "description") {
             setDescription(e.target.value);
+        } else if (e.target.name === "project_number") {
+            setProjectNumber(e.target.value);
+        } else if (e.target.name === "project_name") {
+            setProjectName(e.target.value);
         }
     }
 
@@ -60,47 +69,67 @@ function Settings() {
             <MainContentContainer>
 
                 <div className="flex justify-center flex-row w-full">
-
-
                     <ContentCard>
-                        <form onSubmit={handleOnSubmit}>
-                            <h2 >Rediger prosjektinnstillinger</h2>
-                            <div>Prosjektnummer</div>
-                            <div>
-                                <CardInputField type="text" name="project_number" key="number" value={data && data.data.ProjectNumber} />
-                            </div>
+                        <div className="w-[900px]">
+                            {
+                                loading && specLoading ? (
+                                    <LoadingSpinner text="prosjektinnstillinger" />
+                                ) : (
+                                    <form onSubmit={handleOnSubmit}>
+                                        <h2 >Rediger prosjektinnstillinger</h2>
+                                        <div>Prosjektnummer</div>
+                                        <div>
+                                            <CardInputField type="text" name="project_number" changeFunction={handleChange} key="number" value={projectNumber} />
+                                        </div>
 
-                            <div className="mt-3">Prosjektnavn</div>
-                            <div>
-                                <CardInputField type="text" name="project_name" key="name" value={data && data.data.ProjectName} />
-                            </div>
-                            <div className="mt-3">Prosjektbeskrivelse</div>
-                            <div>
-                                <TextArea className="form-text-area" name="description" changeFunction={handleChange} value={description} />
-                            </div>
-                            <div className="mt-3">Kravspesifikasjon</div>
-                            <div>
-                                <CardSelect name="project_specification" changeFunction={handleChange}>
-                                    <option value="none">- Velg -</option>
+                                        <div className="mt-3">Prosjektnavn</div>
+                                        <div>
+                                            <CardInputField type="text" name="project_name" changeFunction={handleChange} key="name" value={projectName} />
+                                        </div>
+                                        <div className="mt-3">Prosjektbeskrivelse</div>
+                                        <div>
+                                            <TextArea className="form-text-area" name="description" changeFunction={handleChange} value={description} />
+                                        </div>
+                                        <div className="mt-3">Kravspesifikasjon</div>
+                                        <div>
+                                            <CardSelect name="project_specification" changeFunction={handleChange}>
+                                                <option value="none">- Velg -</option>
 
-                                    {
-                                        specData && specData.data !== undefined && specData.data !== '' ? (
-                                            <>
-                                                {specData.data.map((spec, index) => (<option key={index} value={spec.id}>{spec.name}</option>))}
-                                            </>
-                                        ) : (
-                                            <option>Ingen spesifikasjoner</option>
-                                        )
-                                    }
-                                </CardSelect>
+                                                {
+                                                    specData?.success === true ? (
+                                                        Object.keys(specData.data).map((key, index) => (
+                                                            <option key={index} value={specData.data[key].uid}>{specData.data[key].name}</option>
+                                                        ))
 
-                            </div>
-                            <div className="mt-3">
-                                <CardButton buttonText="Oppdater" />
-                            </div>
-                        </form>
+                                                    ) : (
+                                                        <option>Ingen spesifikasjoner</option>
+                                                    )
+                                                }
+                                            </CardSelect>
+
+                                        </div>
+                                        <div className="mt-3">
+                                            <CardButton buttonText="Oppdater" />
+                                        </div>
+                                        {
+                                            updatedDataResponse?.success === false && (
+                                                <div className="mt-3">
+                                                    {updatedDataResponse.message}
+                                                </div>
+                                            )
+                                        }
+                                        {
+                                            updatedProjectDataError && (
+                                                <div className="mt-3">
+                                                    {updatedProjectDataError}
+                                                </div>
+                                            )
+                                        }
+                                    </form>
+                                )
+                            }
+                        </div>
                     </ContentCard>
-
                 </div>
             </MainContentContainer>
         </>

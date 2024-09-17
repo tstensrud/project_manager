@@ -1,5 +1,5 @@
-import { useEffect, useState, useContext } from 'react';
-import { Form, useNavigate } from 'react-router-dom';
+import { useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // Hooks ++
 import { GlobalContext } from '../../GlobalContext';
@@ -16,13 +16,13 @@ import TextArea from '../../layout/formelements/TextArea.jsx';
 
 function NewProject() {
 
-    const { activeProject, setActiveProject, setActiveProjectName } = useContext(GlobalContext);
+    const { setActiveProject, setActiveProjectName } = useContext(GlobalContext);
     const { data, setData, response, loading, error, handleSubmit } = useSubmitData('/projects/new_project/');
     const navigate = useNavigate();
 
     useEffect(() => {
         setActiveProject(null);
-        setActiveProjectName(null)
+        setActiveProjectName(null);
     }, []);
 
     useEffect(() => {
@@ -40,8 +40,7 @@ function NewProject() {
     }
 
     const submitProject = async (e) => {
-        await handleSubmit(e);
-        setData('');   
+        await handleSubmit(e);  
     }
     
     return (
@@ -76,7 +75,10 @@ function NewProject() {
                         </div>
                         <div>
                             {
-                                response?.success === false && <>{response.message}</>
+                                response?.success === false && response.message
+                            }
+                            {
+                                error && error
                             }
                         </div>
                     </ContentCard>

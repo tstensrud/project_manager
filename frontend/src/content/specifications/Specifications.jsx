@@ -1,8 +1,6 @@
-import { Link, useParams } from 'react-router-dom';
-import { useEffect, useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 // Hooks ++
-import { GlobalContext } from '../../GlobalContext';
 import useFetch from '../../hooks/useFetch'
 
 // components
@@ -13,14 +11,10 @@ import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import ContentCard from '../../layout/ContentCard.jsx';
 
 function Specifications() {
-    const { projectId } = useParams();
-    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
+
     const { data, loading, error, refetch } = useFetch(`/specifications/get_specifications/`);
 
-    /* useEffect(() => {
-        setActiveProject(projectId);
-    }, []); */
-
+    console.log(data)
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Kravspesifikasjoner"} projectName={""} projectNumber={""} />
@@ -29,31 +23,58 @@ function Specifications() {
                     <ContentCard>
                         {
                             loading && loading === true ? (
-                                <LoadingSpinner />
+                                <LoadingSpinner text="kravspesifikasjoner" />
                             ) : (
                                 <>
-                                    <h2>Kravspesifikasjoner i databasen</h2>
-                                    <p className="info">
+                                    <div className="mb-3">
+                                        <h2>Kravspesifikasjoner i databasen</h2>
+                                    </div>
+                                    <div className="mb-3">
                                         Velg kravspesifikasjon fra listen under for å og legge til romtyper.
                                         Du kan opprette en ny for ditt prosjekt dersom de eksisterende i databasen ikke er relevante
-                                    </p>
-                                    <span className="info">
-                                        <ul>
-                                            {
-                                                data && data.data !== null ? (
-                                                    data.data.map((spec, index) => (
-                                                        <li key={index}>
-                                                            <Link to={`/specifications/${spec.id}/`}>{spec.name}</Link>
-                                                        </li>
-                                                    )
-                                                    )) : (
-                                                    <>
-                                                        Ingen spesifikasjoner i databasen
-                                                    </>
-                                                )
-                                            }
-                                        </ul>
-                                    </span>
+                                    </div>
+                                    <div>
+                                        <div className="w-full flex flex-col">
+                                            <table>
+                                                <thead>
+                                                    <tr className="bg-tertiary-color border-default-border-color dark:bg-dark-tertiary-color border-b dark:border-b-dark-default-border-color">
+                                                        <th className="pt-1 pb-1 pl-3">
+                                                            Kravspesifikasjon
+                                                        </th>
+                                                        <th className="pt-1 pb-1">
+                                                            Opprettet
+                                                        </th>
+                                                        <th className="pt-1 pb-1 pr-3">
+                                                            Opprettet av
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        data?.success === true ? (
+                                                            Object.keys(data.data).map((key, index) => (
+                                                                <tr className="hover:dark:bg-table-hover hover:bg-table-hover border-default-border-color border-b dark:border-b-dark-default-border-color" key={index}>
+                                                                    <td className="pt-1 pb-1 pl-3">
+                                                                        <Link to={`/specifications/${data.data[key].uid}/`}>{data.data[key].name}</Link>
+                                                                    </td>
+                                                                    <td className="pt-1 pb-1">
+                                                                        {data.data[key].created_at}
+                                                                    </td>
+                                                                    <td className="pt-1 pb-1 pr-3">
+                                                                        {data.data[key].created_by}
+                                                                    </td>
+                                                                </tr>
+                                                            )
+                                                            )) : (
+                                                            <>
+                                                                Ingen spesifikasjoner i databasen
+                                                            </>
+                                                        )
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </>
                             )
                         }

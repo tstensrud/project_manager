@@ -16,7 +16,7 @@ function ProjectSummary({ projectId }) {
         <ContentCard>
             {
                 loading && loading === true ? (
-                    <LoadingSpinner />
+                    <LoadingSpinner text="prosjektinfo" />
                 ) : (
                     <>
                         {

@@ -1,6 +1,5 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
 
 // Hooks
 import useFetch from '../../hooks/useFetch';
@@ -8,6 +7,7 @@ import useUpdateData from '../../hooks/useUpdateData';
 
 // Components
 import MessageBox from '../../layout/MessageBox';
+import LoadingRow from '../../layout/tableelements/LoadingRow.jsx';
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -15,17 +15,14 @@ import EditableInputField from "../../layout/tableelements/EditableInputField.js
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 
 
-function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData, totalColumns }) {
+function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
     const { projectId } = useParams();
-    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
-    //console.log(allRoomData);
-
-
+    
     // Initial fetches and refetch
     const { data: sanitaryData, loading: sanitaryLoading, error: sanitaryError, refetch: sanitaryRefetch } = useFetch(`/project_api/${projectId}/sanitary/get_room/${roomId}/`);
 
     // Update data
-    const { data: updatedRoomData, response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/sanitary/update_room/${roomId}/`);
+    const { response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/sanitary/update_room/${roomId}/`);
 
 
     // Edit of values
@@ -35,15 +32,20 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
     // Marking a row
     const [markedRow, setMarkedRow] = useState('');
 
-    // Roomdata
-    const [showRoomData, setShowRoomData] = useState(false);
-
     // useEffects
     useEffect(() => {
         if (sanitaryData) {
             setEditedData('');
         }
     }, [sanitaryData]);
+
+    useEffect(() => {
+        if(response?.success === true) {
+            setData('');
+            sanitaryRefetch();
+            buildingReFetch();
+        }
+    },[response])
 
 
     // Handlers
@@ -66,9 +68,6 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
         if (e.key === "Enter") {
             await updateRoomData(e);
             handleBlur();
-            setData('');
-            sanitaryRefetch();
-            buildingReFetch();
         } if (e.key == "Escape") {
             handleBlur();
             return;
@@ -77,7 +76,7 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('bg-marked-row text-primary-color');
+            setMarkedRow('bg-marked-row text-primary-color dark:bg-dark-marked-row dark:text-dark-primary-color');
         } else {
             setMarkedRow('');
         }
@@ -94,7 +93,7 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
             }
         </TableTDelement>
     );
-
+    
     return (
         <>
 
@@ -102,13 +101,7 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
             <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
                     sanitaryLoading && sanitaryLoading === true ? (
-                        <>
-                            {
-                                Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="blur-sm opacity-50" key={index}>####</td>
-                                ))
-                            }
-                        </>
+                        <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
                             <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
@@ -117,10 +110,10 @@ function SanitaryTableRowComponent({ roomId, buildingReFetch, index, allRoomData
 
                             <TableTDelement width="12%">
                                 <div className="font-semibold">
-                                {allRoomData ? allRoomData.RoomNumber : ''}
+                                {sanitaryData?.room_data ? sanitaryData.room_data.RoomNumber : ''}
                                 </div>
                                 <div className="text-grey-text dark:text-dark-grey-text uppercase font-semibold">
-                                    {allRoomData ? allRoomData.RoomName : ''}
+                                    {sanitaryData?.room_data ? sanitaryData.room_data.RoomName : ''}
                                 </div>
                             </TableTDelement>
                             {renderEditableCell("shaft", "5%")}

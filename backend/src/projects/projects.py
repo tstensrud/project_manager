@@ -9,13 +9,13 @@ projects_bp = Blueprint('projects', __name__, static_folder='static', template_f
 @projects_bp.route('/', methods=['GET'])
 @jwt_required()
 def projects():
-    projects_objects = dbo.get_all_projects()
-    project_json_data = list(map(lambda x: x.get_json(), projects_objects))
-
-    if project_json_data:
-        return jsonify({"data": project_json_data})
-    else:
-        return jsonify({"data": "Ingen prosjekter opprettet"})
+    projects = dbo.get_all_projects()
+    if projects:
+        project_data = {}
+        for project in projects:
+            project_data[project.uid] = project.get_json()
+        return jsonify({"success": True, "data": project_data})    
+    return jsonify({"success": False, "message": "Ingen prosjekter opprettet"})
         
 
 @projects_bp.route('/new_project/', methods=['POST'])

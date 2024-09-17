@@ -2,8 +2,7 @@ import json
 from datetime import datetime, timezone, timedelta
 #import pandas as pd
 from flask import Blueprint, jsonify, request
-from flask_login import current_user
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
 from flask_jwt_extended import jwt_required
 from .. import db_operations as dbo
 from ..globals import replace_and_convert_to_float
@@ -44,9 +43,8 @@ def get_specifications():
     specifications = dbo.get_specifications()
     spec_data = {}
     for specification in specifications:
-        spec_data[specification.uid] = specification.name
-    spec_list = [{"id": key, "name": value} for key, value in spec_data.items()]
-    return jsonify({"data": spec_list})
+        spec_data[specification.uid] = specification.get_json()
+    return jsonify({"success": True, "data": spec_data})
 
 @specifications_bp.route('/get_spec_room_data/<spec_uid>/', methods=['GET'])
 @jwt_required()
@@ -114,7 +112,7 @@ def new_room_for_spec(spec_uid):
             if key == "room_type":
                 room_type = dbo.find_room_type_for_specification(spec_uid, value)
                 if room_type is True:
-                    return jsonify({f"error_{key}": "Romtype finnes allerede"})
+                    return jsonify({"success": False, "message": f"Romtype {key} finnes allerede"})
                 else:
                     processed_data[key] = escape(value).strip()
             if key in float_values:
@@ -122,15 +120,15 @@ def new_room_for_spec(spec_uid):
                 converted_value = replace_and_convert_to_float(cleansed_value)
                 if converted_value is False:
                     print(f"Could not convert value: {value}")
-                    return jsonify({f"error_{key}": "Luftmengder må kun inneholde tall"})
+                    return jsonify({"success": False, "message": f"Luftmengder må kun inneholde tall"})
                 else:
                     processed_data[key] = converted_value
             else:
                 processed_data[key] = escape(value).strip()
         #print(f"Data: {processed_data}.")
         if dbo.new_specification_room_type(spec_uid, processed_data):
-            return jsonify({"success": "Rom lagt til"})
-    return jsonify({"error", "Kunne ikke legge til nytt rom."})
+            return jsonify({"success": True, "message": "Rom lagt til"})
+    return jsonify({"success": False, "message": "Kunne ikke legge til nytt rom."})
 
 
 @specifications_bp.route('/new_specification/', methods=['POST'])
@@ -140,11 +138,11 @@ def new_specification():
     if data:
         spec_name = escape(data["spec_name"])
         if dbo.find_specification_name(spec_name):
-            return jsonify({"error", f"Kravspesifikasjon {spec_name} finnes allerede i databasen"})
+            return jsonify({"success": False, "message": f"Kravspesifikasjon {spec_name} finnes allerede i databasen"})
         else:
             new_spec = dbo.new_specifitaion(spec_name)
             if new_spec is not None:
-                return jsonify({"response": "Kravspesfikasjon opprettet", "data": new_spec})
+                return jsonify({"success": True, "message": "Kravspesfikasjon opprettet", "data": new_spec})
             else:
                 return jsonify({"success": False, "error": "Kunne ikke opprette ny kravspesifikasjon"})
     else:

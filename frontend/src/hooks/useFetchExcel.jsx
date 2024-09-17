@@ -14,7 +14,7 @@ const useFetchExcel = (endpoint) => {
           setResponse(res.data);
           setLoading(false);
         } catch (err) {
-          setError(err);
+          setError(err.response ? err.response.data : err.message);
           setLoading(false);
         }
       };

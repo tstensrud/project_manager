@@ -1,10 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
 
 // Hooks
 import useFetch from '../../hooks/useFetch'
-import useSubmitData from "../../hooks/useSubmitData";
 import useUpdateData from '../../hooks/useUpdateData';
 import useDeleteData from '../../hooks/useDeleteData';
 
@@ -17,15 +15,15 @@ import TableButton from "../../layout/tableelements/TableButton.jsx";
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
+import LoadingSpinner from "../../layout/LoadingSpinner.jsx";
 
-function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
+function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
     const { projectId } = useParams();
-    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
 
     // Hooks
     const { data: systemData, loading: systemLoading, error: systemError, refetch: systemRefetch } = useFetch(`/project_api/${projectId}/get_system/${systemId}/`);
-    const { data: updatedSystemData, response, setData, handleSubmit: updateSystemData } = useUpdateData(`/project_api/${projectId}/update_system/${systemId}/`);
-    const { data: deleteSystemId, responseDeleteSystem, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/project_api/${projectId}/delete_system/${systemId}/`);
+    const { data: updatedSystemData, response: updateSystemDataResponse, setData, handleSubmit: updateSystemData } = useUpdateData(`/project_api/${projectId}/update_system/${systemId}/`);
+    const { data: deleteSystemId, response: responseDeleteSystem, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/project_api/${projectId}/delete_system/${systemId}/`);
 
     // Use states
     const [editingCell, setEditingCell] = useState(null);
@@ -46,12 +44,21 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
         }
     }, [systemData]);
 
+    useEffect(() => {
+        if (responseDeleteSystem?.success === true) {
+            systemsRefetch();   
+        }
+    },[responseDeleteSystem]);
+
+    useEffect(() => {
+        if (updateSystemDataResponse?.sucess === true) {
+            setData('');
+            systemRefetch();
+        }
+    },[updateSystemDataResponse])
+
 
     // Handlers
-    const sendMessageToParent = (msg) => {
-        msgToParent(msg);
-    }
-
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
     };
@@ -71,8 +78,6 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
     const deleteSystem = async (e) => {
         await deleteSubmit(e);
         setDisabledDeleteButton(true);
-        setRowClass("deleted-row")
-        sendMessageToParent("deleted");
     }
 
     const handleBlur = () => {
@@ -83,8 +88,6 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
         if (e.key === "Enter") {
             await updateSystemData(e);
             handleBlur();
-            setData('');
-            systemRefetch();
         } if (e.key == "Escape") {
             handleBlur();
             return;
@@ -113,19 +116,13 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
 
     return (
         <>
-            {response && response.error !== null && response.error !== undefined ? (<MessageBox message={response.error} />) : (<></>)}
+            {updateSystemDataResponse?.success === false && (<MessageBox message={updateSystemDataResponse.message} />)}
 
             <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
 
                 {
-                    systemLoading && systemLoading === true ? (
-                        <>
-                            {
-                                Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="blur-sm opacity-50">###</td>
-                                ))
-                            }
-                        </>
+                    systemLoading ? (
+                        <LoadingSpinner text="systemer" />
                     ) : (
                         <>
                             <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
@@ -158,7 +155,9 @@ function SystemTableRowComponent({ systemId, msgToParent, totalColumns }) {
                                 {systemData && systemData.system_data.AirFlowExtract > systemData.system_data.AirFlow ? (<>For mye avtrekk. </>) : (<></>)}
                             </TableTDelement>
                             <TableTDelement width="10%">
-                                {showDeleteDialog === true ? (<></>) : (<TableButton clickFunction={showDeleteBox} buttonText="Slett" />)}
+                                <div className="pt-1 pb-1">
+                                    {showDeleteDialog === true ? (<></>) : (<TableButton clickFunction={showDeleteBox} buttonText="Slett" />)}
+                                </div>
                             </TableTDelement>
                         </>
                     )

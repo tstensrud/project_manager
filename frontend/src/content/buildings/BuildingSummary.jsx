@@ -10,6 +10,7 @@ import CardTitle from '../../layout/CardTitle';
 import ContentCard from '../../layout/ContentCard';
 import CardButton from '../../layout/formelements/CardButton';
 import CardInputField from '../../layout/formelements/CardInputField.jsx';
+import MessageBox from '../../layout/MessageBox.jsx'
 
 // SVG imports
 import PlusIcon from '../../assets/svg/plusIcon.jsx';
@@ -81,7 +82,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
     return (
 
         <ContentCard>
-
+            {response?.success === false && <MessageBox message={response.message} /> }
             {
                 editBuildingContainer && editBuildingContainer === true ? (
                     <>
@@ -90,17 +91,11 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                                 <div className="flex mb-1">
                                     <CardInputField changeFunction={handleNameChange} name="buildingName" placeholder="Endre navn.."/>
                                 </div>
-                                <div className="flex">
-                                    <CardButton buttonText="Lagre"/>
+                                <div className="flex items-center">
+                                    <CardButton buttonText="Lagre"/> {error && error}
                                 </div>
                             </div>
                         </form>
-                        <div className="flex mr-4">
-                            <span className="text-supply-color">
-                                {response && response.error ? <>FEIL: {response.error}</> : ''}
-                                {error && error ? <>{error}</> : ""}
-                            </span>
-                        </div>
                     </>
                 ) : (
                     <CardTitle svg={<BuildingIcon />} title={buildingName} />
@@ -164,7 +159,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                                         <CardButton buttonText="Avbryt" clickFunction={closeEditOptions} />
                                     </div>
                                 </div>
-                                <div>
+                                <div className="mt-3">
                                     {
                                         deleteResponse && deleteResponse.success === false ? deleteResponse.error : ''
                                     }

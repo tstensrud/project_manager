@@ -1,6 +1,5 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
 
 // Hooks
 import useFetch from '../../hooks/useFetch';
@@ -10,6 +9,7 @@ import useUpdateSystem from '../../hooks/useUpdateSystem';
 // Components
 import RoomData from './RoomData';
 import MessageBox from '../../layout/MessageBox';
+import LoadingRow from '../../layout/tableelements/LoadingRow.jsx';
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -18,17 +18,14 @@ import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import TableSelect from "../../layout/tableelements/TableSelect.jsx";
 
 
-function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoomData, totalColumns }) {
+function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, totalColumns }) {
     const { projectId } = useParams();
-    const { activeProject, setActiveProject, token, setToken } = useContext(GlobalContext);
-    //console.log(allRoomData);
-
 
     // Initial fetches and refetch
     const { data: ventData, loading: ventLoading, error: ventError, refetch: ventRefetch } = useFetch(`/project_api/${projectId}/ventilation/get_room/${roomId}/`);
 
     // Update data
-    const { data: updatedRoomData, response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomId}/0/`);
+    const { response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomId}/0/`);
     const { systemData, response: systemResponse, setSystemData, handleSubmit: updateSystemData } = useUpdateSystem(`/project_api/${projectId}/ventilation/update_room/${roomId}/0/`);
 
     // Edit of values
@@ -74,7 +71,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
             ventRefetch();
             buildingReFetch();
         }
-    },[response]);
+    }, [response]);
 
     // Handlers
     const handleEdit = (cellName) => {
@@ -166,17 +163,12 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, index, allRoo
         <>
             {showRoomData ? <RoomData roomData={allRoomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
             {response?.success === false && <MessageBox message={response.message} />}
-            {systemResponse?.success === false && <MessageBox message={systemResponse.message}/>}
+            {systemResponse?.success === false && <MessageBox message={systemResponse.message} />}
+            {ventError && <MessageBox message={ventError} />}
             <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
-                    ventLoading && ventLoading === true ? (
-                        <>
-                            {
-                                Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="blur-sm opacity-50" key={index}>#### <br /></td>
-                                ))
-                            }
-                        </>
+                    ventLoading  ? (
+                        <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
 

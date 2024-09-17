@@ -1,4 +1,5 @@
 from . import db
+from datetime import datetime
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
@@ -65,19 +66,24 @@ class Projects(db.Model):
     project_name = db.Column(db.String(50), nullable=False)
     project_description = db.Column(db.Text)
     specification = db.Column(db.String(50))
+    created_at = db.Column(db.Integer)
 
     todo_item = db.relationship('TodoItem', backref='project', uselist=False, lazy=True)
     buildings = db.relationship('Buildings', backref='project', uselist=False, lazy=True)
     ventilation_systems = db.relationship('VentilationSystems', backref='project', uselist=False, lazy=True)
     
     def get_json(self):
+        timestamp = int(self.created_at) / 1000
+        created_at = datetime.fromtimestamp(timestamp)
+        formatted_time = created_at.strftime("%Y")
         return {
             "id": self.id,
             "uid": self.uid,
             "ProjectNumber": self.project_number,
             "ProjectName": self.project_name,
             "ProjectDescription": self.project_description,
-            "Specification": self.specification
+            "Specification": self.specification,
+            "CreatedAt": formatted_time
         }
 
 class Buildings(db.Model):
@@ -358,14 +364,21 @@ class Specifications(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     uid = db.Column(db.String(250), unique=True)
     name = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.Integer)
+    created_by = db.Column(db.String(255))
 
     room_types = db.relationship("RoomTypes", backref="specifications", lazy=True)
 
     def get_json(self):
+        timestamp = int(self.created_at) / 1000
+        created_at = datetime.fromtimestamp(timestamp)
+        formatted_date = created_at.strftime("%Y-%m-%d")
         return {
             "id": self.id,
             "uid": self.uid,
-            "name": self.name
+            "name": self.name,
+            "created_at": formatted_date,
+            "created_by": self.created_by
         }
     
 class RoomTypes(db.Model):

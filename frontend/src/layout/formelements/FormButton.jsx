@@ -28,7 +28,9 @@ function FormButton(props) {
                         hover:dark:border-dark-form-element-hover
                         focus:border-form-focus-border-color
                         focus:dark:border-dark-form-focus-color
-                        focus:outline-none">
+                        focus:outline-none"
+                        disabled={props.disabled}
+                        >
                         {props.buttonText}
                     </button>
                 ) : (
@@ -54,8 +56,11 @@ function FormButton(props) {
                         hover:dark:border-dark-form-element-hover
                         focus:border-form-focus-border-color
                         focus:dark:border-dark-form-focus-color
-                        focus:outline-none">
+                        focus:outline-none"
+                        disabled={props.disabled}
+                        >
                         {props.buttonText}
+                        
                     </button>
                 )
             }

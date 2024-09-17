@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // hooks
 import useFetch from '../../hooks/useFetch'
@@ -12,10 +12,11 @@ import CardSelect from '../../layout/formelements/CardSelect.jsx';
 import CardButton from '../../layout/formelements/CardButton.jsx';
 import SummaryHeader from './components/SummaryHeader.jsx';
 import EquipmentContainer from './components/EquipmentContainer.jsx';
+import MessageBox from '../../layout/MessageBox';
 
 function BuildingSummary({ buildingUid, projectId }) {
 
-    const { data: curveData, setData, handleSubmit } = useUpdateData(`/project_api/${projectId}/sanitary/update_curve/${buildingUid}/`);
+    const { response, setData, handleSubmit } = useUpdateData(`/project_api/${projectId}/sanitary/update_curve/${buildingUid}/`);
     const { data: buildingSummaryData, loading: buildingSummaryDataLoading, refetch } = useFetch(`/project_api/${projectId}/sanitary/building_summary/${buildingUid}/`);
 
     const translateEquipment = (name) => {
@@ -55,6 +56,12 @@ function BuildingSummary({ buildingUid, projectId }) {
         }
     }
 
+    useEffect(() => {
+        if (response?.success === true) {
+            refetch();
+        }
+    }, [response]);
+
     const handleCurveChange = (e) => {
         e.preventDefault();
         if (e.target.value === "") {
@@ -67,10 +74,14 @@ function BuildingSummary({ buildingUid, projectId }) {
     const handleCurveSubmit = async (e) => {
         e.preventDefault();
         await handleSubmit(e);
-        refetch();
     }
 
     return (
+        <>
+        {
+            response?.success === false && <MessageBox message={response.message} />
+        }
+
         <ContentCard>
             <div className="flex w-[400px] mb-5">
                 <div className="flex w-[40%]">
@@ -83,17 +94,19 @@ function BuildingSummary({ buildingUid, projectId }) {
 
             {
                 buildingSummaryDataLoading && buildingSummaryDataLoading === true ? (
-                    <LoadingSpinner />
+                    <LoadingSpinner text="sanitærdata" />
                 ) : (
                     <>
                         <div className="flex w-full flex-row mb-3 ">
                             <div className="mr-3">
                                 Avløpskurve:
                             </div>
-                            <strong>{buildingSummaryData && buildingSummaryData.building_data.GraphCurve}</strong>
+                            <strong>
+                                {buildingSummaryData && buildingSummaryData.building_data.GraphCurve}
+                            </strong>
                         </div>
                         <form onSubmit={handleCurveSubmit}>
-                            <div className="mb-1 flex flex-row">
+                            <div className="mb-3 flex flex-row">
                                 <div className="mr-3">
                                     <CardSelect changeFunction={handleCurveChange}>
                                         <option value="">- Velg avløpskurve -</option>
@@ -141,6 +154,7 @@ function BuildingSummary({ buildingUid, projectId }) {
                 )
             }
         </ContentCard>
+        </>
     );
 }
 

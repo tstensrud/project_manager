@@ -17,7 +17,7 @@ function BuildingRoomData({ projectId }) {
                 <div className="border-0 p-3 rounder-lg">
                     {
                         loading && loading === true ? (
-                            <LoadingSpinner />
+                            <LoadingSpinner text="romdata" />
 
                         ) : (
                             <>

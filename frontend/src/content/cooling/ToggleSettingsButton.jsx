@@ -2,25 +2,23 @@ import { useState } from 'react';
 
 // Components
 import CoolingSettings from './CoolingSettings';
-import ActiveSortingButton from '../../layout/formelements/ActiveSortingButton.jsx'
+import SortingButton from '../../layout/formelements/SortingButton.jsx'
 
-function HeatingSettingsWindow({ buildingUid, onSettingsButtonUpdate }) {
+function HeatingSettingsWindow({ buildingUid, onSettingsButtonUpdate, buttonText }) {
     const [showCoolingSettings, setShowCoolingSettings] = useState(false);
-    const [settingsUpdatedState, setSettingsUpdatedState] = useState(false);
-
+    
     // Upon pass change from CoolingSettings to Cooling
     const handleSettingsUpdate = () => {
         onSettingsButtonUpdate();
     }
 
-    const handleClick = (e) => {
-        e.preventDefault();
+    const handleClick = () => {
         setShowCoolingSettings(!showCoolingSettings);
     }
     return (
         <>
-            <ActiveSortingButton sortButtonClick={(e) => handleClick(e, setShowCoolingSettings)} buttonText="Kjøledata" />
-            {showCoolingSettings && <CoolingSettings onSettingsUpdate={handleSettingsUpdate} key={buildingUid} buildingUid={buildingUid} showHeatingSettings={showCoolingSettings} setShowHeatingSettings={setShowCoolingSettings} />}
+            <SortingButton sortButtonClick={handleClick} buttonText={buttonText} />
+            {showCoolingSettings && <CoolingSettings onSettingsUpdate={handleSettingsUpdate} key={buildingUid} buildingUid={buildingUid} showCoolingSettings={showCoolingSettings} setShowCoolingSettings={setShowCoolingSettings} />}
         </>
     );
 }

@@ -1,6 +1,6 @@
 function TableContainer(props) {
     return (
-        <div className="flex flex-col h-[80%] overflow-y-auto">
+        <div className="flex flex-col">
             {props.children}
         </div>
     );

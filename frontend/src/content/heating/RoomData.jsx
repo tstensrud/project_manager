@@ -8,7 +8,7 @@ function RoomData({ heatingData, setShowRoomData }) {
   const handleClick = (e) => {
     setShowRoomData(false);
   }
-  
+  console.log(heatingData.building_data)
   return (
     <>
       <Draggable>
@@ -17,8 +17,9 @@ function RoomData({ heatingData, setShowRoomData }) {
           
           <RoomDataMainTitle roomNumber={heatingData.room_data.RoomNumber} roomName={heatingData.room_data.RoomName} clickFunction={(e) => handleClick(e, setShowRoomData)} />
 
-          <RoomDataRow rowName="Romtype" rowData={heatingData.room_data.RoomTypeName} />
-          <RoomDataRow rowName="Bygg" rowData={heatingData.building_data.BuildingName} />
+          <RoomDataRow rowName="Romtype" rowData="">{heatingData.room_data.RoomTypeName}</RoomDataRow>
+          <RoomDataRow rowName="Bygg" rowData="">{heatingData.building_data.BuildingName}</RoomDataRow>
+          <RoomDataRow rowName="Etasje" rowData="">{heatingData.room_data.Floor}</RoomDataRow>
           <RoomDataRow rowName="Areal" rowData={``}>{heatingData.room_data.Area} m2</RoomDataRow>
 
 
@@ -29,9 +30,9 @@ function RoomData({ heatingData, setShowRoomData }) {
           <RoomDataRow rowName="Luftmengde" rowData="">{heatingData.heating_data.Airflow} m3/h</RoomDataRow>
           <RoomDataRow rowName="DUT" rowData={``} >{heatingData.building_data.Dut} C&#176;</RoomDataRow>
           <RoomDataRow rowName="Årsmiddeltemp" rowData={``}>{heatingData.building_data.YearMidTemp} C&#176;</RoomDataRow>
-          <RoomDataRow rowName="Antall personer" rowData={`${heatingData.room_data.RoomPopulation} stk.`} />
+          <RoomDataRow rowName="Antall personer" rowData="">{heatingData.room_data.RoomPopulation} stk.</RoomDataRow>
           <RoomDataRow rowName="Areal yttervegg" rowData={``}>{heatingData.heating_data.OuterWallArea} m2</RoomDataRow>
-          <RoomDataRow rowName="Romhøyde" rowData={`${heatingData.heating_data.RoomHeight} m`} />
+          <RoomDataRow rowName="Romhøyde" rowData="">{heatingData.heating_data.RoomHeight} m</RoomDataRow>
           <RoomDataRow rowName="Areal vindu/dører" rowData={``}>{heatingData.heating_data.WindowDoorArea} m2</RoomDataRow>
           <RoomDataRow rowName="Areal innervegger" rowData={``}>{heatingData.heating_data.InnerWallArea} m2</RoomDataRow>
           <RoomDataRow rowName="Areal tak" rowData={``} >{heatingData.heating_data.RoofArea} m2</RoomDataRow>
@@ -41,19 +42,19 @@ function RoomData({ heatingData, setShowRoomData }) {
 
           <RoomDataRowTitle title="Varmetap" />
 
-          <RoomDataRow rowName="Varmetap kuldebroer" rowData={`${heatingData.heating_data.HeatLossColdBridge.toFixed(2)} W`} />
-          <RoomDataRow rowName="Varmetap transmisjon" rowData={`${heatingData.heating_data.HeatLossTransmission.toFixed(2)} W`} />
-          <RoomDataRow rowName="Varmetap infiltrasjon" rowData={`${heatingData.heating_data.HeatLossInfiltration.toFixed(2)} W`} />
-          <RoomDataRow rowName="Varmetap ventilasjon" rowData={`${heatingData.heating_data.HeatLossVentilation.toFixed(2)} W`} />
-          <RoomDataRow rowName="Varmetap kuldebroer" rowData={`${heatingData.heating_data.HeatLossColdBridge.toFixed(2)} W`} />
-          <RoomDataRow rowName="Varmetap totalt" rowData={`${heatingData.heating_data.HeatLossSum.toFixed(2)} W`} />
-          <RoomDataRow rowName="Prosjektert varme" rowData={`${heatingData.heating_data.ChosenHeating.toFixed(2)} W`} />
+          <RoomDataRow rowName="Varmetap kuldebroer" rowData={ ``}>{heatingData.heating_data.HeatLossColdBridge.toFixed(2)} W</RoomDataRow>
+          <RoomDataRow rowName="Varmetap transmisjon" rowData="" >{heatingData.heating_data.HeatLossTransmission.toFixed(2)}W</RoomDataRow>
+          <RoomDataRow rowName="Varmetap infiltrasjon" rowData={``}>{heatingData.heating_data.HeatLossInfiltration.toFixed(2)} W</RoomDataRow>
+          <RoomDataRow rowName="Varmetap ventilasjon" rowData="" >{heatingData.heating_data.HeatLossVentilation.toFixed(2)} W</RoomDataRow>
+          <RoomDataRow rowName="Varmetap kuldebroer" rowData="">{heatingData.heating_data.HeatLossColdBridge.toFixed(2)} W </RoomDataRow>
+          <RoomDataRow rowName="Varmetap totalt" rowData="">{heatingData.heating_data.HeatLossSum.toFixed(2)} W </RoomDataRow>
+          <RoomDataRow rowName="Prosjektert varme" rowData="">{heatingData.heating_data.ChosenHeating.toFixed(2)} W</RoomDataRow>
 
           <RoomDataRowTitle title="Annet" />
 
-          <RoomDataRow rowName="Sikkerhet" rowData={`${heatingData.building_data.Safety} %`} />
-          <RoomDataRow rowName="Varmekilde" rowData={`${heatingData.heating_data.HeatSource}`} />
-          <RoomDataRow rowName="Kommentar" rowData={``} />
+          <RoomDataRow rowName="Sikkerhet" rowData="">{heatingData.building_data.Safety} %</RoomDataRow>
+          <RoomDataRow rowName="Varmekilde" rowData="">{heatingData.heating_data.HeatSource}</RoomDataRow>
+          <RoomDataRow rowName="Kommentar" rowData={``}></RoomDataRow>
 
         </div>
       </Draggable>

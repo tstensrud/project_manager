@@ -2,7 +2,7 @@ import { useState } from "react";
 
 // Components
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
-function SanitaryShaftTableRowComponent({ data, shaft, floor, name }) {
+function SanitaryShaftTableRowComponent({ data, shaft, floor }) {
 
     // Marking a row
     const [markedRow, setMarkedRow] = useState('');
@@ -10,7 +10,7 @@ function SanitaryShaftTableRowComponent({ data, shaft, floor, name }) {
     // Handlers
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('bg-marked-row text-primary-color');
+            setMarkedRow('bg-marked-row text-primary-color dark:bg-dark-marked-row dark:text-dark-primary-color');
         } else {
             setMarkedRow('');
         }
@@ -18,7 +18,6 @@ function SanitaryShaftTableRowComponent({ data, shaft, floor, name }) {
 
     return (
         <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
-            <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{name}</TableTDelement>
             <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{shaft}</TableTDelement>
             <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{floor}</TableTDelement>
             <TableTDelement pointer={true} clickFunction={handleOnMarkedRow}>{data.cumulative_sum_cold_water.toFixed(2)}</TableTDelement>
