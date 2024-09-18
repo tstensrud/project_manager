@@ -42,6 +42,8 @@ function Dashboard() {
     e.preventDefault();
     setSearhValue(e.target.value)
   }
+
+  
   return (
     <>
       <SubTitleComponent svg={<HeaderIcon />} headerText={"Dashboard - velg prosjekt"} projectName={""} projectNumber={""} />
