@@ -13,11 +13,13 @@ Project methods
 '''
 def new_project(number: str, name: str, description: str) -> models.Projects:
     uid = globals.encode_uid_base64(uuid4())
+    timestamp = int(time.time() * 1000)
     new_project = models.Projects(uid=uid,
                                     project_number=number,
                                     project_name=name,
                                     project_description=description,
-                                    specification=None)
+                                    specification=None,
+                                    created_at = timestamp)
     try:
         db.session.add(new_project)
         db.session.commit()
@@ -106,7 +108,12 @@ def update_project_information(project_uid: str, project_number=None, project_na
             db.session.rollback()
             return False
     return False
-    
+
+def search_projects(search_string: str) -> list[models.Projects]:
+    projects = db.session.query(models.Projects).filter(models.Projects.project_name.like(f"{search_string}%")).all()
+    if projects:
+        return projects
+    return None
 '''
 TODO-list
 '''

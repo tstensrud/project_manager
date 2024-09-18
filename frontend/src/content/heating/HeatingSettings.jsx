@@ -71,12 +71,16 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                     ) : (
                         <>
                             <div className="flex sticky top-0 bg-secondary-color dark:bg-dark-secondary-color flex-col border-default-border-color p-1 font-extrabold w-full">
-                                <div className="flex w-full justify-end">
+                                <div className="flex flex-row w-full items-center mb-5">
+                                <div className="w-[10%]">
+
+                                </div>
+                                <div className="flex flex-1 justify-center text-xl text-center">
+                                    Varmeparametre bygg {data && data.building_data.BuildingName}
+                                </div>
+                                <div className="flex w-[10%] justify-end">
                                     <span onClick={handleCloseWindow} className="cursor-pointer text-2xl hover:text-accent-color hover:dark:text-dark-accent-color">&times;</span>
                                 </div>
-
-                                <div className="w-full justify-center text-center">
-                                    Varmeinnstillinger bygg {data && data.building_data.BuildingName}
                                 </div>
                             </div>
 

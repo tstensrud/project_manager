@@ -1,9 +1,11 @@
 from datetime import datetime, timezone, timedelta
 import os
 import json
+import time
 import random
 from uuid import uuid4
 from werkzeug.security import generate_password_hash
+from sqlalchemy import text
 from flask import Blueprint, request, jsonify, send_from_directory
 from . import models, db, globals
 from .models import User
@@ -129,15 +131,48 @@ def initialize():
 
 @views.route('/test', methods=['GET'])
 def test():
-    uid = "uqeiBus0TVGucDRaV2WcLQ"
-    type = "sink_1_14_inch"
-    buid = "SZdIXRWtS2a5xtkPehlIkQ"
-    #shaft = {}
-    value = dbo.shaft_summary_shaft_building(buid, "A", "A")
-    #value = dbo.get_building_shafts(buid)
-    #shaft["A"] = value
-    return jsonify({"message": value})
+    projects = dbo.get_all_projects()
+    timestamp = int(time.time() * 1000)
+    for project in projects:
+        project.created_at = timestamp
+    try:
+        db.session.commit()
+        return jsonify({"message": "done"})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"err": f"{str(e)}"})
 
+""" @views.route('/create_test_projects', methods=['GET'])
+def create_test_projects():
+    oslo_street_names = [
+    "Karl Johans gate", "Bogstadveien", "Dronningens gate", "Torggata", "Storgata",
+    "Grünerløkka gate", "Frognerveien", "Sørkedalsveien", "Bygdøy allé", "Pilestredet",
+    "Thorvald Meyers gate", "Trondheimsveien", "Maridalsveien", "Ullevålsveien", "Holmenkollveien",
+    "Parkveien", "Kirkeveien", "Oscars gate", "Møllergata", "Bjørvika allé",
+    "Hegdehaugsveien", "Schweigaards gate", "Hausmanns gate", "Vogts gate", "Skippergata",
+    "Sofienberggata", "Grefsenveien", "Kongsveien", "Munkedamsveien", "Dælenenggata",
+    "Sandakerveien", "Uranienborgveien", "Langgata", "Fjordgata", "Lilletorget",
+    "Sinsenveien", "Majorstuveien", "Hammersborggata", "Skillebekkveien", "Middelthunsgate",
+    "Lille Grensen", "Fredensborgveien", "Sagveien", "Tøyengata", "Skovveien",
+    "Bergsalléen", "Bislettgata", "Øvre Slottsgate", "Hovinveien", "Kjølberggata"
+    ]
+    random_numbers = [
+    639852, 604719, 659028, 633715, 681245, 662908, 675431, 620387, 640258, 605671,
+    621043, 680473, 607385, 698234, 684512, 671023, 697831, 627384, 654021, 610238,
+    690432, 676193, 603285, 665293, 609478, 638204, 629471, 613847, 653920, 648302,
+    668321, 622403, 636781, 687549, 669482, 609345, 695432, 604738, 621845, 672093,
+    646920, 600174, 681045, 692341, 626485, 630295, 601843, 677492, 634801, 619305
+    ]
+
+    try:
+        for i in range(len(oslo_street_names)):
+            dummy_project(project_name=oslo_street_names[i], project_number=random_numbers[i])
+        return jsonify({"message": "done"})
+    except Exception as e:
+        return jsonify({"error": f"{str(e)}"}) """
+
+
+    
 '''
 Set up default specifications
 '''
@@ -196,14 +231,19 @@ def spec_rooms_setup() -> bool:
 '''
 Create dummy project
 '''
-def dummy_project():
-    new_project = dbo.new_project("123456", "Dummy project", "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus voluptatem odio vitae pariatur sint ipsum possimus porro, molestias ab sunt quidem sit quasi vel vero. Earum, ut? Dolorum, ipsa recusandae?")
+def dummy_project(project_name=None, project_number=None):
+
+    if project_name and project_number is None:
+        project_name = "Dummy project"
+        project_number = "123456"    
+
+    new_project = dbo.new_project(f"{project_number}", f"{project_name}-D", "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus voluptatem odio vitae pariatur sint ipsum possimus porro, molestias ab sunt quidem sit quasi vel vero. Earum, ut? Dolorum, ipsa recusandae?")
     spec = dbo.get_specification_by_row(1)
     dbo.set_project_specification(new_project.uid, spec.uid)
     for i in range(4):
         dbo.new_building(new_project.uid, f"Bygg {i}")
     floors = ["01", "10", "20", "30", "40"]
-    heat_ex = ["R", "P"]
+    heat_ex = ["R", "P", "B"]
     buildings = dbo.get_all_project_buildings(new_project.uid)
     spec_room_types = dbo.get_specification_room_types(spec.uid)
 

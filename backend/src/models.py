@@ -1,7 +1,7 @@
 from . import db
 from datetime import datetime
 from flask_login import UserMixin
-from sqlalchemy.sql import func
+from sqlalchemy import func, Index
 
 class User(db.Model, UserMixin):
     __tablename__ = 'Users'
@@ -15,6 +15,10 @@ class User(db.Model, UserMixin):
     is_active = db.Column(db.Boolean, default=True)
 
     todo_item = db.relationship('TodoItem', backref='user', uselist=False, lazy=True)
+
+    __table_args__ = (
+        Index('idx_uid', 'uuid'),
+    )
 
     def get_json(self):
         return {
@@ -44,7 +48,10 @@ class TodoItem(db.Model):
     date_completed = db.Column(db.String(10))
     completed_by = db.Column(db.String(100))
 
-    
+    __table_args__ = (
+        Index('idx_todo_uid', 'uid'),
+    )
+
     def get_json(self):
         return {
             "id": self.id,
@@ -72,6 +79,11 @@ class Projects(db.Model):
     buildings = db.relationship('Buildings', backref='project', uselist=False, lazy=True)
     ventilation_systems = db.relationship('VentilationSystems', backref='project', uselist=False, lazy=True)
     
+    __table_args__ = (
+        Index('idx_name', 'project_name'),
+        Index('idx_projects_uid', 'uid'),
+    )
+
     def get_json(self):
         timestamp = int(self.created_at) / 1000
         created_at = datetime.fromtimestamp(timestamp)
@@ -108,6 +120,10 @@ class Buildings(db.Model):
     graph_curve = db.Column(db.String(2))
 
     rooms = db.relationship('Rooms', backref='building', lazy=True)
+
+    __table_args__ = (
+        Index('idx_buildings_uid', 'uid'),
+    )
 
     def get_json(self):
         return {
@@ -220,6 +236,9 @@ class Rooms(db.Model):
     drain_75_mm = db.Column(db.Float)
     drain_110_mm = db.Column(db.Float)
 
+    __table_args__ = (
+        Index('idx_rooms_uid', 'uid'),
+    )
 
     def get_json_room_data(self):
         building = db.session.query(Buildings).filter(Buildings.uid == self.building_uid).first()
@@ -341,6 +360,10 @@ class VentilationSystems(db.Model):
 
     room = db.relationship('Rooms', backref="system", lazy=True)
 
+    __table_args__ = (
+        Index('idx_ventsystems_uid', 'uid'),
+    )
+
     def get_json(self):
         return {
             "id": self.id,
@@ -368,6 +391,10 @@ class Specifications(db.Model):
     created_by = db.Column(db.String(255))
 
     room_types = db.relationship("RoomTypes", backref="specifications", lazy=True)
+
+    __table_args__ = (
+        Index('idx_spec_uid', 'uid'),
+    )
 
     def get_json(self):
         timestamp = int(self.created_at) / 1000
@@ -399,6 +426,10 @@ class RoomTypes(db.Model):
     db_neighbour = db.Column(db.String(50))
     db_corridor = db.Column(db.String(50))
     comments = db.Column(db.String(20))
+
+    __table_args__ = (
+        Index('idx_roomtypes_uid', 'uid'),
+    )
 
     room = db.relationship('Rooms', backref='room_type', lazy=True)
 
@@ -511,6 +542,10 @@ class DeletedRooms(db.Model):
     firehose = db.Column(db.Float)
     drain_75_mm = db.Column(db.Float)
     drain_110_mm = db.Column(db.Float)
+
+    __table_args__ = (
+        Index('idx_deletedrooms_uid', 'uid'),
+    )
 
 class SanitaryEquipmentWaterData(db.Model):
     __tablename__ = "SanitaryEquipmentWaterData"

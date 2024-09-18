@@ -1,6 +1,5 @@
-from flask import Blueprint, redirect, jsonify, request, session
+from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from .. import models, db
 from .. import db_operations as dbo
 from markupsafe import escape
 
@@ -35,3 +34,14 @@ def new_project():
         if new_project is False:
             return jsonify({"success": False, "message": "Kunne ikke opprette nytt prosjekt"})
     return jsonify({"success": True, "data": new_project.get_json()})
+
+@projects_bp.route('/search/<search_string>/', methods=['GET'])
+def search_project(search_string: str):
+    projects = dbo.search_projects(search_string)
+    if projects:
+        project_data = {}
+        for project in projects:
+            project_data[project.uid] = project.get_json()
+        return jsonify({"success": True, "data": project_data})
+    else:
+        return jsonify({"success": True, "message": "No match found"})

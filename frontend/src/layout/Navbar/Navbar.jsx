@@ -173,7 +173,7 @@ function Navbar() {
                         Dashboard
                     </div>
 
-                    <div className="flex text-center items-center pl-3 h-full border-l border-l-default-border-color">
+                    <div className="flex text-center items-center pl-3 h-full border-l dark:border-dark-default-border-color border-default-border-color">
                         <div className="flex mr-3">
                             <svg className="stroke-accent-color dark:stroke-dark-accent-color fill-none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" width="24" height="24" viewBox="0 0 24 24">
                                 <defs></defs>

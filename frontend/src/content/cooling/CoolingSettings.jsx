@@ -62,13 +62,17 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
                         <LoadingSpinner text="parametre" />
                     ) : (
                         <>
-                            <div className="flexsticky top-0 bg-secondary-color dark:bg-dark-secondary-color flex-col border-b-default-border-color p-1 font-extrabold w-full">
-                                <div className="flex w-full justify-end">
+                            <div className="flex sticky top-0 bg-secondary-color dark:bg-dark-secondary-color flex-col border-default-border-color p-1 font-extrabold w-full">
+                                <div className="flex flex-row w-full items-center mb-5">
+                                <div className="w-[10%]">
+
+                                </div>
+                                <div className="flex flex-1 justify-center text-xl text-center">
+                                    Kjøleparametre bygg {data && data.building_data.BuildingName}
+                                </div>
+                                <div className="flex w-[10%] justify-end">
                                     <span onClick={handleCloseWindow} className="cursor-pointer text-2xl hover:text-accent-color hover:dark:text-dark-accent-color">&times;</span>
                                 </div>
-
-                                <div className="w-full justify-center text-center">
-                                    Kjøleinnstillinger bygg {data && data.building_data.BuildingName}
                                 </div>
                             </div>
 

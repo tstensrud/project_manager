@@ -51,7 +51,7 @@ function Login(props) {
 
     return (
         <div className="flex w-full h-full text-dark-primary-color justify-center text-center items-center bg-gradient-to-tr from-dark-tertiary-color to-dark-secondary-color">
-            <div className="flex flex-col bg-dark-secondary-color border border-dark-accent-color rounded-lg shadow-lg shadow-background-shade h-1/2">
+            <div className="flex flex-col bg-dark-secondary-color border border-dark-accent-color rounded-lg shadow-lg shadow-background-shade h-1/2 min-h-1/2 overflow-y-auto">
                 <div className="w-full flex justify-end pr-5 pl-5 pt-4">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="stroke-dark-accent-color dark:stroke-dark-accent-color fill-none hover:fill-dark-accent-color" viewBox="0 0 24 24">
                         <path strokeWidth="2" d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z" />

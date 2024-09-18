@@ -1,27 +1,47 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 
+// Hooks and utils
 import { GlobalContext } from '../../GlobalContext';
+import useFetch from '../../hooks/useFetch'
+import useFetchRequest from '../../hooks/useFetchRequest'
 
 // components
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import useFetch from '../../hooks/useFetch'
 import HeaderIcon from '../../assets/svg/dashboardIcon.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import ContentCard from '../../layout/ContentCard';
-import InputField from '../../layout/formelements/InputField.jsx'
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 
 function Dashboard() {
 
   const { setActiveProject, setActiveProjectName } = useContext(GlobalContext);
-  const { data, loading, error } = useFetch('/projects/');
+  const { data, loading, error } = useFetch(`/projects/`);
+
+  const [searchValue, setSearhValue] = useState(null);
+  const { data: searchData, setData: setSearchData, loading: searchLoading, fetchData } = useFetchRequest(`/projects/search/${searchValue}/`);
+
 
   useEffect(() => {
     setActiveProject('0');
     setActiveProjectName('');
   }, []);
 
+  useEffect(() => {
+    if (!searchValue) {
+      setSearchData({});
+      return;
+    } else {
+      fetchData();
+    }
+  }, [searchValue])
+
+
+  // Handlers
+  const onInputChange = (e) => {
+    e.preventDefault();
+    setSearhValue(e.target.value)
+  }
   return (
     <>
       <SubTitleComponent svg={<HeaderIcon />} headerText={"Dashboard - velg prosjekt"} projectName={""} projectNumber={""} />
@@ -30,7 +50,7 @@ function Dashboard() {
           loading && loading === true ? (
             <LoadingSpinner text="prosjekter" />
           ) : (
-            <div className="flex justify-center flex-row w-full">
+            <div className="flex justify-center flex-row w-full mb-32">
               <ContentCard>
                 <div className="w-[900px] flex flex-col">
                   <div className="mb-3">
@@ -41,54 +61,104 @@ function Dashboard() {
                       Søk i prosjekter
                     </div>
                     <div className="w-2/3">
-                      <InputField />
+                      <input
+                        className="
+                      bg-form-background-color
+                      dark:bg-dark-form-background-color
+                      border-form-border-color
+                      dark:border-dark-form-border-color
+                      text-primary-color
+                      dark:text-dark-primary-color
+                      outline-none
+                      w-full
+                      border-2
+                      pl-5
+                      pr-5
+                      text-sm
+                      rounded-3xl
+                      h-9
+                      focus:border-form-focus-border-color
+                      focus:dark:border-dark-form-focus-border-color
+                      hover:border-form-element-hover
+                      hover:dark:border-dark-form-element-hover"
+                        onChange={onInputChange}
+                        type="text"
+                        value={searchValue}
+                        placeholder="Skriv inn prosjektnavn"
+                      />
                     </div>
-
                   </div>
 
                   <div className="w-full flex flex-col">
                     <table>
                       <thead>
-                        <tr className="bg-tertiary-color border-default-border-color dark:bg-dark-tertiary-color border-b dark:border-b-dark-default-border-color">
-                          <th className="pt-1 pb-1 pl-3">
+                        <tr className="border-default-border-color  border-b dark:border-b-dark-default-border-color w-56">
+                          <th className="pt-1 pb-1 pl-3 min-w-[300px] max-w-[300px] w-[300px] text-start">
                             Prosjektnr
                           </th>
-                          <th className="pt-1 pb-1">
+                          <th className="pt-1 pb-1 min-w-[400px] max-w-[400px] w-[400px]">
                             Prosjektnavn
                           </th>
-                          <th className="pt-1 pb-1 pr-3">
+                          <th className="pt-1 pb-1 pr-3 min-w-[200px] max-w-[200px] w-[200px] text-end">
                             Påbegynt
-                          </th>
-                          <th className="pt-1 pb-1 pr-3">
-                            Kravspesifikasjon
                           </th>
                         </tr>
                       </thead>
-                      <tbody>
-                        {
-                          data?.success === true &&
-                          Object.keys(data.data).map((key, index) => (
-                            <tr className="hover:dark:bg-table-hover hover:bg-table-hover border-default-border-color border-b dark:border-b-dark-default-border-color" key={index}>
-                              <td className="pt-1 pb-1 pl-3 pr-3">
-                                <Link to={`/project/${data.data[key].uid}/`}>{data.data[key].ProjectNumber}</Link>
-                              </td>
-                              <td className="pt-1 pb-1 pl-3 pr-3">
-                                {data.data[key].ProjectName}
-                              </td>
-                              <td className="pt-1 pb-1 pl-3 pr-3">
-                                {data.data[key].CreatedAt}
-                              </td>
-                              <td className="pt-1 pb-1 pr-3 pl-3">
-                                {data.data[key].Specification}
-                              </td>
-                            </tr>
-                          ))
-                        }
-                      </tbody>
+
+                      {
+                        !searchValue ? (
+                          <>
+                            <tbody>
+                              {
+                                data?.success === true &&
+                                Object.keys(data.data)
+                                .sort((a, b) => {
+                                  const numA = data.data[a].ProjectNumber;
+                                  const numB = data.data[b].ProjectNumber;
+                                  return numA - numB;
+                                })
+                                .map((key, index) => (
+                                  <tr className="hover:dark:bg-table-hover hover:bg-table-hover border-default-border-color border-b dark:border-b-dark-default-border-color" key={index}>
+                                    <td className="pt-1 pb-1 pl-3 pr-3 min-w-[300px] max-w-[300px] w-[300px]">
+                                      <Link to={`/project/${data.data[key].uid}/`}>{data.data[key].ProjectNumber}</Link>
+                                    </td>
+                                    <td className="pt-1 pb-1 pl-3 pr-3 min-w-[400px] max-w-[400px] w-[400px]">
+                                      {data.data[key].ProjectName}
+                                    </td>
+                                    <td className="pt-1 pb-1 pl-3 pr-3 min-w-[200px] max-w-[200px] w-[200px] text-end">
+                                      {data.data[key].CreatedAt}
+                                    </td>
+                                  </tr>
+                                ))
+                              }
+                            </tbody>
+                          </>
+                        ) : (
+                          <>
+                            <tbody>
+                              {
+                                searchData?.success === true &&
+                                searchData?.data && Object.keys(searchData.data).map((key, index) => (
+                                  <tr className="hover:dark:bg-table-hover hover:bg-table-hover border-default-border-color border-b dark:border-b-dark-default-border-color" key={index}>
+                                    <td className="pt-1 pb-1 pl-3 pr-3 min-w-[300px] max-w-[300px] w-[300px]">
+                                      <Link to={`/project/${searchData.data[key].uid}/`}>{searchData.data[key].ProjectNumber}</Link>
+                                    </td>
+                                    <td className="pt-1 pb-1 pl-3 pr-3 min-w-[400px] max-w-[400px] w-[400px]">
+                                      {searchData.data[key].ProjectName}
+                                    </td>
+                                    <td className="pt-1 pb-1 pl-3 pr-3 min-w-[200px] max-w-[200px] w-[200px] text-end">
+                                      {searchData.data[key].CreatedAt}
+                                    </td>
+                                  </tr>
+                                ))
+                              }
+                            </tbody>
+                          </>
+                        )
+                      }
 
                     </table>
                   </div>
-
                   {error && error}
                 </div>
               </ContentCard>
