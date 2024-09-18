@@ -27,23 +27,22 @@ def create_app():
 
         
     from .views import views
-
-
-
     from .api import project_api
     from .projects import projects
     from .specifications import specifications
     from .userprofile import user
+    #from .admin import admin
 
     app.register_blueprint(user.user_bp, url_prefix='/user/<uuid>')
     app.register_blueprint(projects.projects_bp, url_prefix='/projects')
     app.register_blueprint(specifications.specifications_bp, url_prefix='/specifications')
     app.register_blueprint(project_api.project_api_bp, url_prefix='/project_api/<project_uid>/')
+    #app.register_blueprint(admin.admin_bp, url_prefix="/admin/")
     
 
     app.register_blueprint(views, url_prefix='/')
 
-    from .models import User
+    from .models import Users
     create_db(app)
 
     login_manager = LoginManager()
@@ -52,7 +51,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        return Users.query.get(int(id))
     
     @app.before_request
     def before_request():

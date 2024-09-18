@@ -7,8 +7,8 @@ const useDeleteData = (endpoint) => {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
+        //e.preventDefault();
         setLoading(true);
         try {
           const config = {

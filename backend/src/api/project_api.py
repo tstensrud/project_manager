@@ -7,8 +7,8 @@ from .. import sanitary_calculations as sc
 from .. import globals
 from .. import excel
 
-project_api_bp = Blueprint('project_api', __name__, static_folder='static', template_folder='templates')
-globals.blueprint_setup(project_api_bp)
+project_api_bp = Blueprint('project_api', __name__)
+#globals.blueprint_setup(project_api_bp)
 
 @project_api_bp.after_request
 def refresh_expiring_jwts(response):

@@ -3,7 +3,7 @@ from datetime import datetime
 from flask_login import UserMixin
 from sqlalchemy import func, Index
 
-class User(db.Model, UserMixin):
+class Users(db.Model, UserMixin):
     __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
     uuid = db.Column(db.String(250), unique=True)
@@ -25,14 +25,34 @@ class User(db.Model, UserMixin):
             "id": self.id,
             "uuid": self.uuid,
             "email": self.email,
-            "password": self.password,
             "name": self.name,
             "logged_in": self.logged_in,
             "admin": self.admin,
             "is_active": self.is_active
         }
 
+class UserFavProjects(db.Model):
+    __tablename__ = "UserFavProjects"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    uid = db.Column(db.String(250), unique=True)
+    user_uid = db.Column(db.String(250), db.ForeignKey('Users.uuid'), nullable=False)
+    project_uid = db.Column(db.String(250), db.ForeignKey('Projects.uid'), nullable=False)
 
+    project = db.relationship('Projects', backref='fav_project', uselist=False, lazy=True)
+    
+    __table_args__ = (
+        Index('idx_fav_uid', 'uid'),
+    )
+
+    def get_json(self):
+        project_name = self.project.project_name
+        return {
+            "id": self.id,
+            "uid": self.uid,
+            "user_uid": self.user_uid,
+            "project_uid": self.project_uid,
+            "project_name": project_name
+        }
 '''
 # TODO-items
 '''
@@ -78,6 +98,7 @@ class Projects(db.Model):
     todo_item = db.relationship('TodoItem', backref='project', uselist=False, lazy=True)
     buildings = db.relationship('Buildings', backref='project', uselist=False, lazy=True)
     ventilation_systems = db.relationship('VentilationSystems', backref='project', uselist=False, lazy=True)
+    
     
     __table_args__ = (
         Index('idx_name', 'project_name'),

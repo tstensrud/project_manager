@@ -76,7 +76,8 @@ function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
     }
 
     const deleteSystem = async (e) => {
-        await deleteSubmit(e);
+        e.preventDefault();
+        await deleteSubmit();
         setDisabledDeleteButton(true);
     }
 

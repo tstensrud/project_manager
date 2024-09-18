@@ -79,7 +79,8 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
     };
 
     const onDelete = async (e) => {
-        await deleteSubmit(e);
+        e.preventDefault();
+        await deleteSubmit();
         setDisabledDeleteButton(true);
     }
 

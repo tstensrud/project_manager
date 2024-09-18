@@ -35,7 +35,7 @@ function EditSpecification() {
 
     const deleteSpecification = async (e) => {
         e.preventDefault();
-        await handleSubmit(e);
+        await handleSubmit();
         navigate(`/specifications`);
     }
 

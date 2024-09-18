@@ -67,7 +67,8 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     };
 
     const onDelete = async (e) => {
-        await deleteSubmit(e);
+        e.preventDefault();
+        await deleteSubmit();
         setUndoButton(true);
         setUndoDeleteData({ "undo": true });
     }

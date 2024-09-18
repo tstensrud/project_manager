@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash
 from sqlalchemy import text
 from flask import Blueprint, request, jsonify, send_from_directory
 from . import models, db, globals
-from .models import User
+from .models import Users
 from . import db_operations as dbo
 from . import sanitary_calculations as sc
 from werkzeug.security import check_password_hash
@@ -64,7 +64,7 @@ def token():
         email = escape(request.json.get("email"))
         password =  escape(request.json.get("password"))
 
-        user = User.query.filter_by(email=email).first()
+        user = Users.query.filter_by(email=email).first()
         if user:
             user_uuid = user.uuid
             if check_password_hash(user.password, password):
@@ -85,7 +85,7 @@ def token():
 def get_user():
     verify_jwt_in_request()
     user_identiy = get_jwt_identity()
-    user = db.session.query(models.User).filter(models.User.uuid == user_identiy).first()
+    user = db.session.query(models.Users).filter(models.Users.uuid == user_identiy).first()
     user_data = {}
     user_data["uuid"] = user.uuid
     user_data["email"] = user.email
@@ -102,7 +102,7 @@ def download_file(filename):
 
 @views.route('/logout/<user_uid>/', methods=["POST"])
 def logout(user_uid):
-    user = db.session.query(models.User).filter(models.User.uuid == user_uid).first()
+    user = db.session.query(models.Users).filter(models.Users.uuid == user_uid).first()
     user.logged_in = False
     db.session.commit()
     response = jsonify({"message": "user logged out"})
@@ -116,9 +116,9 @@ def initialize():
     name = "Administrator"
     password = "1234"
     uuid = globals.encode_uid_base64(uuid4())
-    user = models.User.query.filter_by(email=email).first()
+    user = models.Users.query.filter_by(email=email).first()
     if not user:
-        admin_account = models.User(uuid=str(uuid), email=email, name=name, password = generate_password_hash(password, method='scrypt'), logged_in=False, admin=True, is_active=True)
+        admin_account = models.Users(uuid=str(uuid), email=email, name=name, password = generate_password_hash(password, method='scrypt'), logged_in=False, admin=True, is_active=True)
         db.session.add(admin_account)
         db.session.commit()
         print("Admin account created")
