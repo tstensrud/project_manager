@@ -11,9 +11,9 @@ function Layout() {
     return (
         <>
             <Header/>
-            <div className="flex flex-col h-full bg-secondary-color text-primary-color">
+            
                 <Outlet />
-            </div>
+            
         </>
     );
 }

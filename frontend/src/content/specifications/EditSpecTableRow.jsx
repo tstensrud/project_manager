@@ -10,6 +10,7 @@ import MessageBox from '../../layout/MessageBox';
 import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import TableButton from "../../layout/tableelements/TableButton.jsx";
+import LoadingRow from "../../layout/tableelements/LoadingRow.jsx";
 
 function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
 
@@ -100,13 +101,7 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
             <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover">
                 {
                     roomLoading ? (
-                        <>
-                            {
-                                Array.from({ length: totalColumns }).map((_, index) => (
-                                    <td className="blur-sm opacity-50" key={index}>####</td>
-                                ))
-                            }
-                        </>
+                        <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
                             {renderEditableCell("name", "15%")}

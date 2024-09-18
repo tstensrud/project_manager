@@ -149,7 +149,7 @@ function Rooms() {
                                         </div>
                                     </>
                                 ) : (
-                                    <div className="mb-32">
+                                    <div className="">
                                         <TableTop info={<HelpBox />} />
                                         <RoomTable callRefetchOfRooms={callRefetchOfRooms} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
                                     </div>

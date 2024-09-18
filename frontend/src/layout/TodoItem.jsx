@@ -38,7 +38,7 @@ function TodoItem({ user, itemData }) {
 
     return (
         <div className="border-b border-t border-form-border-color dark:border-dark-form-border-color">
-            <div className="w-full text-base font-semibold pl-2">{itemData.date} - {itemData.author_uid}</div>
+            <div className="w-full text-sm font-semibold pl-2 text-grey-text dark:text-dark-grey-text pt-1">{itemData.date} - {itemData.author_uid}</div>
             <div className={completed ? "line-through bg-secondary-color dark:bg-dark-secondary-color text-base text-primary-color dark:text-dark-primary-color w-full border-form-border-color dark:border-dark-form-border-color p-2" : "w-full text-base pl-2"}>
                 {itemData.content}
             </div>

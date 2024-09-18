@@ -14,6 +14,7 @@ const CardSelect = forwardRef((props, ref) => {
             rounded-3xl text-sm pl-5 pr-5 h-9 transition duration-200 outline-none 
             focus:border-form-focus-border-color
             focus:dark:border-dark-form-focus-border-color
+            focus:outline-none
             hover:border-form-element-hover
             dark:hover:border-dark-form-element-hover"
             name={props.name}

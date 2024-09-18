@@ -23,6 +23,7 @@ const SelectElement = forwardRef((props, ref) => {
                 outline-none 
                 focus:border-form-focus-border-color
                 focus:dark:border-dark-form-focus-border-color
+                focus:outline-none
                 hover:border-form-element-hover
                 hover:dark:border-dark-form-element-hover"
             name={props.name}

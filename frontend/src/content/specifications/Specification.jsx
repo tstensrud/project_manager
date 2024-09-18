@@ -13,9 +13,12 @@ import LoadingSpinner from '../../layout/LoadingSpinner';
 import TableTop from '../../layout/TableTop';
 import Helpbox from './HelpBox';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import Table from '../../layout/tableelements/Table.jsx';
+import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
+import TableContainer from '../../layout/tableelements/TableContainer.jsx';
 
 
 function Specification() {
@@ -68,52 +71,58 @@ function Specification() {
                                 </div>
                             </div>
                             <TableTop info={<Helpbox />} />
-                            <TableHeader>
-                                <thead>
-                                    <tr>
-                                        <TableTHelement width="15%">Romtype</TableTHelement>
-                                        <TableTHelement width="5%">Luft per person<br />m<sup>3</sup>/h/pers</TableTHelement>
-                                        <TableTHelement width="5%">Emisjon<br />m<sup>3</sup>/m<sup>2</sup>/h</TableTHelement>
-                                        <TableTHelement width="5%">Prosess<br />m<sup>3</sup>/h</TableTHelement>
-                                        <TableTHelement width="5%">Luft minimum<br />m<sup>3</sup>/h</TableTHelement>
-                                        <TableTHelement width="5%">Vent.prinsipp</TableTHelement>
-                                        <TableTHelement width="5%">Gjenvinner</TableTHelement>
-                                        <TableTHelement width="5%">Styring</TableTHelement>
-                                        <TableTHelement width="30%">Presiseringer</TableTHelement>
-                                        <TableTHelement width="5%">dB teknisk</TableTHelement>
-                                        <TableTHelement width="5%">dB naborom</TableTHelement>
-                                        <TableTHelement width="5%">dB korridor</TableTHelement>
-                                        <TableTHelement width="5%">Kommentar</TableTHelement>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        data && data.data ? (
-                                            data.data.map((rowData, index) =>
-                                                <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover" key={index}>
-                                                    <TableTDelement>{rowData ? rowData.name : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.air_per_person : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.air_emission : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.air_process : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.air_minimum : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.ventilation_principle : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.heat_exchange : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.room_control : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.notes : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.db_technical : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.db_neighbour : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.db_corridor : ''}</TableTDelement>
-                                                    <TableTDelement>{rowData ? rowData.comments : ''}</TableTDelement>
-                                                </tr>
-                                            )
-                                        ) : (
-                                            <>
-                                                {data && data.error}
-                                            </>
-                                        )
-                                    }
-                                </tbody>
-                            </TableHeader>
+                            <TableContainer>
+                                <TableHeader>
+                                    <thead>
+                                        <tr>
+                                            <TableTHelement width="15%">Romtype</TableTHelement>
+                                            <TableTHelement width="5%">Luft per person<br />m<sup>3</sup>/h/pers</TableTHelement>
+                                            <TableTHelement width="5%">Emisjon<br />m<sup>3</sup>/m<sup>2</sup>/h</TableTHelement>
+                                            <TableTHelement width="5%">Prosess<br />m<sup>3</sup>/h</TableTHelement>
+                                            <TableTHelement width="5%">Luft minimum<br />m<sup>3</sup>/h</TableTHelement>
+                                            <TableTHelement width="5%">Vent.prinsipp</TableTHelement>
+                                            <TableTHelement width="5%">Gjenvinner</TableTHelement>
+                                            <TableTHelement width="5%">Styring</TableTHelement>
+                                            <TableTHelement width="30%">Presiseringer</TableTHelement>
+                                            <TableTHelement width="5%">dB teknisk</TableTHelement>
+                                            <TableTHelement width="5%">dB naborom</TableTHelement>
+                                            <TableTHelement width="5%">dB korridor</TableTHelement>
+                                            <TableTHelement width="5%">Kommentar</TableTHelement>
+                                        </tr>
+                                    </thead>
+                                </TableHeader>
+                                <TableWrapper>
+                                    <Table>
+                                        <tbody>
+                                            {
+                                                data && data.data ? (
+                                                    data.data.map((rowData, index) =>
+                                                        <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover" key={index}>
+                                                            <TableTDelement width="15%">{rowData ? rowData.name : ''}</TableTDelement>
+                                                            <TableTDelement width="5%">{rowData ? rowData.air_per_person : ''}</TableTDelement>
+                                                            <TableTDelement width="5%">{rowData ? rowData.air_emission : ''}</TableTDelement>
+                                                            <TableTDelement width="5%">{rowData ? rowData.air_process : ''}</TableTDelement>
+                                                            <TableTDelement width="5%">{rowData ? rowData.air_minimum : ''}</TableTDelement>
+                                                            <TableTDelement width="5%">{rowData ? rowData.ventilation_principle : ''}</TableTDelement>
+                                                            <TableTDelement width="5%">{rowData ? rowData.heat_exchange : ''}</TableTDelement>
+                                                            <TableTDelement width="5%">{rowData ? rowData.room_control : ''}</TableTDelement>
+                                                            <TableTDelement width="30%">{rowData ? rowData.notes : ''}</TableTDelement>
+                                                            <TableTDelement width="5%">{rowData ? rowData.db_technical : ''}</TableTDelement>
+                                                            <TableTDelement width="5%">{rowData ? rowData.db_neighbour : ''}</TableTDelement>
+                                                            <TableTDelement width="5%">{rowData ? rowData.db_corridor : ''}</TableTDelement>
+                                                            <TableTDelement width="5%">{rowData ? rowData.comments : ''}</TableTDelement>
+                                                        </tr>
+                                                    )
+                                                ) : (
+                                                    <>
+                                                        {data && data.error}
+                                                    </>
+                                                )
+                                            }
+                                        </tbody>
+                                    </Table>
+                                </TableWrapper>
+                            </TableContainer>
                         </>
                     )
                 }

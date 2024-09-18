@@ -82,7 +82,7 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
                                 </div>
                                 <div>
                                     <form name="building_heating_settings" onSubmit={handleSubmit}>
-                                        <div>
+                                        <div className="pb-10">
                                             <div>
                                                 Romtemp sommer (C&#176;)
                                             </div>

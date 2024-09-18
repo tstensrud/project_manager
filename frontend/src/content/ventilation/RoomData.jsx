@@ -42,7 +42,7 @@ function RoomData({ roomData, ventData, setShowRoomData }) {
   return (
     <>
       <Draggable>
-        <div className="fixed shadow-lg shadow-background-shade border border-default-border-color dark:border-dark-default-border-color left-[25%] top-[15%] z-[1000] w-[600px] overflow-y-auto rounded-lg cursor-move" style={{ cursor: 'move' }}>
+        <div className="fixed shadow-lg bg-secondary-color dark:bg-dark-secondary-color shadow-background-shade border border-default-border-color dark:border-dark-default-border-color left-[25%] top-[15%] z-[1000] h-1/2 w-1/3 overflow-y-auto rounded-lg cursor-move" style={{ cursor: 'move' }}>
           
           <RoomDataMainTitle roomNumber={roomData.RoomNumber}roomName={roomData.RoomName} clickFunction={(e) => handleClick(e, setShowRoomData)} />
 
