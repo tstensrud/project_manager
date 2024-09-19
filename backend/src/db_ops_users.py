@@ -34,6 +34,24 @@ def get_user(user_uuid) -> models.Users:
     user = db.session.query(models.Users).filter(models.Users.uuid == user_uuid).first()
     return user
 
+def get_user_data(user_uid) -> dict:
+    user = get_user(user_uuid=user_uid)
+    if user:
+        user_data = {}
+        user_json = user.get_json()
+        user_favs = get_fav_projects(user_uid)
+        if user_favs:
+            fav_uids={}
+            for fav in user_favs:
+                fav_uids[fav.uid] = fav.get_json()
+        user_data = {
+            "user_info": user_json,
+            "user_favs": fav_uids
+        }
+        
+        return user_data
+    return {}
+
 def update_password(user_uuid: int, password: str) -> bool:
     user = get_user(user_uuid)
     user.password = generate_password_hash(password, method='scrypt')

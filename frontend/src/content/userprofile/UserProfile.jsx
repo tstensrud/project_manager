@@ -24,8 +24,7 @@ import UserList from './admin/UserList.jsx';
 function UserProfile() {
     const { userUuid, setFavProjects } = useContext(GlobalContext);
 
-    const { data, loading } = useFetch(`/user/`);
-    const { data: favourites, loading: loadingFavs, refetch: refetchFavs } = useFetch(`/user/get_favs/`);
+    const { data, loading, refetch } = useFetch(`/user/`);
 
     const [deletedFavUid, setDeletedFavUid] = useState(null);
     const { response: deleteResponse, handleSubmit } = useDeleteData(`/user/remove_fav/${deletedFavUid}/`);
@@ -40,7 +39,7 @@ function UserProfile() {
 
     useEffect(() => {
         if (deleteResponse?.success) {
-            refetchFavs();
+            refetch();
         }
     }, [deleteResponse]);
 
@@ -51,10 +50,10 @@ function UserProfile() {
     }, [deletedFavUid]);
 
     useEffect(() => {
-        if (favourites?.success === true) {
-            setFavouritesInGlobal(favourites.data)
+        if (data?.success === true) {
+            setFavProjects(data.data.user_favs)
         }
-    }, [favourites]);
+    }, [data]);
 
     useEffect(() => {
         if (newPassword && confirmPass) {
@@ -93,14 +92,6 @@ function UserProfile() {
         setDeletedFavUid(favToDeleteUid);
     }
 
-    const setFavouritesInGlobal = (data) => {
-        const updatedFavProjects = {};
-        Object.keys(data).map((key) => (
-            updatedFavProjects[data[key].project_name] = data[key].project_uid
-        ));
-        setFavProjects(updatedFavProjects);
-    }
-
     const handleNewPasswordSubmit = async (e) => {
         e.preventDefault();
         if (passwordMatch) {
@@ -110,7 +101,7 @@ function UserProfile() {
 
     return (
         <>
-            <SubTitleComponent svg={<AccountIcon />} headerText={`Velkommen tilbake, ${data?.data?.name}!`} projectName={""} projectNumber={""} />
+            <SubTitleComponent svg={<AccountIcon />} headerText={`Velkommen tilbake, ${data?.data?.user_info?.name}!`} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 <div className="flex flex-row justify-evenly flex-wrap w-full">
 
@@ -133,19 +124,19 @@ function UserProfile() {
                                             <div className="flex flex-col">
                                                 <div className="flex flex-row">
                                                     <div className="text-grey-text dark:text-dark-grey-text">Brukernavn: </div>
-                                                    <div className="flex flex-1 justify-end">{data.data.name}</div>
+                                                    <div className="flex flex-1 justify-end">{data.data.user_info.name}</div>
                                                 </div>
                                                 <div className="flex flex-row">
                                                     <div className="text-grey-text dark:text-dark-grey-text">E-mail: </div>
-                                                    <div className="flex flex-1 justify-end">{data.data.email}</div>
+                                                    <div className="flex flex-1 justify-end">{data.data.user_info.email}</div>
                                                 </div>
                                                 <div className="flex flex-row">
                                                     <div className="text-grey-text dark:text-dark-grey-text">Bruker-ID: </div>
-                                                    <div className="flex flex-1 justify-end">{data.data.uuid}</div>
+                                                    <div className="flex flex-1 justify-end">{data.data.user_info.uuid}</div>
                                                 </div>
                                                 <div className="flex flex-row">
                                                     <div className="text-grey-text dark:text-dark-grey-text">Aktiv: </div>
-                                                    <div className="flex flex-1 justify-end">{data.data.is_active && 'Ja'}</div>
+                                                    <div className="flex flex-1 justify-end">{data.data.user_info.is_active && 'Ja'}</div>
                                                 </div>
                                             </div>
                                         ) : (
@@ -170,47 +161,37 @@ function UserProfile() {
                         </div>
                         <div className="flex flex-col">
                             {
-                                !favourites?.success ? (
-                                    <div>
-                                        {favourites?.message}
-                                    </div>
+                                loading === true ? (
+                                    <LoadingSpinner />
                                 ) : (
-                                    <>
-                                        {
-                                            loadingFavs === true ? (
-                                                <LoadingSpinner />
-                                            ) : (
-                                                <div className="flex flex-col">
-                                                    <div className="flex flex-col w-full">
-                                                        <div className="flex flex-row border-b border-default-border-color dark:border-dark-default-border-color">
-                                                            <div className="flex w-[70%] text-grey-text dark:text-dark-grey-text">
-                                                                Prosjektnavn
+                                    <div className="flex flex-col">
+                                        <div className="flex flex-col w-full">
+                                            <div className="flex flex-row border-b border-default-border-color dark:border-dark-default-border-color">
+                                                <div className="flex w-[70%] text-grey-text dark:text-dark-grey-text">
+                                                    Prosjektnavn
+                                                </div>
+                                                <div className="flex flex-1 justify-end text-grey-text dark:text-dark-grey-text">
+                                                    Rediger favoritt
+                                                </div>
+                                            </div>
+                                            {
+                                                data?.success && (
+                                                    Object.keys(data.data.user_favs).map((key, index) => (
+                                                        <div ket={index} className="flex flex-row">
+                                                            <div className="flex w-[70%]" key={index}>
+                                                                <Link className="text-primary-color dark:text-dark-primary-color hover:no-underline hover:text-accent-color hover:dark:text-dark-accent-color" to={`/project/${data.data.user_favs[key].project_uid}/`}>
+                                                                    {data.data.user_favs[key].project_name}
+                                                                </Link>
                                                             </div>
-                                                            <div className="flex flex-1 justify-end text-grey-text dark:text-dark-grey-text">
-                                                                Rediger favoritt
+                                                            <div className="flex flex-1 justify-end">
+                                                                <button className="hover:text-accent-color font-semibold hover:dark:text-dark-accent-color" onClick={(e) => handleDeleteClick(e, data.data.user_favs[key].uid)}>Fjern</button>
                                                             </div>
                                                         </div>
-                                                        {
-                                                            favourites?.success && (
-                                                                Object.keys(favourites.data).map((key, index) => (
-                                                                    <div className="flex flex-row">
-                                                                        <div className="flex w-[70%]" key={index}>
-                                                                            <Link className="text-primary-color dark:text-dark-primary-color hover:no-underline hover:text-accent-color hover:dark:text-dark-accent-color" to={`/project/${favourites.data[key].project_uid}/`}>
-                                                                                {favourites.data[key].project_name}
-                                                                            </Link>
-                                                                        </div>
-                                                                        <div className="flex flex-1 justify-end">
-                                                                            <button className="hover:text-accent-color font-semibold hover:dark:text-dark-accent-color" onClick={(e) => handleDeleteClick(e, favourites.data[key].uid)}>Fjern</button>
-                                                                        </div>
-                                                                    </div>
-                                                                ))
-                                                            )
-                                                        }
-                                                    </div>
-                                                </div>
-                                            )
-                                        }
-                                    </>
+                                                    ))
+                                                )
+                                            }
+                                        </div>
+                                    </div>
                                 )
                             }
                         </div>

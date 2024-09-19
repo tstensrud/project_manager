@@ -27,7 +27,7 @@ def user_profile():
     user_identity = get_jwt_identity()
     user = dbo.get_user(user_identity)
     if user:
-        user_data = user.get_json()
+        user_data = dbo.get_user_data(user_uid=user_identity)
         is_admin = user.admin
         if is_admin:
             return jsonify({"success": True, "data": user_data, "admin": "admin"})
@@ -53,19 +53,6 @@ def remove_fav_project(fav_uid: str):
     if removed_fav:
         return jsonify({"success": True})
     return jsonify({"success": False, "message": "Kunne ikke slette favoritt"})
-
-@user_bp.route('/get_favs/', methods=['GET'])
-@jwt_required()
-def get_fav_projects():
-    verify_jwt_in_request()
-    user_identity = get_jwt_identity()
-    favs = dbo.get_fav_projects(user_identity)
-    if favs:
-        fav_data = {}
-        for fav in favs:
-            fav_data[fav.uid] = fav.get_json()
-        return jsonify({"success": True, "data": fav_data})
-    return jsonify({"success": False, "message": "Ingen favoritter lagt til"})
 
 @user_bp.route('/change_password/', methods=['PATCH'])
 @jwt_required()
