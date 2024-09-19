@@ -32,7 +32,7 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
     return (
         <>
             {
-                loading || buildingDataLoading ? (
+                loading ? (
                     <LoadingSpinner text="romdata" />
                 ) : (
                     <TableContainer>

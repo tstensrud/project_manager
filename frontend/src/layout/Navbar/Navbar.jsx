@@ -130,8 +130,8 @@ function Navbar() {
 
                             <div className="flex flex-col w-[250px] tracking-wide">
                                 <div className="flex flex-col w-[250px] tracking-wide">
-                                    <NavbarMenuTitle title="Brukerkonto" />
-                                    <NavbarLink url={'userprofile'} linkText="Konto" />
+                                    <NavbarMenuTitle title="Brukervalg" />
+                                    <NavbarLink url={'userprofile'} linkText="Min side" />
                                     <NavbarLink url={`logout/${userUuid}`} linkText="Logg ut" />
                                 </div>
                             </div>

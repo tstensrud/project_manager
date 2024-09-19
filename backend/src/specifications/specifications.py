@@ -74,12 +74,11 @@ def get_spec_rooms(spec_uid):
 @jwt_required()
 def get_specification_room_types(spec_uid):
     specification_data = dbo.get_specification_room_types(spec_uid)
-    spec = dbo.get_specification(spec_uid)
     room_uid_type = {}
     for room_type in specification_data:
         room_uid_type[room_type.uid] = room_type.name
     room_types_list = [{"uid": key, "name": value} for key, value in room_uid_type.items()]
-    return jsonify({"spec_room_type_data": room_types_list})
+    return jsonify({"data": room_types_list})
 
 """ @jwt_required()
 

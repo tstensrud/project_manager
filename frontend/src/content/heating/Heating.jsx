@@ -38,9 +38,9 @@ function Heating() {
 
 
     // Handlers
-    const handleSettingsButtonUpdate = () => {
+    const handleSettingsButtonUpdate = async () => {
         setSettingsUpdatedState(prevState => !prevState);
-        buildingReFetch();
+        await buildingReFetch();
     }
 
 

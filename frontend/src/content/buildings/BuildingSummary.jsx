@@ -71,7 +71,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
 
     const submitNameChange = async (e) => {
         e.preventDefault();
-        await handleSubmit(e);
+        await handleSubmit();
     }
 
     const handleDeleteBuilding = async (e) => {

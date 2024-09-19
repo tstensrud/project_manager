@@ -77,7 +77,8 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
 
     const handleKeyDown = async (e) => {
         if (e.key === "Enter") {
-            await updateRoomData(e);
+            e.preventDefault();
+            await updateRoomData();
             handleBlur();
         } if (e.key == "Escape") {
             handleBlur();
@@ -119,8 +120,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
 
     const handleUpdateVentilation = async (e) => {
         e.preventDefault();
-        console.log(updateVentilationData)
-        await updateVentilationDataSubmit(e);
+        await updateVentilationDataSubmit();
     }
 
     return (

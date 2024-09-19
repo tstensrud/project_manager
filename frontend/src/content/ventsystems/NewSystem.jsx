@@ -52,7 +52,7 @@ function NewSystem() {
 
     const handleSubmitNewSystem = async (e) => {
         e.preventDefault();
-        await submitSystemData(e);
+        await submitSystemData();
     }
 
     // Form-element refs

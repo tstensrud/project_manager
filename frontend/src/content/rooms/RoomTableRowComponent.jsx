@@ -79,7 +79,8 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
 
     const handleKeyDown = async (e) => {
         if (e.key === "Enter") {
-            await updateRoomData(e);
+            e.preventDefault();
+            await updateRoomData();
             handleBlur();
         } if (e.key == "Escape") {
             handleBlur();
@@ -108,7 +109,8 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     );
 
     const handleUndo = async (e) => {
-        await handleSubmit(e);
+        e.preventDefault();
+        await handleSubmit();
         setUndoButton(false);
     }
 

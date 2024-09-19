@@ -85,6 +85,7 @@ def token():
 def get_user():
     verify_jwt_in_request()
     user_identiy = get_jwt_identity()
+    print(user_identiy)
     user = db.session.query(models.Users).filter(models.Users.uuid == user_identiy).first()
     user_data = {}
     user_data["uuid"] = user.uuid
@@ -121,7 +122,6 @@ def initialize():
         admin_account = models.Users(uuid=str(uuid), email=email, name=name, password = generate_password_hash(password, method='scrypt'), logged_in=False, admin=True, is_active=True)
         db.session.add(admin_account)
         db.session.commit()
-        print("Admin account created")
     if spec_rooms_setup():
         dummy_project()
         set_sanitary_equipment_data()

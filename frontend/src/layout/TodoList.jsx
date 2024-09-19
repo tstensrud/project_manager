@@ -44,7 +44,7 @@ function TodoList({ setShowTodoList }) {
         if (!newTodo){
             return;
         }
-        await handleSubmit(e);
+        await handleSubmit();
     }
 console.log(response)
     return (

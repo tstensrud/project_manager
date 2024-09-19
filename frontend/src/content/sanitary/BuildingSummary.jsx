@@ -73,7 +73,7 @@ function BuildingSummary({ buildingUid, projectId }) {
 
     const handleCurveSubmit = async (e) => {
         e.preventDefault();
-        await handleSubmit(e);
+        await handleSubmit();
     }
 
     return (

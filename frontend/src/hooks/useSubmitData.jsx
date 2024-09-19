@@ -7,8 +7,7 @@ const useSubmitData = (endpoint) => {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
         setLoading(true);
         try {
           const res = await AxiosInstance.post(endpoint, data);

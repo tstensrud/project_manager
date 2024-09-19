@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Hooks and utils
 import { GlobalContext } from '../../GlobalContext';
@@ -21,6 +21,7 @@ function Dashboard() {
   const [searchValue, setSearhValue] = useState(null);
   const { data: searchData, setData: setSearchData, loading: searchLoading, fetchData } = useFetchRequest(`/projects/search/${searchValue}/`);
 
+  const navigate = useNavigate();
 
   useEffect(() => {
     setActiveProject('0');
@@ -43,7 +44,7 @@ function Dashboard() {
     setSearhValue(e.target.value)
   }
 
-  
+
   return (
     <>
       <SubTitleComponent svg={<HeaderIcon />} headerText={"Dashboard - velg prosjekt"} projectName={""} projectNumber={""} />
@@ -114,24 +115,28 @@ function Dashboard() {
                               {
                                 data?.success === true &&
                                 Object.keys(data.data)
-                                .sort((a, b) => {
-                                  const numA = data.data[a].ProjectNumber;
-                                  const numB = data.data[b].ProjectNumber;
-                                  return numA - numB;
-                                })
-                                .map((key, index) => (
-                                  <tr className="hover:dark:bg-table-hover hover:bg-table-hover border-default-border-color border-b dark:border-b-dark-default-border-color" key={index}>
-                                    <td className="pt-1 pb-1 pl-3 pr-3 min-w-[300px] max-w-[300px] w-[300px]">
-                                      <Link to={`/project/${data.data[key].uid}/`}>{data.data[key].ProjectNumber}</Link>
-                                    </td>
-                                    <td className="pt-1 pb-1 pl-3 pr-3 min-w-[400px] max-w-[400px] w-[400px]">
-                                      {data.data[key].ProjectName}
-                                    </td>
-                                    <td className="pt-1 pb-1 pl-3 pr-3 min-w-[200px] max-w-[200px] w-[200px] text-end">
-                                      {data.data[key].CreatedAt}
-                                    </td>
-                                  </tr>
-                                ))
+                                  .sort((a, b) => {
+                                    const numA = data.data[a].ProjectNumber;
+                                    const numB = data.data[b].ProjectNumber;
+                                    return numA - numB;
+                                  })
+                                  .map((key, index) => (
+                                    <tr onClick={() => navigate(`/project/${data.data[key].uid}/`)} className="hover:dark:bg-dark-table-hover cursor-pointer hover:bg-table-hover border-default-border-color border-b dark:border-b-dark-default-border-color text-primary-color dark:text-dark-primary-color hover:no-underline hover:text-accent-color hover:dark:text-dark-accent-color" key={index}>
+                                      <td className="pt-1 pb-1 pl-3 pr-3 min-w-[300px] max-w-[300px] w-[300px]">
+                                        
+                                          {data.data[key].ProjectNumber}
+                                        
+                                      </td>
+                                      <td className="pt-1 pb-1 pl-3 pr-3 min-w-[400px] max-w-[400px] w-[400px]">
+                                        
+                                          {data.data[key].ProjectName}
+                                        
+                                      </td>
+                                      <td className="pt-1 pb-1 pl-3 pr-3 min-w-[200px] max-w-[200px] w-[200px] text-end">
+                                        {data.data[key].CreatedAt}
+                                      </td>
+                                    </tr>
+                                  ))
                               }
                             </tbody>
                           </>
@@ -141,12 +146,12 @@ function Dashboard() {
                               {
                                 searchData?.success === true &&
                                 searchData?.data && Object.keys(searchData.data).map((key, index) => (
-                                  <tr className="hover:dark:bg-table-hover hover:bg-table-hover border-default-border-color border-b dark:border-b-dark-default-border-color" key={index}>
+                                  <tr onClick={() => navigate(`/project/${searchData.data[key].uid}/`)} className="hover:dark:bg-table-hover cursor-pointer hover:bg-table-hover border-default-border-color border-b dark:border-b-dark-default-border-color text-primary-color dark:text-dark-primary-color hover:no-underline hover:text-accent-color hover:dark:text-dark-accent-color" key={index}>
                                     <td className="pt-1 pb-1 pl-3 pr-3 min-w-[300px] max-w-[300px] w-[300px]">
-                                      <Link to={`/project/${searchData.data[key].uid}/`}>{searchData.data[key].ProjectNumber}</Link>
+                                        {searchData.data[key].ProjectNumber}
                                     </td>
                                     <td className="pt-1 pb-1 pl-3 pr-3 min-w-[400px] max-w-[400px] w-[400px]">
-                                      {searchData.data[key].ProjectName}
+                                        {searchData.data[key].ProjectName}
                                     </td>
                                     <td className="pt-1 pb-1 pl-3 pr-3 min-w-[200px] max-w-[200px] w-[200px] text-end">
                                       {searchData.data[key].CreatedAt}

@@ -60,7 +60,8 @@ function Settings() {
     }
 
     const handleOnSubmit = async (e) => {
-        await updateProjectDataSubmit(e);
+        e.preventDefault();
+        await updateProjectDataSubmit();
     }
 
     return (
@@ -121,7 +122,7 @@ function Settings() {
                                         {
                                             updatedProjectDataError && (
                                                 <div className="mt-3">
-                                                    {updatedProjectDataError}
+                                                    {JSON.stringify(updatedProjectDataError)}
                                                 </div>
                                             )
                                         }

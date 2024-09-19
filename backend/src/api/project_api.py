@@ -80,7 +80,7 @@ def set_spec(project_uid):
             number_exist = dbo.check_for_existing_project_number(data["project_number"].strip())
             if number_exist:
                 return jsonify({"success": False, "message": "Prosjektnummeret finnes allerede"})
-            project_number = data.data["project_number"].strip()
+            project_number = data["project_number"].strip()
         if "project_specification" in data:
             new_spec = dbo.set_project_specification(project_uid, data["project_specification"])
             if new_spec is False:
@@ -426,19 +426,20 @@ def new_system(project_uid):
 @jwt_required()
 def update_system(project_uid, system_uid):
     data = request.get_json()
-    processed_data = {}
-    for key, value in data.items():
-        key = globals.camelcase_to_snake(key)
-        if key == "air_flow":
-            converted_value = globals.replace_and_convert_to_float(value.strip())
-            if converted_value is False:
-                return jsonify({"success": False, "message": "Viftekapasitet må kun inneholde tall"})
-            processed_data[key] = converted_value
-        else:
-            processed_data[key] = value.strip()
-    dbo.update_system_info(system_uid, processed_data)
-    
-    return jsonify({"success": True})
+    if data:
+        processed_data = {}
+        for key, value in data.items():
+            key = globals.camelcase_to_snake(key)
+            if key == "air_flow":
+                converted_value = globals.replace_and_convert_to_float(value.strip())
+                if converted_value is False:
+                    return jsonify({"success": False, "message": "Viftekapasitet må kun inneholde tall"})
+                processed_data[key] = converted_value
+            else:
+                processed_data[key] = value.strip()
+        dbo.update_system_info(system_uid, processed_data)
+        return jsonify({"success": True, "message": "System oppdatert"})
+    return jsonify({"success": False, "message": "Mottok ingen data"})
 
 @project_api_bp.route('/delete_system/<system_uid>/', methods=['DELETE'])
 @jwt_required()
@@ -611,17 +612,17 @@ def update_buildingsettings(project_uid, building_uid):
         for key, value in data.items():
             converted_value = globals.replace_and_convert_to_float(value)
             if converted_value is False:
-                return jsonify({"error": "Innstillinger må kun inne holde tall"})
+                return jsonify({"success": False, "message": "Innstillinger må kun inne holde tall"})
             processed_data[key] = converted_value
         if dbo.update_building_heating_settings(building_uid, processed_data):
             building_rooms = dbo.get_all_rooms_building(building_uid)
             for room in building_rooms:
                 dbo.calculate_total_heat_loss_for_room(room.uid)
-            return jsonify({"message": "Oppdatert"})
+            return jsonify({"success": True, "message": "Oppdatert"})
         else:
-            return jsonify({"error": "Kunne ikke oppdatere bygg"})
+            return jsonify({"success": False, "message": "Kunne ikke oppdatere bygg"})
     else:
-        return jsonify({"error": "Fant ingen bygg"})
+        return jsonify({"success": False, "message": "Fant ingen bygg"})
     
 @project_api_bp.route('/heating/buildingsettings/setheatsource/<building_uid>/', methods=['PATCH'])
 @jwt_required()
@@ -632,8 +633,8 @@ def set_heatsource(project_uid, building_uid):
         for room in rooms:
             update = dbo.update_room_data(room.uid, data)
             if update is False:
-                return jsonify({"error": "Kunne ikke sette varmekilde for rom"})
-    return jsonify({"message": "Rom oppdatert"})
+                return jsonify({"success": False, "message": "Kunne ikke sette varmekilde for rom"})
+    return jsonify({"success": True, "message": "Rom oppdatert"})
 #
 #               
 #   COOLING

@@ -25,7 +25,7 @@ const CardInputField = forwardRef((props, ref) => {
             dark:hover:border-dark-form-element-hover
             "
             onChange={props.changeFunction}
-            type="text"
+            type={props.password ? 'password' : 'text'}
             value={props.value}
             name={props.name}
             placeholder={props.placeholder}

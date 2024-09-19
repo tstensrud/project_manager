@@ -40,7 +40,8 @@ function NewProject() {
     }
 
     const submitProject = async (e) => {
-        await handleSubmit(e);  
+        e.preventDefault();
+        await handleSubmit();  
     }
     
     return (

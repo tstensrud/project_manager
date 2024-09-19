@@ -17,7 +17,7 @@ import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 function Project() {
     const { projectId } = useParams();
     const { setActiveProject, setActiveProjectName } = useContext(GlobalContext);
-    const { data, loading, error } = useFetch(`/project_api/${projectId}/`)
+    const { data, loading, error } = useFetch(`/project_api/${projectId}/`);
 
 
     useEffect(() => {
@@ -41,7 +41,7 @@ function Project() {
                     loading ? (
                         <LoadingSpinner text="prosjekt" />
                     ) : (
-                        <div className="flex justify-center flex-row w-full flex-wrap">
+                        <div className="flex justify-evenly flex-row w-full flex-wrap">
                             <ProjectSummary projectId={projectId} />
                             <BuildingRoomData projectId={projectId} />
                             <VentilationSummary projectId={projectId} />

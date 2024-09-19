@@ -92,7 +92,7 @@ function Rooms() {
             roomTypeRef.current.focus();
             return;
         }
-        await handleSubmit(e);
+        await handleSubmit();
     }
 
     return (
@@ -106,38 +106,43 @@ function Rooms() {
                         <LoadingSpinner text="data" />
                     ) : (
                         <>
-                            <div className="flex h-20 items-center justify-center text-center flex-row w-full">
-                                <form onSubmit={handleOnSubmit}>
-                                    <div className="flex flex-row w-full">
-                                        <div className="mr-2 w-24">
-                                            <InputField name="floor" changeFunction={handleFormChange} placeholder="Etasje" tabIndex={2} required={true} disabled={disabled} />
-                                        </div>
-                                        <div className="mr-2 w-36">
-                                            <InputField ref={inputRoomNumberRef} name="roomNumber" changeFunction={handleFormChange} placeholder="Romnr" tabIndex={3} required={true} disabled={disabled} />
-                                        </div>
-                                        <div className="mr-2">
-                                            <SelectElement ref={roomTypeRef} name="roomType" changeFunction={handleFormChange} tabIndex={4} disabled={disabled}>
-                                                <option key="0" value="">- Velg romtype -</option>
-                                                {roomTypeData && roomTypeData.spec_room_type_data !== undefined && roomTypeData.spec_room_type_data.map(type => (
-                                                    <option key={type.uid} value={type.uid}>{type.name}</option>
-                                                ))};
-                                            </SelectElement>
-                                        </div>
-                                        <div className="mr-2 w-52">
-                                            <InputField ref={inputRoomNameRef} name="roomName" changeFunction={handleFormChange} placeholder="Romnavn" tabIndex={5} required={true} disabled={disabled} />
-                                        </div>
-                                        <div className="mr-2 w-24">
-                                            <InputField ref={inputAreaRef} name="roomArea" changeFunction={handleFormChange} placeholder="Areal" tabIndex={6} required={true} disabled={disabled} />
-                                        </div>
-                                        <div className="mr-2 w-28">
-                                            <InputField ref={inputPopRef} name="roomPeople" changeFunction={handleFormChange} placeholder="Personer" tabIndex={7} required={true} disabled={disabled} />
-                                        </div>
-                                        <div className="mr-2">
-                                            <FormButton buttonText="Legg til" tabIndex={7} disabled={disabled} />
-                                        </div>
+                            {
+                                currentBuilding !== -1 && (
+                                    <div className="flex h-20 items-center justify-center text-center flex-row w-full">
+                                        <form onSubmit={handleOnSubmit}>
+                                            <div className="flex flex-row w-full">
+                                                <div className="mr-2 w-24">
+                                                    <InputField name="floor" changeFunction={handleFormChange} placeholder="Etasje" tabIndex={2} required={true} disabled={disabled} />
+                                                </div>
+                                                <div className="mr-2 w-36">
+                                                    <InputField ref={inputRoomNumberRef} name="roomNumber" changeFunction={handleFormChange} placeholder="Romnr" tabIndex={3} required={true} disabled={disabled} />
+                                                </div>
+                                                <div className="mr-2">
+                                                    <SelectElement ref={roomTypeRef} name="roomType" changeFunction={handleFormChange} tabIndex={4} disabled={disabled}>
+                                                        <option key="0" value="">- Velg romtype -</option>
+                                                        {roomTypeData && roomTypeData.data !== undefined && roomTypeData.data.map(type => (
+                                                            <option key={type.uid} value={type.uid}>{type.name}</option>
+                                                        ))};
+                                                    </SelectElement>
+                                                </div>
+                                                <div className="mr-2 w-52">
+                                                    <InputField ref={inputRoomNameRef} name="roomName" changeFunction={handleFormChange} placeholder="Romnavn" tabIndex={5} required={true} disabled={disabled} />
+                                                </div>
+                                                <div className="mr-2 w-24">
+                                                    <InputField ref={inputAreaRef} name="roomArea" changeFunction={handleFormChange} placeholder="Areal" tabIndex={6} required={true} disabled={disabled} />
+                                                </div>
+                                                <div className="mr-2 w-28">
+                                                    <InputField ref={inputPopRef} name="roomPeople" changeFunction={handleFormChange} placeholder="Personer" tabIndex={7} required={true} disabled={disabled} />
+                                                </div>
+                                                <div className="mr-2">
+                                                    <FormButton buttonText="Legg til" tabIndex={7} disabled={disabled} />
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                </form>
-                            </div>
+                                )
+                            }
+
 
                             <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
 

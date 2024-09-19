@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Hooks and utils
@@ -11,28 +11,40 @@ import CardTitle from '../../layout/CardTitle';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import ContentCard from '../../layout/ContentCard';
 import useSubmitData from '../../hooks/useSubmitData.jsx';
+import BookMarkIcon from '../../assets/svg/bookMarkIcon.jsx'
 
 function ProjectSummary({ projectId }) {
-    const { userUuid } = useContext(GlobalContext);
-    
+    const { userUuid, favProjects } = useContext(GlobalContext);
+
     const { data, loading, error } = useFetch(`/project_api/${projectId}/`);
-    
-    
-    const { setData: setFavData, response: favResponse, error: favError, handleSubmit } = useSubmitData(`/user/${userUuid}/set_favourite/${projectId}/`);
+
+    const { setData: setFavData, response: favResponse, error: favError, handleSubmit } = useSubmitData(`/user/set_favourite/${projectId}/`);
+
+    const [isFav, setIsFav] = useState(false);
 
     useEffect(() => {
-        setFavData({projectUid: projectId});
-    },[]);
+        setFavData({ projectUid: projectId });
+    }, []);
+
+    useEffect(() => {
+        for (let value in favProjects) {
+            if (favProjects[value] === projectId) {
+                setIsFav(true);
+                return;
+            }
+        }
+    }, []);
 
     useEffect(() => {
         if (favResponse?.success === true) {
-            console.log("Fav set")
-        } 
-    },[favResponse])
+            setIsFav(true);
+        }
+    }, [favResponse]);
+
 
     const handleSetFav = (e) => {
         e.preventDefault();
-        handleSubmit(e);
+        handleSubmit();
     }
 
     return (
@@ -45,15 +57,26 @@ function ProjectSummary({ projectId }) {
                         {
                             data && data.data ? (
                                 <>
-                                <div className="flex flex-row">
-                                    <div className="w-[80%]">
-                                        <CardTitle svg={<StarIcon />} title={<>{data?.data.ProjectName}</>} />
+                                    <div className="flex flex-row items-center">
+                                        <div className="w-[80%]">
+                                            <CardTitle svg={<StarIcon />} title={<>{data?.data.ProjectName}</>} />
+                                        </div>
+                                        <div className="flex flex-1 justify-end h-full">
+                                            {
+                                                !isFav && (
+                                                    <div className="flex flex-row h-full items-center">
+                                                        <div className="flex text-center items-center h-full pr-5">
+                                                            <Link to="#" onClick={handleSetFav}>Sett som favoritt</Link>
+                                                        </div>
+                                                        <div className="flex items-center h-full">
+                                                            <BookMarkIcon />
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        </div>
                                     </div>
-                                    <div className="flex flex-1 justify-end">
-                                        <Link to="#" onClick={handleSetFav}>Sett som favoritt</Link>
-                                    </div>
-                                </div>
-                                    
+
                                     <div className="border-0 p-3 rounder-lg">
                                         <div className="mb-1 text-grey-text dark:text-dark-grey-text">
                                             <h4>Prosjektbeskrivelse</h4>

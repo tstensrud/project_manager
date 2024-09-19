@@ -44,7 +44,7 @@ function Buildings() {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        await handleSubmit(e);
+        await handleSubmit();
     }
 
     return (

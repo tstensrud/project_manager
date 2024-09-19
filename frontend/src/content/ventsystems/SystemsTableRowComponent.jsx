@@ -22,14 +22,13 @@ function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
 
     // Hooks
     const { data: systemData, loading: systemLoading, error: systemError, refetch: systemRefetch } = useFetch(`/project_api/${projectId}/get_system/${systemId}/`);
-    const { data: updatedSystemData, response: updateSystemDataResponse, setData, handleSubmit: updateSystemData } = useUpdateData(`/project_api/${projectId}/update_system/${systemId}/`);
-    const { data: deleteSystemId, response: responseDeleteSystem, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/project_api/${projectId}/delete_system/${systemId}/`);
+    const { response: updateSystemDataResponse, setData, handleSubmit: updateSystemData } = useUpdateData(`/project_api/${projectId}/update_system/${systemId}/`);
+    const { response: responseDeleteSystem, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/project_api/${projectId}/delete_system/${systemId}/`);
 
     // Use states
     const [editingCell, setEditingCell] = useState(null);
     const [editedData, setEditedData] = useState(null);
     const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
-    const [cellClass, setRowClass] = useState("");
     const [markedRow, setMarkedRow] = useState('');
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -51,13 +50,13 @@ function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
     },[responseDeleteSystem]);
 
     useEffect(() => {
-        if (updateSystemDataResponse?.sucess === true) {
+        if (updateSystemDataResponse?.success === true) {
+            console.log("refetch")
             setData('');
             systemRefetch();
         }
-    },[updateSystemDataResponse])
-
-
+    },[updateSystemDataResponse]);
+    
     // Handlers
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
@@ -87,7 +86,8 @@ function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
 
     const handleKeyDown = async (e) => {
         if (e.key === "Enter") {
-            await updateSystemData(e);
+            e.preventDefault();
+            await updateSystemData();
             handleBlur();
         } if (e.key == "Escape") {
             handleBlur();
@@ -115,6 +115,7 @@ function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
         </TableTDelement>
     );
 
+    console.log(updateSystemDataResponse)
     return (
         <>
             {updateSystemDataResponse?.success === false && (<MessageBox message={updateSystemDataResponse.message} />)}

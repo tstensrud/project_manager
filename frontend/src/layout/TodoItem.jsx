@@ -33,7 +33,8 @@ function TodoItem({ user, itemData }) {
     }, [response]);
 
     const handleComplete = async (e) => {
-        await handleSubmit(e);
+        e.preventDefault();
+        await handleSubmit();
     }
 
     return (

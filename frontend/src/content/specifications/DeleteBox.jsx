@@ -30,7 +30,7 @@ function DeleteBox({ setShowDeleteDialog, deleteSpecification }) {
     return (
         <div className="fixed top-0 h-full w-full justify-center items-center z-[1000] bg-background-shade">
             <div className="w-full h-full flex flex-col justify-center items-center">
-                <div className="bg-secondary-color flex flex-col p-5 rounded-lg w-[400px] h-[400px] justify-center items-center text-center">
+                <div className="bg-secondary-color dark:bg-dark-secondary-color flex flex-col p-5 rounded-lg w-[400px] h-[400px] justify-center items-center text-center">
                     <h4>Slett kravspesifikasjon</h4>
                     <div className="mb-3">
                         Denne handlingen er <strong>ikke</strong> reversibel og alle romtyper assosisert blir slettet. Rom som allerede er lagt inn med data fra denne spesifikasjonen blir ikke slettet.

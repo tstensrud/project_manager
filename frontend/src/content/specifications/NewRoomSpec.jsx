@@ -97,7 +97,7 @@ function NewRoomSpec() {
 
     const submitNewData = async (e) => {
         e.preventDefault();
-        await handleSubmit(e);
+        await handleSubmit();
     }
 
     const toggleHelpBox = (e) => {

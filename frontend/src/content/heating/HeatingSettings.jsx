@@ -25,6 +25,21 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
     // Set heat source for rooms in building
     const { data: updatedHeatSourceData, response: responseHeatsource, setData: setHeatSourceData, handleSubmit: updateHeatSource } = useUpdateData(`/project_api/${projectId}/heating/buildingsettings/setheatsource/${buildingUid}/`);
 
+    useEffect(() => {
+        if (response?.success === true) {
+            refetch();
+            setData('');
+            onSettingsUpdate();
+        }
+    }, [response]);
+
+    useEffect(() => {
+        if (responseHeatsource?.success === true) {
+            setHeatSourceData('');
+            onSettingsUpdate();
+        }
+    },[responseHeatsource])
+
     // Handlers
     const handleCloseWindow = () => {
         setShowHeatingSettings(false);
@@ -32,12 +47,8 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (updatedBuildingData !== null && updatedBuildingData !== undefined && updatedBuildingData !== '') {
-            await updateBuildingData(e);
-            refetch();
-            setData('');
-            onSettingsUpdate(); // Pass a message of change to HeatingTableRowComponent
+        if (updatedBuildingData) {
+            await updateBuildingData();
         }
     }
 
@@ -47,9 +58,9 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
 
     const handleHeatSourceSubmit = async (e) => {
         e.preventDefault();
-        await updateHeatSource(e);
-        setHeatSourceData('');
-        onSettingsUpdate(); // Pass a message of change to HeatingTableRowComponent
+        if (updatedHeatSourceData) {
+            await updateHeatSource();
+        }
     }
 
     const handleFormChange = (e) => {
@@ -61,8 +72,7 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
 
     return (
         <>
-            {response?.error && response.error !== null ? (<MessageBox message={response.error} />) : (<></>)}
-            {error?.error && error.error !== null ? (<MessageBox message={error.error} />) : (<></>)}
+            {response?.success === false && (<MessageBox message={response.message} />)}
 
             <div className="flex flex-col pl-3 pr-3 absolute top-1/2 rounded-lg border border-primary-color dark:border-dark-default-border-color left-1/2 transform -translate-x-1/2 overflow-y-auto -translate-y-1/2 h-1/2 w-[700px] bg-secondary-color dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color shadow-lg shadow-background-shade justify-start z-[1000] text-base">
                 {
@@ -93,91 +103,91 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                                                 Innetempertaur (C&#176;)
                                             </div>
                                             <div>
-                                                <CardInputField name="inside_temp" placeholder={data && data.building_data.InsideTemp} changeFunction={handleFormChange} />
+                                                <CardInputField name="inside_temp" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 DUT (C&#176;)
                                             </div>
                                             <div>
-                                                <CardInputField name="dut" placeholder={data && data.building_data.Dut} changeFunction={handleFormChange} />
+                                                <CardInputField name="dut" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 Temp ventilasjon (C&#176;)
                                             </div>
                                             <div className="mt-2">
-                                                <CardInputField name="vent_temp" placeholder={data && data.building_data.VentTemp} changeFunction={handleFormChange} />
+                                                <CardInputField name="vent_temp" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 Luftveksling infilt. (1/h)
                                             </div>
                                             <div>
-                                                <CardInputField name="infiltration" placeholder={data && data.building_data.Infiltration} changeFunction={handleFormChange} />
+                                                <CardInputField name="infiltration" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 U-verdi yttervegg (W/m<sup>2</sup>K)
                                             </div>
                                             <div>
-                                                <CardInputField name="u_value_outer_wall" placeholder={data && data.building_data.UvalueOuterWall} changeFunction={handleFormChange} />
+                                                <CardInputField name="u_value_outer_wall" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 U-verdi vindu/dør (W/m<sup>2</sup>K)
                                             </div>
                                             <div>
-                                                <CardInputField name="u_value_window_door" placeholder={data && data.building_data.UvalueWindowDoor} changeFunction={handleFormChange} />
+                                                <CardInputField name="u_value_window_door" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 U-verdi gulv grunn (W/m<sup>2</sup>K)
                                             </div>
                                             <div>
-                                                <CardInputField name="u_value_floor_ground" placeholder={data && data.building_data.UvalueFloorGround} changeFunction={handleFormChange} />
+                                                <CardInputField name="u_value_floor_ground" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 U-verdi gulv luft (W/m<sup>2</sup>K)
                                             </div>
                                             <div>
-                                                <CardInputField name="u_value_floor_air" placeholder={data && data.building_data.UvalueFloorAir} changeFunction={handleFormChange} />
+                                                <CardInputField name="u_value_floor_air" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 U-verdi tak (W/m<sup>2</sup>K)
                                             </div>
                                             <div>
-                                                <CardInputField name="u_value_roof" placeholder={data && data.building_data.UvalueRoof} changeFunction={handleFormChange} />
+                                                <CardInputField name="u_value_roof"  changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 Kuldebroveri (W/m<sup>2</sup>K)
                                             </div>
                                             <div>
-                                                <CardInputField name="cold_bridge_value" placeholder={data && data.building_data.ColdBridge} changeFunction={handleFormChange} />
+                                                <CardInputField name="cold_bridge_value" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 Årsmiddeltemp. (C&#176;)
                                             </div>
                                             <div>
-                                                <CardInputField name="year_mid_temp" placeholder={data && data.building_data.YearMidTemp} changeFunction={handleFormChange} />
+                                                <CardInputField name="year_mid_temp" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 Temp gulv mot luft (C&#176;)
                                             </div>
                                             <div>
-                                                <CardInputField name="temp_floor_air" placeholder={data && data.building_data.TempFloorAir} changeFunction={handleFormChange} />
+                                                <CardInputField name="temp_floor_air"changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2">
                                                 Tillegg (%)
                                             </div>
                                             <div>
-                                                <CardInputField name="safety" placeholder={data && data.building_data.Safety} changeFunction={handleFormChange} />
+                                                <CardInputField name="safety" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-2 mb-5">
@@ -193,7 +203,7 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                                             <h3>Sett primærvarmekilde</h3>
                                         </div>
                                         <div>
-                                            <CardInputField name="heat_source" changeFunction={handleHeatSourceChange} placeholder='Radiator' /> <br></br>
+                                            <CardInputField name="heat_source" changeFunction={handleHeatSourceChange} /> <br></br>
                                         </div>
                                         <div className="mt-3">
                                             <CardButton buttonText="Lagre" />

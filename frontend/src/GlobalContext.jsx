@@ -9,6 +9,7 @@ const GlobalProvider = ({ children }) => {
     const [activeProjectName, setActiveProjectName] = useState(null);
     const [token, setToken] = useState(null);
     const [darkMode, setDarkMode] = useState(true);
+    const [favProjects, setFavProjects] = useState(null);
 
     const value = {
         activeProject,
@@ -22,7 +23,9 @@ const GlobalProvider = ({ children }) => {
         token,
         setToken,
         darkMode,
-        setDarkMode
+        setDarkMode,
+        favProjects,
+        setFavProjects,
     };
 
     useEffect(() => {

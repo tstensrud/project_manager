@@ -69,7 +69,8 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
 
     const handleKeyDown = async (e) => {
         if (e.key === "Enter") {
-            await updateRoomData(e);
+            e.preventDefault();
+            await updateRoomData();
             handleBlur();
 
         } if (e.key == "Escape") {

@@ -33,14 +33,12 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
     // Handlers
     const handleCloseWindow = () => {
         setShowCoolingSettings(false);
-        console.log("asdf")
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (updatedBuildingData) {
-            await updateBuildingData(e);
+            await updateBuildingData();
         }
     }
 
@@ -87,42 +85,42 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
                                                 Romtemp sommer (C&#176;)
                                             </div>
                                             <div>
-                                                <CardInputField name="RoomTempSummer" placeholder="26" changeFunction={handleFormChange} />
+                                                <CardInputField name="RoomTempSummer" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-3">
                                                 Tilluftstemp. sommer (C&#176;)
                                             </div>
                                             <div>
-                                                <CardInputField name="VentairTempSummer" placeholder="18" changeFunction={handleFormChange} />
+                                                <CardInputField name="VentairTempSummer" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-3">
                                                 Internlast lys (W/m<sup>2</sup>)
                                             </div>
                                             <div>
-                                                <CardInputField name="InternalHeatloadLights" placeholder="7" changeFunction={handleFormChange} />
+                                                <CardInputField name="InternalHeatloadLights" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-3">
                                                 Internlast personer (W/pers)
                                             </div>
                                             <div>
-                                                <CardInputField name="InternalHeatloadPeople" placeholder="100" changeFunction={handleFormChange} />
+                                                <CardInputField name="InternalHeatloadPeople" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-3">
                                                 Soltilskudd (W/m<sup>2</sup>K)
                                             </div>
                                             <div>
-                                                <CardInputField name="SunAdition" placeholder="1" changeFunction={handleFormChange} />
+                                                <CardInputField name="SunAdition" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-3">
                                                 Solreduksjon (0-1,0)
                                             </div>
                                             <div>
-                                                <CardInputField name="SunReduction" placeholder="0,5" changeFunction={handleFormChange} />
+                                                <CardInputField name="SunReduction" changeFunction={handleFormChange} />
                                             </div>
 
                                             <div className="mt-3">
