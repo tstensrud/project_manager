@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react'
 
+// hooks and utils
 import useSubmitData from '../../../hooks/useSubmitData.jsx';
 
+// components
 import CardInputField from '../../../layout/formelements/CardInputField.jsx';
 import CardButton from '../../../layout/formelements/CardButton.jsx';
 
@@ -40,7 +42,7 @@ function NewUser({ userDataRefetch }) {
                 <div className="flex flex-row items-end">
                     <div className="flex flex-col mt-3 mr-3">
                         <div className="pl-2">
-                            Epost til bruker
+                            E-postadresse
                         </div>
                         <div>
                             <CardInputField ref={emailRef} tabindex={1} name="email" changeFunction={handleInputChange} required={true} placeholder="E-post" />
@@ -55,7 +57,7 @@ function NewUser({ userDataRefetch }) {
                         </div>
                     </div>
                     <div className="flex mt-3 h-full items-end justify-end">
-                        <CardButton tabindex={3} buttonText="Legg til" />
+                        <CardButton tabindex={3} buttonText="Legg til ny bruker" />
                     </div>
 
                 </div>
@@ -64,6 +66,13 @@ function NewUser({ userDataRefetch }) {
                         newUserResponse?.success === false && (
                             <div className="flex h-full items-center mt-3 text-accent-color dark:text-dark-accent-color">
                                 Feil: {newUserResponse.message}
+                            </div>
+                        )
+                    }
+                    {
+                        newUserResponse?.success === true && (
+                            <div className="flex h-full items-center mt-3">
+                               Ny bruker opprettet: <div className="ml-5 text-accent-color dark:text-dark-accent-color">https://tstensrud.github.io/project_manager/#/register/{newUserResponse.data}</div>
                             </div>
                         )
                     }

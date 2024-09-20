@@ -5,7 +5,7 @@ from os import path
 from flask_login import LoginManager
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 import os
 
 #load_dotenv()
@@ -21,7 +21,7 @@ def create_app():
     #app.config['SQLALCHEMY_ECHO'] = True
     app.config['JWT_SECRET_KEY'] = "ASsaf39834578DJYACDS1234fwec1af521f35f1"
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
-    
+    load_dotenv()
     #app.config['UPLOAD_FOLDER'] = ".static/excel"
     db.init_app(app)
 

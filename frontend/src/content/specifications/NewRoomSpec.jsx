@@ -23,7 +23,7 @@ function NewRoomSpec() {
     const { suid } = useParams();
 
     // Hooks
-    const { data, loading: specLoading, error: specError, refetch } = useFetch(`/specifications/get_spec_room_data/${suid}/`);
+    const { data, error: specError } = useFetch(`/specifications/get_spec_room_data/${suid}/`);
     const { data: newData, setData, loading, response, error, handleSubmit } = useSubmitData(`/specifications/new_room/${suid}/`);
 
     // useStates

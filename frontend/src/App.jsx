@@ -30,6 +30,8 @@ import Sanitary from './content/sanitary/Sanitary';
 import Reports from './content/reports/Reports';
 import NewSystem from './content/ventsystems/NewSystem';
 import CalculatorSpeedAirflowDucts from './content/calculators/CalculatorSpeedAirflowDucts';
+import RegisterNewUser from './login/RegisterNewUser.jsx';
+import NotFound from './layout/NotFound.jsx';
 
 function App() {
 
@@ -40,9 +42,11 @@ function App() {
       <Routes>
         <Route path="/logout/:uuid" element={<Logout token={removeToken} />} />
         <Route path="noaccess" element={<NoAccess />} />
-        {!token ? (<Route path="/" element={<Login setToken={setToken} />} />
-        ) : (
-          <>
+        {
+          !token ? (
+            <Route path="/" element={<Login setToken={setToken} />} />
+          ) : (
+            <>
             <Route path="/" element={<Layout />}>
               <Route path="dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
               <Route path="specifications/edit/:suid/:name" element={<ProtectedRoute element={<EditSpecification />} />} />
@@ -67,9 +71,13 @@ function App() {
               <Route path="sanitary/shafts/:projectId" element={<ProtectedRoute element={<SanitaryShafts />} />} />
               <Route path="reports/:projectId" element={<ProtectedRoute element={<Reports />} />} />
               <Route path="calculator/ductflow" element={<ProtectedRoute element={<CalculatorSpeedAirflowDucts />}/>}/>
+              <Route path="*" element={<NotFound />} />
             </Route>
-          </>)}
-        <Route path="*" element={<Login setToken={setToken} />} />
+          </>
+          )
+        }
+        <Route path="register/:uuid" element={<RegisterNewUser />} />
+        <Route path="*" element={<NoAccess />} />
       </Routes>
     </Router>
 

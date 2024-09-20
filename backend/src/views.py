@@ -5,15 +5,12 @@ import time
 import random
 from uuid import uuid4
 from werkzeug.security import generate_password_hash
-from sqlalchemy import text
 from flask import Blueprint, request, jsonify, send_from_directory
 from . import models, db, globals
 from .models import Users
 from . import db_operations as dbo
-from . import sanitary_calculations as sc
 from werkzeug.security import check_password_hash
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, JWTManager, verify_jwt_in_request
-from markupsafe import escape
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, verify_jwt_in_request
 
 views = Blueprint("views", __name__)
 
@@ -38,7 +35,7 @@ def refresh_expiring_jwts(response):
 
 @views.route('/', methods=['GET'])
 def index():
-    return jsonify({"Nothing": "here"})
+    return jsonify({"Root": "Structor TS"})
 
 """ @views.route('/test/', methods=['GET'])
 def test():
@@ -54,38 +51,37 @@ def verify_token():
     try:
         verify_jwt_in_request()
         user_identity = get_jwt_identity()
-        return jsonify({"valie": True, "user": user_identity}), 200
+        return jsonify({"valid": True, "user": user_identity}), 200
     except:
         return jsonify({"valid": False}), 401
 
-@views.route('/token/', methods=['GET', 'POST'])
+@views.route('/token/', methods=['POST'])
 def token():
-    if request.method == 'POST':
-        email = escape(request.json.get("email"))
-        password =  escape(request.json.get("password"))
+    email = request.json.get("email")
+    password =  request.json.get("password")
 
-        user = Users.query.filter_by(email=email).first()
-        if user:
-            user_uuid = user.uuid
-            if check_password_hash(user.password, password):
-                access_token = create_access_token(identity=user_uuid)
-                response = {"access_token": access_token, "uuid": user.uuid, "username": user.name}
-                user.logged_in = True
-                db.session.commit()
-                return jsonify(response)
-            else:
-                return jsonify({"error": "Feil brukernavn eller passord"}), 401
+    user = Users.query.filter_by(email=email).first()
+    if user:
+        is_active = user.is_active
+        if is_active is False:
+            return jsonify({"success": False, "message": "Bruker er deaktivert"})
+        user_uuid = user.uuid
+        if check_password_hash(user.password, password):
+            access_token = create_access_token(identity=user_uuid)
+            response = {"success": True, "access_token": access_token, "uuid": user.uuid, "username": user.name}
+            user.logged_in = True
+            db.session.commit()
+            return jsonify(response)
         else:
-            return jsonify({"error": "Feil brukernavn eller passord"}), 401
-    if request.method == "GET":
-        return jsonify({"Message": "Nothing here"})
+            return jsonify({"success": False, "message": "Feil brukernavn eller passord"}), 401
+    else:
+        return jsonify({"success": False, "message": "Feil brukernavn eller passord"}), 401
 
 @views.route('/get_user/', methods=['GET'])
 @jwt_required()
 def get_user():
     verify_jwt_in_request()
     user_identiy = get_jwt_identity()
-    print(user_identiy)
     user = db.session.query(models.Users).filter(models.Users.uuid == user_identiy).first()
     user_data = {}
     user_data["uuid"] = user.uuid
@@ -105,10 +101,14 @@ def download_file(filename):
 def logout(user_uid):
     user = db.session.query(models.Users).filter(models.Users.uuid == user_uid).first()
     user.logged_in = False
-    db.session.commit()
+    try:
+        db.session.commit()
+    except Exception as e:
+        print(e)
     response = jsonify({"message": "user logged out"})
     unset_jwt_cookies(response)
-    return response
+    return jsonify({"message": "user logged out"})
+    
 
 @views.route('/initialize', methods=['GET'])
 def initialize():
@@ -123,26 +123,17 @@ def initialize():
         db.session.add(admin_account)
         db.session.commit()
     if spec_rooms_setup():
-        dummy_project()
         set_sanitary_equipment_data()
+        create_test_projects()
     else:
         return jsonify({"error": "Failed to initialize app"})
     return jsonify({"success": "App initialized"})
 
 @views.route('/test', methods=['GET'])
 def test():
-    projects = dbo.get_all_projects()
-    timestamp = int(time.time() * 1000)
-    for project in projects:
-        project.created_at = timestamp
-    try:
-        db.session.commit()
-        return jsonify({"message": "done"})
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"err": f"{str(e)}"})
+    return jsonify({"empty": "data"})
 
-""" @views.route('/create_test_projects', methods=['GET'])
+#@views.route('/create_test_projects', methods=['GET'])
 def create_test_projects():
     oslo_street_names = [
     "Karl Johans gate", "Bogstadveien", "Dronningens gate", "Torggata", "Storgata",
@@ -169,7 +160,7 @@ def create_test_projects():
             dummy_project(project_name=oslo_street_names[i], project_number=random_numbers[i])
         return jsonify({"message": "done"})
     except Exception as e:
-        return jsonify({"error": f"{str(e)}"}) """
+        return jsonify({"error": f"{str(e)}"})
 
 
     

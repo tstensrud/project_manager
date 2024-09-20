@@ -5,20 +5,16 @@ from sqlalchemy import func, Index
 
 class Users(db.Model, UserMixin):
     __tablename__ = 'Users'
-    id = db.Column(db.Integer, primary_key=True, autoincrement = True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     uuid = db.Column(db.String(250), unique=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(250), nullable=False)
+    password = db.Column(db.String(250), nullable=True)
     name = db.Column(db.String(100), nullable=False)
     logged_in = db.Column(db.Boolean, default=False)
     admin = db.Column(db.Boolean, default=False)
-    is_active = db.Column(db.Boolean, default=True)
+    is_active = db.Column(db.Boolean, default=False)
 
-    todo_item = db.relationship('TodoItem', backref='user', uselist=False, lazy=True)
-
-    __table_args__ = (
-        Index('idx_uid', 'uuid'),
-    )
+    todo_item = db.relationship('TodoItem', backref='user', lazy=True)
 
     def get_json(self):
         return {
@@ -26,9 +22,9 @@ class Users(db.Model, UserMixin):
             "uuid": self.uuid,
             "email": self.email,
             "name": self.name,
-            "logged_in": self.logged_in,
+            "loggedIn": self.logged_in,
             "admin": self.admin,
-            "is_active": self.is_active
+            "isActive": self.is_active
         }
 
 class UserFavProjects(db.Model):
@@ -53,6 +49,15 @@ class UserFavProjects(db.Model):
             "project_uid": self.project_uid,
             "project_name": project_name
         }
+
+class NewUserRegistration(db.Model):
+    __tablename__ = 'NewUserRegistration'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_uid = db.Column(db.String(250), db.ForeignKey('Users.uuid'), nullable=False)
+    token_hash = db.Column(db.String(100), nullable=False)
+    timestamp = db.Column(db.String(100), nullable=False)
+    is_revoked = db.Column(db.Boolean, default=False)
+
 '''
 # TODO-items
 '''

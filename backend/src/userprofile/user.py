@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
+from werkzeug.security import check_password_hash
 from .. import db_ops_users as dbo
 from functools import wraps
 
@@ -27,13 +28,36 @@ def user_profile():
     user_identity = get_jwt_identity()
     user = dbo.get_user(user_identity)
     if user:
-        user_data = user.get_json()
+        user_data = dbo.get_user_data(user_uid=user_identity)
         is_admin = user.admin
         if is_admin:
             return jsonify({"success": True, "data": user_data, "admin": "admin"})
         else:
             return jsonify({"success": True, "data": user_data})
     return jsonify({"success": False, "message": "Fant ikke bruker"})
+
+@user_bp.route('/new_user_registration/<uuid>/', methods=['GET'])
+def new_user_register(uuid: str):
+    register_record = dbo.get_new_register_record(uuid)
+    if register_record:
+        if register_record.is_revoked:
+            return jsonify({"success": False, "message": "Denne siden har utløpt"})
+        token_hash = register_record.token_hash
+        check_token_match = dbo.verify_url_token(uuid, token_hash)
+        if check_token_match:
+            return jsonify({"success": True})
+        return jsonify({"success": False, "message": "Denne siden har utløpt"})
+    return jsonify({"success": False, "message": "Denne siden finnes ikke"}),404
+
+@user_bp.route('/set_password/<uuid>/', methods=['PATCH'])
+def set_password(uuid):
+    data = request.get_json()
+    if data:
+        set_password = dbo.set_new_user_password(data['password'], uuid)
+        if set_password:
+            return ({"success": True})
+        return ({"success": False, "message": "Kunne ikke sette passord"})
+    return ({"success": False, "message": "Mottok ikke passord"})
 
 @user_bp.route('/set_favourite/<project_uid>/', methods=['POST'])
 @jwt_required()
@@ -54,33 +78,24 @@ def remove_fav_project(fav_uid: str):
         return jsonify({"success": True})
     return jsonify({"success": False, "message": "Kunne ikke slette favoritt"})
 
-@user_bp.route('/get_favs/', methods=['GET'])
-@jwt_required()
-def get_fav_projects():
-    verify_jwt_in_request()
-    user_identity = get_jwt_identity()
-    favs = dbo.get_fav_projects(user_identity)
-    if favs:
-        fav_data = {}
-        for fav in favs:
-            fav_data[fav.uid] = fav.get_json()
-        return jsonify({"success": True, "data": fav_data})
-    return jsonify({"success": False, "message": "Ingen favoritter lagt til"})
-
 @user_bp.route('/change_password/', methods=['PATCH'])
 @jwt_required()
 def change_password():
+    verify_jwt_in_request()
     data = request.get_json()
     if data:
-        new_password = data["new"]
-        verify_jwt_in_request()
         user_identity = get_jwt_identity()
         user = dbo.get_user(user_identity)
         if user:
-            updated_password = dbo.update_password(user_identity, new_password)
-            if updated_password:
-                return jsonify({"success": True, "message": "Passord oppdatert"})
-            return jsonify({"success": False, "message": "Kunne ikke oppdatere passord"})
+            new_password = data["new"]
+            old_password = data["old"]
+            stored_password = user.password
+            if check_password_hash(stored_password, old_password):
+                updated_password = dbo.update_password(user_identity, new_password)
+                if updated_password:
+                    return jsonify({"success": True, "message": "Passord oppdatert"})
+                return jsonify({"success": False, "message": "Kunne ikke oppdatere passord"})
+            return jsonify({"success": False, "message": "Feil passord"})
         return jsonify({"success": False, "message": "Fant ikke bruker"})
     return jsonify({"success": False, "message": "Mottok ingen data"})
 
@@ -100,9 +115,9 @@ def register_new_user():
             return jsonify({"success": False, "message": "E-post er allerede registrert"})
         
         name = data["name"].strip()
-        new_user = dbo.register_new_user(name=name, email=email)
-        if new_user:
-            return jsonify({"success": True, "message": "Bruker lagt til"})
+        new_user = dbo.initialize_new_user(name=name, email=email)
+        if new_user is not None:
+            return jsonify({"success": True, "message": "Bruker lagt til", "data": new_user})
         return jsonify({"success": False, "message": "Kunne ikke legge til ny bruker"})
     return jsonify({"success": False, "message": "Mottok ingen ny brukerdata"})
 

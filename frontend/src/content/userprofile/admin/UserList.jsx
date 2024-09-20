@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from 'react'
+import { useEffect } from 'react'
 
 // hooks
 import useFetch from '../../../hooks/useFetch'
@@ -22,7 +22,6 @@ function UserList() {
     useEffect(() => {
         if (activeStatusResponse?.success === true) {
             userDataRefetch();
-            //setDeactivateData({});
         }
     }, [activeStatusResponse]);
 
@@ -89,18 +88,18 @@ function UserList() {
                                                     {userData.data[key].email}
                                                 </td>
                                                 <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
-                                                    {userData.data[key].logged_in ? 'Ja' : 'Nei'}
+                                                    {userData.data[key].loggedIn ? 'Ja' : 'Nei'}
                                                 </td>
                                                 <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
                                                     {userData.data[key].admin ? 'Ja' : 'Nei'}
                                                 </td>
                                                 <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
-                                                    {userData.data[key].is_active ? 'Ja' : 'Nei'}
+                                                    {userData.data[key].isActive ? 'Ja' : 'Nei'}
                                                 </td>
                                                 <td className="pt-1 pb-1 pr-3 min-w-[150px] max-w-[150px] w-[150px] text-end">
                                                     <button onClick={(e) => handleActiveStatus(e, userData.data[key].uuid)} className="font-semibold hover:text-accent-accent-color dark:hover:text-dark-accent-color">
                                                         {
-                                                            userData.data[key].is_active ? 'Deaktiver' : 'Aktiver'
+                                                            userData.data[key].isActive ? 'Deaktiver' : 'Aktiver'
                                                         }
                                                     </button>
                                                 </td>

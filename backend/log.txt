@@ -1,1 +1,11 @@
 
+- 2024-09-20 09:58:18.392877: Could not add new NewUserRegistration (sqlite3.IntegrityError) NOT NULL constraint failed: Users.password
+[SQL: INSERT INTO "Users" (uuid, email, password, name, logged_in, admin, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)]
+[parameters: ('ZOJgTESaTxqHaFkwp0zZZQ', 'test@test.com', None, 'Test Navn', 0, 0, 0)]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+- 2024-09-20 09:59:32.879203: Could not add new NewUserRegistration (sqlite3.IntegrityError) NOT NULL constraint failed: Users.password
+[SQL: INSERT INTO "Users" (uuid, email, password, name, logged_in, admin, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)]
+[parameters: ('W6lhDA1ORqqnsooBPNeTiw', 'test@test.com', None, 'Test Navn', 0, 0, 0)]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
