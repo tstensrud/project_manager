@@ -168,7 +168,7 @@ function UserProfile() {
                                                 <div className="flex w-[70%] text-grey-text dark:text-dark-grey-text">
                                                     Prosjektnavn
                                                 </div>
-                                                <div className="flex flex-1 justify-end text-grey-text dark:text-dark-grey-text">
+                                                <div className="flex flex-1 text-end text-grey-text dark:text-dark-grey-text">
                                                     Rediger favoritt
                                                 </div>
                                             </div>
@@ -267,7 +267,7 @@ function UserProfile() {
                 {
                     data?.success === true && (
                         data?.admin && (
-                            <div className="flex flex-row justify-evenly flex-wrap w-full">
+                            <div className="flex w-full p-5">
                                 <UserList uuid={userUuid} />
                             </div>
                         )

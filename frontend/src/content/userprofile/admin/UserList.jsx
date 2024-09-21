@@ -32,8 +32,8 @@ function UserList() {
     }
 
     return (
-        <div className="bg-secondary-color dark:bg-dark-secondary-color rounded-lg ml-5 mr-5 mt-5 shadow-lg shadow-background-shade">
-            <div className="flex flex-col p-4 h-full">
+        <div className="bg-secondary-color dark:bg-dark-secondary-color rounded-lg shadow-lg w-full shadow-background-shade">
+            <div className="flex flex-col p-4 h-full overflow-y-auto">
                 <div className="flex flex-row mb-3">
                     <div>
                         <h2 className="text-grey-text dark:text-dark-grey-text">Brukere</h2>
@@ -48,7 +48,7 @@ function UserList() {
                 </div>
 
                 <div className="flex flex-col">
-                    <div className="flex flex-col w-full h-[600px] max-h-[600px]">
+                    <div className="flex flex-col w-full">
                         <table>
                             <thead>
                                 <tr className="border-default-border-color text-grey-text dark:text-dark-grey-text  border-b dark:border-b-dark-default-border-color w-56">
@@ -73,6 +73,9 @@ function UserList() {
                                     <th className="pt-1 pb-1 pr-3 min-w-[300px] max-w-[300px] w-[300px] text-end">
                                         Bruker-ID
                                     </th>
+                                    <th className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-end">
+                                        Slett
+                                    </th>
                                 </tr>
                             </thead>
 
@@ -80,7 +83,7 @@ function UserList() {
                                 {
                                     userData?.success === true && (
                                         Object.keys(userData.data).map((key, index) => (
-                                            <tr key={index}>
+                                            <tr key={index} className="hover:bg-table-hover dark:hover:bg-dark-table-hover">
                                                 <td className="pt-1 pb-1 pl-3 min-w-[300px] max-w-[300px] w-[300px] text-start">
                                                     {userData.data[key].name}
                                                 </td>
@@ -105,6 +108,9 @@ function UserList() {
                                                 </td>
                                                 <td className="pt-1 pb-1 pr-3 min-w-[300px] max-w-[300px] w-[300px] text-end">
                                                     {userData.data[key].uuid}
+                                                </td>
+                                                <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-end">
+                                                    <button>slett</button>
                                                 </td>
                                             </tr>
                                         ))

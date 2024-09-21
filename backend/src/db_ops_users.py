@@ -178,3 +178,16 @@ def get_fav_projects(uuid: str) -> list[models.UserFavProjects]:
     if favs:
         return favs
     return None
+
+def delete_user(uuid: str) -> bool:
+    user = get_user(uuid)
+    if user:
+        try:
+            db.session.delete(user)
+            db.session.commit()
+            return True
+        except Exception as e:
+            db.session.rollback()
+            globals.log(f"Could not delete user {e}")
+            return False
+    return False

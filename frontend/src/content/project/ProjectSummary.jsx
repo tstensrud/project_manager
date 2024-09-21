@@ -27,8 +27,12 @@ function ProjectSummary({ projectId }) {
     }, []);
 
     useEffect(() => {
-        for (let value in favProjects) {
-            if (favProjects[value] === projectId) {
+        if (favProjects) {
+            const isFavourite = Object.entries(favProjects).some(([, project]) => {
+                return project.project_uid === projectId;
+            });
+
+            if (isFavourite) {
                 setIsFav(true);
                 return;
             }
@@ -41,7 +45,6 @@ function ProjectSummary({ projectId }) {
         }
     }, [favResponse]);
 
-
     const handleSetFav = (e) => {
         e.preventDefault();
         handleSubmit();
@@ -50,7 +53,7 @@ function ProjectSummary({ projectId }) {
     return (
         <ContentCard>
             {
-                loading && loading === true ? (
+                loading ? (
                     <LoadingSpinner text="prosjektinfo" />
                 ) : (
                     <>

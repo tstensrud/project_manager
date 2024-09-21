@@ -144,6 +144,14 @@ def change_user_status():
         return jsonify({"success": False, "message": "Kunne ikke deaktivere bruker"})
     return jsonify({"success": False, "message": "Ingen data mottatt"})
         
-        
-            
-        
+@user_bp.route('/delete_user/', methods=['DELETE'])
+@admin_required
+def delete_user():
+    data = request.get_json()
+    if data:
+        user_uid = data['user_uid']
+        deleted_user = dbo.delete_user(user_uid)
+        if deleted_user:
+            return jsonify({"success": True, "message": "Bruker slettet"})
+        return jsonify({"success": False, "message": "Kunne ikke slette bruker"})
+    return jsonify({"success": False, "message": "Mottok ingen data"})
