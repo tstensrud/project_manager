@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 
 function NoAccess() {
     useEffect(() => {
-        localStorage.removeItem("token")
+        //localStorage.removeItem("token")
+        sessionStorage.clear();
     }, [])
 
     return (

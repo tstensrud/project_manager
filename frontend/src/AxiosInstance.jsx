@@ -7,7 +7,7 @@ const AxiosInstance = axios.create({
 });
 
 AxiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -26,7 +26,7 @@ AxiosInstance.interceptors.response.use((response) => {
   const data = response.data;
 
   if (data && data.access_token) {
-    localStorage.setItem('token', data.access_token);
+    sessionStorage.setItem('token', data.access_token);
 
     response.config.headers.Authorization = `Bearer ${data.access_token}`;
   }
@@ -34,7 +34,7 @@ AxiosInstance.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   if (error.response.status === 401) {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     // Handle 401 errors, e.g., redirect to login page
     window.location.href = '/'
   }
