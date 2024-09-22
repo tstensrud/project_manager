@@ -41,6 +41,7 @@ def specifications():
 @jwt_required()
 def get_specifications():
     specifications = dbo.get_specifications()
+    print(specifications)
     spec_data = {}
     for specification in specifications:
         spec_data[specification.uid] = specification.get_json()

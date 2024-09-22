@@ -423,9 +423,11 @@ class Specifications(db.Model):
     )
 
     def get_json(self):
-        timestamp = int(self.created_at) / 1000
-        created_at = datetime.fromtimestamp(timestamp)
-        formatted_date = created_at.strftime("%Y-%m-%d")
+        formatted_date = ""
+        if self.created_at is not None:
+            timestamp = int(self.created_at) / 1000
+            created_at = datetime.fromtimestamp(timestamp)
+            formatted_date = created_at.strftime("%Y-%m-%d")
         return {
             "id": self.id,
             "uid": self.uid,

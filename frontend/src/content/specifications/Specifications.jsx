@@ -67,7 +67,11 @@ function Specifications() {
                                                             )
                                                             )) : (
                                                             <>
+                                                            <tr>
+                                                                <td>
                                                                 Ingen spesifikasjoner i databasen
+                                                                </td>
+                                                            </tr>
                                                             </>
                                                         )
                                                     }

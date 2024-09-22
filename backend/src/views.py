@@ -173,9 +173,10 @@ def spec_rooms_setup() -> bool:
     
     for name in names:
         uid = globals.encode_uid_base64(uuid4())
-        spec = models.Specifications(uid=uid, name=name)
-        db.session.add(spec)
+        timestamp = int(time.time() * 1000)
+        spec = models.Specifications(uid=uid, name=name, created_at=timestamp, created_by="Admin")
         try:
+            db.session.add(spec)
             db.session.commit()
         except Exception as e:
             return f"Could not create {name}, {e}"
