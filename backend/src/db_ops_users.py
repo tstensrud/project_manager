@@ -163,7 +163,6 @@ def set_fav_project(project_uid: str, uuid: str) -> bool:
 
 def remove_fav_project(fav_uid: str) -> bool:
     fav = db.session.query(models.UserFavProjects).filter(models.UserFavProjects.uid == fav_uid).first()
-    print(fav)
     try:
         db.session.delete(fav)
         db.session.commit()
