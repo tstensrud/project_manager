@@ -8,7 +8,7 @@ from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 import os
 
-#load_dotenv()
+load_dotenv()
 db = SQLAlchemy()
 DB_NAME = "projects.db"
 
@@ -16,12 +16,12 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
     jwt = JWTManager(app)
-    app.config['SECRET_KEY'] = "9UE5CwQRIJqM5O2SbDifX"
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}"
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    #app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('EXTERNAL_DB_URL')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
     #app.config['SQLALCHEMY_ECHO'] = True
-    app.config['JWT_SECRET_KEY'] = "ASsaf39834578DJYACDS1234fwec1af521f35f1"
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
-    load_dotenv()
     #app.config['UPLOAD_FOLDER'] = ".static/excel"
     db.init_app(app)
 

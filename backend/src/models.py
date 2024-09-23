@@ -54,7 +54,7 @@ class NewUserRegistration(db.Model):
     __tablename__ = 'NewUserRegistration'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_uid = db.Column(db.String(250), db.ForeignKey('Users.uuid'), nullable=False)
-    token_hash = db.Column(db.String(100), nullable=False)
+    token_hash = db.Column(db.String(255), nullable=False)
     timestamp = db.Column(db.String(100), nullable=False)
     is_revoked = db.Column(db.Boolean, default=False)
 
@@ -98,7 +98,7 @@ class Projects(db.Model):
     project_name = db.Column(db.String(50), nullable=False)
     project_description = db.Column(db.Text)
     specification = db.Column(db.String(50))
-    created_at = db.Column(db.Integer)
+    created_at = db.Column(db.BigInteger)
 
     todo_item = db.relationship('TodoItem', backref='project', uselist=False, lazy=True)
     buildings = db.relationship('Buildings', backref='project', uselist=False, lazy=True)
@@ -206,7 +206,7 @@ class Rooms(db.Model):
     vent_principle = db.Column(db.String(50))
     heat_exchange = db.Column(db.String(50))
     room_control = db.Column(db.String(50))
-    notes = db.Column(db.String(100))
+    notes = db.Column(db.String(255))
     db_technical = db.Column(db.String(50))
     db_neighbour = db.Column(db.String(50))
     db_corridor = db.Column(db.String(50))
@@ -413,7 +413,7 @@ class Specifications(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     uid = db.Column(db.String(250), unique=True)
     name = db.Column(db.String(50), nullable=False)
-    created_at = db.Column(db.Integer)
+    created_at = db.Column(db.BigInteger)
     created_by = db.Column(db.String(255))
 
     room_types = db.relationship("RoomTypes", backref="specifications", lazy=True)
@@ -449,7 +449,7 @@ class RoomTypes(db.Model):
     ventilation_principle = db.Column(db.String(50))
     heat_exchange = db.Column(db.String(50))
     room_control = db.Column(db.String(50))
-    notes = db.Column(db.String(100))
+    notes = db.Column(db.String(255))
     db_technical = db.Column(db.String(50))
     db_neighbour = db.Column(db.String(50))
     db_corridor = db.Column(db.String(50))
@@ -514,7 +514,7 @@ class DeletedRooms(db.Model):
     vent_principle = db.Column(db.String(50))
     heat_exchange = db.Column(db.String(50))
     room_control = db.Column(db.String(50))
-    notes = db.Column(db.String(100))
+    notes = db.Column(db.String(255))
     db_technical = db.Column(db.String(50))
     db_neighbour = db.Column(db.String(50))
     db_corridor = db.Column(db.String(50))

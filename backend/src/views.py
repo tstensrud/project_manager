@@ -110,7 +110,7 @@ def logout(user_uid):
     return jsonify({"message": "user logged out"})
     
 
-@views.route('/initialize', methods=['GET'])
+""" @views.route('/initialize', methods=['GET'])
 def initialize():
         
     email = "admin"
@@ -127,7 +127,7 @@ def initialize():
         create_test_projects()
     else:
         return jsonify({"error": "Failed to initialize app"})
-    return jsonify({"success": "App initialized"})
+    return jsonify({"success": "App initialized"}) """
 
 @views.route('/test', methods=['GET'])
 def test():
@@ -158,7 +158,7 @@ def create_test_projects():
     try:
         for i in range(len(oslo_street_names)):
             dummy_project(project_name=oslo_street_names[i], project_number=random_numbers[i])
-        return jsonify({"message": "done"})
+        #return jsonify({"message": "done"})
     except Exception as e:
         return jsonify({"error": f"{str(e)}"})
 

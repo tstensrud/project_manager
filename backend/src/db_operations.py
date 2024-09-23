@@ -110,10 +110,11 @@ def update_project_information(project_uid: str, project_number=None, project_na
     return False
 
 def search_projects(search_string: str) -> list[models.Projects]:
-    projects = db.session.query(models.Projects).filter(models.Projects.project_name.like(f"{search_string}%")).all()
+    projects = db.session.query(models.Projects).filter(models.Projects.project_name.ilike(f"{search_string}%")).all()
     if projects:
         return projects
     return None
+
 '''
 TODO-list
 '''
