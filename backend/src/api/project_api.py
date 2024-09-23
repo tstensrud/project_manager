@@ -508,13 +508,13 @@ def ventilation_update_room(project_uid, room_uid, cooling):
             if current_room_system_uid is None:
                 if dbo.update_room_data(room_uid, processed_data):
                     dbo.update_system_airflows(value)
-                    return jsonify({"success": True})
+                    return jsonify({"success": True, "message": "System satt"})
             else:
                 if dbo.update_room_data(room_uid, processed_data):
                     if dbo.update_airflow_changed_system(value, current_room_system_uid):
                         return jsonify({"success": True, "message": "Byttet system"})
                     else:
-                        return jsonify({"success": False, "message": "kunne ikke bytte system"})   
+                        return jsonify({"success": False, "message": "Kunne ikke bytte system"})   
     
     updated_room = dbo.update_room_data(room_uid, processed_data)
     if updated_room is False:

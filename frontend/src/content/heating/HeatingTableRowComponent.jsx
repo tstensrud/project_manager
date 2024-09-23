@@ -8,6 +8,7 @@ import useUpdateData from '../../hooks/useUpdateData';
 // Components
 import RoomData from './RoomData';
 import MessageBox from '../../layout/MessageBox';
+import MarkedRow from "../../layout/tableelements/MarkedRow.jsx";
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -29,7 +30,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
     const [editedData, setEditedData] = useState(null);
 
     // Marking a row
-    const [markedRow, setMarkedRow] = useState('');
+    const [markedRow, setMarkedRow] = useState(false);
 
     // Room data
     const [showRoomData, setShowRoomData] = useState(false);
@@ -81,12 +82,12 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
     };
 
     const handleOnMarkedRow = () => {
-        if (markedRow === '') {
-            setMarkedRow('bg-marked-row dark:bg-dark-marked-row text-primary-color dark:text-dark-primary-color');
+        if (markedRow === false) {
+            setMarkedRow(true)
         } else {
-            setMarkedRow('');
+            setMarkedRow(false);
         }
-    }
+    };
 
     const handleOpenRoomData = (e) => {
         e.preventDefault();
@@ -109,7 +110,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
         <>
             {showRoomData ? <RoomData buildingData={buildingData} roomData={allRoomData} heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
             {response?.success === false && <MessageBox message={response.message} />}
-            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
+            <MarkedRow markedRow={markedRow}>
                 {
                     heatingLoading && heatingLoading === true ? (
                         <LoadingRow cols={totalColumns} />
@@ -160,7 +161,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                     )
                 }
 
-            </tr>
+            </MarkedRow>
         </>
     );
 }

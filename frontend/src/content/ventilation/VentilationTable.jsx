@@ -133,19 +133,27 @@ function VentilationTable({ projectId, buildingUid }) {
                                                     <TableTDelement width="6%" />
                                                     <TableTDelement width="6%" />
                                                     <TableTDelement width="34%">
-                                                        {
-                                                            buildingData?.data?.floor_summaries &&
-                                                            Object.keys(buildingData?.data.floor_summaries)
-                                                                .filter(key => key === floor)
-                                                                .map(key => (
-                                                                    <React.Fragment key={key}>
-                                                                        <div className="font-semibold">
-                                                                            {buildingData.data.floor_summaries[key].supply < buildingData.data.floor_summaries[key].demand && 'For lite luftmengde ift dimensjonert. '}
-                                                                            {buildingData.data.floor_summaries[key].supply !== buildingData.data.floor_summaries[key].extract && 'Ubalanse i etasje.'}
-                                                                        </div>
-                                                                    </React.Fragment>
-                                                                ))
-                                                        }
+                                                        <div className="flex flex-row w-full">
+                                                            <div className="text-start animate-fade w-44">
+
+                                                            </div>
+                                                            <div>
+                                                                {
+                                                                    buildingData?.data?.floor_summaries &&
+                                                                    Object.keys(buildingData?.data.floor_summaries)
+                                                                        .filter(key => key === floor)
+                                                                        .map(key => (
+                                                                            <React.Fragment key={key}>
+                                                                                <div className="font-semibold">
+                                                                                    {buildingData.data.floor_summaries[key].supply < buildingData.data.floor_summaries[key].demand && 'For lite luftmengde ift dimensjonert. '}
+                                                                                    {buildingData.data.floor_summaries[key].supply !== buildingData.data.floor_summaries[key].extract && 'Ubalanse i etasje.'}
+                                                                                </div>
+                                                                            </React.Fragment>
+                                                                        ))
+                                                                }
+                                                            </div>
+                                                        </div>
+
                                                     </TableTDelement>
                                                 </tr>
                                             </tbody>

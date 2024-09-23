@@ -8,6 +8,7 @@ import useUpdateData from '../../hooks/useUpdateData';
 // Components
 import MessageBox from '../../layout/MessageBox';
 import LoadingRow from '../../layout/tableelements/LoadingRow.jsx';
+import MarkedRow from "../../layout/tableelements/MarkedRow.jsx";
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -77,7 +78,7 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('bg-marked-row text-primary-color dark:bg-dark-marked-row dark:text-dark-primary-color');
+            setMarkedRow('bg-marked-row dark:bg-dark-marked-row text-primary-color dark:text-dark-primary-color hover:bg-marked-row dark:hover:bg-dark-marked-row');
         } else {
             setMarkedRow('');
         }
@@ -99,7 +100,7 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
         <>
 
             {response?.success === false ? <MessageBox message={response.message} /> : null}
-            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
+            <MarkedRow markedRow={markedRow}>
                 {
                     sanitaryLoading && sanitaryLoading === true ? (
                         <LoadingRow cols={totalColumns} />
@@ -136,7 +137,7 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
                         </>
                     )
                 }
-            </tr>
+            </MarkedRow>
         </>
     );
 }

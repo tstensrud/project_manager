@@ -39,7 +39,7 @@ function FormButton(props) {
                         className="outline-0 uppercase
                         bg-form-background-color
                         dark:bg-dark-form-background-color 
-                        border-2 
+                        border-2
                         border-form-border-color
                         dark:border-dark-form-border-color
                         pl-5

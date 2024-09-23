@@ -7,6 +7,7 @@ import useUpdateData from '../../hooks/useUpdateData';
 
 // Components
 import MessageBox from '../../layout/MessageBox';
+import MarkedRow from "../../layout/tableelements/MarkedRow.jsx";
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -32,7 +33,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
     const [editedData, setEditedData] = useState(null);
 
     // Marking a row
-    const [markedRow, setMarkedRow] = useState('');
+    const [markedRow, setMarkedRow] = useState(false);
 
     // useEffects
     useEffect(() => { // Refetch upon received message that cooling settings has changed
@@ -87,12 +88,13 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
     };
 
     const handleOnMarkedRow = () => {
-        if (markedRow === '') {
-            setMarkedRow('bg-marked-row text-primary-color');
+        if (markedRow === false) {
+            setMarkedRow(true)
         } else {
-            setMarkedRow('');
+            setMarkedRow(false);
         }
-    }
+    };
+
 
     const calculateExtraAirNeeded = () => {
         const { SumInternalHeatLoad, CoolingSum, VentairTempSummer, RoomTempSummer } = coolingData.cooling_data;
@@ -127,7 +129,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
         <>
             {updateRoomDataResponse?.success === false && <MessageBox message={updateRoomDataResponse.message} />}
             {coolingError && <MessageBox message={coolingError} /> }
-            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
+            <MarkedRow markedRow={markedRow}>
                 {
                     coolingLoading && coolingLoading === true ? (
                         <LoadingRow cols={totalColumns} />
@@ -175,7 +177,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
                         </>
                     )
                 }
-            </tr>
+            </MarkedRow>
         </>
     );
 }

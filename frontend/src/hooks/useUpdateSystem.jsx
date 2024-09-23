@@ -19,7 +19,7 @@ const useUpdateData = (endpoint) => {
       }
     }, [systemData, endpoint]);
 
-  return { systemData, setSystemData, response, loading, error, handleSubmit };
+  return { systemData, setSystemData, response, loading, error, handleSubmit, setResponse };
 };
 
 export default useUpdateData;

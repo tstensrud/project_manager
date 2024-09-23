@@ -26,7 +26,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
 
     // Update data
     const { response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomId}/0/`);
-    const { systemData, response: systemResponse, setSystemData, handleSubmit: updateSystemData } = useUpdateSystem(`/project_api/${projectId}/ventilation/update_room/${roomId}/0/`);
+    const { systemData, response: systemResponse, setResponse, setSystemData, handleSubmit: updateSystemData } = useUpdateSystem(`/project_api/${projectId}/ventilation/update_room/${roomId}/0/`);
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
@@ -70,6 +70,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
             setData('');
             ventRefetch();
             buildingReFetch();
+            setResponse("");
         }
     }, [response]);
 
@@ -102,7 +103,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
 
     const handleOnMarkedRow = () => {
         if (markedRow === '') {
-            setMarkedRow('bg-marked-row dark:bg-dark-marked-row text-primary-color dark:text-dark-primary-color');
+            setMarkedRow('bg-marked-row dark:bg-dark-marked-row text-primary-color dark:text-dark-primary-color hover:bg-marked-row dark:hover:bg-dark-marked-row');
         } else {
             setMarkedRow('');
         }
@@ -159,7 +160,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
 
         return minimumAir.toFixed(0);
     }
-
+    console.log(systemResponse)
     return (
         <>
             {showRoomData ? <RoomData roomData={allRoomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
@@ -168,7 +169,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
             {ventError && <MessageBox message={ventError} />}
             <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
-                    ventLoading  ? (
+                    ventLoading ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
@@ -217,8 +218,22 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                                 </TableSelect>
                             </TableTDelement>
                             <TableTDelement width="34%">
-                                {ventData && ventData.vent_data.AirSupply && ventData.vent_data.AirExtract < ventData.vent_data.AirDemand ? (<>For lite luft. </>) : (<></>)}
-                                {ventData && ventData.vent_data.AirSupply !== ventData.vent_data.AirExtract ? (<>Ubalanse i rom. </>) : (<></>)}
+                                <div className="flex flex-row w-full">
+                                    <div className="text-start animate-fade w-44">
+                                        {
+                                            systemResponse?.success === true && systemResponse.message
+                                        }
+                                    </div>
+                                    <div>
+                                        {
+                                            ventData && ventData.vent_data.AirSupply && ventData.vent_data.AirExtract < ventData.vent_data.AirDemand && (<>For lite luft. </>)
+                                        }
+                                        {
+                                            ventData && ventData.vent_data.AirSupply !== ventData.vent_data.AirExtract && (<>Ubalanse i rom. </>)
+                                        }
+                                    </div>
+                                </div>
+
                             </TableTDelement>
 
                         </>

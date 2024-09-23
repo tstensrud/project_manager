@@ -11,6 +11,7 @@ import useDeleteData from '../../hooks/useDeleteData'
 // Components
 import MessageBox from '../../layout/MessageBox';
 import LoadingRow from '../../layout/tableelements/LoadingRow.jsx';
+import MarkedRow from "../../layout/tableelements/MarkedRow.jsx";
 
 // Svg
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -34,7 +35,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     const [editingCell, setEditingCell] = useState(null);
 
     // Row marking
-    const [markedRow, setMarkedRow] = useState('');
+    const [markedRow, setMarkedRow] = useState(false);
 
     // Undo
     const [undoButton, setUndoButton] = useState(false);
@@ -89,10 +90,10 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     };
 
     const handleOnMarkedRow = () => {
-        if (markedRow === '') {
-            setMarkedRow('bg-marked-row dark:bg-dark-marked-row text-primary-color dark:text-dark-primary-color');
+        if (markedRow === false) {
+            setMarkedRow(true)
         } else {
-            setMarkedRow('');
+            setMarkedRow(false);
         }
     };
 
@@ -117,7 +118,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     return (
         <>
             {response?.success === false && <MessageBox message={response.message} />}
-            <tr className={undoButton ? 'text-grey-text line-through' : `${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
+            <MarkedRow markedRow={markedRow}>
                 {
                     roomLoading && roomLoading === true ? (
                         <LoadingRow cols={totalColumns} />
@@ -152,7 +153,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
                         </>
                     )
                 }
-            </tr>
+            </MarkedRow>
         </>
     );
 }

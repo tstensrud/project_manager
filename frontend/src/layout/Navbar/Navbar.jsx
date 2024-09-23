@@ -12,7 +12,7 @@ import NavbarMenuTitle from "./NavbarMenuTitle";
 import DarkmodeContainer from "./DarkmodeContainer";
 
 function Navbar() {
-    const { activeProject, setActiveProject, userUuid, setUserUuid, userName, setUserName, activeProjectName, setActiveProjectName, darkMode, setDarkMode } = useContext(GlobalContext);
+    const { activeProject, setActiveProject, userUuid, setUserUuid, setUserName, activeProjectName, setActiveProjectName } = useContext(GlobalContext);
     const { data: userData, loading, error, refetch: refetchUserInfo } = useFetch(`/get_user/`);
     const [displayMenuContainer, setDisplayMenuContainer] = useState(false);
     const [displayDashboardMenu, setDisplayDashboardContainer] = useState(false);
@@ -34,11 +34,6 @@ function Navbar() {
         setUserUuid(userData && userData.user.uuid);
         setUserName(userData && userData.user.name);
     }, [userData]);
-
-    // Handlers
-    const toggleDarkModeContainer = () => {
-        setDarkMode(!darkMode);
-    }
 
     const handleShowProjectMenu = () => setDisplayMenuContainer(true);
     const handleHideProjectMenu = () => setDisplayMenuContainer(false);
@@ -144,27 +139,25 @@ function Navbar() {
             }
 
 
-            <div className="w-full bg-tertiary-color dark:bg-dark-tertiary-color text-primary-color dark:text-dark-primary-color flex min-h-[5%]">
+            <div className="w-full bg-tertiary-color dark:bg-dark-tertiary-color text-primary-color dark:text-dark-primary-color flex min-h-16">
                 <div className="flex pl-5 justify-start items-center min-w-[30%] h-gull text-base">
                     {
-                        activeProject !== "0" && activeProject !== null && activeProject !== undefined ? (
-                            <>
-                                <div onMouseEnter={handleShowProjectMenu} className="font-semibold pl-2 pr-2 hover:cursor-default tracking-wide">
-                                    Prosjektmeny
-                                </div>
-                            </>
-                        ) : (<></>)
+                        activeProject && activeProject !== "0" && (
+                            <div onMouseEnter={handleShowProjectMenu} className="font-semibold pl-2 pr-2 hover:cursor-default tracking-wide">
+                                Prosjektmeny
+                            </div>
+                        )
                     }
 
                 </div>
 
                 <div className="flex w-[60%] h-full justify-center items-center">
                     {
-                        activeProjectName && activeProjectName ? (
+                        activeProjectName && activeProjectName && (
                             <div className="flex items-center justify-center text-center uppercase bg-primary-color dark:bg-dark-tertiary-color rounded-3xl pl-10 pr-10 mt-1 mb-1 text-3xl font-semibold text-secondary-color dark:text-dark-primary-color">
                                 {activeProjectName}
                             </div>
-                        ) : (<></>)
+                        )
                     }
                 </div>
 

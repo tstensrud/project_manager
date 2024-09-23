@@ -45,8 +45,7 @@
   input:checked + .slider::before {
     @apply transform translate-x-5;
   }
-
-
+  
 }
 .app-container {
   display: flex;

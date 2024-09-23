@@ -20,20 +20,20 @@ function ToDo() {
         setInfoText(false)
     }
     return (
-        
+
         <div className="flex items-center">
             <div className="mr-3">
-            {
-            infoText ? "Huskeliste" : ""
-            }
+                {
+                    infoText ? "Huskeliste" : ""
+                }
             </div>
-        
-            <a onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}  href="#" onClick={(e) => handleClick(e, setShowTodoList)}>
+
+            <div onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} className="cursor-pointer" onClick={(e) => handleClick(e, setShowTodoList)}>
                 {TodoListIcon && <TodoListIcon />}
-            </a>
-            {showTodoList && <TodoList showTodoList={showTodoList} setShowTodoList={setShowTodoList} />}
             </div>
-        
+            {showTodoList && <TodoList showTodoList={showTodoList} setShowTodoList={setShowTodoList} />}
+        </div>
+
     );
 }
 
