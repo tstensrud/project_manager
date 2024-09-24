@@ -1,14 +1,29 @@
 from datetime import datetime, timezone, timedelta
 import json
 from flask import Blueprint, jsonify, request, url_for
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required, verify_jwt_in_request
 from .. import db_operations as dbo
 from .. import sanitary_calculations as sc
 from .. import globals
 from .. import excel
+from functools import wraps
 
 project_api_bp = Blueprint('project_api', __name__)
 #globals.blueprint_setup(project_api_bp)
+
+def admin_required(func):
+    @wraps(func)
+    @jwt_required()
+    def wrapper(*args, **kwargs):
+        verify_jwt_in_request()
+        uuid = get_jwt_identity()
+        user = dbo.get_user(uuid)
+        if not user:
+            return jsonify({"success": False, "message": "Fant ikke bruker"}),404
+        if not user.admin:
+            return jsonify({"success": False, "message": "Du har ikke tilgang på denne funksjonen"})
+        return func(*args, **kwargs)
+    return wrapper
 
 @project_api_bp.after_request
 def refresh_expiring_jwts(response):

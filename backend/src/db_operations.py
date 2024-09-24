@@ -112,6 +112,40 @@ def search_projects(search_string: str) -> list[models.Projects]:
         return projects
     return None
 
+def delete_project(project_uid: str) -> bool:
+    project = get_project(project_uid=project_uid)
+    if project:
+        project_rooms = get_all_project_rooms(project_uid=project_uid)
+        project_buildings = get_all_project_buildings(project_uid=project_uid)
+        project_vent_systems = get_all_systems(project_uid=project_uid)
+
+        try:
+            if project_rooms:
+                for room in project_rooms:
+                    db.session.delete(room)
+            if project_buildings:
+                for building in project_buildings:
+                    db.session.delete(building)
+            if project_vent_systems:
+                for system in project_vent_systems:
+                    db.session.delete(system)
+            db.session.commit()
+        except Exception as e:
+            globals.log(f"Could not delete project rooms, buildings and systems: {e}")
+            db.session.rollback()
+            return False
+        
+        try:
+            db.session.delete(project)
+            db.session.commit()
+            return True
+        except Exception as e:
+            globals.log(f"Could not delete project: {e}")
+            db.session.rollback()
+            return False
+    globals.log(f"No project found")
+    return False
+
 '''
 TODO-list
 '''
@@ -1286,7 +1320,21 @@ def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str
 
     return shaft_summaries
 
+def get_db_stats():
+    try:
+        total_projects = db.session.query(func.count(models.Projects.id)).scalar()
+        total_rooms = db.session.query(func.count(models.Rooms.id).label("rooms")).scalar()
+        total_area = db.session.query(func.sum(models.Rooms.area).label("area")).scalar()
 
+        return {
+            "total_projects": total_projects,
+            "total_rooms": total_rooms,
+            "total_area": total_area
+        }
+    
+    except Exception as e:
+        globals.log(f"Could not gather statistics: {e}")
+        return None
 '''
 
 Varme

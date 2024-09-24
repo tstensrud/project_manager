@@ -15,7 +15,6 @@ def admin_required(func):
         user = dbo.get_user(uuid)
         if not user:
             return jsonify({"success": False, "message": "Fant ikke bruker"}),404
-        
         if not user.admin:
             return jsonify({"success": False, "message": "Du har ikke tilgang på denne funksjonen"})
         return func(*args, **kwargs)

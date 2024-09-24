@@ -8,7 +8,7 @@ import CardInputField from '../../../layout/formelements/CardInputField.jsx';
 import CardButton from '../../../layout/formelements/CardButton.jsx';
 
 function NewUser({ userDataRefetch }) {
-    const { setData: setNewUserData, response: newUserResponse, handleSubmit: submitNewUser } = useSubmitData(`/user/new_user/`);
+    const { data: newUserData, setData: setNewUserData, response: newUserResponse, handleSubmit: submitNewUser } = useSubmitData(`/user/new_user/`);
 
     const emailRef = useRef(null);
     const nameRef = useRef(null);
@@ -39,7 +39,7 @@ function NewUser({ userDataRefetch }) {
     return (
         <form onSubmit={handleSubmit}>
             <div className="flex flex-col">
-                <div className="flex flex-row items-end">
+                <div className="flex flex-col">
                     <div className="flex flex-col mt-3 mr-3">
                         <div className="pl-2">
                             E-postadresse
@@ -56,7 +56,7 @@ function NewUser({ userDataRefetch }) {
                             <CardInputField ref={nameRef} tabindex={2} name="name" changeFunction={handleInputChange} required={true} placeholder="Navn" />
                         </div>
                     </div>
-                    <div className="flex mt-3 h-full items-end justify-end">
+                    <div className="flex mt-3 h-full">
                         <CardButton tabindex={3} buttonText="Legg til ny bruker" />
                     </div>
 

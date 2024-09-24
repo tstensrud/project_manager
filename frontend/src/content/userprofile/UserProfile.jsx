@@ -19,7 +19,7 @@ import EditIcon from '../../assets/svg/editIcon.jsx'
 import InfoIcon from '../../assets/svg/infoIcon.jsx'
 import ThumbsUp from '../../assets/svg/thumbsUp.jsx'
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
-import UserList from './admin/UserList.jsx';
+import AdminPanel from './admin/AdminPanel.jsx';
 
 function UserProfile() {
     const { userUuid, setFavProjects } = useContext(GlobalContext);
@@ -268,7 +268,7 @@ function UserProfile() {
                     data?.success === true && (
                         data?.admin && (
                             <div className="flex w-full p-5">
-                                <UserList uuid={userUuid} />
+                                <AdminPanel uuid={userUuid} />
                             </div>
                         )
                     )

@@ -99,9 +99,6 @@ function RegisterNewUser() {
                                             </button>
                                         </div>
                                         <div className="h-10">
-                                            {
-                                                <LoadingSpinner />
-                                            }
                                         </div>
                                     </div>
                                 </form>

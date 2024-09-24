@@ -7,10 +7,7 @@ from functools import wraps
 
 admin_bp = Blueprint('admin', __name__)
 
-def admin_required(f):
-    @wraps(f)
-    def decorated_method(*args, **kwargs):
-        user = dbu.get_user(uuid)
+
         
 
 @admin_bp.route('/', methods=['GET'])

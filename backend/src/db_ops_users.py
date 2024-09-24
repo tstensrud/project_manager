@@ -42,7 +42,6 @@ def send_registration_mail(email_adress: str, uuid: str) -> bool:
         server.login(user=sender_email, password=password)
         server.sendmail(sender_email, email_adress, message.as_string())
         server.quit()
-        print("Email sent")
         return True
     except Exception as e:
         globals.log(f"Could not send email: {e}")
@@ -53,16 +52,22 @@ def initialize_new_user(name: str, email: str) -> str:
     uuid = globals.encode_uid_base64(uuid4())
     token = generate_hashed_url_token(uuid)
     timestamp = globals.timestamp()
-    new_user_reg = models.NewUserRegistration(user_uid=uuid, token_hash=token, timestamp=timestamp)
     new_user = models.Users(uuid=uuid, name=name, email=email)
     try:
         db.session.add(new_user)
-        db.session.add(new_user_reg)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        globals.log(f"Could not add new NewUserRegistration {e}")
+        globals.log(f"Could not add new new user {e}")
         return None
+    
+    new_user_reg = models.NewUserRegistration(user_uid=uuid, token_hash=token, timestamp=timestamp)
+    try:
+        db.session.add(new_user_reg)
+        db.session.commit()
+    except Exception as e:
+        globals.log(f"Could not add new user registration: {e}")
+        return False
     send_email = send_registration_mail(email, uuid)
     if send_email:
         return uuid
