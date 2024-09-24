@@ -44,11 +44,9 @@ def get_all_projects():
     projects = db.session.query(models.Projects).order_by(models.Projects.project_number).all()
     return projects
 
-
 def get_project(project_uid: int) -> models.Projects:
     project = db.session.query(models.Projects).filter(models.Projects.uid == project_uid).first()
     return project
-
 
 def get_all_project_names():
     project_names = []
@@ -56,7 +54,6 @@ def get_all_project_names():
     for project_name in projects:
         project_names.append(project_name.ProjectName)
     return project_names
-
 
 def get_all_project_rooms(project_uid: str) -> list[models.Rooms]:
     rooms = db.session.query(
@@ -143,7 +140,6 @@ def get_todo_item(item_uid: int) -> models.TodoItem:
     item = db.session.query(models.TodoItem).filter(models.TodoItem.uid == item_uid).first()
     return item
 
-
 def get_project_todo_items(project_uid: int) -> dict:
     todo_list = db.session.query(models.TodoItem).filter(and_(
         models.TodoItem.project_uid == project_uid, models.TodoItem.completed == False)).order_by(
@@ -152,7 +148,6 @@ def get_project_todo_items(project_uid: int) -> dict:
                     "content": item.content, "completed": item.completed, "date_completed": item.date_completed,
                     "completed_by": item.completed_by} for item in todo_list]
     return todo_dict
-
 
 def set_todo_item_completed(item_uid: int, user_uid: int) -> bool:
     date = datetime.datetime.now()
@@ -177,7 +172,7 @@ def get_building(building_uid: str) -> models.Buildings:
     building = db.session.query(models.Buildings).filter(models.Buildings.uid == building_uid).first()
     return building
 
-def get_building_data(building_uid: str, include_ventilation: bool, include_heating: bool, include_sanitary: bool) -> dict:
+def get_building_data(building_uid: str, include_ventilation: bool, include_heating: bool, include_sanitary: bool, include_sanitary_shafts=False) -> dict:
     building = get_building(building_uid)
     if not building:
         return {}
@@ -193,10 +188,8 @@ def get_building_data(building_uid: str, include_ventilation: bool, include_heat
 
     # Ventilation
     if include_ventilation is True:
-        supply_air = summarize_supply_air_building(building_uid)
-        extract_air = summarize_extract_air_building(building_uid)
+        air_summaries = summarize_demand_supply_extract_building(building_uid=building_uid)
 
-        demand = summarize_demand_building(building_uid)
         system_uids = systems_in_building(building_uid)
         if None in system_uids:
             system_uids.pop(system_uids.index(None))
@@ -209,10 +202,10 @@ def get_building_data(building_uid: str, include_ventilation: bool, include_heat
             floor_summaries[floor] = {"supply": sum_airflow_supply_floor_building(building_uid, floor),
                                     "extract": sum_airflow_extract_floor_building(building_uid, floor),
                                     "demand": sum_airflow_demand_floor_building(building_uid, floor)}
-        building_data["supplyAir"] = supply_air
-        building_data["extractAir"] = extract_air
+        building_data["supplyAir"] = air_summaries['air_supply']
+        building_data["extractAir"] = air_summaries['air_extract']
         building_data["systems"] = systems
-        building_data["demand"] = demand
+        building_data["demand"] = air_summaries['air_demand']
     else:
         for floor in floors:
             floor_summaries[floor] = {"supply": "",
@@ -235,15 +228,17 @@ def get_building_data(building_uid: str, include_ventilation: bool, include_heat
     # Drainage and tap water
     if include_sanitary is True:
         sanitary_summary = summarize_sanitary_equipment_building(building_uid)
-        building_shafts = get_building_shafts(building_uid)
-        graph_curve = building_data["GraphCurve"]
-        shaft_list = {}
-        if building_shafts:
-            for shaft in building_shafts:
-                summary = shaft_summary_shaft_building(building_uid, shaft, graph_curve, floors)
-                shaft_list[shaft] = summary
         building_data["sanitary_summary"] = sanitary_summary
-        building_data["shaft_summaries"] = shaft_list
+        
+        if include_sanitary_shafts:
+            building_shafts = get_building_shafts(building_uid)
+            graph_curve = building_data["GraphCurve"]
+            shaft_list = {}
+            if building_shafts:
+                for shaft in building_shafts:
+                    summary = shaft_summary_shaft_building(building_uid, shaft, graph_curve, floors)
+                    shaft_list[shaft] = summary
+            building_data["shaft_summaries"] = shaft_list
 
     return building_data
 
@@ -328,7 +323,8 @@ def new_building(project_uid: str, building_name: str) -> bool:
                                     temp_floor_air = -22,
                                     dut= -22.0,
                                     safety= 10.0,
-                                    graph_curve="A")
+                                    graph_curve="A",
+                                    area=0.0)
     try:
         db.session.add(new_building)
         db.session.commit()
@@ -671,6 +667,19 @@ def summarize_project_area(project_uid: int) -> float:
         models.Rooms.area)).join(models.Buildings).join(models.Projects).filter(
             models.Projects.uid == project_uid).scalar()
     return area
+
+def summarize_demand_supply_extract_building(building_uid: str) -> dict:
+    summaries = db.session.query(
+        func.sum(models.Rooms.air_demand).label("air_demand"),
+        func.sum(models.Rooms.air_supply).label("air_supply"),
+        func.sum(models.Rooms.air_extract).label("air_extract"),
+    ).filter(models.Rooms.building_uid == building_uid).one_or_none()
+
+    return {
+            "air_demand":summaries.air_demand,
+            "air_supply":summaries.air_supply,
+            "air_extract":summaries.air_extract,
+    }
 
 def summarize_supply_air_building(building_uid: int) -> float:
     supply = db.session.query(func.sum(
@@ -1231,17 +1240,15 @@ def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str
     cumulative_sum_drainage = 0
     cumulative_sum_coldwater = 0
     cumulative_sum_hotwater = 0
-    largest_cold_water_outlet = sc.get_largest_water_outlet(building_uid, shaft, "cw")
-    largest_warm_water_outlet = sc.get_largest_water_outlet(building_uid, shaft, "ww")
+    largest_water_outlets = sc.get_largest_water_outlet(building_uid=building_uid, shaft=shaft)
 
     for i,floor in enumerate(floors[::-1]):
         shaft_summary = {}
-
+        sum_waterflows = sc.sum_waterflows_floor(building_uid=building_uid, floor=floor, shaft=shaft)
+        
         # Drainage
-        floor_sum_drainage = sc.sum_drainage_floor(building_uid, floor, shaft)
-        if floor_sum_drainage > 0:
-            #print(f"Sum drainage for floor {floor} in building: {building_uid}: {floor_sum_drainage}")
-            floor_sum_drainage_simul = sc.simultanius_drainage(floor_sum_drainage, graph_curve)
+        if sum_waterflows['total_drainage'] > 0:
+            floor_sum_drainage_simul = sc.simultanius_drainage(sum_waterflows['total_drainage'], graph_curve)
             if i == 0:
                 cumulative_sum_drainage = floor_sum_drainage_simul
             else:
@@ -1250,9 +1257,8 @@ def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str
         pipe_size_1_60 = sc.pipesize_drainage_1_60(cumulative_sum_drainage)
 
         #Cold water
-        floor_sum_cold_water = sc.sum_cold_water_floor(building_uid, floor, shaft)
-        if floor_sum_cold_water > 0:
-            floor_sum_cold_water_simul = sc.simultanius_tap_water(floor_sum_cold_water, largest_cold_water_outlet)
+        if sum_waterflows['total_cw'] > 0:
+            floor_sum_cold_water_simul = sc.simultanius_tap_water(sum_waterflows['total_cw'], largest_water_outlets['largest_cw'])
             if i == 0:
                 cumulative_sum_coldwater = floor_sum_cold_water_simul
             else:
@@ -1260,9 +1266,8 @@ def shaft_summary_shaft_building(building_uid: str, shaft: str, graph_curve: str
         pipe_size_cold_water = sc.pipesize_tap_water(cumulative_sum_coldwater)
 
         #Warm water
-        floor_sum_warm_water = sc.sum_warm_water_floor(building_uid, floor, shaft)
-        if floor_sum_warm_water > 0:
-            floor_sum_warm_water_simul = sc.simultanius_tap_water(floor_sum_warm_water, largest_warm_water_outlet)
+        if sum_waterflows['total_ww'] > 0:
+            floor_sum_warm_water_simul = sc.simultanius_tap_water(sum_waterflows['total_ww'], largest_water_outlets['largest_ww'])
             if i == 0:
                 cumulative_sum_hotwater = floor_sum_warm_water_simul
             else:

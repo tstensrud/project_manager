@@ -12,7 +12,7 @@ function Sanitary() {
 
     // Hooks
     const { data, loading } = useFetch(`/project_api/${projectId}/sanitary/buildings/`);
-
+    console.log("Data:", data)
     return (
         <>
             <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitæranlegg - oppsummering"} projectName={""} projectNumber={""} />
@@ -26,8 +26,8 @@ function Sanitary() {
                                 data && data.building_data === null ? (
                                     <p className="text-primary-color text-xs">{data.error}</p>
                                 ) : (
-                                    data && data.building_data && Object.keys(data.building_data).map((key) => (
-                                        <BuildingSummary buildingUid={data.building_data[key].uid} projectId={projectId} key={data.building_data[key].uid} />
+                                    data?.building_data && Object.values(data.building_data).map((value) => (
+                                        <BuildingSummary buildingUid={value} projectId={projectId} key={value} />
                                     )
                                 ))
                             }

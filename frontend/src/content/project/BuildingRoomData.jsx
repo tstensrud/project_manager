@@ -35,7 +35,7 @@ function BuildingRoomData({ projectId }) {
                                                                 {building.BuildingName}
                                                             </div>
                                                             <div className="flex w-1/2 justify-end">
-                                                                {building.area.toLocaleString()} <div className="ml-1">m<sup>2</sup></div>
+                                                                {building?.area && building.area.toLocaleString()} <div className="ml-1">m<sup>2</sup></div>
                                                             </div>
                                                         </div>
                                                     ))

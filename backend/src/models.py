@@ -35,9 +35,10 @@ class UserFavProjects(db.Model):
     project_uid = db.Column(db.String(250), db.ForeignKey('Projects.uid'), nullable=False)
 
     project = db.relationship('Projects', backref='fav_project', uselist=False, lazy=True)
-    
+
     __table_args__ = (
-        Index('idx_fav_uid', 'uid'),
+        Index('idx_fav_project_project_uid', 'project_uid'),
+        Index('idx_fav_project_uuid', 'user_uid'),
     )
 
     def get_json(self):
@@ -74,9 +75,9 @@ class TodoItem(db.Model):
     completed_by = db.Column(db.String(100))
 
     __table_args__ = (
-        Index('idx_todo_uid', 'uid'),
+        Index("idx_todo_project_uid", "project_uid"),
+        Index("idx_todo_user_uid", "author_uid")
     )
-
     def get_json(self):
         return {
             "id": self.id,
@@ -107,7 +108,7 @@ class Projects(db.Model):
     
     __table_args__ = (
         Index('idx_name', 'project_name'),
-        Index('idx_projects_uid', 'uid'),
+        Index('idx_project_number', "project_number")
     )
 
     def get_json(self):
@@ -144,11 +145,12 @@ class Buildings(db.Model):
     dut = db.Column(db.Float)
     safety = db.Column(db.Integer)
     graph_curve = db.Column(db.String(2))
+    area = db.Column(db.Float)
 
     rooms = db.relationship('Rooms', backref='building', lazy=True)
 
     __table_args__ = (
-        Index('idx_buildings_uid', 'uid'),
+        Index('idx_buildings_project_uid', "project_uid"),
     )
 
     def get_json(self):
@@ -170,7 +172,8 @@ class Buildings(db.Model):
             "TempFloorAir": self.temp_floor_air,
             "Dut": self.dut,
             "Safety": self.safety,
-            "GraphCurve": self.graph_curve
+            "GraphCurve": self.graph_curve,
+            "area": self.area
         }
 
 class Rooms(db.Model):
@@ -263,7 +266,11 @@ class Rooms(db.Model):
     drain_110_mm = db.Column(db.Float)
 
     __table_args__ = (
-        Index('idx_rooms_uid', 'uid'),
+        Index('idx_rooms_project_uid', 'project_uid'),
+        Index('idx_rooms_building_uid', "building_uid"),
+        Index("idx_rooms_room_type_uid", "room_type_uid"),
+        Index("idx_rooms_system_uid", "system_uid"),
+
     )
 
     def get_json_room_data(self):
@@ -387,7 +394,7 @@ class VentilationSystems(db.Model):
     room = db.relationship('Rooms', backref="system", lazy=True)
 
     __table_args__ = (
-        Index('idx_ventsystems_uid', 'uid'),
+        Index("idx_ventsys_project_uid", "project_uid"),
     )
 
     def get_json(self):
@@ -417,10 +424,6 @@ class Specifications(db.Model):
     created_by = db.Column(db.String(255))
 
     room_types = db.relationship("RoomTypes", backref="specifications", lazy=True)
-
-    __table_args__ = (
-        Index('idx_spec_uid', 'uid'),
-    )
 
     def get_json(self):
         formatted_date = ""
@@ -455,11 +458,11 @@ class RoomTypes(db.Model):
     db_corridor = db.Column(db.String(50))
     comments = db.Column(db.String(20))
 
-    __table_args__ = (
-        Index('idx_roomtypes_uid', 'uid'),
-    )
-
     room = db.relationship('Rooms', backref='room_type', lazy=True)
+
+    __table_args__ = (
+        Index("idx_roomtypes_spec_uid", "specification_uid"),
+    )
 
     def get_json(self):
         return {
@@ -570,10 +573,6 @@ class DeletedRooms(db.Model):
     firehose = db.Column(db.Float)
     drain_75_mm = db.Column(db.Float)
     drain_110_mm = db.Column(db.Float)
-
-    __table_args__ = (
-        Index('idx_deletedrooms_uid', 'uid'),
-    )
 
 class SanitaryEquipmentWaterData(db.Model):
     __tablename__ = "SanitaryEquipmentWaterData"

@@ -734,12 +734,12 @@ def get_buildings_sanitary(project_uid):
         building_data = []
 
         for building in buildings:
-            building_data.append(dbo.get_building_data(building.uid, False, False, True))
+            building_data.append(building.uid)
         return jsonify({"building_data": building_data})
 
 @project_api_bp.route('/sanitary/get_building/<building_uid>/', methods=['GET'])
 def get_sanitary_building_data(project_uid, building_uid):
-    building_data = dbo.get_building_data(building_uid, False, False, True)
+    building_data = dbo.get_building_data(building_uid, False, False, True, include_sanitary_shafts=True)
     if building_data:
         return jsonify({"success": True, "data": building_data})
     return jsonify({"success": False, "message": "No building data found"})
@@ -772,7 +772,7 @@ def get_sanitary_building_summary(project_uid, building_uid):
     building = dbo.get_building(building_uid)
     if building:
         curve = building.graph_curve
-        building_sanitary_totals = sc.sum_flows_building(building_uid, curve)
+        building_sanitary_totals = sc.sums_simul_waterflows_building(building_uid, curve)
         totals = {
             "drainage": {
                 "pipe_size_vertical": sc.pipesize_drainage_vertical(building_sanitary_totals[0]),

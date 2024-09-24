@@ -28,12 +28,6 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
     const { data, setData, loading, response, error, handleSubmit } = useUpdateData(`/project_api/${projectId}/buildings/edit/${buildingData.uid}/`);
     const { data: deleteData, setData: setDeleteData, response: deleteResponse, handleSubmit: handleDeleteSubmit } = useDeleteData(`/project_api/${projectId}/buildings/delete/${buildingData.uid}/`);
 
-    const buildingName = buildingData.BuildingName || '';
-    const area = buildingData.area || '';
-    const supplyAir = buildingData.supplyAir || '';
-    const extractAir = buildingData.extractAir || '';
-    const heating = buildingData.heating || '';
-
     // useEffects
     useEffect(() => {
         if (response && response.success === true) {
@@ -78,7 +72,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
         e.preventDefault();
         await handleDeleteSubmit();
     }
-
+    console.log(buildingData)
     return (
 
         <ContentCard>
@@ -98,7 +92,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                         </form>
                     </>
                 ) : (
-                    <CardTitle svg={<BuildingIcon />} title={buildingName} />
+                    <CardTitle svg={<BuildingIcon />} title={buildingData?.BuildingName && buildingData.BuildingName} />
                 )
             }
             <div className="border-0 p-3 rounder-lg">
@@ -107,7 +101,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                 </div>
 
                 <div className="mb-5">
-                    {area.toLocaleString()} m<sup>2</sup>
+                    {buildingData?.area && buildingData.area.toLocaleString()} m<sup>2</sup>
                 </div>
 
 
@@ -117,10 +111,10 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
 
                 <div className="mb-5">
                     {PlusIcon && <PlusIcon />}
-                    <span className="text-supply-color"> {supplyAir.toLocaleString()} </span> m<sup>3</sup>/h
+                    <span className="text-supply-color"> {buildingData?.supplyAir && buildingData.supplyAir.toLocaleString()} </span> m<sup>3</sup>/h
                     <br />
                     {MinusIcon && <MinusIcon />}
-                    <span className="text-extract-color"> {extractAir.toLocaleString()} </span> m<sup>3</sup>/h
+                    <span className="text-extract-color"> {buildingData?.extractAir && buildingData.extractAir.toLocaleString()} </span> m<sup>3</sup>/h
                 </div>
 
                 <div className="mb-5">
@@ -128,7 +122,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                         <h4>Betjenes av ventilasjonssystem</h4>
                     </div>
                     {
-                        buildingData.systems.map((system, index) =>
+                        buildingData?.systems && buildingData.systems.map((system, index) =>
                             <div key={index} className="flex flex-row">
                                 <div className="flex w-full">
                                     {system}
@@ -144,7 +138,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                     <h4>Prosjektert varme</h4>
                 </div>
                 <div className="mb-5">
-                    {Number((heating / 1000).toFixed(2)).toLocaleString()} kW
+                    {Number((buildingData?.heating && buildingData.heating / 1000).toFixed(2)).toLocaleString()} kW
                 </div>
             </div>
             <div className="flex flex-row h-full">

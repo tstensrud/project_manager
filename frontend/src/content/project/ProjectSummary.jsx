@@ -99,7 +99,7 @@ function ProjectSummary({ projectId }) {
                                             <h4>Prosjektert areal</h4>
                                         </div>
                                         <div>
-                                            {data?.data?.area !== null && data?.data?.area.toLocaleString()} m<sup>2</sup>
+                                            {data?.data?.area && data?.data?.area.toLocaleString()} m<sup>2</sup>
                                         </div>
                                     </div>
                                 </>

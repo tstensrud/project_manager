@@ -1,157 +1,111 @@
-
 from . import models, db
 from sqlalchemy import func, and_
 import math
 
-def get_sanitary_equipment_values(equipment: str) -> models.SanitaryEquipmentWaterData:
-    item = db.session.query(models.SanitaryEquipmentWaterData).filter(models.SanitaryEquipmentWaterData.equipment_type == equipment).first()
-    if item:
-        return item
-    else:
-        return None
+def get_all_sanitary_equipment_types() -> list[models.SanitaryEquipmentWaterData]:
+    equipment = db.session.query(models.SanitaryEquipmentWaterData).all()
+    return equipment
 
-def sum_drainage_building(building_uid: str) -> float:
+def sum_waterflows_building(building_uid: str) -> dict:
     equipment_types = get_all_sanitary_equipment_types()
     total_drainage = 0
+    total_cw = 0
+    total_ww = 0
     for e_type in equipment_types:
-        sum = 0
-        column = getattr(models.Rooms, e_type)
-        sum = db.session.query(func.sum(column)).filter(models.Rooms.building_uid == building_uid).scalar()
-        if sum is not None:
-            sanitary_values =  get_sanitary_equipment_values(e_type)
-            total_drainage = total_drainage + (sum * sanitary_values.water_flow_drainage)
-    return total_drainage
+        sum_type = 0
+        column = getattr(models.Rooms, e_type.equipment_type)
+        sum_type = db.session.query(func.sum(column)).filter(models.Rooms.building_uid == building_uid).scalar()
+        if sum_type is not None:
+            total_drainage = total_drainage + (sum_type * e_type.water_flow_drainage)
+            total_cw = total_cw + (sum_type * e_type.water_flow_cold_water)
+            total_ww = total_ww + (sum_type * e_type.water_flow_warm_water)
+    return {
+        "total_drainage": total_drainage,
+        "total_cw": total_cw,
+        "total_ww": total_ww
+    }
 
-def sum_cold_water_building(building_uid: str) -> float:
-    equipment_types = get_all_sanitary_equipment_types()
-    total_cold_water = 0
-    for e_type in equipment_types:
-        sum = 0
-        column = getattr(models.Rooms, e_type)
-        sum = db.session.query(func.sum(column)).filter(models.Rooms.building_uid == building_uid).scalar()
-        if sum is not None:
-            sanitary_values =  get_sanitary_equipment_values(e_type)
-            total_cold_water = total_cold_water + (sum * sanitary_values.water_flow_cold_water)
-    return total_cold_water
-
-def sum_hot_water_building(building_uid: str) -> float:
-    equipment_types = get_all_sanitary_equipment_types()
-    total_hot_water = 0
-    for e_type in equipment_types:
-        sum = 0
-        column = getattr(models.Rooms, e_type)
-        sum = db.session.query(func.sum(column)).filter(models.Rooms.building_uid == building_uid).scalar()
-        if sum is not None:
-            sanitary_values =  get_sanitary_equipment_values(e_type)
-            total_hot_water = total_hot_water + (sum * sanitary_values.water_flow_warm_water)
-    return total_hot_water
-
-def sum_flows_building(building_uid: str, graph_curve: str) -> list[float]:
+def sums_simul_waterflows_building(building_uid: str, graph_curve: str) -> list[float]:
     sums = []
-    drainage = sum_drainage_building(building_uid)
-    cold_water = sum_cold_water_building(building_uid)
-    hot_water = sum_hot_water_building(building_uid)
-    largest_cold_water_outlet = get_largest_water_outlet(building_uid, "", "cw")
-    largest_hot_water_outlet = get_largest_water_outlet(building_uid, "", "ww")
+    water_flows = sum_waterflows_building(building_uid=building_uid)
+    largest_water_outlets = get_largest_water_outlet(building_uid, "")
     
-    drainage_simul = simultanius_drainage(drainage, graph_curve)
-    cold_water_simul = simultanius_tap_water(cold_water, largest_cold_water_outlet)
-    warm_water_simul = simultanius_tap_water(hot_water, largest_hot_water_outlet)
+    drainage_simul = simultanius_drainage(water_flows['total_drainage'], graph_curve)
+    cold_water_simul = simultanius_tap_water(water_flows['total_cw'], largest_water_outlets['largest_cw'])
+    warm_water_simul = simultanius_tap_water(water_flows['total_ww'], largest_water_outlets['largest_ww'])
     sums.append(drainage_simul)
     sums.append(cold_water_simul)
     sums.append(warm_water_simul)
 
     return sums
 
-
-def sum_drainage_floor(building_uid: str, floor: str, shaft: str) -> float:
+def sum_waterflows_floor(building_uid: str, floor: str, shaft: str) -> float:
     equipment_types = get_all_sanitary_equipment_types()
     total_drainage = 0
+    total_cw = 0
+    total_ww = 0
     for e_type in equipment_types:
         sum = 0
-        column = getattr(models.Rooms, e_type)
+        column = getattr(models.Rooms, e_type.equipment_type)
         sum = db.session.query(func.sum(column)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor, models.Rooms.shaft == shaft)).scalar()
         if sum is not None:
-            sanitary_values =  get_sanitary_equipment_values(e_type)
-            total_drainage = total_drainage + (sum * sanitary_values.water_flow_drainage)
-    return total_drainage
+            total_drainage = total_drainage + (sum * e_type.water_flow_drainage)
+            total_cw = total_cw + (sum * e_type.water_flow_cold_water)
+            total_ww = total_ww + (sum * e_type.water_flow_warm_water)
+    return {
+        'total_drainage': total_drainage,
+        "total_cw": total_cw,
+        "total_ww": total_ww
+    }
 
-def sum_cold_water_floor(building_uid: str, floor: str, shaft: str) -> float:
-    equipment_types = get_all_sanitary_equipment_types()
-    total_cold_water = 0
-    for e_type in equipment_types:
-        sum = 0
-        column = getattr(models.Rooms, e_type)
-        sum = db.session.query(func.sum(column)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor, models.Rooms.shaft == shaft)).scalar()
-        if sum is not None:
-            sanitary_values =  get_sanitary_equipment_values(e_type)
-            total_cold_water = total_cold_water + (sum * sanitary_values.water_flow_cold_water)
-    #print(f"Total cold water: {total_cold_water}")
-    return total_cold_water
-
-def sum_warm_water_floor(building_uid: str, floor: str, shaft: str) -> float:
-    equipment_types = get_all_sanitary_equipment_types()
-    total_hot_water = 0
-    for e_type in equipment_types:
-        sum = 0
-        column = getattr(models.Rooms, e_type)
-        sum = db.session.query(func.sum(column)).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.floor == floor, models.Rooms.shaft == shaft)).scalar()
-        if sum is not None:
-            sanitary_values =  get_sanitary_equipment_values(e_type)
-            total_hot_water = total_hot_water + (sum * sanitary_values.water_flow_warm_water)
-    #print(f"Total warm water: {total_hot_water}")
-    return total_hot_water
-
-def get_all_sanitary_equipment_types() -> list[str]:
-    equipment_types = db.session.query(models.SanitaryEquipmentWaterData.equipment_type).all()
-    equipment_list = [et[0] for et in equipment_types]
-    return equipment_list
-
-def sum_drainage_equipment_shaft(project_uid: str, equipment: str, shaft: str) -> float:
-    equipment_values = get_sanitary_equipment_values(equipment)
-    drainage_value = equipment_values.water_flow_drainage
-    column = getattr(models.Rooms, equipment)
+def sum_drainage_equipment_shaft(project_uid: str, equipment_type: str, equipment_value: float, shaft: str) -> float:
+    column = getattr(models.Rooms, equipment_type)
     sum_equipment_type = db.session.query(func.sum(column)).filter(and_(models.Rooms.shaft == shaft, models.Rooms.project_uid == project_uid)).scalar()
     sum_drainage = 0
     if sum_equipment_type is not None:
-        sum_drainage = sum_equipment_type * drainage_value
+        sum_drainage = sum_equipment_type * equipment_value
     return sum_drainage
 
 def sum_drainage_shaft(project_uid: str, shaft: str) -> float:
     equipment_types = get_all_sanitary_equipment_types()
     sum = 0
     for type in equipment_types:
-        sum = sum + sum_drainage_equipment_shaft(project_uid, type, shaft)
+        sum = sum + sum_drainage_equipment_shaft(project_uid=project_uid, equipment_type=type.equipment_type,
+                                                 equipment_value=type.water_flow_drainage, shaft=shaft)
     return sum
 
-# water_type is either "cw" for cold water or "ww" for warm water
-def get_largest_water_outlet(building_uid: str, shaft: str, water_type: str) -> float:
+def get_largest_water_outlet(building_uid: str, shaft: str) -> float:
     equipment_types = get_all_sanitary_equipment_types()
     installed_equipment = []
-    largest_outlet = 0
+    largest_cw_outlet = 0
+    largest_ww_outlet = 0
+    
+    # Gather all sanitary equipment types that has a value > 0
     for equipment in equipment_types:
-        column = getattr(models.Rooms, equipment)
+        column = getattr(models.Rooms, equipment.equipment_type)
         if shaft == "":
             installed = db.session.query(column).filter(and_(models.Rooms.building_uid == building_uid, column > 0)).first()
         else:
             installed = db.session.query(column).filter(and_(models.Rooms.building_uid == building_uid, models.Rooms.shaft == shaft, column > 0)).first()
         if installed:
             installed_equipment.append(equipment)
-    for item in installed_equipment:
-        item_value = get_sanitary_equipment_values(item)
-        if water_type == "cw":
-            if item_value.water_flow_cold_water > largest_outlet:
-                largest_outlet = item_value.water_flow_cold_water
-        elif water_type == "ww":
-            if item_value.water_flow_warm_water > largest_outlet:
-                largest_outlet = item_value.water_flow_warm_water
-    return largest_outlet
+    
+    # Find largest outlet of installed equipment
+    for installed_type in installed_equipment:
+        if installed_type.water_flow_cold_water > largest_cw_outlet:
+            largest_cw_outlet = installed_type.water_flow_cold_water
+        if installed_type.water_flow_warm_water > largest_ww_outlet:
+            largest_ww_outlet = installed_type.water_flow_warm_water
+
+    return {
+        "largest_cw": largest_cw_outlet,
+        "largest_ww": largest_ww_outlet
+    }
 
 '''
 Simultaneity calculations
 '''
 def simultanius_drainage(sum: float, graph_curve: str) -> float:
-    #print(f"Calculating simultanious draining. Sum drainage: {sum}. Graph curve: {graph_curve}")
     if sum == 0:
         return 0
     graph_curve_value = 0

@@ -17,7 +17,7 @@ import MessageBox from '../../layout/MessageBox';
 function BuildingSummary({ buildingUid, projectId }) {
 
     const { response, setData, handleSubmit } = useUpdateData(`/project_api/${projectId}/sanitary/update_curve/${buildingUid}/`);
-    const { data: buildingSummaryData, loading: buildingSummaryDataLoading, refetch } = useFetch(`/project_api/${projectId}/sanitary/building_summary/${buildingUid}/`);
+    const { data: buildingSummaryData, loading: buildingSummaryDataLoading, refetch } = useFetch(buildingUid ? `/project_api/${projectId}/sanitary/building_summary/${buildingUid}/` : null);
 
     const translateEquipment = (name) => {
         switch (name) {
@@ -75,7 +75,7 @@ function BuildingSummary({ buildingUid, projectId }) {
         e.preventDefault();
         await handleSubmit();
     }
-
+    //console.log(buildingUid)
     return (
         <>
         {
