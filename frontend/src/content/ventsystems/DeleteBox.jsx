@@ -21,7 +21,7 @@ function DeleteBox({ systemName, setShowDeleteDialog, deleteSystem }) {
             </span>
             <br />
             <br />
-            <button onClick={handleDeleteSpec} className="table-button">SLETT</button>
+            <button onClick={handleDeleteSpec} className="text-primary-color dark:text-dark-primary-color font-semibold hover:text-accent-color hover:dark:text-dark-accent-color">SLETT</button>
         </>
     );
 }

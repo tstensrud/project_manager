@@ -44,7 +44,7 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
         if(response?.success === true) {
             setData('');
             sanitaryRefetch();
-            buildingReFetch();
+            //buildingReFetch();
         }
     },[response])
 

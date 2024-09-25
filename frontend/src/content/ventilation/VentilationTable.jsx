@@ -28,7 +28,7 @@ function VentilationTable({ projectId, buildingUid }) {
             setFloors(sortedKeys);
         }
     }, [buildingData]);
-
+    
     return (
         <>
             {
@@ -60,7 +60,6 @@ function VentilationTable({ projectId, buildingUid }) {
                                     <TableWrapper floor={floor}>
                                         <Table>
                                             <tbody>
-
                                                 {
                                                     roomData?.data && (
                                                         Object.entries(roomData.data)
@@ -73,7 +72,9 @@ function VentilationTable({ projectId, buildingUid }) {
                                                             })
                                                             .map(([key, room], index) => (
                                                                 <VentilationTableRowComponent index={index} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={12} roomId={room.uid} systems={ventSystemData} />
-                                                            )))
+                                                            )
+                                                        )
+                                                    )
                                                 }
 
                                                 <tr className="bg-secondary-color dark:bg-dark-secondary-color">

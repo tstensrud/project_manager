@@ -12,12 +12,14 @@ import DeleteBox from './DeleteBox';
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
 import TableButton from "../../layout/tableelements/TableButton.jsx";
+import MarkedRow from "../../layout/tableelements/MarkedRow.jsx";
+import LoadingRow from '../../layout/tableelements/LoadingRow.jsx'
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
 import LoadingSpinner from "../../layout/LoadingSpinner.jsx";
 
-function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
+function SystemTableRowComponent({ systemId, systemsRefetch, cols }) {
     const { projectId } = useParams();
 
     // Hooks
@@ -27,9 +29,7 @@ function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
 
     // Use states
     const [editingCell, setEditingCell] = useState(null);
-    const [editedData, setEditedData] = useState(null);
-    const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
-    const [markedRow, setMarkedRow] = useState('');
+    const [markedRow, setMarkedRow] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     // use effects
@@ -38,25 +38,18 @@ function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
     }, []);
 
     useEffect(() => {
-        if (systemData) {
-            setEditedData('');
-        }
-    }, [systemData]);
-
-    useEffect(() => {
         if (responseDeleteSystem?.success === true) {
-            systemsRefetch();   
+            systemsRefetch();
         }
-    },[responseDeleteSystem]);
+    }, [responseDeleteSystem]);
 
     useEffect(() => {
         if (updateSystemDataResponse?.success === true) {
-            console.log("refetch")
             setData('');
             systemRefetch();
         }
-    },[updateSystemDataResponse]);
-    
+    }, [updateSystemDataResponse]);
+
     // Handlers
     const handleEdit = (cellName) => {
         setEditingCell(cellName);
@@ -77,7 +70,6 @@ function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
     const deleteSystem = async (e) => {
         e.preventDefault();
         await deleteSubmit();
-        setDisabledDeleteButton(true);
     }
 
     const handleBlur = () => {
@@ -96,12 +88,12 @@ function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
     };
 
     const handleOnMarkedRow = () => {
-        if (markedRow === '') {
-            setMarkedRow('bg-marked-row dark:bg-dark-marked-row text-primary-color dark:text-dark-primary-color hover:bg-marked-row dark:hover:bg-dark-marked-row');
+        if (markedRow === false) {
+            setMarkedRow(true)
         } else {
-            setMarkedRow('');
+            setMarkedRow(false);
         }
-    }
+    };
 
     const renderEditableCell = (cellName, width) => (
         <TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
@@ -115,56 +107,51 @@ function SystemTableRowComponent({ systemId, systemsRefetch, totalColumns }) {
         </TableTDelement>
     );
 
-    console.log(updateSystemDataResponse)
     return (
         <>
             {updateSystemDataResponse?.success === false && (<MessageBox message={updateSystemDataResponse.message} />)}
-
-            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
-
-                {
-                    systemLoading ? (
-                        <LoadingSpinner text="systemer" />
-                    ) : (
-                        <>
-                            <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
-                                <MarkRowIcon />
-                            </TableTDelement>
-                            <TableTDelement width="5%">
-                                {systemData ? systemData.system_data.SystemName : ''}
-                            </TableTDelement>
-                            {renderEditableCell("Location", "10%")}
-                            {renderEditableCell("ServiceArea", "10%")}
-                            {renderEditableCell("AirFlow", "7%")}
-                            {renderEditableCell("HeatExchange", "5%")}
-                            <TableTDelement width="7%">
-                                {systemData ? systemData.system_data.AirFlowSupply : ''}
-                            </TableTDelement>
-                            <TableTDelement width="7%">
-                                {systemData ? systemData.system_data.AirFlowExtract : ''}
-                            </TableTDelement>
-                            <TableTDelement width="5%">
-                                {systemData ? systemData.system_data.SpecialSystem : ''}
-                            </TableTDelement>
-                            <TableTDelement width="32%">
-                                {
-                                    showDeleteDialog === true ? (
-                                        <DeleteBox systemName={systemData && systemData.system_data.SystemName} setShowDeleteDialog={setShowDeleteDialog} deleteSystem={deleteSystem} />
-                                    ) : (<></>)
-                                }
-                                {systemData && systemData.system_data.AirFlowSupply !== systemData.system_data.AirFlowExtract ? (<>Ubalanse på system. </>) : (<></>)}
-                                {systemData && systemData.system_data.AirFlowSupply > systemData.system_data.AirFlow ? (<>For mye tilluft. </>) : (<></>)}
-                                {systemData && systemData.system_data.AirFlowExtract > systemData.system_data.AirFlow ? (<>For mye avtrekk. </>) : (<></>)}
-                            </TableTDelement>
-                            <TableTDelement width="10%">
-                                <div className="pt-1 pb-1">
-                                    {showDeleteDialog === true ? (<></>) : (<TableButton clickFunction={showDeleteBox} buttonText="Slett" />)}
-                                </div>
-                            </TableTDelement>
-                        </>
-                    )
-                }
-            </tr>
+            {
+                systemLoading ? (
+                    <LoadingRow cols={cols}/>
+                ) : (
+                    <MarkedRow markedRow={markedRow}>
+                        <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
+                            <MarkRowIcon />
+                        </TableTDelement>
+                        <TableTDelement width="5%">
+                            {systemData ? systemData.system_data.SystemName : ''}
+                        </TableTDelement>
+                        {renderEditableCell("Location", "10%")}
+                        {renderEditableCell("ServiceArea", "10%")}
+                        {renderEditableCell("AirFlow", "7%")}
+                        {renderEditableCell("HeatExchange", "5%")}
+                        <TableTDelement width="7%">
+                            {systemData ? systemData.system_data.AirFlowSupply : ''}
+                        </TableTDelement>
+                        <TableTDelement width="7%">
+                            {systemData ? systemData.system_data.AirFlowExtract : ''}
+                        </TableTDelement>
+                        <TableTDelement width="5%">
+                            {systemData ? systemData.system_data.SpecialSystem : ''}
+                        </TableTDelement>
+                        <TableTDelement width="32%">
+                            {
+                                showDeleteDialog === true ? (
+                                    <DeleteBox systemName={systemData && systemData.system_data.SystemName} setShowDeleteDialog={setShowDeleteDialog} deleteSystem={deleteSystem} />
+                                ) : (<></>)
+                            }
+                            {systemData && systemData.system_data.AirFlowSupply !== systemData.system_data.AirFlowExtract ? (<>Ubalanse på system. </>) : (<></>)}
+                            {systemData && systemData.system_data.AirFlowSupply > systemData.system_data.AirFlow ? (<>For mye tilluft. </>) : (<></>)}
+                            {systemData && systemData.system_data.AirFlowExtract > systemData.system_data.AirFlow ? (<>For mye avtrekk. </>) : (<></>)}
+                        </TableTDelement>
+                        <TableTDelement width="10%">
+                            <div className="pt-1 pb-1">
+                                {showDeleteDialog === true ? (<></>) : (<TableButton clickFunction={showDeleteBox} buttonText="Slett" />)}
+                            </div>
+                        </TableTDelement>
+                    </MarkedRow>
+                )
+            }
         </>
     );
 }

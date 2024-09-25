@@ -61,35 +61,44 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                                 </tr>
                             </thead>
                         </TableHeader>
-
-
                         {
-                            floors && floors.map(floor => (
-                                <React.Fragment key={floor}>
-                                    <TableWrapper floor={floor}>
-                                        <Table>
-                                            <tbody>
-                                                {
-                                                    roomData?.data && (
-                                                        Object.entries(roomData.data)
-                                                            .filter(([key, room]) => room.Floor === floor)
-                                                            .sort(([, roomA], [, roomB]) => {
-                                                                return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
-                                                                    numeric: true,
-                                                                    sensitivity: "base"
-                                                                });
-                                                            })
-                                                            .map(([key, room]) => (
-                                                                <SanitaryTableRowComponent buildingReFetch={buildingReFetch} key={room.uid} totalColumns={14} roomId={room.uid} />
-                                                            ))
-                                                    )
-                                                }
-                                            </tbody>
-                                        </Table>
-                                    </TableWrapper>
-                                </React.Fragment>
-                            ))}
-                        <div style={{ marginBottom: "30px" }}>
+                            buildingDataLoading ? (
+                                <LoadingSpinner text="utstyr" />
+                            ) : (
+                                <>
+                                    {
+                                        floors && floors.map(floor => (
+                                            <React.Fragment key={floor}>
+                                                <TableWrapper floor={floor}>
+                                                    <Table>
+                                                        <tbody>
+                                                            {
+                                                                roomData?.data && (
+                                                                    Object.entries(roomData.data)
+                                                                        .filter(([key, room]) => room.Floor === floor)
+                                                                        .sort(([, roomA], [, roomB]) => {
+                                                                            return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
+                                                                                numeric: true,
+                                                                                sensitivity: "base"
+                                                                            });
+                                                                        })
+                                                                        .map(([key, room]) => (
+                                                                            <SanitaryTableRowComponent buildingReFetch={buildingReFetch} key={room.uid} totalColumns={14} roomId={room.uid} />
+                                                                        )
+                                                                        )
+                                                                )
+                                                            }
+                                                        </tbody>
+                                                    </Table>
+                                                </TableWrapper>
+                                            </React.Fragment>
+                                        ))
+                                    }
+                                </>
+                            )
+                        }
+
+                        {/*                         <div style={{ marginBottom: "30px" }}>
                             <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color dark:bg-dark-secondary-color shadow-lg shadow-background-shade mb-5">
                                 <Table>
                                     <tfoot>
@@ -97,26 +106,26 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                                             <TableTDelement width="2%" />
                                             <TableTDelement width="12%" />
                                             <TableTDelement width="5%" />
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.sink_1_14_inch ? <>{Number((buildingData.data).sanitary_summary.sink_1_14_inch)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.sink_large ? <>{Number((buildingData.data).sanitary_summary.sink_large)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.drinking_fountain ? <>{Number((buildingData.data).sanitary_summary.drinking_fountain)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.sink_utility ? <>{Number((buildingData.data).sanitary_summary.sink_utility)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.wc ? <>{Number((buildingData.data).sanitary_summary.wc)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.urinal ? <>{Number((buildingData.data).sanitary_summary.urinal)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.dishwasher ? <>{Number((buildingData.data).sanitary_summary.dishwasher)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.shower ? <>{Number((buildingData.data).sanitary_summary.shower)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.tub ? <>{Number((buildingData.data).sanitary_summary.tub)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.washing_machine ? <>{Number((buildingData.data).sanitary_summary.washing_machine)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.tap_water_outlet_inside ? <>{Number((buildingData.data).sanitary_summary.tap_water_outlet_inside)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.tap_water_outlet_outside ? <>{Number((buildingData.data).sanitary_summary.tap_water_outlet_outside)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.firehose ? <>{Number((buildingData.data).sanitary_summary.firehose)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.drain_75_mm ? <>{Number((buildingData.data).sanitary_summary.drain_75_mm)} <br /> stk</> : (<></>)}</strong></TableTDelement>
-                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.drain_110_mm ? <>{Number((buildingData.data).sanitary_summary.drain_110_mm)} <br /> stk</> : (<></>)}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.sink_1_14_inch && <>{Number((buildingData.data).sanitary_summary.sink_1_14_inch)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.sink_large && <>{Number((buildingData.data).sanitary_summary.sink_large)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.drinking_fountain && <>{Number((buildingData.data).sanitary_summary.drinking_fountain)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.sink_utility && <>{Number((buildingData.data).sanitary_summary.sink_utility)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.wc && <>{Number((buildingData.data).sanitary_summary.wc)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.urinal && <>{Number((buildingData.data).sanitary_summary.urinal)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.dishwasher && <>{Number((buildingData.data).sanitary_summary.dishwasher)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.shower && <>{Number((buildingData.data).sanitary_summary.shower)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.tub && <>{Number((buildingData.data).sanitary_summary.tub)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.washing_machine && <>{Number((buildingData.data).sanitary_summary.washing_machine)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.tap_water_outlet_inside && <>{Number((buildingData.data).sanitary_summary.tap_water_outlet_inside)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.tap_water_outlet_outside && <>{Number((buildingData.data).sanitary_summary.tap_water_outlet_outside)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.firehose && <>{Number((buildingData.data).sanitary_summary.firehose)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.drain_75_mm && <>{Number((buildingData.data).sanitary_summary.drain_75_mm)} <br /> stk</>}</strong></TableTDelement>
+                                            <TableTDelement width="5%"><strong>{buildingData?.data?.sanitary_summary?.drain_110_mm && <>{Number((buildingData.data).sanitary_summary.drain_110_mm)} <br /> stk</>}</strong></TableTDelement>
                                         </tr>
                                     </tfoot>
                                 </Table>
                             </div>
-                        </div>
+                        </div> */}
                     </TableContainer>
                 )
             }

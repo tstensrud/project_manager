@@ -46,8 +46,9 @@ function VentilationSummary({ projectId }) {
                                                     </div>
                                                 </>
                                             ) : (
-                                                <>"Ingen data"</>
-                                            )}
+                                                <>Ingen data</>
+                                            )
+                                        }
                                     </>
                                 ) : (
                                     <>

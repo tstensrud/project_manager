@@ -36,6 +36,12 @@ function Heating() {
         }
     }, [buildingData]);
 
+    useEffect(() => {
+        if  (buildings.length === 1) {
+            setCurrentBuilding(0);
+        }
+    },[buildings]);
+
 
     // Handlers
     const handleSettingsButtonUpdate = async () => {

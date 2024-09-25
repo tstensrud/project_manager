@@ -52,3 +52,7 @@
   flex-direction: column;
   height: 100%;
 }
+
+.test {
+  background-color: #1d2d3d;
+}

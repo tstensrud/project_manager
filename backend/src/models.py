@@ -184,7 +184,7 @@ class Rooms(db.Model):
     # Foreign keys
     project_uid = db.Column(db.String(250), db.ForeignKey('Projects.uid'), nullable=False)
     building_uid = db.Column(db.String(250), db.ForeignKey('Buildings.uid'), nullable=False)
-    room_type_uid = db.Column(db.String(250), db.ForeignKey('RoomTypes.uid'), nullable=False)
+    room_type_uid = db.Column(db.String(250), db.ForeignKey('RoomTypes.uid'))
     system_uid = db.Column(db.String(250), db.ForeignKey('VentilationSystems.uid', ondelete="SET NULL"), nullable=True)
 
     # Basic room data

@@ -72,7 +72,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
         e.preventDefault();
         await handleDeleteSubmit();
     }
-    console.log(buildingData)
+    
     return (
 
         <ContentCard>

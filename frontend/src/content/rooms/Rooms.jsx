@@ -57,6 +57,12 @@ function Rooms() {
     }, [buildingData]);
 
     useEffect(() => {
+        if  (buildings.length === 1) {
+            setCurrentBuilding(0);
+        }
+    },[buildings]);
+
+    useEffect(() => {
         if (newRoomDataResponse?.success === true) {
             inputRoomNumberRef.current.value = "";
             inputRoomNameRef.current.value = "";
@@ -157,13 +163,12 @@ function Rooms() {
                                 ) : (
                                     <div className="">
                                         <TableTop info={<HelpBox />} />
-                                        <RoomTable callRefetchOfRooms={callRefetchOfRooms} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                        <RoomTable newRoomData={newRoomData} callRefetchOfRooms={callRefetchOfRooms} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
                                     </div>
                                 )
                             }
                         </>
                     )
-
                 }
             </MainContentContainer>
         </>

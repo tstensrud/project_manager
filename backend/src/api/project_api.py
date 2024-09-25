@@ -351,12 +351,12 @@ def delete_room(project_uid, room_uid):
     room_system = room.system_uid
     if room_uid != received_room_uid:
         globals.log(f"Delete room attempted with mismatch between endpoint room_id and json-data-room id")
-        return jsonify({"message": "Feil i sletting av rom."})
+        return jsonify({"success": False, "message": "Feil i sletting av rom."})
     if dbo.delete_room(room_uid):
         dbo.update_system_airflows(room_system)
-        response = {"message": "Rom slettet"}
+        response = {"success": True, "message": "Rom slettet"}
     else:
-        response = {"message": "Kunne ikke slette rom"}
+        response = {"success": False, "message": "Kunne ikke slette rom"}
     return jsonify(response)
 
 @project_api_bp.route('/rooms/undo_delete/<room_uid>/', methods=['POST'])
@@ -366,13 +366,13 @@ def undo_delete(project_uid, room_uid):
     if data:
         if data["undo"] is True:
             if dbo.undo_delete_room(room_uid):
-                return jsonify({"success": "Sletting av rom angret"})
+                return jsonify({"success": True, "message": "Sletting av rom angret"})
             else:
-                return jsonify({"error": "Kunne ikke angre på sletting"})
+                return jsonify({"success": False, "message": "Kunne ikke angre på sletting"})
         else:
-            return jsonify({"error": "Feil i mottatt data"})
+            return jsonify({"success": False, "message": "Feil i mottatt data"})
     else:
-        return jsonify({"error": "Fant ikke slettet rom"})
+        return jsonify({"success": False, "message": "Fant ikke slettet rom"})
 #
 #               
 #   VENTILATIONSYSTEMS

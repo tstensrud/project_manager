@@ -91,7 +91,6 @@ function BuildingSummary({ buildingUid, projectId }) {
                     {buildingSummaryData && buildingSummaryData.building_data.BuildingName}
                 </div>
             </div>
-
             {
                 buildingSummaryDataLoading && buildingSummaryDataLoading === true ? (
                     <LoadingSpinner text="sanitærdata" />

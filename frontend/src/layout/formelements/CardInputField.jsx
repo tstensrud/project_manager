@@ -2,9 +2,10 @@ import React, { forwardRef } from 'react';
 
 const CardInputField = forwardRef((props, ref) => {
     return (
-        <input
-            ref={ref}
-            className="
+        <div>
+            <input
+                ref={ref}
+                className="
             bg-tertiary-color
             dark:bg-dark-tertiary-color
             border-form-border-color
@@ -24,14 +25,15 @@ const CardInputField = forwardRef((props, ref) => {
             hover:border-form-element-hover
             dark:hover:border-dark-form-element-hover
             "
-            onChange={props.changeFunction}
-            type={props.password ? 'password' : 'text'}
-            value={props.value}
-            name={props.name}
-            placeholder={props.placeholder}
-            required={props.required}
-            tabIndex={props.tabIndex}
-        />
+                onChange={props.changeFunction}
+                type={props.password ? 'password' : 'text'}
+                value={props.value}
+                name={props.name}
+                placeholder={props.placeholder}
+                required={props.required}
+                tabIndex={props.tabIndex}
+            />
+        </div>
     );
 });
 

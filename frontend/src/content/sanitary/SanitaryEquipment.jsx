@@ -30,6 +30,12 @@ function SanitaryEquipment() {
         }
     }, [buildingData]);
 
+    useEffect(() => {
+        if  (buildings.length === 1) {
+            setCurrentBuilding(0);
+        }
+    },[buildings]);
+
 
     // Handlers
     const sortButtonClick = (index) => {

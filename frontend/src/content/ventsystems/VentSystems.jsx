@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 // Hooks
@@ -26,6 +27,7 @@ function VentSystems() {
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Ventilasjonssytemer"} projectName={""} projectNumber={""} />
             {systemsError && <MessageBox message={systemsError} />}
             <MainContentContainer>
+
                 {
                     systemsLoading && systemsLoading === true ? (
                         <LoadingSpinner text="ventilasjonssystemer" />
@@ -38,38 +40,36 @@ function VentSystems() {
                             {
                                 receivedSystemsData ? (
                                     receivedSystemsData.systems_data === null ? (
-                                        <>Ingen ssytemer lagt til</>
+                                        <>Ingen sytemer lagt til</>
                                     ) : (
                                         <>
                                             <TableTop info={<HelpBox />} />
-                                            
-                                                <TableHeader>
-                                                    <thead>
-                                                        <tr>
-                                                            <TableTHelement width="2%" text="#"/>
-                                                            <TableTHelement width="5%" text="Systemnr"/>
-                                                            <TableTHelement width="10%" text="Plassering" />
-                                                            <TableTHelement width="10%" text="Betjeningsområde" />
-                                                            <TableTHelement width="7%">Viftekapasitet<br /> m<sup>3</sup>/h</TableTHelement>
-                                                            <TableTHelement width="5%" text="Gjenvinner" />
-                                                            <TableTHelement width="7%">Prosjektert tilluft<br /> m<sup>3</sup>/h</TableTHelement>
-                                                            <TableTHelement width="7%">Prosjektert avtrekk<br /> m<sup>3</sup>/h</TableTHelement>
-                                                            <TableTHelement width="5%" text="Spesialsystem" />
-                                                            <TableTHelement width="32%" text="Merknad" />
-                                                            <TableTHelement width="10%" text="Slett system" />
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {
-                                                            receivedSystemsData && receivedSystemsData.systems_data ? (
-                                                                receivedSystemsData.systems_data.map((system) => <SystemsTableRowComponent systemsRefetch={systemsRefetch} key={system.uid} systemId={system.uid} />)
-                                                            ) : (
-                                                                <></>
-                                                            )
-                                                        }
-                                                    </tbody>
-                                                </TableHeader>
-                                            
+                                            <TableHeader>
+                                                <thead>
+                                                    <tr>
+                                                        <TableTHelement width="2%" text="#" />
+                                                        <TableTHelement width="5%" text="Systemnr" />
+                                                        <TableTHelement width="10%" text="Plassering" />
+                                                        <TableTHelement width="10%" text="Betjeningsområde" />
+                                                        <TableTHelement width="7%">Viftekapasitet<br /> m<sup>3</sup>/h</TableTHelement>
+                                                        <TableTHelement width="5%" text="Gjenvinner" />
+                                                        <TableTHelement width="7%">Prosjektert tilluft<br /> m<sup>3</sup>/h</TableTHelement>
+                                                        <TableTHelement width="7%">Prosjektert avtrekk<br /> m<sup>3</sup>/h</TableTHelement>
+                                                        <TableTHelement width="5%" text="Spesialsystem" />
+                                                        <TableTHelement width="32%" text="Merknad" />
+                                                        <TableTHelement width="10%" text="Slett system" />
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        receivedSystemsData && receivedSystemsData.systems_data ? (
+                                                            receivedSystemsData.systems_data.map((system) => <SystemsTableRowComponent systemsRefetch={systemsRefetch} key={system.uid} cols={11} systemId={system.uid} />)
+                                                        ) : (
+                                                            <></>
+                                                        )
+                                                    }
+                                                </tbody>
+                                            </TableHeader>
                                         </>
                                     )
                                 ) : (<></>)

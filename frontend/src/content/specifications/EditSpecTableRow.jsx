@@ -40,7 +40,8 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
 
     useEffect(() => {
         if (responseDeleteRoom?.success === true) {
-            refetch();
+            //refetch();
+            console.log(responseDeleteRoom.message)
         }
     }, [responseDeleteRoom]);
 
@@ -81,7 +82,7 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
 
     const onDelete = async (e) => {
         e.preventDefault();
-        await deleteSubmit();
+        await deleteSubmit({});
         setDisabledDeleteButton(true);
     }
 
@@ -96,7 +97,7 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
             }
         </TableTDelement>
     );
-
+    
     return (
         <>
             {updateRoomDataResponse?.error && <MessageBox message={updateRoomDataResponse.error} />}

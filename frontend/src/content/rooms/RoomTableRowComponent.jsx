@@ -29,7 +29,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
 
     // Update and delete
     const {  response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
-    const {  setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/project_api/${projectId}/rooms/delete_room/${roomId}/`);
+    const {  setData: setDeleteData, handleSubmit: deleteSubmit, response: deleteResponse } = useDeleteData(`/project_api/${projectId}/rooms/delete_room/${roomId}/`);
 
     // Edit cells
     const [editingCell, setEditingCell] = useState(null);
@@ -37,9 +37,10 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     // Row marking
     const [markedRow, setMarkedRow] = useState(false);
 
-    // Undo
+    // Undo and deletion
+    const [deletedRoom, setDeletedRoom] = useState(false);
     const [undoButton, setUndoButton] = useState(false);
-    const { setData: setUndoDeleteData, handleSubmit } = useSubmitData(`/project_api/${projectId}/rooms/undo_delete/${roomId}/`);
+    const { setData: setUndoDeleteData, response: undoDeleteResponse, handleSubmit: handleUndoDelete } = useSubmitData(`/project_api/${projectId}/rooms/undo_delete/${roomId}/`);
 
     // Use effects
     useEffect(() => {
@@ -47,13 +48,27 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
         setDeleteData({ "roomId": roomId });
     }, []);
 
-
     useEffect(() => {
         if (response?.success === true) {
             setData('');
             roomRefetch();
         }
     },[response]);
+
+    useEffect(() => {
+        if(deleteResponse?.success === true) {
+            setUndoButton(true);
+            setUndoDeleteData({ "undo": true });
+            setDeletedRoom(true);
+        }
+    },[deleteResponse]);
+
+    useEffect(() => {
+        if(undoDeleteResponse?.success === true) {
+            setUndoButton(false);
+            setDeletedRoom(false);
+        }
+    },[undoDeleteResponse])
 
     // Handlers
     const handleEdit = (cellName) => {
@@ -70,8 +85,6 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     const onDelete = async (e) => {
         e.preventDefault();
         await deleteSubmit();
-        setUndoButton(true);
-        setUndoDeleteData({ "undo": true });
     }
 
     const handleBlur = () => {
@@ -111,14 +124,13 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
 
     const handleUndo = async (e) => {
         e.preventDefault();
-        await handleSubmit();
-        setUndoButton(false);
+        await handleUndoDelete();
     }
 
     return (
         <>
             {response?.success === false && <MessageBox message={response.message} />}
-            <MarkedRow markedRow={markedRow}>
+            <MarkedRow deleted={deletedRoom} markedRow={markedRow}>
                 {
                     roomLoading && roomLoading === true ? (
                         <LoadingRow cols={totalColumns} />

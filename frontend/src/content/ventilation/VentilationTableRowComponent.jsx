@@ -160,7 +160,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
 
         return minimumAir.toFixed(0);
     }
-    console.log(systemResponse)
+    
     return (
         <>
             {showRoomData ? <RoomData roomData={allRoomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
@@ -212,9 +212,11 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                             <TableTDelement width="6%">
                                 <TableSelect value={currentSystemName} name="systemUid" changeFunction={handleSystemChange}>
                                     {currentSystemName && currentSystemName !== null ? (<option key="0">{currentSystemName}</option>) : ''}
-                                    {systems && Object.keys(systems.systems_data).map((key, index) => (
+                                    {
+                                    systems?.systems_data && Object.keys(systems.systems_data).map((key, index) => (
                                         <option key={index} value={systems.systems_data[key].uid}>{systems.systems_data[key].SystemName}</option>
-                                    ))}
+                                    ))
+                                    }
                                 </TableSelect>
                             </TableTDelement>
                             <TableTDelement width="34%">

@@ -129,12 +129,22 @@ def initialize():
         return jsonify({"error": "Failed to initialize app"})
     return jsonify({"success": "App initialized"}) """
 
-@views.route('/test', methods=['GET'])
-def test():
-    return jsonify({"empty": "data"})
+""" @views.route('/testprojects/', methods=['GET'])
+def testprojects():
+    projects = create_test_projects()
+    if projects:
+        return jsonify({"success": True})
+    return jsonify({"success": False}) """
+
+""" @views.route('/spec/', methods=['GET'])
+def specs():
+    spec_setup = spec_rooms_setup()
+    if spec_setup:
+        return jsonify({"success": True})
+    return jsonify({"success": False}) """
 
 #@views.route('/create_test_projects', methods=['GET'])
-def create_test_projects():
+def create_test_projects() -> bool:
     oslo_street_names = [
     "Karl Johans gate", "Bogstadveien", "Dronningens gate", "Torggata", "Storgata",
     "Grünerløkka gate", "Frognerveien", "Sørkedalsveien", "Bygdøy allé", "Pilestredet",
@@ -159,8 +169,9 @@ def create_test_projects():
         for i in range(len(oslo_street_names)):
             dummy_project(project_name=oslo_street_names[i], project_number=random_numbers[i])
         #return jsonify({"message": "done"})
+        return True
     except Exception as e:
-        return jsonify({"error": f"{str(e)}"})
+        return False
 
 
     

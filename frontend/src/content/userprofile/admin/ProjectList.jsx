@@ -7,6 +7,7 @@ import useFetchRequest from '../../../hooks/useFetchRequest'
 import useFetch from '../../../hooks/useFetch'
 import ProjectTableRow from './ProjectTableRow';
 import LoadingSpinner from '../../../layout/LoadingSpinner';
+import SearchInput from '../../../layout/formelements/SearchInput.jsx';
 
 function ProjectList() {
     const [searchValue, setSearhValue] = useState(null);
@@ -34,31 +35,7 @@ function ProjectList() {
             <div className="flex flex-col w-full">
                 <div className="flex flex-row mb-3 items-center">
                     <div className="w-1/2">
-                        <input
-                            className="
-                      bg-form-background-color
-                      dark:bg-dark-form-background-color
-                      border-form-border-color
-                      dark:border-dark-form-border-color
-                      text-primary-color
-                      dark:text-dark-primary-color
-                      outline-none
-                      w-full
-                      border-2
-                      pl-5
-                      pr-5
-                      text-sm
-                      rounded-3xl
-                      h-9
-                      focus:border-form-focus-border-color
-                      focus:dark:border-dark-form-focus-border-color
-                      hover:border-form-element-hover
-                      hover:dark:border-dark-form-element-hover"
-                            onChange={onInputChange}
-                            type="text"
-                            value={searchValue}
-                            placeholder="Søk i prosjekter"
-                        />
+                        <SearchInput value={searchValue} changeFunction={onInputChange} />
                     </div>
                 </div>
                 {
