@@ -7,7 +7,7 @@ import useUpdateData from '../../../hooks/useUpdateData.jsx';
 // components
 import SearchInput from '../../../layout/formelements/SearchInput.jsx';
 
-function UserList() {
+function UserList({newUserFlag}) {
     const { data: userData, loading: userDataLoading, refetch: userDataRefetch } = useFetch(`/user/all_users/`);
     const { response: activeStatusResponse, data: activeStatusData, setData: setActiveStatus, handleSubmit: submitActiveStatus } = useUpdateData(`/user/change_user_status/`);
 
@@ -23,6 +23,10 @@ function UserList() {
             userDataRefetch();
         }
     }, [activeStatusResponse]);
+
+    useEffect(() => {
+        userDataRefetch();
+    },[newUserFlag])
 
 
     const handleActiveStatus = (e, uuid) => {

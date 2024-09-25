@@ -14,13 +14,15 @@ import SubTitleComponent from '../../layout/SubTitleComponent';
 import EditSpecTableRow from './EditSpecTableRow';
 import DeleteBox from './DeleteBox';
 import TableTop from '../../layout/TableTop';
-import HelpBoxEdit from './HelpBoxEdit';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import Table from '../../layout/tableelements/Table.jsx';
 import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
+
+// help
+import { title, sections } from '../help/SpecEditTableHelp.jsx'
 
 function EditSpecification() {
     const { suid, name } = useParams();
@@ -66,7 +68,7 @@ function EditSpecification() {
                                     <Link to="#" onClick={openDeleteDialog}>Slett kravspesifikasjon</Link>&nbsp;&nbsp; <DeleteIcon />
                                 </div>
                             </div>
-                            <TableTop info={<HelpBoxEdit />} />
+                            <TableTop title={title} sections={sections}/>
                             <TableHeader>
                                 <thead>
                                     <tr>

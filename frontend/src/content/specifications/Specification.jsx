@@ -11,7 +11,6 @@ import HeaderIcon from '../../assets/svg/specificationsIcon.jsx';
 import EditIcon from '../../assets/svg/editIcon.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import TableTop from '../../layout/TableTop';
-import Helpbox from './HelpBox';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import Table from '../../layout/tableelements/Table.jsx';
 import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
@@ -19,6 +18,9 @@ import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import TableContainer from '../../layout/tableelements/TableContainer.jsx';
+
+// help
+import { title, sections } from '../help/SpecificationHelp.jsx'
 
 
 function Specification() {
@@ -70,7 +72,7 @@ function Specification() {
                                     <Link to={`/specifications/edit/${suid}/${data.spec_name}`}>Rediger kravspesifikasjon</Link>  &nbsp; <EditIcon />
                                 </div>
                             </div>
-                            <TableTop info={<Helpbox />} />
+                            <TableTop title={title} sections={sections} />
                             <TableContainer>
                                 <TableHeader>
                                     <thead>

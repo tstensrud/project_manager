@@ -8,8 +8,6 @@ import useFetch from '../../hooks/useFetch'
 import HeatingIcon from '../../assets/svg/heatingIcon.jsx'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import ToggleSettingsButton from './ToggleSettingsButton';
-import TableTop from '../../layout/TableTop.jsx';
-import HelpBox from './HelpBox.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import SortingButtons from '../../layout/SortingButtons.jsx';
 import HeatingTable from './HeatingTable.jsx';
@@ -37,10 +35,10 @@ function Heating() {
     }, [buildingData]);
 
     useEffect(() => {
-        if  (buildings.length === 1) {
+        if (buildings.length === 1) {
             setCurrentBuilding(0);
         }
-    },[buildings]);
+    }, [buildings]);
 
 
     // Handlers
@@ -78,10 +76,7 @@ function Heating() {
                                         Velg bygg
                                     </div>
                                 ) : (
-                                    <>
-                                        <TableTop info={<HelpBox />} />
-                                        <HeatingTable settingsUpdatedState={settingsUpdatedState} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
-                                    </>
+                                    <HeatingTable settingsUpdatedState={settingsUpdatedState} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
                                 )
                             }
                         </>

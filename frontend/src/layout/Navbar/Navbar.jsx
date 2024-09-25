@@ -20,7 +20,7 @@ function Navbar() {
     // useEffects
     useEffect(() => {
         refetchUserInfo();
-        const projectData = JSON.parse(localStorage.getItem("projectData"))
+        const projectData = JSON.parse(sessionStorage.getItem("projectData"));
         if (projectData) {
             const projectId = projectData.projectId;
             const projectName = projectData.projectName;
@@ -139,7 +139,7 @@ function Navbar() {
             }
 
 
-            <div className="w-full bg-tertiary-color dark:bg-dark-tertiary-color text-primary-color dark:text-dark-primary-color flex min-h-16">
+            <div className="w-full bg-tertiary-color dark:bg-dark-tertiary-color text-primary-color dark:text-dark-primary-color flex min-h-16 max-h-16">
                 <div className="flex pl-5 justify-start items-center min-w-[30%] h-gull text-base">
                     {
                         activeProject && activeProject !== "0" && (

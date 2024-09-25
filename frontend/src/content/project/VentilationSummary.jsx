@@ -6,10 +6,12 @@ import ContentCard from '../../layout/ContentCard';
 import VentIcon from '../../assets/svg/ventSystemIcon.jsx';
 import CardTitle from '../../layout/CardTitle';
 import LoadingSpinner from '../../layout/LoadingSpinner';
+import { useEffect } from 'react';
 
 function VentilationSummary({ projectId }) {
     const { data: systemsData, loading, error } = useFetch(`/project_api/${projectId}/systems/`)
     const { data } = useFetch(`/project_api/${projectId}/ventilation/`)
+
 
     return (
         <ContentCard>

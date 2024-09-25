@@ -1,6 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
-import { useState, useRef, useContext, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 // hooks ++
 import useSubmitData from '../../hooks/useSubmitData'
@@ -11,13 +10,16 @@ import HeaderIcon from '../../assets/svg/specificationsIcon.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import MessageBox from '../../layout/MessageBox';
 import HelpIcon from '../../assets/svg/helpIcon.jsx';
-import HelpBoxNewRoom from './HelpBoxNewRoom';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import ContentCard from '../../layout/ContentCard.jsx';
 import CardSelect from '../../layout/formelements/CardSelect.jsx';
 import CardInputField from '../../layout/formelements/CardInputField.jsx';
 import CardButton from '../../layout/formelements/CardButton.jsx';
 import CheckBox from '../../layout/formelements/CheckBox.jsx';
+
+// help
+import HelpBox from '../../layout/HelpBox.jsx'
+import { title, sections } from '../help/SpecNewRoomHelp.jsx'
 
 function NewRoomSpec() {
     const { suid } = useParams();
@@ -113,18 +115,7 @@ function NewRoomSpec() {
 
                 {
                     showHelpBox === true && (
-                        <div className="fixed h-full w-full justify-center items-center z-[1000] left-0 top-[15%]">
-                            <div className="w-full h-full flex flex-col mt-[2%] items-center">
-                                <div className="bg-tertiary-color flex flex-col pl-5 pr-5 rounded-lg w-[30%] h-[50%] overflow-y-auto shadow-lg shadow-background-shade border border-default-border-color">
-                                    <div className="w-full bg-tertiary-color flex justify-end sticky top-0 pt-3">
-                                        <Link to="#" onClick={toggleHelpBox}>Lukk</Link>
-                                    </div>
-                                    <div className="w-full flex flex-col">
-                                        <HelpBoxNewRoom />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <HelpBox title={title} sections={sections} setShowHelpBox={toggleHelpBox} />
                     )
                 }
 

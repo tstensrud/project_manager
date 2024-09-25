@@ -7,7 +7,7 @@ import useSubmitData from '../../../hooks/useSubmitData.jsx';
 import CardInputField from '../../../layout/formelements/CardInputField.jsx';
 import CardButton from '../../../layout/formelements/CardButton.jsx';
 
-function NewUser({ userDataRefetch }) {
+function NewUser({ newUserFlag, setNewUserFlag }) {
     const { data: newUserData, setData: setNewUserData, response: newUserResponse, handleSubmit: submitNewUser } = useSubmitData(`/user/new_user/`);
 
     const emailRef = useRef(null);
@@ -19,7 +19,7 @@ function NewUser({ userDataRefetch }) {
             setNewUserData({});
             emailRef.current.value = '';
             nameRef.current.value = '';
-            userDataRefetch();
+            setNewUserFlag(!newUserFlag);
         }
     }, [newUserResponse]);
 

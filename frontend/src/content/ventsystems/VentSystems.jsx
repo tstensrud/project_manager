@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 // Hooks
@@ -11,10 +10,12 @@ import SystemsTableRowComponent from "./SystemsTableRowComponent";
 import MessageBox from '../../layout/MessageBox';
 import TableTop from '../../layout/TableTop';
 import LoadingSpinner from '../../layout/LoadingSpinner';
-import HelpBox from './HelpBox';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
+
+// help
+import { title, sections } from '../help/VentsystemsHelp.jsx'
 
 function VentSystems() {
     const { projectId } = useParams();
@@ -43,7 +44,7 @@ function VentSystems() {
                                         <>Ingen sytemer lagt til</>
                                     ) : (
                                         <>
-                                            <TableTop info={<HelpBox />} />
+                                            <TableTop title={title} sections={sections} />
                                             <TableHeader>
                                                 <thead>
                                                     <tr>

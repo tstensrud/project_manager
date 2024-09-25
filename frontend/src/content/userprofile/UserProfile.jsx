@@ -22,7 +22,7 @@ import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import AdminPanel from './admin/AdminPanel.jsx';
 
 function UserProfile() {
-    const { userUuid, setFavProjects } = useContext(GlobalContext);
+    const { userUuid } = useContext(GlobalContext);
 
     const { data, loading, refetch } = useFetch(`/user/`);
 
@@ -48,12 +48,6 @@ function UserProfile() {
             handleSubmit();
         }
     }, [deletedFavUid]);
-
-    useEffect(() => {
-        if (data?.success === true) {
-            setFavProjects(data.data.user_favs)
-        }
-    }, [data]);
 
     useEffect(() => {
         if (newPassword && confirmPass) {
@@ -99,7 +93,7 @@ function UserProfile() {
 
     return (
         <>
-            <SubTitleComponent svg={<AccountIcon />} headerText={`Velkommen tilbake, ${data?.data?.user_info?.name}!`} projectName={""} projectNumber={""} />
+            <SubTitleComponent svg={<AccountIcon />} headerText={`Velkommen tilbake, ${data?.data?.user_info.name}!`} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 <div className="flex flex-row justify-evenly flex-wrap w-full">
 

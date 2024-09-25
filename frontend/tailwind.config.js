@@ -80,10 +80,16 @@ export default {
         fadeOut: {
           '0%': {'opacity': "1"},
           '100%': {'opacity': "0"}
+        },
+        slide: {
+          '0%' : {left: '-30%'},
+          '50%': {left: '50%'},
+          '100%': {left: '100%'},
         }
       },
       animation: {
-        fade: 'fadeOut 5s forwards'
+        fade: 'fadeOut 5s forwards',
+        slide: 'slide 3.0s linear infinite'
       }
     },
   },

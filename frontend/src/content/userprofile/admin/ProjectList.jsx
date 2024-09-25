@@ -10,7 +10,7 @@ import LoadingSpinner from '../../../layout/LoadingSpinner';
 import SearchInput from '../../../layout/formelements/SearchInput.jsx';
 
 function ProjectList() {
-    const [searchValue, setSearhValue] = useState(null);
+    const [searchValue, setSearhValue] = useState("");
 
     const { data, loading, error, refetch } = useFetch(`/projects/`);
     const { data: searchData, setData: setSearchData, loading: searchLoading, fetchData } = useFetchRequest(`/projects/search/${searchValue}/`);

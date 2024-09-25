@@ -8,8 +8,6 @@ import useFetch from '../../hooks/useFetch'
 import CoolingIcon from '../../assets/svg/coolingIcon.jsx'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import ToggleSettingsButton from './ToggleSettingsButton';
-import TableTop from '../../layout/TableTop.jsx';
-import HelpBox from './HelpBox.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import SortingButtons from '../../layout/SortingButtons.jsx';
 import CoolingTable from './CoolingTable.jsx';
@@ -78,7 +76,7 @@ function Cooling() {
                                     </div>
                                 ) : (
                                     <>
-                                        <TableTop info={<HelpBox />} />
+                                        
                                         <CoolingTable settingsUpdatedState={settingsUpdatedState} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
                                     </>
                                 )

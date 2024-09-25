@@ -11,14 +11,13 @@ import HeaderIcon from '../../assets/svg/projectIcon.jsx';
 import ProjectSummary from './ProjectSummary';
 import VentilationSummary from './VentilationSummary';
 import HeatingCoolingSummary from './HeatingCoolingSummary';
-import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
+import LoadingBar from '../../layout/LoadingBar.jsx'
 
 
 function Project() {
     const { projectId } = useParams();
     const { setActiveProject, setActiveProjectName } = useContext(GlobalContext);
     const { data, loading, error } = useFetch(`/project_api/${projectId}/`);
-
 
     useEffect(() => {
         const projectName = data?.data?.ProjectName;
@@ -30,25 +29,20 @@ function Project() {
             projectId: data?.data?.uid
         }
 
-        localStorage.setItem("projectData", JSON.stringify(activeProjectData))
+        sessionStorage.setItem("projectData", JSON.stringify(activeProjectData))
     }, [data]);
+
 
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektoversikt"} projectName={data && data.data.ProjectName} projectNumber={data && data.data.ProjectNumber} />
             <MainContentContainer>
-                {
-                    loading ? (
-                        <LoadingSpinner text="prosjekt" />
-                    ) : (
-                        <div className="flex justify-evenly flex-row w-full flex-wrap">
-                            <ProjectSummary projectId={projectId} />
-                            <BuildingRoomData projectId={projectId} />
-                            <VentilationSummary projectId={projectId} />
-                            <HeatingCoolingSummary projectId={projectId} />
-                        </div>
-                    )
-                }
+                <div className="flex justify-evenly flex-row w-full flex-wrap">
+                    <ProjectSummary projectId={projectId} />
+                    <BuildingRoomData projectId={projectId} />
+                    <VentilationSummary projectId={projectId} />
+                    <HeatingCoolingSummary projectId={projectId} />
+                </div>
             </MainContentContainer>
         </>
     );

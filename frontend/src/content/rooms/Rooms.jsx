@@ -9,8 +9,6 @@ import useSubmitData from '../../hooks/useSubmitData'
 import RoomIcon from '../../assets/svg/roomsIcon.jsx'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import MessageBox from '../../layout/MessageBox';
-import TableTop from '../../layout/TableTop';
-import HelpBox from './HelpBox.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import FormButton from '../../layout/formelements/FormButton.jsx';
 import InputField from '../../layout/formelements/InputField.jsx';
@@ -57,10 +55,10 @@ function Rooms() {
     }, [buildingData]);
 
     useEffect(() => {
-        if  (buildings.length === 1) {
+        if (buildings.length === 1) {
             setCurrentBuilding(0);
         }
-    },[buildings]);
+    }, [buildings]);
 
     useEffect(() => {
         if (newRoomDataResponse?.success === true) {
@@ -155,14 +153,11 @@ function Rooms() {
 
                             {
                                 currentBuilding === -1 ? (
-                                    <>
-                                        <div className="w-full flex justify-center mt-12">
-                                            Velg bygg
-                                        </div>
-                                    </>
+                                    <div className="w-full flex justify-center mt-12">
+                                        Velg bygg
+                                    </div>
                                 ) : (
                                     <div className="">
-                                        <TableTop info={<HelpBox />} />
                                         <RoomTable newRoomData={newRoomData} callRefetchOfRooms={callRefetchOfRooms} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
                                     </div>
                                 )

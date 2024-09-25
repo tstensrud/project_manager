@@ -1,4 +1,3 @@
-import Draggable from 'react-draggable';
 import RoomDataRow from '../../layout/tableelements/RoomDataRow';
 import RoomDataRowTitle from '../../layout/tableelements/RoomDataRowTitle';
 import RoomDataMainTitle from '../../layout/tableelements/RoomDataMainTitle';
@@ -10,9 +9,8 @@ function RoomData({ heatingData, setShowRoomData }) {
   }
 
   return (
-    <Draggable>
-
-      <div className="fixed shadow-lg bg-secondary-color dark:bg-dark-secondary-color shadow-background-shade border border-default-border-color dark:border-dark-default-border-color left-[25%] top-[15%] z-[1000] h-1/2 w-1/3 overflow-y-auto rounded-lg cursor-move" style={{ cursor: 'move' }}>
+    <div className="fixed h-full w-full justify-center items-center z-[1000] left-0 top-0 bg-background-shade">
+      <div className="fixed shadow-lg bg-secondary-color dark:bg-dark-secondary-color shadow-background-shade border border-default-border-color dark:border-dark-default-border-color top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1000] h-1/2 w-[450px] overflow-y-auto rounded-lg">
 
         <RoomDataMainTitle roomNumber={heatingData.room_data.RoomNumber} roomName={heatingData.room_data.RoomName} clickFunction={(e) => handleClick(e, setShowRoomData)} />
 
@@ -57,7 +55,7 @@ function RoomData({ heatingData, setShowRoomData }) {
         <RoomDataRow rowName="Kommentar" rowData={``}></RoomDataRow>
 
       </div>
-    </Draggable>
+      </div>
   );
 }
 

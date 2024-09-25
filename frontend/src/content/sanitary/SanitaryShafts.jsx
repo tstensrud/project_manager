@@ -6,8 +6,6 @@ import useFetch from '../../hooks/useFetch.jsx'
 import TapwaterIcon from '../../assets/svg/tapWaterIcon.jsx';
 import SanitaryShaftTable from './SanitaryShaftTable.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
-import TableTop from '../../layout/TableTop.jsx';
-import HelpBoxShafts from './HelpBoxShafts.jsx';
 import SortingButtons from '../../layout/SortingButtons.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
@@ -34,10 +32,10 @@ function SanitaryShafts() {
     }, [buildingData]);
 
     useEffect(() => {
-        if  (buildings.length === 1) {
+        if (buildings.length === 1) {
             setCurrentBuilding(0);
         }
-    },[buildings]);
+    }, [buildings]);
 
 
     // Handlers
@@ -57,16 +55,11 @@ function SanitaryShafts() {
                             <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
                             {
                                 currentBuilding === -1 ? (
-                                    <>
-                                        <div className="w-full flex justify-center mt-12">
-                                            Velg bygg
-                                        </div>
-                                    </>
+                                    <div className="w-full flex justify-center mt-12">
+                                        Velg bygg
+                                    </div>
                                 ) : (
-                                    <>
-                                        <TableTop info={<HelpBoxShafts />} />
-                                        <SanitaryShaftTable projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
-                                    </>
+                                    <SanitaryShaftTable projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
                                 )
                             }
                         </>

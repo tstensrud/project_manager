@@ -6,6 +6,7 @@ import LoadingSpinner from '../../layout/LoadingSpinner';
 import BuildingIcon from '../../assets/svg/buildingIcon.jsx';
 import CardTitle from '../../layout/CardTitle';
 import ContentCard from '../../layout/ContentCard';
+import { useEffect } from 'react';
 
 function BuildingRoomData({ projectId }) {
     const { data, loading, error } = useFetch(`/project_api/${projectId}/buildings/`);
@@ -17,7 +18,7 @@ function BuildingRoomData({ projectId }) {
                 <div className="border-0 p-3 rounder-lg">
                     {
                         loading && loading === true ? (
-                            <LoadingSpinner text="romdata" />
+                            <LoadingSpinner text="bygg- og romdata" />
 
                         ) : (
                             <>

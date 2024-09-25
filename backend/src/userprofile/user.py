@@ -63,11 +63,29 @@ def set_password(uuid):
 def set_favourite_project(project_uid: str):
     verify_jwt_in_request()
     user_identity = get_jwt_identity()
-    new_fav = dbo.set_fav_project(project_uid, user_identity)
-    if new_fav:
-        return jsonify({"success": True})
-    else:
-        return jsonify({"success": False, "message": "Kunne ikke legge til favoritt"})
+    if user_identity:
+        new_fav = dbo.set_fav_project(project_uid, user_identity)
+        if new_fav:
+            return jsonify({"success": True})
+        else:
+            return jsonify({"success": False, "message": "Kunne ikke legge til favoritt"})
+    return jsonify({"success": False, "message": "User not found"})
+
+@user_bp.route('/is_favourite/<project_uid>/', methods=['GET'])
+@jwt_required()
+def is_project_favourite(project_uid: str):
+    verify_jwt_in_request()
+    user_identity = get_jwt_identity()
+    if user_identity:
+        fav_projects = dbo.get_fav_projects(user_identity)
+        is_fav = False
+        for fav in fav_projects:
+            if fav.project_uid == project_uid:
+                is_fav = True
+                break
+        return jsonify({"success": True, "data": is_fav})
+    return jsonify({"success": False, "message": "User not found"})
+
 
 @user_bp.route('/remove_fav/<fav_uid>/', methods=['DELETE'])
 @jwt_required()

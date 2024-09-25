@@ -19,7 +19,7 @@ function DarkmodeContainer() {
                 </svg>
             </div>
             <div className="relative w-10 h-5">
-                <input onClick={toggleDarkModeContainer} type="checkbox" id="toggle" checked={darkMode ? false : true} />
+                <input onClick={toggleDarkModeContainer} onChange={null} type="checkbox" id="toggle" checked={darkMode ? false : true} />
                 <label htmlFor="toggle" className="slider"></label>
             </div>
             <div className="flex ml-3">

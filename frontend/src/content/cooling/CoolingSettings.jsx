@@ -54,33 +54,30 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
         <>
             {response?.success === false && (<MessageBox message={response.message} />)}
             {error && (<MessageBox message={`Feil: ${error}`} />)}
-            <div className="flex flex-col pl-3 pr-3 absolute top-1/2 rounded-lg border border-primary-color dark:border-dark-default-border-color left-1/2 transform -translate-x-1/2 overflow-y-auto -translate-y-1/2 h-1/2 w-[400px] bg-secondary-color dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color shadow-lg shadow-background-shade justify-start z-[900] text-base">
+            <div className="flex flex-col absolute top-1/2 rounded-lg border border-primary-color dark:border-dark-default-border-color left-1/2 transform -translate-x-1/2 overflow-y-auto -translate-y-1/2 h-1/2 w-[450px] bg-secondary-color dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color shadow-lg shadow-background-shade justify-start z-[900] text-base">
                 {
                     loading ? (
                         <LoadingSpinner text="parametre" />
                     ) : (
                         <>
-                            <div className="flex sticky top-0 bg-secondary-color dark:bg-dark-secondary-color flex-col border-default-border-color p-1 font-extrabold w-full">
+                            <div className="flex pl-3 sticky top-0 bg-secondary-color dark:bg-dark-secondary-color flex-col border-default-border-color p-1 font-semibold w-full border-b dark:border-dark-default-border-color">
                                 <div className="flex flex-row w-full items-center mb-5">
-                                <div className="w-[10%]">
+                                    <div className="w-[10%]">
 
-                                </div>
-                                <div className="flex flex-1 justify-center text-xl text-center">
-                                    Kjøleparametre bygg {data && data.building_data.BuildingName}
-                                </div>
-                                <div className="flex w-[10%] justify-end">
-                                    <span onClick={handleCloseWindow} className="cursor-pointer text-2xl hover:text-accent-color hover:dark:text-dark-accent-color">&times;</span>
-                                </div>
+                                    </div>
+                                    <div className="flex flex-1 justify-center text-xl text-center">
+                                        Kjøleparametre {data && data.building_data.BuildingName}
+                                    </div>
+                                    <div className="flex w-[10%] justify-end pr-3">
+                                        <span onClick={handleCloseWindow} className="cursor-pointer text-2xl hover:text-accent-color hover:dark:text-dark-accent-color">&times;</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col h-full text-primary-color dark:text-dark-primary-color justify-start w-full text-base-item-container">
-                                <div className="mb-3">
-                                    <strong>NB!</strong> Disse verdiene settes for alle rom i bygget. Du kan etterpå justere enkeltrom med egne verdier ved behov.
-                                </div>
+                            <div className="flex flex-col pl-3 mt-3 h-full text-primary-color dark:text-dark-primary-color justify-start w-full text-base-item-container">
                                 <div>
                                     <form name="building_heating_settings" onSubmit={handleSubmit}>
-                                        <div className="pb-10">
+                                        <div>
                                             <div>
                                                 Romtemp sommer (C&#176;)
                                             </div>
@@ -129,6 +126,9 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
                                         </div>
 
                                     </form>
+                                    <div className="mt-2">
+                                        <strong>NB!</strong> Disse verdiene settes for alle rom i bygget. Du kan etterpå justere enkeltrom med egne verdier ved behov.
+                                    </div>
                                 </div>
                             </div>
                         </>

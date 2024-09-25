@@ -14,29 +14,15 @@ import useSubmitData from '../../hooks/useSubmitData.jsx';
 import BookMarkIcon from '../../assets/svg/bookMarkIcon.jsx'
 
 function ProjectSummary({ projectId }) {
-    const { userUuid, favProjects } = useContext(GlobalContext);
-
     const { data, loading, error } = useFetch(`/project_api/${projectId}/`);
-
+    const { data: isFavData } = useFetch(`/user/is_favourite/${projectId}/`)
     const { setData: setFavData, response: favResponse, error: favError, handleSubmit } = useSubmitData(`/user/set_favourite/${projectId}/`);
 
     const [isFav, setIsFav] = useState(false);
 
+    // useeffects
     useEffect(() => {
         setFavData({ projectUid: projectId });
-    }, []);
-
-    useEffect(() => {
-        if (favProjects) {
-            const isFavourite = Object.entries(favProjects).some(([, project]) => {
-                return project.project_uid === projectId;
-            });
-
-            if (isFavourite) {
-                setIsFav(true);
-                return;
-            }
-        }
     }, []);
 
     useEffect(() => {
@@ -44,7 +30,13 @@ function ProjectSummary({ projectId }) {
             setIsFav(true);
         }
     }, [favResponse]);
+    useEffect(() => {
+        if (isFavData?.success === true) {
+            setIsFav(isFavData.data)
+        }
+    },[isFavData]);
 
+    // Handlers
     const handleSetFav = (e) => {
         e.preventDefault();
         handleSubmit();

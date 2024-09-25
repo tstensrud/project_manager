@@ -7,8 +7,6 @@ import useFetch from '../../hooks/useFetch'
 // Components
 import VentilationIcon from '../../assets/svg/ventilationIcon.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent';
-import TableTop from '../../layout/TableTop';
-import HelpBox from './HelpBox.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import SortingButtons from '../../layout/SortingButtons.jsx';
 import VentilationTable from './VentilationTable.jsx';
@@ -36,10 +34,10 @@ function Ventilation() {
     }, [buildingData]);
 
     useEffect(() => {
-        if  (buildings.length === 1) {
+        if (buildings.length === 1) {
             setCurrentBuilding(0);
         }
-    },[buildings]);
+    }, [buildings]);
 
 
     // Handlers
@@ -60,16 +58,11 @@ function Ventilation() {
                             <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
                             {
                                 currentBuilding === -1 ? (
-                                    <>
-                                        <div className="w-full flex justify-center mt-12">
-                                            Velg bygg
-                                        </div>
-                                    </>
+                                    <div className="w-full flex justify-center mt-12">
+                                        Velg bygg
+                                    </div>
                                 ) : (
-                                    <>
-                                        <TableTop info={<HelpBox />} />
-                                        <VentilationTable projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
-                                    </>
+                                    <VentilationTable projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
                                 )
                             }
                         </>

@@ -5,8 +5,6 @@ import useFetch from '../../hooks/useFetch.jsx'
 
 import TapwaterIcon from '../../assets/svg/tapWaterIcon.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
-import TableTop from '../../layout/TableTop.jsx';
-import HelpBox from './HelpBox.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import SortingButtons from '../../layout/SortingButtons.jsx';
 import SanitaryEquipmentTable from './SanitaryEquipmentTable.jsx';
@@ -59,7 +57,7 @@ function SanitaryEquipment() {
                                     </div>
                                 ) : (
                                     <>
-                                        <TableTop info={<HelpBox />} />
+                                        
                                         <SanitaryEquipmentTable projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
                                     </>
                                 )

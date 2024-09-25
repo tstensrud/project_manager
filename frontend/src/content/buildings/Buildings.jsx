@@ -11,9 +11,9 @@ import SubTitleComponent from '../../layout/SubTitleComponent.jsx'
 import BuildingSummary from './BuildingSummary';
 import useSubmitData from '../../hooks/useSubmitData'
 import HeaderIcon from '../../assets/svg/buildingIcon.jsx';
-import LoadingSpinner from '../../layout/LoadingSpinner';
 import InputField from '../../layout/formelements/InputField.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
+import LoadingBar from '../../layout/LoadingBar.jsx'
 
 function Buildings() {
     const { projectId } = useParams();
@@ -52,6 +52,9 @@ function Buildings() {
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Bygg"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 {
+                    loading && <LoadingBar />
+                }
+                {
                     newBuildingResponse?.success === false && <MessageBox message={newBuildingResponse.message} />
                 }
                 <form onSubmit={handleFormSubmit}>
@@ -70,11 +73,7 @@ function Buildings() {
 
                 <div className="flex justify-center flex-row flex-wrap w-full">
                     {
-                        loading ? (
-                            <>
-                                <LoadingSpinner />
-                            </>
-                        ) : (
+                        !loading && (
                             <>
                                 {
                                     data?.building_data === null ? (

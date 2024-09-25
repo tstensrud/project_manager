@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // Components
 import UserList from './UserList.jsx';
@@ -10,14 +10,16 @@ import Statistics from './Statistics.jsx';
 
 function AdminPanel() {
 
+    const [newUserFlag, setNewUserFlag] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(-1)
+
     const menuItems = [
-        { text: "Brukere", component: <UserList /> },
-        { text: "Ny bruker", component: <NewUser /> },
+        { text: "Brukere", component: <UserList newUserFlag={newUserFlag} /> },
+        { text: "Ny bruker", component: <NewUser newUserFlag={newUserFlag} setNewUserFlag={setNewUserFlag} /> },
         { text: "Prosjekter", component: <ProjectList /> },
-        {text: "Statistikk", component: <Statistics />}
+        { text: "Statistikk", component: <Statistics /> }
     ];
 
-    const [activeIndex, setActiveIndex] = useState(-1)
 
     return (
         <div className="bg-secondary-color dark:bg-dark-secondary-color rounded-lg shadow-lg w-full shadow-background-shade">
@@ -31,10 +33,12 @@ function AdminPanel() {
                     </div>
                 </div>
                 <div className="w-full border-b dark:border-dark-default-border-color border-default-border-color">
-                    <div className="flex flex-row w-1/6 justify-evenly mb-5">
+                    <div className="flex flex-row w-full mb-5 pl-5">
                         {
                             menuItems.map((item, index) => (
-                                <AdminNavButton index={index} activeIndex={activeIndex} setActiveIndex={setActiveIndex} key={index} buttonText={item.text} />
+                                <div key={`navbutton-${index}`} className="mr-2">
+                                    <AdminNavButton index={index} activeIndex={activeIndex} setActiveIndex={setActiveIndex} buttonText={item.text} />
+                                </div>
                             ))
                         }
                     </div>
@@ -42,7 +46,10 @@ function AdminPanel() {
                 <div className="p-5">
                     {
                         menuItems.map((item, index) => (
-                            index === activeIndex && item.component
+                            index === activeIndex &&
+                            <React.Fragment key={index}>
+                                {item.component}
+                            </React.Fragment>
                         ))
                     }
                 </div>

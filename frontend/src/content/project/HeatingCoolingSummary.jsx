@@ -6,10 +6,11 @@ import ContentCard from '../../layout/ContentCard';
 import HeatingIcon from '../../assets/svg/heatingIcon.jsx';
 import CardTitle from '../../layout/CardTitle';
 import LoadingSpinner from '../../layout/LoadingSpinner';
+import { useEffect } from 'react';
 
 function HeatingSummary({ projectId }) {
     const { data, loading, error } = useFetch(`/project_api/${projectId}/energy/`)
-    
+
     return (
         <>
         <ContentCard>

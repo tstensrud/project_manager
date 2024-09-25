@@ -13,6 +13,10 @@ import TableContainer from '../../layout/tableelements/TableContainer.jsx';
 import TableWrapper from "../../layout/tableelements/TableWrapper.jsx";
 import SanitaryTableRowComponent from "./SanitaryTableRowComponent.jsx";
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
+import TableTop from '../../layout/TableTop.jsx';
+
+// help
+import { title, sections } from '../help/SanitaryEquipmentHelp.jsx'
 
 function SanitaryEquipmentTable({ projectId, buildingUid }) {
     const { data: roomData, loading } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
@@ -35,6 +39,8 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                 loading ? (
                     <LoadingSpinner text="romdata" />
                 ) : (
+                    <>
+                    <TableTop title={title} sections={sections} />
                     <TableContainer>
 
                         <TableHeader>
@@ -127,6 +133,7 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                             </div>
                         </div> */}
                     </TableContainer>
+                    </>
                 )
             }
 

@@ -11,7 +11,11 @@ import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableContainer from '../../layout/tableelements/TableContainer.jsx';
 import TableWrapper from "../../layout/tableelements/TableWrapper.jsx";
 import CoolingTableRowComponent from "./CoolingTableRowComponent.jsx";
+import TableTop from '../../layout/TableTop.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
+
+// help
+import { title, sections } from '../help/CoolingTableHelp.jsx'
 
 function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
     const { data: roomData, loading } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
@@ -34,9 +38,12 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
     return (
         <>
             {
-                loading ? (
-                    <LoadingSpinner text="rom"/>
-                ) : (
+                loading && <LoadingSpinner text="rom" />
+            }
+            {
+                !loading && (
+                    <>
+                    <TableTop title={title} sections={sections} />
                     <TableContainer>
                         <TableHeader>
                             <thead>
@@ -88,6 +95,7 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
                         }
 
                     </TableContainer>
+                    </>
                 )
             }
         </>

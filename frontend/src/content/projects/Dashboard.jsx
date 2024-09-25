@@ -19,7 +19,7 @@ function Dashboard() {
   const { setActiveProject, setActiveProjectName } = useContext(GlobalContext);
   const { data, loading, error } = useFetch(`/projects/`);
 
-  const [searchValue, setSearhValue] = useState(null);
+  const [searchValue, setSearhValue] = useState("");
   const { data: searchData, setData: setSearchData, loading: searchLoading, fetchData } = useFetchRequest(`/projects/search/${searchValue}/`);
 
   const navigate = useNavigate();
