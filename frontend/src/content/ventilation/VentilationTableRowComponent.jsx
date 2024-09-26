@@ -25,7 +25,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
     const { data: ventData, loading: ventLoading, error: ventError, refetch: ventRefetch } = useFetch(`/project_api/${projectId}/ventilation/get_room/${roomId}/`);
 
     // Update data
-    const { response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomId}/0/`);
+    const { response, setData, handleSubmit: updateRoomData, loading: updateRoomLoading } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomId}/0/`);
     const { systemData, response: systemResponse, setResponse, setSystemData, handleSubmit: updateSystemData } = useUpdateSystem(`/project_api/${projectId}/ventilation/update_room/${roomId}/0/`);
 
     // Edit of values
@@ -169,7 +169,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
             {ventError && <MessageBox message={ventError} />}
             <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
                 {
-                    ventLoading ? (
+                    ventLoading || updateRoomLoading ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>

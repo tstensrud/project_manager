@@ -1139,10 +1139,6 @@ def infiltration_loss(delta_t_inside_outside: float, room_volume: float, air_cha
     infiltration_loss = 0.28 * 1.2 * delta_t_inside_outside * room_volume * air_change_per_hour
     return infiltration_loss
 
-def ventilation_loss(air_flow_per_area: float, room_area: float, indoor_temp: float, vent_air_temp: float) -> float:
-    ventilation_loss = 0.35 * air_flow_per_area * room_area * (indoor_temp - vent_air_temp)
-    return ventilation_loss
-
 def calculate_total_heat_loss_for_room(room_uid: int) -> bool:
     try:
         room = get_room(room_uid)
@@ -1162,19 +1158,16 @@ def calculate_total_heat_loss_for_room(room_uid: int) -> bool:
         transmission_loss_outer_walls = building.u_value_outer_wall * dt_surfaces_to_air * outer_wall_area
         transmission_loss_windows_doors = building.u_value_window_doors * dt_surfaces_to_air * room.window_door_area
         if room.floor_ground_area != 0:
-            transmission_loss_floor = building.u_value_floor_ground * dt_floor_ground * room.floor_ground_area
+            transmission_loss_floor = building.u_value_floor_ground * dt_surfaces_to_air * room.floor_ground_area
         else:
-            transmission_loss_floor = building.u_value_floor_air * dt_floor_ground * room.floor_air_area
+            transmission_loss_floor = building.u_value_floor_air * dt_surfaces_to_air * room.floor_air_area
         transmission_loss_roof = building.u_value_roof * dt_surfaces_to_air * room.roof_area
-        ##print(f"Transmission losses calculated: outer_walls={transmission_loss_outer_walls}, windows_doors={transmission_loss_windows_doors}, floor={transmission_loss_floor}, roof={transmission_loss_roof}")
         room_cold_bridge_loss = building.cold_bridge_value * room.area * dt_surfaces_to_air
-        room_ventilation_loss = ventilation_loss((room.air_supply / room.area), room.area, building.inside_temp, building.vent_temp)
+        # ventilasjon: -(luftmengde/3600) * (-0.0045 * ((tilluftstemp + romtemp vinter) / 2) + 2.5426) * 1008 * (Tilluftstemp - romtemp vinter)
+        room_ventilation_loss = -(room.air_supply / 3600) * (-0.0045 * (((building.vent_temp + building.inside_temp) / 2) + 273) + 2.5426) * 1008 * (building.vent_temp - building.inside_temp)
         room_infiltration_loss = infiltration_loss(dt_surfaces_to_air, (room.area * room.room_height), building.infiltration)
-        ##print(f"Cold bridge loss: {room_cold_bridge_loss}, ventilation loss: {room_ventilation_loss}, infiltration loss: {room_infiltration_loss}")
         safety = 1 + ((building.safety) / 100)
-        ##print(f"Safety: {building.Safety}")
         total_transmission_loss = transmission_loss_outer_walls + transmission_loss_windows_doors + transmission_loss_floor + transmission_loss_roof
-        
         total_heat_loss = safety * (total_transmission_loss + room_cold_bridge_loss + room_infiltration_loss + room_ventilation_loss)
         
         room.heatloss_ventilation = room_ventilation_loss
@@ -1192,7 +1185,6 @@ def calculate_total_heat_loss_for_room(room_uid: int) -> bool:
         globals.log(f"calcualte total heat loss: {e}")
         db.session.rollback()
         return False
-
 
 def sum_heatloss_demand_building_floor(building_uid: str, floor: str) -> float:
     heat_loss = db.session.query(func.sum(models.Rooms.heatloss_sum)).filter(and_(
@@ -1364,7 +1356,10 @@ dT: innetemp - utetemp
 Kuldebro: Normalisert kuldebroverdi * gulvarea * ytterveggareal * dT
 Transmisjon, for hver ytter, inner, gulv, tak og vindu/dør: U-verdi*dT*areal
 Inflitrasjon: dT(inne ute) * romvolum * luftveksling/time
-ventilasjon: 0,35*(luftmengde/areal)*romareal*(innetemp-innblåsttemp)
+??ventilasjon: 0,35*(luftmengde/areal)*romareal*(innetemp-innblåsttemp)
+
+ventilasjon: -(luftmengde/3600) * (-0.0045 * ((tilluftstemp + romtemp vinter) / 2) + 2.5426) * 1008 * (Tilluftstemp - romtemp vinter)
+
 
 '''
 

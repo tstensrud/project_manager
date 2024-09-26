@@ -137,7 +137,7 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                                                     U-verdi vindu/dør (W/m<div><sup>2</sup></div>K)
                                                 </div>
                                                 <div>
-                                                    <CardInputField name="u_value_window_door" changeFunction={handleFormChange} />
+                                                    <CardInputField name="u_value_window_doors" changeFunction={handleFormChange} />
                                                 </div>
 
                                                 <div className="mt-2 flex flex-row">

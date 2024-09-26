@@ -25,7 +25,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
     const { data: coolingData, loading: coolingLoading, error: coolingError, refetch: coolingRefetch } = useFetch(`/project_api/${projectId}/cooling/get_room/${roomId}/`);
 
     // Update data
-    const { response: updateRoomDataResponse, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/cooling/update_room/${roomId}/`);
+    const { response: updateRoomDataResponse, setData, handleSubmit: updateRoomData, loading: updateCoolingDataLoading } = useUpdateData(`/project_api/${projectId}/cooling/update_room/${roomId}/`);
     const { data: updateVentilationData, response: updateVentDataResponse, setData: setUpdateVentData, handleSubmit: updateVentilationDataSubmit } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomId}/1/`);
 
     // Edit of values
@@ -131,7 +131,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
             {coolingError && <MessageBox message={coolingError} /> }
             <MarkedRow markedRow={markedRow}>
                 {
-                    coolingLoading && coolingLoading === true ? (
+                    coolingLoading || updateCoolingDataLoading ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>

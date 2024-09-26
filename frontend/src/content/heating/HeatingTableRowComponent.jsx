@@ -23,7 +23,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
     const { data: heatingData, loading: heatingLoading, refetch: heatingRefetch } = useFetch(`/project_api/${projectId}/heating/get_room/${roomId}/`);
 
     // Update data
-    const { data: updatedRoomData, response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomId}/`);
+    const { data: updatedRoomData, response, setData, handleSubmit: updateRoomData, loading: updateHeatingDataLoading } = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomId}/`);
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
@@ -112,7 +112,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
             {response?.success === false && <MessageBox message={response.message} />}
             <MarkedRow markedRow={markedRow}>
                 {
-                    heatingLoading && heatingLoading === true ? (
+                    heatingLoading || updateHeatingDataLoading ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>

@@ -72,21 +72,21 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
         e.preventDefault();
         await handleDeleteSubmit();
     }
-    
+
     return (
 
         <ContentCard>
-            {response?.success === false && <MessageBox message={response.message} /> }
+            {response?.success === false && <MessageBox message={response.message} />}
             {
                 editBuildingContainer && editBuildingContainer === true ? (
                     <>
                         <form onSubmit={submitNameChange}>
                             <div className="flex flex-col">
                                 <div className="flex mb-1">
-                                    <CardInputField changeFunction={handleNameChange} name="buildingName" placeholder="Endre navn.."/>
+                                    <CardInputField changeFunction={handleNameChange} name="buildingName" placeholder="Endre navn.." />
                                 </div>
                                 <div className="flex items-center">
-                                    <CardButton buttonText="Lagre"/> {error && error}
+                                    <CardButton buttonText="Lagre" /> {error && error}
                                 </div>
                             </div>
                         </form>
@@ -122,17 +122,21 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                         <h4>Betjenes av ventilasjonssystem</h4>
                     </div>
                     {
-                        buildingData?.systems && buildingData.systems.map((system, index) =>
-                            <div key={index} className="flex flex-row">
-                                <div className="flex w-full">
-                                    {system}
+                        buildingData?.systems ? (
+                            buildingData.systems.map((system, index) =>
+                                <div key={index} className="flex flex-row">
+                                    <div className="flex w-full">
+                                        {system}
+                                    </div>
                                 </div>
-                            </div>
+                            )
+                        ) : (
+                            <>
+                                Ingen systemer tilknyttet
+                            </>
                         )
                     }
                 </div>
-
-
 
                 <div className="text-grey-text dark:text-dark-grey-text mb-3">
                     <h4>Prosjektert varme</h4>
@@ -148,7 +152,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                             <div className="flex flex-col w-full">
                                 <div className="flex flex-row w-full">
                                     <CardButton buttonText="Slett bygg" clickFunction={handleDeleteBuilding} />
-                                    
+
                                     <div className="flex justify-end flex-1">
                                         <CardButton buttonText="Avbryt" clickFunction={closeEditOptions} />
                                     </div>
