@@ -221,17 +221,20 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                             </TableTDelement>
                             <TableTDelement width="34%">
                                 <div className="flex flex-row w-full">
-                                    <div className="text-start animate-fade w-44">
+                                    <div className="text-start pl-2 animate-fade w-44">
                                         {
                                             systemResponse?.success === true && systemResponse.message
                                         }
                                     </div>
-                                    <div>
+                                    <div className="flex flex-row">
                                         {
-                                            ventData && ventData.vent_data.AirSupply && ventData.vent_data.AirExtract < ventData.vent_data.AirDemand && (<>For lite luft. </>)
+                                            ventData?.vent_data && ventData.vent_data.AirSupply < ventData.vent_data.AirDemand && (<div className="mr-2">For lite tilluft.</div>)
                                         }
                                         {
-                                            ventData && ventData.vent_data.AirSupply !== ventData.vent_data.AirExtract && (<>Ubalanse i rom. </>)
+                                            ventData?.vent_data && ventData.vent_data.AirExtract < ventData.vent_data.AirDemand && (<div className="mr-2">For lite avtrekk.</div>)
+                                        }
+                                        {
+                                            ventData && ventData.vent_data.AirSupply !== ventData.vent_data.AirExtract && 'Ubalanse i rom.'
                                         }
                                     </div>
                                 </div>

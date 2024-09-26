@@ -270,7 +270,6 @@ class Rooms(db.Model):
         Index('idx_rooms_building_uid', "building_uid"),
         Index("idx_rooms_room_type_uid", "room_type_uid"),
         Index("idx_rooms_system_uid", "system_uid"),
-
     )
 
     def get_json_room_data(self):

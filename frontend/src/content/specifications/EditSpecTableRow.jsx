@@ -18,7 +18,7 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
     const { data: roomData, loading: roomLoading, error: roomDataError, refetch: roomRefetch } = useFetch(`/specifications/get_room_type_data/${roomUid}/`);
 
     // Update room type data and delete room
-    const { data: updatedRoomData, response: updateRoomDataResponse, setData, handleSubmit: updateRoomData } = useUpdateData(`/specifications/update_room/${roomUid}/`);
+    const { data: updatedRoomData, loading: updateRoomDataLoading, response: updateRoomDataResponse, setData, handleSubmit: updateRoomData } = useUpdateData(`/specifications/update_room/${roomUid}/`);
     const { data: deleteRoomId, response: responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/specifications/delete_room_type/${roomUid}/`);
 
     // Edit of cells
@@ -40,8 +40,7 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
 
     useEffect(() => {
         if (responseDeleteRoom?.success === true) {
-            //refetch();
-            console.log(responseDeleteRoom.message)
+            refetch();
         }
     }, [responseDeleteRoom]);
 
@@ -103,7 +102,7 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
             {updateRoomDataResponse?.error && <MessageBox message={updateRoomDataResponse.error} />}
             <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover">
                 {
-                    roomLoading ? (
+                    roomLoading || updateRoomDataLoading ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>

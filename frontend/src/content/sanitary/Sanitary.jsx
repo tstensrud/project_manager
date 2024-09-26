@@ -12,7 +12,7 @@ function Sanitary() {
 
     // Hooks
     const { data, loading } = useFetch(`/project_api/${projectId}/sanitary/buildings/`);
-    console.log("Data:", data)
+
     return (
         <>
             <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitæranlegg - oppsummering"} projectName={""} projectNumber={""} />

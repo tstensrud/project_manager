@@ -1,63 +1,52 @@
-// Hooks
-import useFetch from '../../hooks/useFetch'
-
 // Components
 import ContentCard from '../../layout/ContentCard';
 import VentIcon from '../../assets/svg/ventSystemIcon.jsx';
 import CardTitle from '../../layout/CardTitle';
-import LoadingSpinner from '../../layout/LoadingSpinner';
-import { useEffect } from 'react';
 
-function VentilationSummary({ projectId }) {
-    const { data: systemsData, loading, error } = useFetch(`/project_api/${projectId}/systems/`)
-    const { data } = useFetch(`/project_api/${projectId}/ventilation/`)
-
+function VentilationSummary({ systemData, totalAirflow }) {
 
     return (
         <ContentCard>
             <CardTitle svg={<VentIcon />} title="Ventilasjonsdata" />
             <div className="border-0 p-3 rounder-lg">
                 {
-                    loading && loading === true ? (
-                        <LoadingSpinner text="ventilasjonsdata" />
-                    ) : (
+                    systemData ? (
                         <>
-                            {
-                                systemsData && data ? (
-                                    <>
-                                        <div className="mb-10">
-                                            <div className="text-grey-text dark:text-dark-grey-text mb-1">
-                                                <h4>Ventilasjonssystemer</h4>
+                            <div className="mb-10">
+                                <div className="text-grey-text dark:text-dark-grey-text mb-1">
+                                    <h4>Ventilasjonssystemer</h4>
+                                </div>
+                                {
+                                    systemData && Object.keys(systemData).map((system, index) => (
+                                        <div key={index} className="flex flex-row w-full">
+                                            <div className="flex">
+                                                {systemData[system].SystemName}
                                             </div>
-                                            {systemsData.systems_data && systemsData.systems_data.map((system, index) => (
-                                                <div key={index} className="flex flex-row">
-                                                    <div className="flex w-full">
-                                                        {system.SystemName}
-                                                    </div>
-                                                </div>
-                                            ))}
+                                            <div className="flex flex-1 justify-end text-end">
+                                                {systemData[system].AirSupply} m<div><sup>3</sup></div>/h
+                                            </div>
                                         </div>
-                                        <div className="mb-1 text-grey-text dark:text-dark-grey-text">
-                                            <h4>Prosjektert luftmengde</h4>
+                                    ))
+                                }
+                            </div>
+                            <div className="mb-1 text-grey-text dark:text-dark-grey-text">
+                                <h4>Prosjektert luftmengde</h4>
+                            </div>
+                            {
+                                totalAirflow ? (
+                                    <>
+                                        <div className="flex flex-row w-full">
+                                            {totalAirflow.toLocaleString()} <div className="ml-1">m<sup>3</sup>/h</div>
                                         </div>
-                                        {
-                                            data.ventdata ? (
-                                                <>
-                                                    <div className="flex flex-row w-full">
-                                                        {data.ventdata.toLocaleString()} <div className="ml-1">m<sup>3</sup>/h</div>
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <>Ingen data</>
-                                            )
-                                        }
                                     </>
                                 ) : (
-                                    <>
-                                        Ingen data enda
-                                    </>
+                                    <>Ingen data</>
                                 )
                             }
+                        </>
+                    ) : (
+                        <>
+                            Ingen data enda
                         </>
                     )
                 }

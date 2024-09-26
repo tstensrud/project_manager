@@ -2,7 +2,7 @@ import FloorTitleBar from "./FloorTitleBar";
 
 function TableWrapper(props) {
     return (
-        <div className="mr-5 ml-5">
+        <div className="">
             {
                 props?.floor && <FloorTitleBar floor={props.floor} />
             }

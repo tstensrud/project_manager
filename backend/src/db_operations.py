@@ -2,7 +2,7 @@ import math
 import datetime
 import time
 from sqlalchemy.inspection import inspect
-from sqlalchemy import func, and_, distinct, select
+from sqlalchemy import func, and_, distinct, select, update
 from uuid import uuid4
 from . import models, db
 from . import globals
@@ -518,7 +518,9 @@ def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str
 
 def get_room(room_uid: str) -> models.Rooms:
     room = db.session.query(models.Rooms).filter(models.Rooms.uid == room_uid).first()
-    return room
+    if room:
+        return room
+    return None
 
 def delete_room(room_uid: str) -> bool:
     room = db.session.query(models.Rooms).filter(models.Rooms.uid == room_uid).first()
@@ -565,29 +567,26 @@ def check_if_roomnumber_exists(building_uid, room_number) -> bool:
     return False
 
 def update_room_data(room_uid: int, data) -> bool:
-    #print(data)
     room = get_room(room_uid)
     room_columns = {column.key for column in inspect(models.Rooms).mapper.column_attrs}
-    for column in room_columns:
-        for key, value in data.items():
-            if column == key:
-                #print(f"Setting {value} into {column} for room {room}")
-                setattr(room, column, value)
 
-                if key == "area" or key == "room_population":
-                    update_ventilation_calculations(room_uid)
-                    calculate_total_heat_loss_for_room(room_uid)
-                    calculate_total_cooling_for_room(room_uid)
+    for key, value in data.items():
+        if key in room_columns:
+            setattr(room, key, value)
 
-                if key == "air_supply" or key == "air_extract":
-                    calculate_total_heat_loss_for_room(room_uid)
-                    calculate_total_cooling_for_room(room_uid)
+            if key == "area" or key == "room_population":
+                update_ventilation_calculations(room_uid)
+                calculate_total_heat_loss_for_room(room_uid)
+                calculate_total_cooling_for_room(room_uid)
+
+            if key == "air_supply" or key == "air_extract":
+                calculate_total_heat_loss_for_room(room_uid)
+                calculate_total_cooling_for_room(room_uid)
 
     try:
         db.session.commit()
         return True
     except Exception as e:
-        #print("Commit failed")
         db.session.rollback()
         globals.log(f"update_room_data(): {e}")
         return False
@@ -626,28 +625,51 @@ def initial_ventilation_calculations(room_uid: int) -> bool:
         db.session.rollback()
         return False
 
-def update_ventilation_calculations(room_uid: int) -> bool:
-    room = get_room(room_uid)
-    room.air_person_sum = round((room.room_population * room.air_per_person),1)
-    room.air_emission_sum = round((room.area * room.air_emission), 1)
-    
-    # Check if the minimum requirement per sqm is > person + emission + process. Set demand to largest of the two
-    air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process),1)
-    room_calculated_minimum = room.area * room.air_minimum
-    set_airflow = 0
-    if room_calculated_minimum > air_demand:
-        set_airflow = room_calculated_minimum
-    else:
-        set_airflow = air_demand
-    room.air_demand = round(set_airflow, 1)
+def update_ventilation_calculations(room_uid=None, rooms=None) -> bool:
+    if rooms:
+        for room in rooms:
+            room.air_person_sum = round((room.room_population * room.air_per_person),1)
+            room.air_emission_sum = round((room.area * room.air_emission), 1)
+            
+            # Check if the minimum requirement per sqm is > person + emission + process. Set demand to largest of the two
+            air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process),1)
+            room_calculated_minimum = room.area * room.air_minimum
+            set_airflow = 0
+            if room_calculated_minimum > air_demand:
+                set_airflow = room_calculated_minimum
+            else:
+                set_airflow = air_demand
+            room.air_demand = round(set_airflow, 1)
 
-    if room.area > 0:
-        room.air_chosen = round((room.air_supply / room.area), 1)
-    else:
-        room.air_chosen = 0.0
-    
-    if room.system_uid:
-        update_system_airflows(room.system_uid)
+            if room.area > 0:
+                room.air_chosen = round((room.air_supply / room.area), 1)
+            else:
+                room.air_chosen = 0.0
+            if room.system_uid:
+                update_system_airflows(room.system_uid)
+
+    if room_uid:
+        room = get_room(room_uid)
+        room.air_person_sum = round((room.room_population * room.air_per_person),1)
+        room.air_emission_sum = round((room.area * room.air_emission), 1)
+        
+        # Check if the minimum requirement per sqm is > person + emission + process. Set demand to largest of the two
+        air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process),1)
+        room_calculated_minimum = room.area * room.air_minimum
+        set_airflow = 0
+        if room_calculated_minimum > air_demand:
+            set_airflow = room_calculated_minimum
+        else:
+            set_airflow = air_demand
+        room.air_demand = round(set_airflow, 1)
+
+        if room.area > 0:
+            room.air_chosen = round((room.air_supply / room.area), 1)
+        else:
+            room.air_chosen = 0.0
+        
+        if room.system_uid:
+            update_system_airflows(room.system_uid)
     try:
         db.session.commit()
         return True
@@ -793,7 +815,7 @@ def delete_system(system_uid: int) -> bool:
         globals.log(f"delete system: {e}")
         return False
 
-def get_all_systems(project_uid: int) -> list:
+def get_all_systems(project_uid: int) -> list[models.VentilationSystems]:
     systems = db.session.query(models.VentilationSystems).join(
         models.Projects).filter(models.Projects.uid == project_uid).order_by(
             models.VentilationSystems.system_name).all()
@@ -948,33 +970,33 @@ def get_room_type(room_type_uid: int, specification: str) -> models.RoomTypes:
         models.RoomTypes.specification_uid == specification, models.RoomTypes.uid == room_type_uid)).first()
     return room_data_object
 
-def update_room_type_data(data, room_uid: str) -> bool:
-    room = db.session.query(models.RoomTypes).filter(models.RoomTypes.uid == room_uid).first()
-    processed_data = {}
-    for key, value in data.items():
-        processed_data[key] = value
-    processed_data_list = list(processed_data.keys())
-
-    room_columns = {column.key for column in inspect(models.RoomTypes).mapper.column_attrs}
-    for key in room_columns:
-        if key == processed_data_list[0]:
-            #print(f"Setting {processed_data[key]} into {key} for room {room}")
-            setattr(room, key, processed_data[key])
-
-            project_rooms_with_room_type = db.session.query(models.Rooms).filter(models.Rooms.room_type_uid == room_uid).all()
-            for project_room in project_rooms_with_room_type:
-                #print("Changing project rooms")
-                setattr(project_room, key, processed_data[key])
-                update_ventilation_calculations(project_room.uid)
-            break
-    try:
-        db.session.commit()
-        return True
-    except Exception as e:
-        #print("Commit failed")
-        db.session.rollback()
-        globals.log(f"update_room_type_data(): {e}")
-        return False
+def update_room_type_data(data, room_type_uid: str) -> bool:
+    room_type = db.session.query(models.RoomTypes).filter(models.RoomTypes.uid == room_type_uid).first()
+    if room_type:
+        room_columns = {column.key for column in inspect(models.RoomTypes).mapper.column_attrs}
+        updated_columns = {}
+        for key, value in data.items():
+            if key in room_columns:
+                setattr(room_type, key, value)
+                updated_columns[key] = value
+        
+        float_values = ["air_per_person", "air_emission", "air_process", "air_minimum"]
+        project_rooms_with_room_type = db.session.query(models.Rooms).filter(models.Rooms.room_type_uid == room_type_uid).all()
+        update_project_rooms = update(models.Rooms).where(models.Rooms.room_type_uid == room_type_uid).values(updated_columns)
+        if updated_columns:
+            try:
+                db.session.execute(update_project_rooms)
+                db.session.commit()
+                for key, value in data.items():
+                    if key in float_values:
+                        update_ventilation_calculations(rooms=project_rooms_with_room_type)
+                return True
+            except Exception as e:
+                globals.log(f"Could not updated columns \"update_room_type_data\" {e}")
+                db.session.rollback()
+                return False
+        return False   
+    return False
 
 def get_room_type_name(specification: str, room_uid: int) -> str:
     room_type_name = db.session.query(models.RoomTypes.name).join(models.Specifications).filter(

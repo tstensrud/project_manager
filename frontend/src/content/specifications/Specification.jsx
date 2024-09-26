@@ -97,8 +97,15 @@ function Specification() {
                                     <Table>
                                         <tbody>
                                             {
-                                                data && data.data ? (
-                                                    data.data.map((rowData, index) =>
+                                                data?.data ? (
+                                                    data.data.slice()
+                                                    .sort((a,b) => {
+                                                        if (a.name && b.name) {
+                                                            return a.name.localeCompare(b.name);
+                                                        }
+                                                        return 0;
+                                                    })
+                                                    .map((rowData, index) =>
                                                         <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover" key={index}>
                                                             <TableTDelement width="15%">{rowData ? rowData.name : ''}</TableTDelement>
                                                             <TableTDelement width="5%">{rowData ? rowData.air_per_person : ''}</TableTDelement>

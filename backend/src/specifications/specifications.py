@@ -41,7 +41,6 @@ def specifications():
 @jwt_required()
 def get_specifications():
     specifications = dbo.get_specifications()
-    print(specifications)
     spec_data = {}
     for specification in specifications:
         spec_data[specification.uid] = specification.get_json()
@@ -64,10 +63,10 @@ def get_spec(spec_uid):
 def get_spec_rooms(spec_uid):
     room_types = dbo.get_specification_room_data(spec_uid)
     if room_types:
-        uids = []
+        room_type_data = {}
         for room_type in room_types:
-            uids.append(room_type.uid)
-        return jsonify({"success": True, "message": "Roomtype UIDs", "data": uids})
+            room_type_data[room_type.name] = room_type.uid
+        return jsonify({"success": True, "data": room_type_data})
     else:
         return jsonify({"success": False, "message": "No roomtypes found"})
     
@@ -119,7 +118,6 @@ def new_room_for_spec(spec_uid):
                 cleansed_value = escape(value).strip()
                 converted_value = replace_and_convert_to_float(cleansed_value)
                 if converted_value is False:
-                    print(f"Could not convert value: {value}")
                     return jsonify({"success": False, "message": f"Luftmengder må kun inneholde tall"})
                 else:
                     processed_data[key] = converted_value
@@ -173,7 +171,6 @@ def get_room_type_data(room_uid):
 @specifications_bp.route('/delete_room_type/<room_uid>/', methods=['DELETE'])
 @jwt_required()
 def delete_room_type(room_uid):
-    print(room_uid)
     deleted_room = dbo.delete_room_type_from_spec(room_uid)
     if deleted_room:
         return jsonify({"success": True, "message": "Room deleted"})
@@ -201,7 +198,6 @@ def delete_spec(spec_uid):
 @jwt_required()
 def update_room(room_uid):
     data = request.get_json()
-    print(data)
     if data:
         processed_data = {}
         float_values = ["air_per_person", "air_emission", "air_process", "air_minimum"]
@@ -210,19 +206,19 @@ def update_room(room_uid):
                 if "vav" in value.lower() and "cav" in value.lower():
                     return jsonify({"success": False, "error": "Styring må ha enten CAV eller VAV, ikke begge deler"})
                 
-            escaped_value = escape(value).strip()
             if key in float_values:
-                converted_value = replace_and_convert_to_float(escaped_value)
+                converted_value = replace_and_convert_to_float(value)
                 if converted_value is not False:
                     processed_data[key] = converted_value
                 else:
                     return jsonify({"success": False, "error": "Luftmengde må kun inneholde tall"})
             else:
-                processed_data[key] = escape(value).strip()
+                processed_data[key] = value.strip()
         if dbo.update_room_type_data(processed_data, room_uid):
             return jsonify({"success": True, "message": "Updated room"})
         else:
             return jsonify({"success": False, "error": "Kunne ikke oppdatere romdata"})
+    return jsonify({"success": False, "message": "Mottok ingen data"})
         
 
         

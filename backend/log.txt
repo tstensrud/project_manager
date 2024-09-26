@@ -1,32 +1,15 @@
-- 2024-09-24 12:58:00.600296: Could not send email: 'NoneType' object has no attribute 'encode'
 
-- 2024-09-24 13:02:16.966270: Could not send email: 'NoneType' object has no attribute 'encode'
+- 2024-09-26 13:53:11.924109: Could not updated columns "update_room_type_data" Unconsumed column names: ventilation_principle
 
-- 2024-09-24 13:27:54.042152: Failed to delete room type: (psycopg2.errors.NotNullViolation) null value in column "room_type_uid" of relation "Rooms" violates not-null constraint
-DETAIL:  Failing row contains (1483, OOl2XouCRuGjPioYB38Ang, sj2SkPx0RUefts07y-TzHg, FelUrd_nTzm8pYLbG0zytQ, null, null, 40, 40844, Navn54, 81, 40, null, 0, 0, 15, 1215, 50, 3.6, 1265, 1270, 1270, 15.7, Omrøring, P, B, VAV,T,B,F, All tilluft tilfores i garderobe, avtrekk overstrømning  til du..., 33dBA, 48dB, 34dB, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, , 26, 100, 7, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0).
+- 2024-09-26 13:53:19.496079: Could not updated columns "update_room_type_data" Unconsumed column names: ventilation_principle
 
-[SQL: UPDATE "Rooms" SET room_type_uid=%(room_type_uid)s WHERE "Rooms".id = %(Rooms_id)s]
-[parameters: [{'room_type_uid': None, 'Rooms_id': 1483}, {'room_type_uid': None, 'Rooms_id': 1539}, {'room_type_uid': None, 'Rooms_id': 1869}, {'room_type_uid': None, 'Rooms_id': 1876}, {'room_type_uid': None, 'Rooms_id': 2199}, {'room_type_uid': None, 'Rooms_id': 2635}, {'room_type_uid': None, 'Rooms_id': 3895}, {'room_type_uid': None, 'Rooms_id': 3909}  ... displaying 10 of 29 total bound parameter sets ...  {'room_type_uid': None, 'Rooms_id': 14220}, {'room_type_uid': None, 'Rooms_id': 14586}]]
-(Background on this error at: https://sqlalche.me/e/20/gkpj)
+- 2024-09-26 13:53:27.723594: Could not updated columns "update_room_type_data" Unconsumed column names: ventilation_principle
 
-- 2024-09-24 13:28:56.522814: Failed to delete room type: (psycopg2.errors.NotNullViolation) null value in column "room_type_uid" of relation "Rooms" violates not-null constraint
-DETAIL:  Failing row contains (1616, MtBnt7SYTyymGsxK9YiUGA, sj2SkPx0RUefts07y-TzHg, 2qIOzM7GR2Cwf2s1jFBebw, null, null, 30, 30958, Navn187, 14, 68, null, 26, 1768, 7.2, 100.8, 200, 3.6, 2068.8, 2070, 2070, 147.9, Omrøring, P, B, VAV,T,CO2,B, Avtreksskap med lufthastighet 0,5m/s over lukeåpning. Avtrekk f..., 28dBA, 48dB, 38dB, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, , 26, 100, 7, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0).
+- 2024-09-26 13:54:33.988874: Could not updated columns "update_room_type_data" Unconsumed column names: ventilation_principle
 
-[SQL: UPDATE "Rooms" SET room_type_uid=%(room_type_uid)s WHERE "Rooms".id = %(Rooms_id)s]
-[parameters: [{'room_type_uid': None, 'Rooms_id': 1616}, {'room_type_uid': None, 'Rooms_id': 1649}, {'room_type_uid': None, 'Rooms_id': 1694}, {'room_type_uid': None, 'Rooms_id': 1888}, {'room_type_uid': None, 'Rooms_id': 2094}, {'room_type_uid': None, 'Rooms_id': 2211}, {'room_type_uid': None, 'Rooms_id': 2781}, {'room_type_uid': None, 'Rooms_id': 3241}  ... displaying 10 of 31 total bound parameter sets ...  {'room_type_uid': None, 'Rooms_id': 13066}, {'room_type_uid': None, 'Rooms_id': 13095}]]
-(Background on this error at: https://sqlalche.me/e/20/gkpj)
+- 2024-09-26 13:54:40.996215: Could not updated columns "update_room_type_data" Unconsumed column names: ventilation_principle
 
-- 2024-09-24 13:29:04.730883: Failed to delete room type: (psycopg2.errors.NotNullViolation) null value in column "room_type_uid" of relation "Rooms" violates not-null constraint
-DETAIL:  Failing row contains (1616, MtBnt7SYTyymGsxK9YiUGA, sj2SkPx0RUefts07y-TzHg, 2qIOzM7GR2Cwf2s1jFBebw, null, null, 30, 30958, Navn187, 14, 68, null, 26, 1768, 7.2, 100.8, 200, 3.6, 2068.8, 2070, 2070, 147.9, Omrøring, P, B, VAV,T,CO2,B, Avtreksskap med lufthastighet 0,5m/s over lukeåpning. Avtrekk f..., 28dBA, 48dB, 38dB, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, , 26, 100, 7, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0).
+- 2024-09-26 13:54:45.224859: Could not updated columns "update_room_type_data" Unconsumed column names: ventilation_principle
 
-[SQL: UPDATE "Rooms" SET room_type_uid=%(room_type_uid)s WHERE "Rooms".id = %(Rooms_id)s]
-[parameters: [{'room_type_uid': None, 'Rooms_id': 1616}, {'room_type_uid': None, 'Rooms_id': 1649}, {'room_type_uid': None, 'Rooms_id': 1694}, {'room_type_uid': None, 'Rooms_id': 1888}, {'room_type_uid': None, 'Rooms_id': 2094}, {'room_type_uid': None, 'Rooms_id': 2211}, {'room_type_uid': None, 'Rooms_id': 2781}, {'room_type_uid': None, 'Rooms_id': 3241}  ... displaying 10 of 31 total bound parameter sets ...  {'room_type_uid': None, 'Rooms_id': 13066}, {'room_type_uid': None, 'Rooms_id': 13095}]]
-(Background on this error at: https://sqlalche.me/e/20/gkpj)
-
-- 2024-09-24 13:29:34.378753: Failed to delete room type: (psycopg2.errors.NotNullViolation) null value in column "room_type_uid" of relation "Rooms" violates not-null constraint
-DETAIL:  Failing row contains (5258, Kc6IIkh6Rgi3HhG0-mSlgQ, PUnRrYkiSY-P-wUVLgm3Cg, 7SEFWrW1Rz6HY-Y7G_n5sQ, null, null, 20, 20959, Navn10, 55, 8, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, , , , , , , , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, , 26, 100, 7, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0).
-
-[SQL: UPDATE "Rooms" SET room_type_uid=%(room_type_uid)s WHERE "Rooms".id = %(Rooms_id)s]
-[parameters: [{'room_type_uid': None, 'Rooms_id': 5258}, {'room_type_uid': None, 'Rooms_id': 5375}, {'room_type_uid': None, 'Rooms_id': 6849}, {'room_type_uid': None, 'Rooms_id': 7768}, {'room_type_uid': None, 'Rooms_id': 8772}, {'room_type_uid': None, 'Rooms_id': 9258}, {'room_type_uid': None, 'Rooms_id': 9358}, {'room_type_uid': None, 'Rooms_id': 9449}  ... displaying 10 of 20 total bound parameter sets ...  {'room_type_uid': None, 'Rooms_id': 14066}, {'room_type_uid': None, 'Rooms_id': 14499}]]
-(Background on this error at: https://sqlalche.me/e/20/gkpj)
+- 2024-09-26 13:54:48.670973: Could not updated columns "update_room_type_data" Unconsumed column names: ventilation_principle
 

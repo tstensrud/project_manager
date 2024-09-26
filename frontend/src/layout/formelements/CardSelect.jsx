@@ -8,7 +8,7 @@ const CardSelect = forwardRef((props, ref) => {
             className="
             bg-tertiary-color
             dark:bg-dark-tertiary-color
-            border-2 
+            border-2
             border-form-border-color
             dark:border-dark-form-border-color
             rounded-3xl text-sm pl-5 pr-5 h-9 transition duration-200 outline-none 

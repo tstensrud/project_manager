@@ -81,7 +81,7 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, newRoomData }) 
                                                                 .map(([key, room], index) => (
                                                                     <RoomTableRowComponent index={index} key={room.uid} allRoomData={room} totalColumns={9} roomId={room.uid} />
                                                                 )
-                                                                )
+                                                            )
                                                         )
                                                     }
                                                 </tbody>

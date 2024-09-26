@@ -45,7 +45,7 @@ function EditSpecification() {
         e.preventDefault();
         setShowDeleteDialog(true);
     }
-
+console.log(data)
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Rediger kravspesifikasjon"} projectName={data && data.spec_name} projectNumber={""} />
@@ -93,8 +93,16 @@ function EditSpecification() {
                                 <Table>
                                     <tbody>
                                         {
-                                            data?.data && data.data.map((uid) => (
-                                                <EditSpecTableRow key={uid} roomUid={uid} totalColumns={14} refetch={refetch} />
+                                            data?.data && Object.entries(data.data)
+                                            .slice()
+                                            .sort((a,b) => {
+                                                if (a[0] && b[0]) {
+                                                    return a[0].localeCompare(a[0]);
+                                                }
+                                                return 0;
+                                            })
+                                            .map(([key, value], index) => (
+                                                <EditSpecTableRow key={index} roomUid={value} totalColumns={14} refetch={refetch} />
                                             ))
                                         }
                                     </tbody>

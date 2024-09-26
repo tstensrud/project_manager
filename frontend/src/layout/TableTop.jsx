@@ -18,11 +18,13 @@ function TableTop({ title, sections }) {
                     <HelpBox title={title} sections={sections} setShowHelpBox={toggleHelpBox} />
                 )
             }
-
-            <div className="bg-secondary-color dark:bg-dark-secondary-color sticky ml-5 mr-5 mt-5 p-3 rounded-tl-lg rounded-tr-lg">
-                <Link to="" onClick={toggleHelpBox}>
+            <div className="flex flex-row w-full">
+                <div onClick={toggleHelpBox} className="flex cursor-pointer bg-secondary-color dark:bg-dark-secondary-color sticky mt-5 p-3 rounded-tl-lg">
                     <HelpIcon />
-                </Link>
+                </div>
+                <div className="flex flex-1 bg-secondary-color dark:bg-dark-secondary-color sticky mt-5 p-3 rounded-tr-lg">
+
+                </div>
             </div>
         </>
     );

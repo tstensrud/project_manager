@@ -13,8 +13,7 @@ import ContentCard from '../../layout/ContentCard';
 import useSubmitData from '../../hooks/useSubmitData.jsx';
 import BookMarkIcon from '../../assets/svg/bookMarkIcon.jsx'
 
-function ProjectSummary({ projectId }) {
-    const { data, loading, error } = useFetch(`/project_api/${projectId}/`);
+function ProjectSummary({ projectId, projectData }) {
     const { data: isFavData } = useFetch(`/user/is_favourite/${projectId}/`)
     const { setData: setFavData, response: favResponse, error: favError, handleSubmit } = useSubmitData(`/user/set_favourite/${projectId}/`);
 
@@ -34,7 +33,7 @@ function ProjectSummary({ projectId }) {
         if (isFavData?.success === true) {
             setIsFav(isFavData.data)
         }
-    },[isFavData]);
+    }, [isFavData]);
 
     // Handlers
     const handleSetFav = (e) => {
@@ -44,62 +43,73 @@ function ProjectSummary({ projectId }) {
 
     return (
         <ContentCard>
+
             {
-                loading ? (
-                    <LoadingSpinner text="prosjektinfo" />
-                ) : (
+                projectData && (
                     <>
-                        {
-                            data && data.data ? (
-                                <>
-                                    <div className="flex flex-row items-center">
-                                        <div className="w-[80%]">
-                                            <CardTitle svg={<StarIcon />} title={<>{data?.data.ProjectName}</>} />
+                        <div className="flex flex-row items-center">
+                            <div className="">
+                                <CardTitle svg={<StarIcon />} title={<>{projectData.ProjectName}</>} />
+                            </div>
+                            <div className="flex flex-1 justify-end h-full">
+                                {
+                                    !isFav && (
+                                        <div className="flex flex-row h-full items-center">
+                                            <div className="flex text-center items-center h-full pr-5">
+                                                <Link to="#" onClick={handleSetFav}>Sett som favoritt</Link>
+                                            </div>
+                                            <div className="flex items-center h-full">
+                                                <BookMarkIcon />
+                                            </div>
                                         </div>
-                                        <div className="flex flex-1 justify-end h-full">
-                                            {
-                                                !isFav && (
-                                                    <div className="flex flex-row h-full items-center">
-                                                        <div className="flex text-center items-center h-full pr-5">
-                                                            <Link to="#" onClick={handleSetFav}>Sett som favoritt</Link>
-                                                        </div>
-                                                        <div className="flex items-center h-full">
-                                                            <BookMarkIcon />
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        </div>
-                                    </div>
+                                    )
+                                }
+                            </div>
+                        </div>
 
-                                    <div className="border-0 p-3 rounder-lg">
-                                        <div className="mb-1 text-grey-text dark:text-dark-grey-text">
-                                            <h4>Prosjektbeskrivelse</h4>
-                                        </div>
-                                        <div className="mb-10 whitespace-pre-wrap">
-                                            {data && data.data.ProjectDescription}
-                                        </div>
+                        <div className="border-0 p-3 rounder-lg">
+                            <div className="mb-1 text-grey-text dark:text-dark-grey-text">
+                                <h4>Prosjektbeskrivelse</h4>
+                            </div>
+                            <div className="mb-10 whitespace-pre-wrap">
+                                {projectData.ProjectDescription}
+                            </div>
 
-                                        <div className="text-grey-text dark:text-dark-grey-text mb-1">
-                                            <h4>Kravspesifikasjon</h4>
-                                        </div>
+                            <div className="text-grey-text dark:text-dark-grey-text mb-1">
+                                <h4>Kravspesifikasjon</h4>
+                            </div>
 
-                                        <div className="mb-10">
-                                            <Link to={`/specifications/${data.data.SpecUid}`}>{data?.data?.SpecificationName}</Link>
-                                        </div>
-                                        <div className="text-grey-text dark:text-dark-grey-text mb-1">
-                                            <h4>Prosjektert areal</h4>
-                                        </div>
-                                        <div>
-                                            {data?.data?.area && data?.data?.area.toLocaleString()} m<sup>2</sup>
-                                        </div>
-                                    </div>
-                                </>
-                            ) : (
-                                <>{data?.error}</>
-                            )
-                        }
+                            <div className="mb-10">
+                                {
+                                    projectData?.SpecUid ? (
+                                        <Link to={`/specifications/${projectData.SpecUid}`}>{projectData.SpecificationName}</Link>
+                                    ) : (
+                                        <>
+                                            Ingen kravspesifikasjon satt
+                                        </>
+                                    )
+                                }
+
+                            </div>
+                            <div className="text-grey-text dark:text-dark-grey-text mb-1">
+                                <h4>Prosjektert areal</h4>
+                            </div>
+                            <div>
+                                {
+                                    projectData?.area ? (
+                                        <>
+                                            {projectData.area.toLocaleString()} m<sup>2</sup>
+                                        </>
+                                    ) : (
+                                        <>
+                                            Ingen rom er lagt til
+                                        </>
+                                    )
+                                }
+                            </div>
+                        </div>
                     </>
+
                 )
             }
 

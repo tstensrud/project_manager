@@ -6,7 +6,9 @@ function TableTDelement(props) {
         ${props?.pointer && props.pointer === true ? `cursor-pointer` : ''}
         ${props?.cellClass && props.cellClass === "supply" && 'bg-supply-color font-bold text-secondary-color'}
         ${props?.cellClass && props.cellClass === "extract" && 'bg-extract-color font-bold text-secondary-color'}
-        text-center box-border
+        text-center
+        box-border
+        h-10
         border-table-border-color
         dark:border-dark-table-border-color
         border-t

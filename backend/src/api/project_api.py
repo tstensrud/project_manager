@@ -50,16 +50,47 @@ def refresh_expiring_jwts(response):
 @jwt_required()
 def project(project_uid):
     project = dbo.get_project(project_uid)
-    specification = dbo.get_specification(project.specification)
-    if project is not None:
+    if project:
+        # Project data
+        specification = dbo.get_specification(project.specification)
         total_area: float = dbo.summarize_project_area(project.uid)
         project_data = project.get_json()
-        if specification is not None:
+        if specification:
             project_data["SpecificationName"] = specification.name
             project_data["SpecUid"] = specification.uid
         else:
             project_data["SpecificationName"] = None
         project_data["area"] = total_area
+
+        # Building data
+        buildings = dbo.get_all_project_buildings(project_uid=project_uid)
+        total_rooms = dbo.count_rooms_in_project(project_uid=project_uid)
+        buildings_summary = {}
+        building_data = {}
+        if buildings:
+            for building in buildings:
+                building_data[building.building_name] = dbo.get_building_data(building.uid, False, False, False)
+            buildings_summary["building_data"] = building_data
+            buildings_summary["rooms"] = total_rooms
+            project_data["buildingData"] = buildings_summary
+
+        # Ventilation systems
+        systems = dbo.get_all_systems(project_uid=project_uid)
+        if systems:
+            system_data = {}
+            for system in systems:
+                system_data[system.system_name] = system.get_json()
+            project_data["ventsystemData"] = system_data
+
+        # Ventilation
+        total_air_flow = dbo.summarize_project_airflow(project_uid=project_uid)
+        project_data["airflow"] = total_air_flow
+
+        # Energy
+        total_heating = dbo.sum_heat_loss_project_chosen(project_uid)
+        total_cooling_equipment = dbo.sum_cooling_from_equipment_project(project_uid)
+        project_data["heating"] = total_heating
+        project_data["cooling"] = total_cooling_equipment
         return jsonify({"success": True, "data": project_data})
     else:
         return jsonify({"error": "Fant ikke prosjekt"})
@@ -480,7 +511,6 @@ def ventilation(project_uid):
 @project_api_bp.route('/ventilation/building_data/<building_uid>/', methods=['GET'])
 def get_building_vent_data(project_uid: str, building_uid: str):
     building_data = dbo.get_building_data(building_uid,True, False, False)
-    print(building_data)
     if building_data:
         return jsonify({"success": True, "data": building_data})
     return jsonify({"success": False, "message":" No building data found"})
@@ -527,7 +557,7 @@ def ventilation_update_room(project_uid, room_uid, cooling):
             else:
                 if dbo.update_room_data(room_uid, processed_data):
                     if dbo.update_airflow_changed_system(value, current_room_system_uid):
-                        return jsonify({"success": True, "message": "Byttet system"})
+                        return jsonify({"success": True, "message": "System endret"})
                     else:
                         return jsonify({"success": False, "message": "Kunne ikke bytte system"})   
     

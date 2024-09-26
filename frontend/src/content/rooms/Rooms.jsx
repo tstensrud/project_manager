@@ -157,9 +157,7 @@ function Rooms() {
                                         Velg bygg
                                     </div>
                                 ) : (
-                                    <div className="">
-                                        <RoomTable newRoomData={newRoomData} callRefetchOfRooms={callRefetchOfRooms} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
-                                    </div>
+                                    <RoomTable newRoomData={newRoomData} callRefetchOfRooms={callRefetchOfRooms} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
                                 )
                             }
                         </>

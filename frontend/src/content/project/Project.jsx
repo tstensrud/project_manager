@@ -17,7 +17,10 @@ import LoadingBar from '../../layout/LoadingBar.jsx'
 function Project() {
     const { projectId } = useParams();
     const { setActiveProject, setActiveProjectName } = useContext(GlobalContext);
+
+    // Fetch requests
     const { data, loading, error } = useFetch(`/project_api/${projectId}/`);
+
 
     useEffect(() => {
         const projectName = data?.data?.ProjectName;
@@ -32,17 +35,30 @@ function Project() {
         sessionStorage.setItem("projectData", JSON.stringify(activeProjectData))
     }, [data]);
 
-
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektoversikt"} projectName={data && data.data.ProjectName} projectNumber={data && data.data.ProjectNumber} />
             <MainContentContainer>
-                <div className="flex justify-evenly flex-row w-full flex-wrap">
-                    <ProjectSummary projectId={projectId} />
-                    <BuildingRoomData projectId={projectId} />
-                    <VentilationSummary projectId={projectId} />
-                    <HeatingCoolingSummary projectId={projectId} />
-                </div>
+                {
+                    loading ? (
+                        <LoadingBar />
+                    ) : (
+                        <>
+                            {
+                                data?.success === true && (
+                                    <div className="flex justify-evenly flex-row w-full flex-wrap">
+                                        <ProjectSummary projectData={data.data} projectId={projectId} />
+                                        <BuildingRoomData buildingData={data.data.buildingData} projectId={projectId} />
+                                        <VentilationSummary systemData={data.data.ventsystemData} totalAirflow={data.data.airflow} projectId={projectId} />
+                                        <HeatingCoolingSummary totalCooling={data.data.cooling} totalHeating={data.data.heating} projectId={projectId} />
+                                    </div>
+
+                                )
+                            }
+                        </>
+                    )
+                }
+
             </MainContentContainer>
         </>
     );
