@@ -23,6 +23,7 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
     const { data: buildingData, loading: buildingDataLoading, refetch: buildingReFetch } = useFetch(`/project_api/${projectId}/sanitary/get_building/${buildingUid}/`);
 
     const [floors, setFloors] = useState([]);
+    const [collapseAll, setCollapseAll] = useState(true);
 
     useEffect(() => {
         if (buildingData?.success === true) {
@@ -40,43 +41,38 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                     <LoadingSpinner text="romdata" />
                 ) : (
                     <>
-                    <TableTop title={title} sections={sections} />
-                    <TableContainer>
+                        <TableTop collapseAll={collapseAll} setCollapseAll={setCollapseAll} title={title} sections={sections} />
+                        <TableContainer>
 
-                        <TableHeader>
-                            <thead>
-                                <tr>
-                                    <TableTHelement width="2%" text="#" />
-                                    <TableTHelement width="12%">Rom</TableTHelement>
-                                    <TableTHelement width="5%">Sjakt</TableTHelement>
-                                    <TableTHelement width="5%">1/14" servant</TableTHelement>
-                                    <TableTHelement width="5%">1" servant</TableTHelement>
-                                    <TableTHelement width="5%">Drikkefontene</TableTHelement>
-                                    <TableTHelement width="5%">Utslagsvask</TableTHelement>
-                                    <TableTHelement width="5%">WC</TableTHelement>
-                                    <TableTHelement width="5%">Urinal</TableTHelement>
-                                    <TableTHelement width="5%">Oppvaskmaskin</TableTHelement>
-                                    <TableTHelement width="5%">Dusjbatteri</TableTHelement>
-                                    <TableTHelement width="5%">Badekar</TableTHelement>
-                                    <TableTHelement width="5%">Vaskemaskin</TableTHelement>
-                                    <TableTHelement width="5%">Tappekran <br />inne</TableTHelement>
-                                    <TableTHelement width="5%">Tappekran <br />ute</TableTHelement>
-                                    <TableTHelement width="5%">Brannskap</TableTHelement>
-                                    <TableTHelement width="5%">Sluk<br />75mm</TableTHelement>
-                                    <TableTHelement width="5%">Sluk<br />110mm</TableTHelement>
-                                </tr>
-                            </thead>
-                        </TableHeader>
-                        {
-                            buildingDataLoading ? (
-                                <LoadingSpinner text="utstyr" />
-                            ) : (
-                                <>
-                                    {
-                                        floors && floors.map(floor => (
-                                            <React.Fragment key={floor}>
-                                                <TableWrapper floor={floor}>
-                                                    <Table>
+                            <TableHeader>
+                                <TableTHelement width="2%" text="#" />
+                                <TableTHelement width="12%">Rom</TableTHelement>
+                                <TableTHelement width="5%">Sjakt</TableTHelement>
+                                <TableTHelement width="5%">1/14" servant</TableTHelement>
+                                <TableTHelement width="5%">1" servant</TableTHelement>
+                                <TableTHelement width="5%">Drikkefontene</TableTHelement>
+                                <TableTHelement width="5%">Utslagsvask</TableTHelement>
+                                <TableTHelement width="5%">WC</TableTHelement>
+                                <TableTHelement width="5%">Urinal</TableTHelement>
+                                <TableTHelement width="5%">Oppvaskmaskin</TableTHelement>
+                                <TableTHelement width="5%">Dusjbatteri</TableTHelement>
+                                <TableTHelement width="5%">Badekar</TableTHelement>
+                                <TableTHelement width="5%">Vaskemaskin</TableTHelement>
+                                <TableTHelement width="5%">Tappekran <br />inne</TableTHelement>
+                                <TableTHelement width="5%">Tappekran <br />ute</TableTHelement>
+                                <TableTHelement width="5%">Brannskap</TableTHelement>
+                                <TableTHelement width="5%">Sluk<br />75mm</TableTHelement>
+                                <TableTHelement width="5%">Sluk<br />110mm</TableTHelement>
+                            </TableHeader>
+                            {
+                                buildingDataLoading ? (
+                                    <LoadingSpinner text="utstyr" />
+                                ) : (
+                                    <>
+                                        {
+                                            floors && floors.map(floor => (
+                                                <React.Fragment key={floor}>
+                                                    <TableWrapper collapseAll={collapseAll} floor={floor}>
                                                         <tbody>
                                                             {
                                                                 roomData?.data && (
@@ -95,16 +91,15 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                                                                 )
                                                             }
                                                         </tbody>
-                                                    </Table>
-                                                </TableWrapper>
-                                            </React.Fragment>
-                                        ))
-                                    }
-                                </>
-                            )
-                        }
+                                                    </TableWrapper>
+                                                </React.Fragment>
+                                            ))
+                                        }
+                                    </>
+                                )
+                            }
 
-                        {/*                         <div style={{ marginBottom: "30px" }}>
+                            {/*                         <div style={{ marginBottom: "30px" }}>
                             <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color dark:bg-dark-secondary-color shadow-lg shadow-background-shade mb-5">
                                 <Table>
                                     <tfoot>
@@ -132,7 +127,7 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                                 </Table>
                             </div>
                         </div> */}
-                    </TableContainer>
+                        </TableContainer>
                     </>
                 )
             }

@@ -4,6 +4,7 @@ function TableSelect(props) {
             value={props.value}
             name={props.name}
             className="
+            cursor-pointer
             top-0
             bottom-0
             w-full
@@ -17,11 +18,9 @@ function TableSelect(props) {
             text-primary-color
             dark:text-dark-primary-color
             text-sm
-            transition
-            duration-200 
-            hover:border-form-element-hover
-            hover:dark:border-dark-form-element-hover"
-            onChange={props.changeFunction}>
+            "
+            onChange={props.changeFunction}
+            >
             {props.children}
         </select>
     );

@@ -148,7 +148,7 @@ function UserProfile() {
                                 <h2 className="text-grey-text dark:text-dark-grey-text">Dine prosjekter</h2>
                             </div>
                             <div className="flex flex-1 justify-end items-center">
-                                <BookMarkIcon />
+                                <BookMarkIcon width={20} height={20} primary={true} />
                             </div>
                         </div>
                         <div className="flex flex-col">
@@ -176,7 +176,7 @@ function UserProfile() {
                                                                 </Link>
                                                             </div>
                                                             <div className="flex flex-1 justify-end">
-                                                                <button className="hover:text-accent-color font-semibold hover:dark:text-dark-accent-color" onClick={(e) => handleDeleteClick(e, data.data.user_favs[key].uid)}>Fjern</button>
+                                                                <button className="text-accent-color dark:text-dark-accent-color hover:text-primary-color font-semibold hover:dark:text-dark-primary-color transition duration-300" onClick={(e) => handleDeleteClick(e, data.data.user_favs[key].uid)}>Fjern</button>
                                                             </div>
                                                         </div>
                                                     ))
@@ -195,7 +195,7 @@ function UserProfile() {
                                 <h2 className="text-grey-text dark:text-dark-grey-text mb-3">Bytt passord</h2>
                             </div>
                             <div className="flex flex-1 justify-end items-center">
-                                <EditIcon dimension="20" />
+                                <EditIcon width={20} height={20} primary={true} />
                             </div>
                         </div>
 

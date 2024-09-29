@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 // Hooks
 import useFetch from '../../hooks/useFetch'
@@ -17,6 +17,7 @@ import MessageBox from '../../layout/MessageBox.jsx';
 
 function Ventilation() {
     const { projectId } = useParams();
+    const [searchParams] = useSearchParams();
 
     // Initial fetch of data
     const { data: buildingData, loading, error } = useFetch(`/project_api/${projectId}/buildings/get_project_buildings/`);

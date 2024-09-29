@@ -6,7 +6,6 @@ import useFetch from '../../hooks/useFetch'
 
 // Components
 import RoomTableRowComponent from "./RoomTableRowComponent";
-import Table from '../../layout/tableelements/Table.jsx';
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
@@ -22,6 +21,7 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, newRoomData }) 
     const { data: buildingData, refetch: refetchBuilding } = useFetch(`/project_api/${projectId}/buildings/get_building/${buildingUid}/`);
 
     const [floors, setFloors] = useState([]);
+    const [collapseAll, setCollapseAll] = useState(true);
 
     useEffect(() => {
         if (buildingData?.success === true) {
@@ -45,47 +45,41 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, newRoomData }) 
                     <LoadingSpinner text="rom" />
                 ) : (
                     <>
-                        <TableTop title={title} sections={sections} />
+                        <TableTop collapseAll={collapseAll} setCollapseAll={setCollapseAll} title={title} sections={sections} />
                         <TableContainer>
                             <TableHeader>
-                                <thead>
-                                    <tr>
-                                        <TableTHelement width="2%" text="#" />
-                                        <TableTHelement width="12%" text="Bygg" />
-                                        <TableTHelement width="10%" text="Romnr" />
-                                        <TableTHelement width="15%" text="Romtype" />
-                                        <TableTHelement width="10%" text="Romnavn" />
-                                        <TableTHelement width="5%" text="Areal" />
-                                        <TableTHelement width="5%" text="Personer" />
-                                        <TableTHelement width="30%" text="Kommentarer" />
-                                        <TableTHelement width="10%" text="Slett Rom" />
-                                    </tr>
-                                </thead>
+                                <TableTHelement width="2%" text="#" />
+                                <TableTHelement width="12%" text="Bygg" />
+                                <TableTHelement width="10%" text="Romnr" />
+                                <TableTHelement width="15%" text="Romtype" />
+                                <TableTHelement width="10%" text="Romnavn" />
+                                <TableTHelement width="5%" text="Areal" />
+                                <TableTHelement width="5%" text="Personer" />
+                                <TableTHelement width="30%" text="Kommentarer" />
+                                <TableTHelement width="10%" text="Slett Rom" />
                             </TableHeader>
                             {
                                 floors && floors.map(floor => (
                                     <React.Fragment key={floor}>
-                                        <TableWrapper floor={floor}>
-                                            <Table>
-                                                <tbody>
-                                                    {
-                                                        roomData?.data && (
-                                                            Object.entries(roomData.data)
-                                                                .filter(([key, room]) => room.Floor === floor)
-                                                                .sort(([, roomA], [, roomB]) => {
-                                                                    return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
-                                                                        numeric: true,
-                                                                        sensitivity: "base"
-                                                                    });
-                                                                })
-                                                                .map(([key, room], index) => (
-                                                                    <RoomTableRowComponent index={index} key={room.uid} allRoomData={room} totalColumns={9} roomId={room.uid} />
-                                                                )
+                                        <TableWrapper collapseAll={collapseAll} floor={floor}>
+                                            <tbody>
+                                                {
+                                                    roomData?.data && (
+                                                        Object.entries(roomData.data)
+                                                            .filter(([key, room]) => room.Floor === floor)
+                                                            .sort(([, roomA], [, roomB]) => {
+                                                                return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
+                                                                    numeric: true,
+                                                                    sensitivity: "base"
+                                                                });
+                                                            })
+                                                            .map(([key, room], index) => (
+                                                                <RoomTableRowComponent index={index} key={room.uid} allRoomData={room} totalColumns={9} roomId={room.uid} />
                                                             )
-                                                        )
-                                                    }
-                                                </tbody>
-                                            </Table>
+                                                            )
+                                                    )
+                                                }
+                                            </tbody>
                                         </TableWrapper>
                                     </React.Fragment>
                                 ))}

@@ -13,7 +13,7 @@
     @apply no-underline text-accent-color dark:text-dark-accent-color;
   }
   a:hover {
-    @apply underline;
+    @apply text-primary-color dark:text-dark-primary-color transition duration-300;
   }
 
   h2 {
@@ -31,7 +31,7 @@
 
 @layer components {
   .slider {
-    @apply absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-tertiary-color dark:bg-dark-tertiary-color transition duration-300 border border-accent-color dark:border-dark-accent-color rounded-[20px];
+    @apply absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-tertiary-color dark:bg-dark-tertiary-color transition duration-300 border border-accent-color dark:border-dark-accent-color rounded-[20px] hover:border-primary-color hover:dark:border-dark-primary-color;
   }
 
   .slider::before {
@@ -39,12 +39,12 @@
   }
 
   input:checked + .slider {
-    @apply bg-tertiary-color;
+    @apply bg-tertiary-color dark:bg-dark-tertiary-color;
   }
   
   input:checked + .slider::before {
     @apply transform translate-x-5;
-  }
+  }  
   
 }
 .app-container {

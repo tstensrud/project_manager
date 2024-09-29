@@ -5,7 +5,6 @@ import useFetch from '../../hooks/useFetch.jsx'
 import { customSortFloors } from '../../utils/customSortFloors.js'
 
 //Components
-import Table from '../../layout/tableelements/Table.jsx';
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableContainer from '../../layout/tableelements/TableContainer.jsx';
@@ -22,6 +21,7 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
     const { data: buildingData, refetch: buildingReFetch } = useFetch(`/project_api/${projectId}/cooling/building_data/${buildingUid}/`);
 
     const [floors, setFloors] = useState([]);
+    const [collapseAll, setCollapseAll] = useState(true);
 
     useEffect(() => {
         if (buildingData?.success === true) {
@@ -38,39 +38,33 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
     return (
         <>
             {
-                loading && <LoadingSpinner text="rom" />
-            }
-            {
-                !loading && (
+                loading ? (
+                    <LoadingSpinner text="rom" />
+                ) : (
                     <>
-                    <TableTop title={title} sections={sections} />
-                    <TableContainer>
-                        <TableHeader>
-                            <thead>
-                                <tr>
-                                    <TableTHelement width="2%" text="#" />
-                                    <TableTHelement width="5%">Romnr</TableTHelement>
-                                    <TableTHelement width="5%">Romtemp <br /> &#176;C</TableTHelement>
-                                    <TableTHelement width="5%">Temp vent<br /> &#176;C</TableTHelement>
-                                    <TableTHelement width="5%">W/Pers</TableTHelement>
-                                    <TableTHelement width="5%">Lys<br /> W/m<sup>2</sup></TableTHelement>
-                                    <TableTHelement width="5%">Ustyr<br /> W/m<sup>2</sup></TableTHelement>
-                                    <TableTHelement width="5%">Soltilskudd<br /> W/m<sup>2</sup></TableTHelement>
-                                    <TableTHelement width="5%">Solreduksjon<br /> (0-1,0)</TableTHelement>
-                                    <TableTHelement width="5%">&#8721; Internlast<br /> W</TableTHelement>
-                                    <TableTHelement width="5%">Kjøling utstyr<br /> W</TableTHelement>
-                                    <TableTHelement width="5%">&#8721; kjøling<br /> W</TableTHelement>
-                                    <TableTHelement width="5%">Ekstra vent. <br />m<sup>3</sup>/h</TableTHelement>
-                                    <TableTHelement width="34%">Merknad</TableTHelement>
-                                </tr>
-                            </thead>
-                        </TableHeader>
+                        <TableTop collapseAll={collapseAll} setCollapseAll={setCollapseAll} title={title} sections={sections} />
+                        <TableContainer>
+                            <TableHeader>
+                                <TableTHelement width="2%" text="#" />
+                                <TableTHelement width="5%">Romnr</TableTHelement>
+                                <TableTHelement width="5%">Romtemp <br /> &#176;C</TableTHelement>
+                                <TableTHelement width="5%">Temp vent<br /> &#176;C</TableTHelement>
+                                <TableTHelement width="5%">W/Pers</TableTHelement>
+                                <TableTHelement width="5%">Lys<br /> W/m<sup>2</sup></TableTHelement>
+                                <TableTHelement width="5%">Ustyr<br /> W/m<sup>2</sup></TableTHelement>
+                                <TableTHelement width="5%">Soltilskudd<br /> W/m<sup>2</sup></TableTHelement>
+                                <TableTHelement width="5%">Solreduksjon<br /> (0-1,0)</TableTHelement>
+                                <TableTHelement width="5%">&#8721; Internlast<br /> W</TableTHelement>
+                                <TableTHelement width="5%">Kjøling utstyr<br /> W</TableTHelement>
+                                <TableTHelement width="5%">&#8721; kjøling<br /> W</TableTHelement>
+                                <TableTHelement width="5%">Ekstra vent. <br />m<sup>3</sup>/h</TableTHelement>
+                                <TableTHelement width="34%">Merknad</TableTHelement>
+                            </TableHeader>
 
-                        {
-                            floors && floors.map(floor => (
-                                <React.Fragment key={floor}>
-                                    <TableWrapper floor={floor}>
-                                        <Table>
+                            {
+                                floors && floors.map(floor => (
+                                    <React.Fragment key={floor}>
+                                        <TableWrapper collapseAll={collapseAll} floor={floor}>
                                             <tbody>
                                                 {
                                                     roomData?.data && (
@@ -88,13 +82,11 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                                     )
                                                 }
                                             </tbody>
-                                        </Table>
-                                    </TableWrapper>
-                                </React.Fragment>
-                            ))
-                        }
-
-                    </TableContainer>
+                                        </TableWrapper>
+                                    </React.Fragment>
+                                ))
+                            }
+                        </TableContainer>
                     </>
                 )
             }

@@ -52,7 +52,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
             heatingRefetch();
             buildingReFetch();
         }
-    },[response])
+    }, [response])
 
     // Handlers
     const handleEdit = (cellName) => {
@@ -105,7 +105,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
             }
         </TableTDelement>
     );
-    
+
     return (
         <>
             {showRoomData ? <RoomData buildingData={buildingData} roomData={allRoomData} heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
@@ -120,11 +120,13 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                                 <MarkRowIcon />
                             </TableTDelement>
                             <TableTDelement pointer={true} width="5%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
-                                <div className="text-accent-color dark:text-dark-accent-color font-semibold">
-                                    {heatingData ? heatingData.room_data.RoomNumber : ''}
-                                </div>
-                                <div className="text-grey-text dark:text-dark-grey-text uppercase font-semibold">
-                                    {heatingData ? heatingData.room_data.RoomName : ''}
+                                <div className="flex flex-col">
+                                    <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
+                                        {heatingData && heatingData.room_data.RoomNumber}
+                                    </div>
+                                    <div className="text-grey-text dark:text-dark-grey-text uppercase">
+                                        {heatingData && heatingData.room_data.RoomName}
+                                    </div>
                                 </div>
                             </TableTDelement>
                             {renderEditableCell("RoomHeight", "5%")}
@@ -139,7 +141,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                                     {heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}
                                 </strong>
                             </TableTDelement>
-                            
+
                             <TableTDelement width="5%">
                                 {heatingData ? heatingData.heating_data.ChosenHeating : ''}
                             </TableTDelement>

@@ -14,7 +14,6 @@ function Specifications() {
 
     const { data, loading, error, refetch } = useFetch(`/specifications/get_specifications/`);
 
-    console.log(data)
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Kravspesifikasjoner"} projectName={""} projectNumber={""} />
@@ -38,13 +37,13 @@ function Specifications() {
                                             <table>
                                                 <thead>
                                                     <tr className="bg-tertiary-color border-default-border-color dark:bg-dark-tertiary-color border-b dark:border-b-dark-default-border-color">
-                                                        <th className="pt-1 pb-1 pl-3">
+                                                        <th className="pt-1 pb-1 pl-3 text-start">
                                                             Kravspesifikasjon
                                                         </th>
                                                         <th className="pt-1 pb-1">
                                                             Opprettet
                                                         </th>
-                                                        <th className="pt-1 pb-1 pr-3">
+                                                        <th className="pt-1 pb-1 pr-3 text-end">
                                                             Opprettet av
                                                         </th>
                                                     </tr>
@@ -53,14 +52,14 @@ function Specifications() {
                                                     {
                                                         data?.success === true ? (
                                                             Object.keys(data.data).map((key, index) => (
-                                                                <tr className="hover:dark:bg-table-hover hover:bg-table-hover border-default-border-color border-b dark:border-b-dark-default-border-color" key={index}>
+                                                                <tr className="border-default-border-color border-b dark:border-b-dark-default-border-color" key={index}>
                                                                     <td className="pt-1 pb-1 pl-3">
                                                                         <Link to={`/specifications/${data.data[key].uid}/`}>{data.data[key].name}</Link>
                                                                     </td>
-                                                                    <td className="pt-1 pb-1">
+                                                                    <td className="pt-1 pb-1 text-center">
                                                                         {data.data[key].created_at}
                                                                     </td>
-                                                                    <td className="pt-1 pb-1 pr-3">
+                                                                    <td className="pt-1 pb-1 pr-3 text-end">
                                                                         {data.data[key].created_by}
                                                                     </td>
                                                                 </tr>

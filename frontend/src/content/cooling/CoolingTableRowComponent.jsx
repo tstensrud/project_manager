@@ -139,11 +139,13 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
                                 <MarkRowIcon />
                             </TableTDelement>
                             <TableTDelement width="5%">
-                                <div>
-                                    {coolingData ? coolingData.room_data.RoomNumber : ''}
-                                </div>
-                                <div className="text-grey-text dark:text-dark-grey-text">
-                                    {coolingData ? coolingData.room_data.RoomName : ''}
+                            <div className="flex flex-col">
+                                    <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
+                                        {coolingData && coolingData.room_data.RoomNumber}
+                                    </div>
+                                    <div className="text-grey-text dark:text-dark-grey-text uppercase">
+                                        {coolingData && coolingData.room_data.RoomName}
+                                    </div>
                                 </div>
                             </TableTDelement>
                             {renderEditableCell("RoomTempSummer", "5%")}

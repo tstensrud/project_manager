@@ -10,6 +10,7 @@ import useUpdateSystem from '../../hooks/useUpdateSystem';
 import RoomData from './RoomData';
 import MessageBox from '../../layout/MessageBox';
 import LoadingRow from '../../layout/tableelements/LoadingRow.jsx';
+import MarkedRow from "../../layout/tableelements/MarkedRow.jsx";
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -34,8 +35,8 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
     const [currentSystemId, setCurrentSystemId] = useState('');
     const [currentSystemName, setCurrentSystemName] = useState('');
 
-    // Marking a row
-    const [markedRow, setMarkedRow] = useState('');
+    // Row marking
+    const [markedRow, setMarkedRow] = useState(false);
 
     // Roomdata
     const [showRoomData, setShowRoomData] = useState(false);
@@ -102,12 +103,12 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
     };
 
     const handleOnMarkedRow = () => {
-        if (markedRow === '') {
-            setMarkedRow('bg-marked-row dark:bg-dark-marked-row text-primary-color dark:text-dark-primary-color hover:bg-marked-row dark:hover:bg-dark-marked-row');
+        if (markedRow === false) {
+            setMarkedRow(true)
         } else {
-            setMarkedRow('');
+            setMarkedRow(false);
         }
-    }
+    };
 
     const renderEditableCell = (cellName, cellClass, width) => (
         <TableTDelement cellClass={cellClass} pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
@@ -160,34 +161,31 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
 
         return minimumAir.toFixed(0);
     }
-    
+
     return (
         <>
             {showRoomData ? <RoomData roomData={allRoomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
             {response?.success === false && <MessageBox message={response.message} />}
             {systemResponse?.success === false && <MessageBox message={systemResponse.message} />}
             {ventError && <MessageBox message={ventError} />}
-            <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
+            <MarkedRow markedRow={markedRow}>
                 {
                     ventLoading || updateRoomLoading ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
-
                             <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
                                 <MarkRowIcon />
                             </TableTDelement>
-
                             <TableTDelement pointer={true} width="10%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
-                                <strong>
-                                    <span className="text-accent-color dark:text-dark-accent-color">
-                                        {allRoomData ? allRoomData.RoomNumber : ''}
-                                    </span>
-                                </strong>
-                                <br />
-                                <span className="text-grey-text dark:text-dark-grey-text uppercase">
-                                    {allRoomData ? allRoomData.RoomName : ''}
-                                </span>
+                                <div className="flex flex-col">
+                                    <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
+                                        {allRoomData && allRoomData.RoomNumber}
+                                    </div>
+                                    <div className="text-grey-text dark:text-dark-grey-text uppercase">
+                                        {allRoomData && allRoomData.RoomName}
+                                    </div>
+                                </div>
                             </TableTDelement>
                             <TableTDelement width="6%">
                                 {ventData ? (ventData.vent_data.AirPersonSum).toFixed(0) : ''}
@@ -211,11 +209,11 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                             </TableTDelement>
                             <TableTDelement width="6%">
                                 <TableSelect value={currentSystemName} name="systemUid" changeFunction={handleSystemChange}>
-                                    {currentSystemName && currentSystemName !== null ? (<option key="0">{currentSystemName}</option>) : ''}
+                                    {currentSystemName ? (<option key="0">{currentSystemName}</option>) : ''}
                                     {
-                                    systems?.systems_data && Object.keys(systems.systems_data).map((key, index) => (
-                                        <option key={index} value={systems.systems_data[key].uid}>{systems.systems_data[key].SystemName}</option>
-                                    ))
+                                        systems?.systems_data && Object.keys(systems.systems_data).map((key, index) => (
+                                            <option key={index} value={systems.systems_data[key].uid}>{systems.systems_data[key].SystemName}</option>
+                                        ))
                                     }
                                 </TableSelect>
                             </TableTDelement>
@@ -223,7 +221,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                                 <div className="flex flex-row w-full">
                                     <div className="text-start pl-2 animate-fade w-44">
                                         {
-                                            systemResponse?.success === true && systemResponse.message
+                                            systemResponse?.success && systemResponse.message
                                         }
                                     </div>
                                     <div className="flex flex-row">
@@ -244,7 +242,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                         </>
                     )
                 }
-            </tr>
+            </MarkedRow>
         </>
     );
 }

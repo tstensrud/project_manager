@@ -54,12 +54,14 @@ function ProjectSummary({ projectId, projectData }) {
                             <div className="flex flex-1 justify-end h-full">
                                 {
                                     !isFav && (
-                                        <div className="flex flex-row h-full items-center">
-                                            <div className="flex text-center items-center h-full pr-5">
-                                                <Link to="#" onClick={handleSetFav}>Sett som favoritt</Link>
+                                        <div onClick={handleSetFav} className="group cursor-pointer flex flex-row h-full items-center hover:text-primary-color hover:dark:text-dark-primary-color">
+                                            <div className="flex text-accent-color dark:text-dark-accent-color transition duration-300 text-center items-center h-full pr-3 group-hover:text-primary-color group-hover:dark:text-dark-primary-color">
+                                                Sett som favoritt
                                             </div>
                                             <div className="flex items-center h-full">
-                                                <BookMarkIcon />
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2" className="stroke-accent-color dark:stroke-dark-accent-color fill-none group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color transition duration-300" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                                                </svg>
                                             </div>
                                         </div>
                                     )

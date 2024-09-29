@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
-import { Link } from 'react-router-dom';
 import { GlobalContext } from '../../GlobalContext';
 
 // Hooks
@@ -48,7 +47,7 @@ function Navbar() {
     return (
         <>
             {
-                activeProject !== "0" && activeProject !== null && activeProject !== undefined ? (
+                activeProject && activeProject !== "0" && (
                     <>
                         {
                             displayMenuContainer && (
@@ -96,7 +95,8 @@ function Navbar() {
                                 </>
                             )
                         }
-                    </>) : (<></>)
+                    </>
+                )
             }
 
             {
@@ -153,7 +153,7 @@ function Navbar() {
 
                 <div className="flex w-[60%] h-full justify-center items-center">
                     {
-                        activeProjectName && activeProjectName && (
+                        activeProjectName && (
                             <div className="flex items-center justify-center text-center uppercase bg-primary-color dark:bg-dark-tertiary-color rounded-3xl pl-10 pr-10 mt-1 mb-1 text-3xl font-semibold text-secondary-color dark:text-dark-primary-color">
                                 {activeProjectName}
                             </div>

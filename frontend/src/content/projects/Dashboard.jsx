@@ -96,7 +96,7 @@ function Dashboard() {
                                     return numA - numB;
                                   })
                                   .map((key, index) => (
-                                    <tr onClick={() => navigate(`/project/${data.data[key].uid}/`)} className="hover:dark:bg-dark-table-hover cursor-pointer hover:bg-table-hover border-default-border-color border-b dark:border-b-dark-default-border-color text-primary-color dark:text-dark-primary-color hover:no-underline hover:text-accent-color hover:dark:text-dark-accent-color" key={index}>
+                                    <tr onClick={() => navigate(`/project/${data.data[key].uid}/`)} className="cursor-pointer border-default-border-color border-b dark:border-b-dark-default-border-color text-primary-color dark:text-dark-primary-color hover:no-underline hover:text-accent-color hover:dark:text-dark-accent-color transition duration-300" key={index}>
                                       <td className="pt-1 pb-1 pl-3 pr-3 min-w-[300px] max-w-[300px] w-[300px]">
 
                                         {data.data[key].ProjectNumber}
@@ -121,7 +121,7 @@ function Dashboard() {
                               {
                                 searchData?.success === true &&
                                 searchData?.data && Object.keys(searchData.data).map((key, index) => (
-                                  <tr onClick={() => navigate(`/project/${searchData.data[key].uid}/`)} className="hover:dark:bg-table-hover cursor-pointer hover:bg-table-hover border-default-border-color border-b dark:border-b-dark-default-border-color text-primary-color dark:text-dark-primary-color hover:no-underline hover:text-accent-color hover:dark:text-dark-accent-color" key={index}>
+                                  <tr onClick={() => navigate(`/project/${searchData.data[key].uid}/`)} className="cursor-pointer border-default-border-color border-b dark:border-b-dark-default-border-color text-primary-color dark:text-dark-primary-color hover:no-underline hover:text-accent-color hover:dark:text-dark-accent-color transition duration-300" key={index}>
                                     <td className="pt-1 pb-1 pl-3 pr-3 min-w-[300px] max-w-[300px] w-[300px]">
                                       {searchData.data[key].ProjectNumber}
                                     </td>
