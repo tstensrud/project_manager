@@ -2,7 +2,7 @@ import { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Hooks ++
-import { GlobalContext } from '../../GlobalContext';
+import { GlobalContext } from '../../context/GlobalContext';
 import useSubmitData from '../../hooks/useSubmitData'
 
 // Components

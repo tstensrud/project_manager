@@ -1,13 +1,11 @@
 import { useEffect } from 'react'
+import { auth } from '../../../utils/firebase.js';
 
 // hooks
 import useFetch from '../../../hooks/useFetch'
 import useUpdateData from '../../../hooks/useUpdateData.jsx';
 
-// components
-import SearchInput from '../../../layout/formelements/SearchInput.jsx';
-
-function UserList({newUserFlag}) {
+function UserList({ newUserFlag }) {
     const { data: userData, loading: userDataLoading, refetch: userDataRefetch } = useFetch(`/user/all_users/`);
     const { response: activeStatusResponse, data: activeStatusData, setData: setActiveStatus, handleSubmit: submitActiveStatus } = useUpdateData(`/user/change_user_status/`);
 
@@ -26,7 +24,7 @@ function UserList({newUserFlag}) {
 
     useEffect(() => {
         userDataRefetch();
-    },[newUserFlag])
+    }, [newUserFlag])
 
 
     const handleActiveStatus = (e, uuid) => {
@@ -42,13 +40,13 @@ function UserList({newUserFlag}) {
                         <thead>
                             <tr className="border-default-border-color text-grey-text dark:text-dark-grey-text  border-b dark:border-b-dark-default-border-color w-56">
                                 <th className="pt-1 pb-1 pl-3 min-w-[300px] max-w-[300px] w-[300px] text-start">
-                                    Brukernavn
+                                    Navn
                                 </th>
                                 <th className="pt-1 pb-1 min-w-[400px] max-w-[400px] w-[400px] text-start">
                                     Epost
                                 </th>
                                 <th className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-start">
-                                    Innlogget
+                                    Sist innlogget
                                 </th>
                                 <th className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-start">
                                     Admin
@@ -74,35 +72,36 @@ function UserList({newUserFlag}) {
                                     Object.keys(userData.data).map((key, index) => (
                                         <tr key={index} className="hover:bg-table-hover dark:hover:bg-dark-table-hover">
                                             <td className="pt-1 pb-1 pl-3 min-w-[300px] max-w-[300px] w-[300px] text-start">
-                                                {userData.data[key].name}
+                                                {userData.data[key]["server"].name}
                                             </td>
                                             <td className="pt-1 pb-1 min-w-[400px] max-w-[400px] w-[400px]">
-                                                {userData.data[key].email}
+                                                {userData.data[key]["server"].email}
                                             </td>
                                             <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
-                                                {userData.data[key].loggedIn ? 'Ja' : 'Nei'}
+                                                {userData.data[key]["firebase"].last_sign_in_timestamp}
                                             </td>
                                             <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
-                                                {userData.data[key].admin ? 'Ja' : 'Nei'}
+                                                {userData.data[key]["server"].admin ? 'Ja' : 'Nei'}
                                             </td>
                                             <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
-                                                {userData.data[key].isActive ? 'Ja' : 'Nei'}
+                                                {userData.data[key]["server"].disabled ? 'Nei' : 'Ja'}
                                             </td>
                                             <td className="pt-1 pb-1 pr-3 min-w-[150px] max-w-[150px] w-[150px] text-end">
-                                                <button onClick={(e) => handleActiveStatus(e, userData.data[key].uuid)} className="font-semibold hover:text-accent-accent-color dark:hover:text-dark-accent-color">
+                                                <button onClick={(e) => handleActiveStatus(e, userData.data[key]["firebase"].uid)} className="font-semibold hover:text-accent-accent-color dark:hover:text-dark-accent-color">
                                                     {
-                                                        userData.data[key].isActive ? 'Deaktiver' : 'Aktiver'
+                                                        userData.data[key]["firebase"].disabled ? 'Aktiver' : 'Deaktiver'
                                                     }
                                                 </button>
                                             </td>
                                             <td className="pt-1 pb-1 pr-3 min-w-[300px] max-w-[300px] w-[300px] text-end">
-                                                <a href={`https://tstensrud.github.io/project_manager/#/register/${userData.data[key].uuid}`} target="_blank">{userData.data[key].uuid}</a>
+                                                {userData.data[key]["firebase"].uid}
                                             </td>
                                             <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-end">
                                                 <button disabled>Slett</button>
                                             </td>
                                         </tr>
-                                    ))
+                                    )
+                                    )
                                 )
                             }
                         </tbody>

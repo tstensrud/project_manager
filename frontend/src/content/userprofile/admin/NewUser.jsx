@@ -72,7 +72,7 @@ function NewUser({ newUserFlag, setNewUserFlag }) {
                     {
                         newUserResponse?.success === true && (
                             <div className="flex h-full items-center mt-3">
-                               Ny bruker opprettet: <div className="ml-5 text-accent-color dark:text-dark-accent-color">https://tstensrud.github.io/project_manager/#/register/{newUserResponse.data}</div>
+                               Ny bruker opprettet. Epost med passord er sendt.
                             </div>
                         )
                     }

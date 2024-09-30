@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GlobalContext } from '../../GlobalContext';
+import { GlobalContext } from '../../context/GlobalContext';
 
 function DarkmodeContainer() {
     const {darkMode, setDarkMode }= useContext(GlobalContext);

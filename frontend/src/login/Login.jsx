@@ -1,49 +1,53 @@
 import { useState, useContext } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { GlobalContext } from '../GlobalContext';
-import { BASE_URL } from '../utils/globals.js'
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+
+import { AuthContext } from '../context/AuthContext.jsx';
+
 import LoadingSpinner from '../layout/LoadingSpinner.jsx';
 
 function Login(props) {
-    const { setUserUuid, setUserName } = useContext(GlobalContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState();
     const [loading, setLoading] = useState(false);
-    const [response, setResponse] = useState("");
     const navigate = useNavigate();
 
-    function logMeIn(e) {
-        e.preventDefault();
-        setLoading(true);
+    const { dispatch } = useContext(AuthContext);
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
-        axios({
-            method: "POST",
-            url: `${BASE_URL}/token/`,
-            data: {
-                email: email,
-                password: password
-            }
-        })
-            .then((response) => {
-                if (response?.data?.success === true) {
-                    props.setToken(response.data.access_token);
-                    setUserUuid(response.data.uuid);
-                    setUserName(response.data.username);
-                    navigate("/userprofile");
-                }
-            }).catch((error) => {
-                if (error.response) {
-                    setResponse(error.response.data.message);
-                }
+
+    const firebaseLogin = async (e) => {
+        e.preventDefault();
+        const auth = getAuth();
+        setLoading(true);
+        await signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                dispatch({ type: "LOGIN", payload: user })
+                navigate("/userprofile");
             })
-            .finally(() => {
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                setError(true);
+                setErrorMessage(errorMessage);
                 setLoading(false);
             });
+    }
 
-        setEmail("");
-        setPassword("");
+    const handleForgotPassword = (e) => {
+        e.preventDefault();
+        const auth = getAuth();
+        sendPasswordResetEmail(auth, email)
+        .then(() => {
+            setErrorMessage(`Følg instruksjoner sendt til ${email}`);
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMessage(errorMessage);
+        })
     }
 
     return (
@@ -56,7 +60,7 @@ function Login(props) {
                         </svg>
                     </div>
                     <div className="flex flex-col items-center justify-start pl-20 pr-20 h-full pt-10">
-                        <form onSubmit={logMeIn}>
+                        <form>
                             <div>
                                 <div className="text-2xl">
                                     Structor TS prosjekter
@@ -70,7 +74,7 @@ function Login(props) {
 
                                 <div className="flex flex-col mt-3 justify-center">
                                     <div className="mb-5">
-                                        <button className="border-2 border-dark-form-border-color bg-dark-form-background-color text-dark-primary-color rounded-3xl pt-2 pb-2 pl-5 pr-5 focus:border-dark-form-focus-border-color focus:outline-none hover:border-dark-form-element-hover" type="submit">
+                                        <button onClick={firebaseLogin} className="border-2 border-dark-form-border-color bg-dark-form-background-color text-dark-primary-color rounded-3xl pt-2 pb-2 pl-5 pr-5 focus:border-dark-form-focus-border-color focus:outline-none hover:border-dark-form-element-hover" type="submit">
                                             Logg inn
                                         </button>
                                     </div>
@@ -85,12 +89,16 @@ function Login(props) {
                             </div>
                         </form>
                         <div className="mt-3">
-                            {response && (<div className="text-accent-color dark:text-dark-accent-color">{response}</div>)}
-                        </div>
-                        <div className="mt-3 mb-3">
-                            Kontakt admin hvis du mangler konto
-                            <br />
-                            torbjorn.stensrud@structor.no
+                            {error &&
+                                <div>
+                                    <div>
+                                        {errorMessage}
+                                    </div>
+                                    <div>
+                                        <button onClick={handleForgotPassword} className="hover:text-accent-color hover:dark:text-dark-accent-color">Glemt passord?</button>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

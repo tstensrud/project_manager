@@ -63,20 +63,19 @@ function VentilationTable({ projectId, buildingUid }) {
                                         <TableWrapper collapseAll={collapseAll} floor={floor}>
                                             <tbody>
                                                 {
-                                                    roomData?.data && (
-                                                        Object.entries(roomData.data)
-                                                            .filter(([key, room]) => room.Floor === floor)
-                                                            .sort(([, roomA], [, roomB]) => {
-                                                                return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
-                                                                    numeric: true,
-                                                                    sensitivity: "base"
-                                                                });
-                                                            })
-                                                            .map(([key, room], rowIndex) => (
-                                                                <VentilationTableRowComponent index={rowIndex} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={12} roomId={room.uid} systems={ventSystemData} />
-                                                            )
-                                                            )
-                                                    )
+                                                    roomData?.data &&
+                                                    Object.entries(roomData.data)
+                                                        .filter(([key, room]) => room.Floor === floor)
+                                                        .sort(([, roomA], [, roomB]) => {
+                                                            return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
+                                                                numeric: true,
+                                                                sensitivity: "base"
+                                                            });
+                                                        })
+                                                        .map(([key, room], rowIndex) => (
+                                                            <VentilationTableRowComponent index={rowIndex} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={12} roomId={room.uid} systems={ventSystemData} />
+                                                        )
+                                                        )
                                                 }
 
                                                 <tr className="bg-secondary-color dark:bg-dark-secondary-color">
@@ -164,7 +163,7 @@ function VentilationTable({ projectId, buildingUid }) {
                                     </React.Fragment>
                                 ))
                             }
-                            <TableWrapper>
+                            <table className="text-primary-color dark:text-dark-primary-color text-xs border-none border-collapse w-full max-w-full whitespace-nowrap dark:bg-dark-secondary-color">
                                 <tbody>
                                     <tr>
                                         <TableTDelement width="2%" />
@@ -190,7 +189,7 @@ function VentilationTable({ projectId, buildingUid }) {
                                         <TableTDelement width="34%" />
                                     </tr>
                                 </tbody>
-                            </TableWrapper>
+                            </table>
                         </TableContainer>
                     </>
                 )

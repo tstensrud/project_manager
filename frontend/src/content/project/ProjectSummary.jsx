@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 // Hooks and utils
 import useFetch from '../../hooks/useFetch'
-import { GlobalContext } from '../../GlobalContext';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import StarIcon from '../../assets/svg/starIcon.jsx';

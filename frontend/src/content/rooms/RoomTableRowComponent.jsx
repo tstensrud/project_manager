@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Hooks
 import useSubmitData from '../../hooks/useSubmitData'

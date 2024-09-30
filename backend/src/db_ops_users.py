@@ -1,29 +1,23 @@
+import smtplib
 import string
 import os
 import secrets
-import hashlib
-import smtplib
-from werkzeug.security import generate_password_hash
+from firebase_admin import auth
 from uuid import uuid4
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from . import models, db
 from . import globals
 
-def generate_hashed_url_token(uuid: str):
-    return hashlib.sha256(uuid.encode('utf-8')).hexdigest()
 
-def verify_url_token(provided_token, stored_token):
-    return generate_hashed_url_token(provided_token) == stored_token
-
-def generate_token(length):
-    chars = string.ascii_letters + string.digits
+def generate_password(length: int) -> str:
+    chars = string.ascii_letters + string.digits + string.punctuation
     password = ''.join(secrets.choice(chars) for i in range(length))
     return password
 
-def send_registration_mail(email_adress: str, uuid: str) -> bool:
+def send_registration_mail(email_adress: str, uuid: str, password: str) -> bool:
     subject = "Din brukerkonto i Structor TS"
-    body = f"Gå inn på denne linken for å fullføre registreringen: https://tstensrud.github.io/project_manager/#/register/{uuid}"
+    body = f"Du er registrert i Structor TS sitt beregningsprogram for VVS.\nDitt passord er {password}.\nDu kan bytte dette ved å nullstille passord etter innlogging."
     sender_email = os.getenv('EMAIL')
     password = os.getenv('MAIL_PASSWORD')
     message = MIMEMultipart()
@@ -47,47 +41,32 @@ def send_registration_mail(email_adress: str, uuid: str) -> bool:
         globals.log(f"Could not send email: {e}")
         return False
 
-
-def initialize_new_user(name: str, email: str) -> str:
-    uuid = globals.encode_uid_base64(uuid4())
-    token = generate_hashed_url_token(uuid)
-    timestamp = globals.timestamp()
-    new_user = models.Users(uuid=uuid, name=name, email=email)
-    try:
-        db.session.add(new_user)
-        db.session.commit()
-    except Exception as e:
-        db.session.rollback()
-        globals.log(f"Could not add new new user {e}")
-        return None
-    
-    new_user_reg = models.NewUserRegistration(user_uid=uuid, token_hash=token, timestamp=timestamp)
-    try:
-        db.session.add(new_user_reg)
-        db.session.commit()
-    except Exception as e:
-        globals.log(f"Could not add new user registration: {e}")
-        return False
-    send_email = send_registration_mail(email, uuid)
-    if send_email:
-        return uuid
-    return None
-
-# Set password for first time upon registration
-def set_new_user_password(password: str, uuid: str) -> bool:
-    user = get_user(uuid)
-    user.password = generate_password_hash(password, method='scrypt')
-    new_user_record = get_new_register_record(uuid)
-    if new_user_record:
-        new_user_record.is_revoked = True
-        user.is_active = True
-    try:
-        db.session.commit()
-        return True
-    except Exception as e:
-        db.session.rollback()
-        globals.log(f"Could not set new password {e}")
-        return False
+def create_new_user(name: str, email: str) -> bool:
+    if name and email:
+        try:
+            password = generate_password(10)
+            new_firebase_user = auth.create_user(
+                email=email,
+                email_verified=False,
+                password=password,
+                display_name=name,
+                photo_url=None,
+                disabled=False
+            )
+        except Exception as e:
+            globals.log(f"Could not create firebase user: {e}")
+            return False
+        if new_firebase_user:
+            new_user = models.Users(uuid=new_firebase_user.uid, name=name, email=email)
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            globals.log(f"Could not add new new user {e}")
+            return None
+        send_registration_mail(email_adress=email, uuid=new_firebase_user.uid, password=password)
+    return False
     
 def find_email(email: str) -> bool:
     email = db.session.query(models.Users).filter(models.Users.email == email).first()
@@ -95,12 +74,11 @@ def find_email(email: str) -> bool:
         return True
     return False
 
-def get_new_register_record(uuid: str) -> models.NewUserRegistration:
+""" def get_new_register_record(uuid: str) -> models.NewUserRegistration:
     record = db.session.query(models.NewUserRegistration).filter(models.NewUserRegistration.user_uid == uuid).first()
     if record:
         return record
-    return None
-
+    return None """
 
 def get_user(user_uuid) -> models.Users:
     user = db.session.query(models.Users).filter(models.Users.uuid == user_uuid).first()
@@ -123,17 +101,6 @@ def get_user_data(user_uid) -> dict:
         
         return user_data
     return {}
-
-def update_password(user_uuid: int, password: str) -> bool:
-    user = get_user(user_uuid)
-    user.password = generate_password_hash(password, method='scrypt')
-    try:
-        db.session.commit()
-        return True
-    except Exception as e:
-        db.session.rollback()
-        globals.log(f"Failed update password: {e}")
-        return False
 
 def get_users() -> list[models.Users]:
     users = db.session.query(models.Users).all()

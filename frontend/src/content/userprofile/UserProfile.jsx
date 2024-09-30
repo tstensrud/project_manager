@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect, useContext, useRef } from 'react'
+import { reauthenticateWithCredential, updatePassword, EmailAuthCredential, EmailAuthProvider } from 'firebase/auth';
+import { auth } from '../../utils/firebase.js';
 
 // Hooks and utils
-import { GlobalContext } from '../../GlobalContext';
+import { GlobalContext } from '../../context/GlobalContext';
+import { AuthContext } from '../../context/AuthContext.jsx';
 import useFetch from '../../hooks/useFetch'
 import useDeleteData from '../../hooks/useDeleteData.jsx';
 import useUpdateData from '../../hooks/useUpdateData.jsx';
@@ -23,13 +26,14 @@ import AdminPanel from './admin/AdminPanel.jsx';
 
 function UserProfile() {
     const { userUuid } = useContext(GlobalContext);
+    const { currentUser, idToken, dispatch, loading: authLoading } = useContext(AuthContext);
 
-    const { data, loading, refetch } = useFetch(`/user/`);
+    const { data, loading, refetch } = useFetch(currentUser ? `/user/${currentUser.uid}/` : null);
 
     const [deletedFavUid, setDeletedFavUid] = useState(null);
     const { response: deleteResponse, handleSubmit } = useDeleteData(`/user/remove_fav/${deletedFavUid}/`);
 
-    const { response: passwordUpdateResponse, setData: setPasswordData, handleSubmit: submitNewPassword } = useUpdateData(`/user/change_password/`);
+    const [passwordChangeErrorMsg, setPasswordChangeErrorMsg] = useState("");
 
     // password-states
     const [passwordMatch, setPasswordMatch] = useState(false);
@@ -59,38 +63,40 @@ function UserProfile() {
         }
     }, [newPassword, confirmPass]);
 
-    useEffect(() => {
-        if (passwordMatch) {
-            setPasswordData({
-                old: oldPassword,
-                new: newPassword
-            })
-        } else {
-            setPasswordData({})
-        }
-    }, [passwordMatch]);
-
-    useEffect(() => {
-        setOldPassword('');
-        setNewPassword('');
-        setConfirmPass('');
-        setPasswordData({});
-        setPasswordMatch(false);
-    }, [passwordUpdateResponse]);
-
     // Handlers
     const handleDeleteClick = (e, favToDeleteUid) => {
         e.preventDefault();
         setDeletedFavUid(favToDeleteUid);
     }
-
-    const handleNewPasswordSubmit = async (e) => {
+// [%wc&3n:d+
+    const handleUpdatePassword = (e) => {
         e.preventDefault();
+
+        if (newPassword.length < 6) {
+            setPasswordChangeErrorMsg("Passordet er for kort. Minst 6 tegn");
+            return;
+        }
+
         if (passwordMatch) {
-            await submitNewPassword();
+            const credentials = EmailAuthProvider.credential(currentUser.email, oldPassword)
+
+            reauthenticateWithCredential(currentUser, credentials).then(() => {
+                updatePassword(currentUser, newPassword).then(() => {
+                    console.log("Password updated");
+                }).catch((error) => {
+                    setPasswordChangeErrorMsg("Kunne ikke oppdatere passord")
+                    console.error("Error updating password", error);
+                });
+            })
+            .catch((error) => {
+                console.error("Error re-authentication user", error)
+                if (error.message === "Firebase: Error (auth/invalid-credential).") {
+                    setPasswordChangeErrorMsg("Gammelt passord er feil")
+                }
+            })
         }
     }
-
+    
     return (
         <>
             <SubTitleComponent svg={<AccountIcon />} headerText={`Velkommen tilbake, ${data?.data?.user_info.name}!`} projectName={""} projectNumber={""} />
@@ -199,7 +205,7 @@ function UserProfile() {
                             </div>
                         </div>
 
-                        <form onSubmit={handleNewPasswordSubmit}>
+                        <form onSubmit={handleUpdatePassword}>
                             <div className="flex flex-col mt-1">
                                 <div className="pl-2">
                                     Gammelt passord
@@ -208,6 +214,7 @@ function UserProfile() {
                                     <CardInputField password={true} changeFunction={(e) => setOldPassword(e.target.value)} value={oldPassword} required={true} placeholder="Skriv inn gammelt passord" />
                                 </div>
                             </div>
+
                             <div className="mt-2 flex flex-row">
                                 <div className="flex flex-col mt-1">
                                     <div className="pl-2">
@@ -240,16 +247,9 @@ function UserProfile() {
                                 <CardButton buttonText="Oppdater" />
                             </div>
                             {
-                                passwordUpdateResponse?.success === false && (
+                                passwordChangeErrorMsg !== "" && (
                                     <div className="mt-3">
-                                        Feil: {passwordUpdateResponse.message}
-                                    </div>
-                                )
-                            }
-                            {
-                                passwordUpdateResponse?.success === true && (
-                                    <div className="mt-3">
-                                        {passwordUpdateResponse.message}
+                                        Feil: {passwordChangeErrorMsg}
                                     </div>
                                 )
                             }

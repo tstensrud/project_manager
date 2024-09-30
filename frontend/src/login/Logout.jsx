@@ -1,36 +1,27 @@
-import axios from "axios";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { GlobalContext } from '../GlobalContext';
-import {BASE_URL} from '../utils/globals.js'
+import { signOut } from "firebase/auth";
 
-function Logout(props) {
+import { AuthContext } from "../context/AuthContext";
+import { auth } from "../utils/firebase";
+
+function Logout() {
 
   const navigate = useNavigate();
-  const {userUuid} = useContext(GlobalContext);
-  
-  useEffect(() => {
-    function logMeOut() {
-      axios({
-        method: "POST",
-        url:`${BASE_URL}/logout/${userUuid}/`,
-      })
-      .then((response) => {
-         props.token()
-         navigate('/');
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error.response)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-          }
-      })}
-      logMeOut();
-  }, [props, navigate]);
+  const { currentUser, idToken, dispatch, loading: authLoading } = useContext(AuthContext);
 
-    return(
-      <h1>Du har logget ut</h1>
-    )
+  useEffect(() => {
+    handleLogOut();
+  }, []);
+
+  const handleLogOut = async () => {
+    await signOut(auth).then(() => {
+        dispatch({type: "LOGOUT" });
+        navigate("/");
+    }).catch((error) => {
+        console.log(error);
+    })
+}
 }
 
 export default Logout;

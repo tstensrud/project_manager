@@ -1,4 +1,5 @@
 from datetime import timedelta
+import firebase_admin
 from flask import Flask, request, session
 from flask_sqlalchemy import SQLAlchemy
 from os import path
@@ -6,24 +7,40 @@ from flask_login import LoginManager
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
+from firebase_admin import credentials
 import os
 
-load_dotenv()
 db = SQLAlchemy()
 DB_NAME = "projects.db"
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    jwt = JWTManager(app)
+    load_dotenv()
+
+    firebase_credentials = os.getenv("FIREBASE_CREDENTIALS")
+    if not firebase_credentials:
+        raise ValueError("Firebase crendtials not found")
+    
+    try:
+        if not firebase_admin._apps:
+            cred = credentials.Certificate(firebase_credentials)
+            firebase_admin.initialize_app(cred)
+    except Exception as e:
+        print(f"Error initializing firebase: {e}")
+        raise
+
+
+    #jwt = JWTManager(app)
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-    #app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('EXTERNAL_DB_URL')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('EXTERNAL_DB_URL')
+    #app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
     #app.config['SQLALCHEMY_ECHO'] = True
-    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
+    #app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+    #app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
     #app.config['UPLOAD_FOLDER'] = ".static/excel"
     db.init_app(app)
+
 
         
     from .views import views
@@ -43,15 +60,14 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
 
     from .models import Users
-    create_db(app)
 
-    login_manager = LoginManager()
-    login_manager.login_view = "views.token"
-    login_manager.init_app(app)
+    #login_manager = LoginManager()
+    #login_manager.login_view = "views.token"
+    #login_manager.init_app(app)
 
-    @login_manager.user_loader
-    def load_user(id):
-        return Users.query.get(int(id))
+    #@login_manager.user_loader
+    #def load_user(id):
+    #    return Users.query.get(int(id))
     
     @app.before_request
     def before_request():
@@ -59,12 +75,3 @@ def create_app():
             return '',200
 
     return app
-
-def create_db(app):
-    if not path.exists('romskjema/' + DB_NAME):
-        with app.app_context():
-            db.create_all()
-
-
-
-    

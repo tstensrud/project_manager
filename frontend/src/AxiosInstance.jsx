@@ -1,45 +1,31 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { auth } from './utils/firebase.js';
 import { BASE_URL } from './utils/globals.js';
 
 const AxiosInstance = axios.create({
   baseURL: BASE_URL,
 });
 
-AxiosInstance.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('token');
+AxiosInstance.interceptors.request.use(
+  async (config) => {
+    const user = auth.currentUser;
+    if (user) {
+      const idToken = await user.getIdToken();
+      config.headers.Authorization = `Bearer ${idToken}`;
+    }
+    return config;
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  /*if (config.data instanceof FormData) {
-    config.headers['Content-Type'] = 'multipart/form-data';
-  }*/
-
-  return config;
 }, (error) => {
   return Promise.reject(error);
 });
 
-AxiosInstance.interceptors.response.use((response) => {
-  const data = response.data;
-
-  if (data && data.access_token) {
-    sessionStorage.setItem('token', data.access_token);
-
-    response.config.headers.Authorization = `Bearer ${data.access_token}`;
+AxiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+      if (error.response && error.response.status === 401) {
+          console.error('Unauthorized.');
+      }
+      return Promise.reject(error);
   }
-
-  return response;
-}, (error) => {
-  if (error.response.status === 401) {
-    sessionStorage.removeItem("token");
-    // Handle 401 errors, e.g., redirect to login page
-    window.location.href = '/'
-  }
-
-  return Promise.reject(error);
-});
-
+)
 export default AxiosInstance;

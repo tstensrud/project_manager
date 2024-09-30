@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 
 import { useParams, useNavigate } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Hooks
 import useFetch from '../../hooks/useFetch'

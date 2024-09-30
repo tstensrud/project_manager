@@ -1,4 +1,4 @@
-function FloorTitleBar({ floor, showTable, setShowTable }) {
+function FloorTitleBar({ floor, showTable, setShowTable, shaft }) {
 
     const handleOnCollapseClick = () => {
         setShowTable(!showTable);
@@ -12,7 +12,23 @@ function FloorTitleBar({ floor, showTable, setShowTable }) {
                         <polyline points="18 15 12 9 6 15"></polyline>
                     </svg>
                 </div>
-                <h3>Etasje {floor}</h3>
+                <h3>
+                    {
+                        shaft && (
+                            <>
+                                Sjakt {shaft}
+                            </>
+                        )
+                    }
+                    {
+                        floor && (
+                            <>
+                                Etasje {floor}
+                            </>
+                        )
+                    }
+                        
+                </h3>
             </div>
         </div>
     );

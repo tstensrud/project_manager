@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Outlet } from 'react-router-dom';
-import { GlobalContext } from './GlobalContext';
+import { GlobalContext } from './context/GlobalContext';
 import Header from './layout/Header';
 
 

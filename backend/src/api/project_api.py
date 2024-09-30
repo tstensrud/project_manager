@@ -1,7 +1,6 @@
-from datetime import datetime, timezone, timedelta
 import json
+from firebase_admin import auth
 from flask import Blueprint, jsonify, request, url_for
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required, verify_jwt_in_request
 from .. import db_operations as dbo
 from .. import sanitary_calculations as sc
 from .. import globals
@@ -11,35 +10,24 @@ from functools import wraps
 project_api_bp = Blueprint('project_api', __name__)
 #globals.blueprint_setup(project_api_bp)
 
-def admin_required(func):
-    @wraps(func)
-    @jwt_required()
-    def wrapper(*args, **kwargs):
-        verify_jwt_in_request()
-        uuid = get_jwt_identity()
-        user = dbo.get_user(uuid)
-        if not user:
-            return jsonify({"success": False, "message": "Fant ikke bruker"}),404
-        if not user.admin:
-            return jsonify({"success": False, "message": "Du har ikke tilgang på denne funksjonen"})
-        return func(*args, **kwargs)
-    return wrapper
-
-@project_api_bp.after_request
-def refresh_expiring_jwts(response):
-    try:
-        exp_timestamp = get_jwt()["exp"]
-        now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(now + timedelta(hours=24))
-        if target_timestamp > exp_timestamp:
-            access_token = create_access_token(identity=get_jwt_identity())
-            data = response.get_json()
-            if type(data) is dict:
-                data["access_token"] = access_token
-                response.data = json.dumps(data)
-        return response
-    except (RuntimeError, KeyError):
-        return response
+def firebase_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        id_token = request.headers.get('Authorization')
+        #print(f"ID token received: {id_token}")
+        if id_token is None:
+            return jsonify({"success": False, "message": "Unauthorized"}), 401
+        token = id_token.split(" ")[1]
+        try:
+            decoded_token = auth.verify_id_token(token)
+            request.user = decoded_token
+            uid = decoded_token['uid']
+            request.user_uid = uid
+            #print(f"UID: {uid}")
+        except Exception as e:
+            return jsonify({"success": False, "message": str(e)}), 401
+        return f(*args, **kwargs)
+    return decorated_function
 
 #
 # 
@@ -47,7 +35,7 @@ def refresh_expiring_jwts(response):
 # 
 #    
 @project_api_bp.route('/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def project(project_uid):
     project = dbo.get_project(project_uid)
     if project:
@@ -96,7 +84,7 @@ def project(project_uid):
         return jsonify({"error": "Fant ikke prosjekt"})
 
 @project_api_bp.route('/project_specification/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_project_specification(project_uid: str):
     project = dbo.get_project(project_uid)
     if project:
@@ -108,14 +96,14 @@ def get_project_specification(project_uid: str):
     return jsonify({"success": False, "message": "Fant ikke prosjekt"})
     
 @project_api_bp.route('/settings/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def settings(project_uid):
     project = dbo.get_project(project_uid)
     project_data = project.get_json()
     return jsonify({"data": project_data})
 
 @project_api_bp.route('/settings/update_project/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def set_spec(project_uid):
     data = request.get_json()
     project_number = None
@@ -146,13 +134,13 @@ def set_spec(project_uid):
 #
 #
 @project_api_bp.route('/todo/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def todo(project_uid):
     todo_list = dbo.get_project_todo_items(project_uid)
     return jsonify({"todo": todo_list})
 
 @project_api_bp.route('/new_todo_item/<user_uuid>/', methods=['POST'])
-@jwt_required()
+@firebase_required
 def new_todo_item(project_uid, user_uuid):
     data = request.get_json()
     if data:
@@ -165,7 +153,7 @@ def new_todo_item(project_uid, user_uuid):
     return jsonify({"success": False, "message": "Ikke noe data mottatt"})
 
 @project_api_bp.route('/todo_item_complete/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def todo_item_complete(project_uid):
     data = request.get_json()
     item_uid = data["item_id"]
@@ -181,7 +169,7 @@ def todo_item_complete(project_uid):
 #
 #
 @project_api_bp.route('/buildings/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def buildings(project_uid):
     buildings = dbo.get_all_project_buildings(project_uid)
     total_rooms = dbo.count_rooms_in_project(project_uid)
@@ -194,7 +182,7 @@ def buildings(project_uid):
         return jsonify({"building_data": building_data, "rooms": total_rooms})
 
 @project_api_bp.route('/buildings/get_building/<building_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_building_data(project_uid: str, building_uid: str):
     building_data = dbo.get_building_data(building_uid, False, False, False)
     if building_data:
@@ -202,7 +190,7 @@ def get_building_data(project_uid: str, building_uid: str):
     return jsonify({"success": False, "message": "No building data found"})
 
 @project_api_bp.route('/buildings/get_project_buildings/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_project_buildings(project_uid: str):
     buildings = dbo.get_all_project_buildings(project_uid)
     if buildings:
@@ -213,7 +201,7 @@ def get_project_buildings(project_uid: str):
     return jsonify({"success": False, "message": "Fant ingen bygg"})
 
 @project_api_bp.route('/buildings/new_building/', methods=["POST"])
-@jwt_required()
+@firebase_required
 def new_building(project_uid):
     data = request.get_json()
     if not data:
@@ -229,7 +217,7 @@ def new_building(project_uid):
             return jsonify({"success": False, "message": "Kunne ikke legge til nytt bygg"})
 
 @project_api_bp.route('/buildings/edit/<building_uid>/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def edit_building(project_uid, building_uid):
     data = request.get_json()
     if data:
@@ -245,7 +233,7 @@ def edit_building(project_uid, building_uid):
         return ({"success": False, "message": "Mottok ikke data"})
 
 @project_api_bp.route('/buildings/delete/<building_uid>/', methods=['DELETE'])
-@jwt_required()
+@firebase_required
 def delete_building(project_uid, building_uid):
     rooms = dbo.check_if_building_has_rooms(building_uid)
     if rooms:
@@ -261,7 +249,7 @@ def delete_building(project_uid, building_uid):
 #
 #
 @project_api_bp.route('/rooms/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def rooms(project_uid):
     project = dbo.get_project(project_uid)
     specification = project.specification
@@ -275,7 +263,7 @@ def rooms(project_uid):
             return jsonify({"room_data": None, "spec": specification})
 
 @project_api_bp.route('/rooms/new_room/<building_uid>/', methods=['POST'])
-@jwt_required()
+@firebase_required
 def new_room(project_uid: str, building_uid: str):
     project = dbo.get_project(project_uid)
     project_specification = project.specification
@@ -329,7 +317,7 @@ def get_rooms_in_building(project_uid: str, building_uid: str):
     return jsonify({"success": False, "message": "No rooms found"})
 
 @project_api_bp.route('/rooms/get_room/<room_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_room(project_uid, room_uid):
     room = dbo.get_room(room_uid)
     room_data = room.get_json_room_data()
@@ -338,7 +326,7 @@ def get_room(project_uid, room_uid):
     return jsonify({"room_data": room_data})
 
 @project_api_bp.route('/rooms/update_room/<room_uid>/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def udpate_room(project_uid, room_uid):
     data = request.get_json()
     if data:
@@ -374,7 +362,7 @@ def udpate_room(project_uid, room_uid):
             return jsonify({"success": False, "message": "Kunne ikke oppdatere rom-data"})
 
 @project_api_bp.route('/rooms/delete_room/<room_uid>/', methods=['DELETE'])
-@jwt_required()
+@firebase_required
 def delete_room(project_uid, room_uid):
     data = request.get_json()
     received_room_uid = data["roomId"]
@@ -391,7 +379,7 @@ def delete_room(project_uid, room_uid):
     return jsonify(response)
 
 @project_api_bp.route('/rooms/undo_delete/<room_uid>/', methods=['POST'])
-@jwt_required()
+@firebase_required
 def undo_delete(project_uid, room_uid):
     data = request.get_json()
     if data:
@@ -411,7 +399,7 @@ def undo_delete(project_uid, room_uid):
 #
 
 @project_api_bp.route('/systems/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def ventsystems(project_uid):
     systems = dbo.get_all_systems(project_uid)
     if systems == []:
@@ -420,7 +408,7 @@ def ventsystems(project_uid):
     return jsonify({"systems_data": systems_data})
 
 @project_api_bp.route('/get_system/<system_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_system(project_uid, system_uid):
     system = dbo.get_system(system_uid)
     system_data = system.get_json()
@@ -430,7 +418,7 @@ def get_system(project_uid, system_uid):
         return jsonify({"success": False, "message": "Fant ikke system"})
 
 @project_api_bp.route('/new_system/', methods=['POST'])
-@jwt_required()
+@firebase_required
 def new_system(project_uid):
     data = request.get_json()
     project = dbo.get_project(project_uid)
@@ -469,7 +457,7 @@ def new_system(project_uid):
         return jsonify({"success": False, "message": "Kunne ikke opprette nytt system"})
 
 @project_api_bp.route('/update_system/<system_uid>/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def update_system(project_uid, system_uid):
     data = request.get_json()
     if data:
@@ -488,7 +476,7 @@ def update_system(project_uid, system_uid):
     return jsonify({"success": False, "message": "Mottok ingen data"})
 
 @project_api_bp.route('/delete_system/<system_uid>/', methods=['DELETE'])
-@jwt_required()
+@firebase_required
 def delete_system(project_uid, system_uid):
     data = request.get_json()
     if dbo.delete_system(system_uid):
@@ -503,7 +491,7 @@ def delete_system(project_uid, system_uid):
 #
 
 @project_api_bp.route('/ventilation/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def ventilation(project_uid):
     total_air_flow = dbo.summarize_project_airflow(project_uid)
     return jsonify({"ventdata": total_air_flow})
@@ -516,7 +504,7 @@ def get_building_vent_data(project_uid: str, building_uid: str):
     return jsonify({"success": False, "message":" No building data found"})
 
 @project_api_bp.route('/ventilation/get_room/<room_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def ventilation_get_room(project_uid, room_uid):
     room = dbo.get_room(room_uid)
     if room:
@@ -531,7 +519,7 @@ def ventilation_get_room(project_uid, room_uid):
         return jsonify({"room_data": None})
 
 @project_api_bp.route('/ventilation/update_room/<room_uid>/<cooling>/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def ventilation_update_room(project_uid, room_uid, cooling):
     room = dbo.get_room(room_uid)
     data = request.get_json()
@@ -580,7 +568,7 @@ def ventilation_update_room(project_uid, room_uid, cooling):
 #
 #
 @project_api_bp.route('/energy/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def heating(project_uid):
     total_heating = dbo.sum_heat_loss_project_chosen(project_uid)
     total_cooling_equipment = dbo.sum_cooling_from_equipment_project(project_uid)
@@ -594,7 +582,7 @@ def get_building_heating_data(project_uid, building_uid):
     return jsonify({"success": False, "message": "No building data found"})
 
 @project_api_bp.route('/heating/get_room/<room_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def heating_room_data(project_uid, room_uid):
     room = dbo.get_room(room_uid)
     building = dbo.get_building(room.building_uid)
@@ -608,7 +596,7 @@ def heating_room_data(project_uid, room_uid):
         return ({"error": "Fant ikke rom"})
 
 @project_api_bp.route('/heating/update_room/<room_uid>/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def heating_update_room(project_uid, room_uid):
     data = request.get_json()
     if data:
@@ -635,7 +623,7 @@ def heating_update_room(project_uid, room_uid):
             return jsonify({"success": False, "message": "Kunne ikke oppdatere romdata"})
  
 @project_api_bp.route('/heating/buildingsettings/<building_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def buildingsettings(project_uid, building_uid):
     building = dbo.get_building(building_uid)
     if building:
@@ -646,7 +634,7 @@ def buildingsettings(project_uid, building_uid):
     
 
 @project_api_bp.route('/heating/buildingsettings/update/<building_uid>/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def update_buildingsettings(project_uid, building_uid):
     building = dbo.get_building(building_uid)
     data = request.get_json()
@@ -670,7 +658,7 @@ def update_buildingsettings(project_uid, building_uid):
         return jsonify({"success": False, "message": "Fant ingen bygg"})
     
 @project_api_bp.route('/heating/buildingsettings/setheatsource/<building_uid>/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def set_heatsource(project_uid, building_uid):
     data = request.get_json()
     if data:
@@ -686,7 +674,7 @@ def set_heatsource(project_uid, building_uid):
 #
 #
 @project_api_bp.route('/cooling/get_room/<room_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_room_cooling(project_uid, room_uid):
     room = dbo.get_room(room_uid)
     if room:
@@ -705,7 +693,7 @@ def get_building_cooling_data(project_uid, building_uid):
     return jsonify({"success": False, "message": "No building data found"})
     
 @project_api_bp.route('/cooling/update_room/<room_uid>/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def update_room_cooling(project_uid, room_uid):
     data = request.get_json()
     if data:
@@ -730,7 +718,7 @@ def update_room_cooling(project_uid, room_uid):
             return jsonify({"success": False, "message": "Kunne ikke oppdatere romdata"})
 
 @project_api_bp.route('/cooling/update_all_rooms/<building_uid>/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def update_all_rooms_cooling(project_uid, building_uid):
     data = request.get_json()
     if data:
@@ -759,7 +747,7 @@ def update_all_rooms_cooling(project_uid, building_uid):
 #
 #
 @project_api_bp.route('/sanitary/get_room/<room_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_sanitary_room(project_uid, room_uid):
     room = dbo.get_room(room_uid)
     if room:
@@ -770,7 +758,7 @@ def get_sanitary_room(project_uid, room_uid):
         return jsonify({"success": False, "message": "Fant ikke rom"})
 
 @project_api_bp.route('/sanitary/buildings/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_buildings_sanitary(project_uid):
     buildings = dbo.get_all_project_buildings(project_uid)
     if buildings is None:
@@ -790,7 +778,7 @@ def get_sanitary_building_data(project_uid, building_uid):
     return jsonify({"success": False, "message": "No building data found"})
 
 @project_api_bp.route('/sanitary/update_room/<room_uid>/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def update_room_sanitary(project_uid, room_uid):
     data = request.get_json()
     if data:
@@ -812,7 +800,7 @@ def update_room_sanitary(project_uid, room_uid):
         return jsonify({"success": False, "message": "Fant ikke rom"})
 
 @project_api_bp.route('/sanitary/building_summary/<building_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_sanitary_building_summary(project_uid, building_uid):
     building = dbo.get_building(building_uid)
     if building:
@@ -840,7 +828,7 @@ def get_sanitary_building_summary(project_uid, building_uid):
 
 
 @project_api_bp.route('/sanitary/update_curve/<building_uid>/', methods=["PATCH"])
-@jwt_required()
+@firebase_required
 def update_curve(project_uid, building_uid):
     data = request.get_json()
     if data:
@@ -854,7 +842,7 @@ def update_curve(project_uid, building_uid):
 
 
 @project_api_bp.route('/excel/<sheet>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def ventilation_excel(project_uid, sheet):
     if sheet == "ventilation":
         file = excel.generate_excel_report(project_uid, vent=True)

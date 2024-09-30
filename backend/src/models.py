@@ -8,11 +8,8 @@ class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     uuid = db.Column(db.String(250), unique=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(250), nullable=True)
     name = db.Column(db.String(100), nullable=False)
-    logged_in = db.Column(db.Boolean, default=False)
     admin = db.Column(db.Boolean, default=False)
-    is_active = db.Column(db.Boolean, default=False)
 
     todo_item = db.relationship('TodoItem', backref='user', lazy=True)
 
@@ -22,9 +19,7 @@ class Users(db.Model, UserMixin):
             "uuid": self.uuid,
             "email": self.email,
             "name": self.name,
-            "loggedIn": self.logged_in,
             "admin": self.admin,
-            "isActive": self.is_active
         }
 
 class UserFavProjects(db.Model):
@@ -51,13 +46,13 @@ class UserFavProjects(db.Model):
             "project_name": project_name
         }
 
-class NewUserRegistration(db.Model):
+""" class NewUserRegistration(db.Model):
     __tablename__ = 'NewUserRegistration'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_uid = db.Column(db.String(250), db.ForeignKey('Users.uuid'), nullable=False)
     token_hash = db.Column(db.String(255), nullable=False)
     timestamp = db.Column(db.String(100), nullable=False)
-    is_revoked = db.Column(db.Boolean, default=False)
+    is_revoked = db.Column(db.Boolean, default=False) """
 
 '''
 # TODO-items

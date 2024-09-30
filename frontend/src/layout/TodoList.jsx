@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useContext, useRef } from 'react';
 
-import { GlobalContext } from '../GlobalContext';
+import { GlobalContext } from '../context/GlobalContext';
 import useFetch from '../hooks/useFetch'
 import useSubmitData from '../hooks/useSubmitData'
 

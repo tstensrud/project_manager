@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import useFetch from '../../hooks/useFetch'
 import { Link, useParams } from 'react-router-dom';
-import { GlobalContext } from '../../GlobalContext';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import MainContentContainer from '../../layout/MainContentContainer.jsx'

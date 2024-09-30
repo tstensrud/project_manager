@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
-import { GlobalContext } from '../../GlobalContext';
+import { GlobalContext } from '../../context/GlobalContext';
+import { signOut } from "firebase/auth";
 
-// Hooks
+// Hooks and utils
 import useFetch from "../../hooks/useFetch";
+import { AuthContext } from "../../context/AuthContext";
 
 // Components
 import NavbarLink from './NavbarLink';
 import NavbarMenuTitle from "./NavbarMenuTitle";
 import DarkmodeContainer from "./DarkmodeContainer";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+    const { currentUser, idToken, dispatch, loading: authLoading } = useContext(AuthContext);
+    const { data: userData, loading, refetch: refetchUserInfo } = useFetch(currentUser ? `/user/${currentUser.uid}/` : null);
+
     const { activeProject, setActiveProject, userUuid, setUserUuid, setUserName, activeProjectName, setActiveProjectName } = useContext(GlobalContext);
-    const { data: userData, loading, error, refetch: refetchUserInfo } = useFetch(`/get_user/`);
     const [displayMenuContainer, setDisplayMenuContainer] = useState(false);
     const [displayDashboardMenu, setDisplayDashboardContainer] = useState(false);
+
+    const navigate = useNavigate();
 
     // useEffects
     useEffect(() => {
@@ -30,8 +37,8 @@ function Navbar() {
     }, []);
 
     useEffect(() => {
-        setUserUuid(userData && userData.user.uuid);
-        setUserName(userData && userData.user.name);
+        setUserUuid(userData && userData.data.uuid);
+        setUserName(userData && userData.data.name);
     }, [userData]);
 
     const handleShowProjectMenu = () => setDisplayMenuContainer(true);
@@ -44,6 +51,15 @@ function Navbar() {
         setDisplayDashboardContainer(false);
     }
 
+    const handleLogOut = async (e) => {
+        e.preventDefault();
+        await signOut(auth).then(() => {
+            dispatch({type: "LOGOUT" });
+            navigate("/");
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
     return (
         <>
             {
@@ -128,7 +144,7 @@ function Navbar() {
                                 <div className="flex flex-col w-[250px] tracking-wide">
                                     <NavbarMenuTitle title="Brukervalg" />
                                     <NavbarLink url={'userprofile'} linkText="Min side" />
-                                    <NavbarLink url={`logout/${userUuid}`} linkText="Logg ut" />
+                                    <NavbarLink url={`logout`} linkText="Logg ut" />
                                 </div>
                             </div>
                         </div>

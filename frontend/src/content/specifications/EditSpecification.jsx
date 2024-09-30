@@ -1,7 +1,7 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 
-import { GlobalContext } from '../../GlobalContext';
+import { GlobalContext } from '../../context/GlobalContext';
 import useFetch from '../../hooks/useFetch'
 import useDeleteData from '../../hooks/useDeleteData';
 

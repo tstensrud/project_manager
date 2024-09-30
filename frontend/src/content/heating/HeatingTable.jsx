@@ -84,15 +84,15 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                                     )
                                                 }
                                                 <tr className="bg-secondary-color dark:bg-dark-secondary-color">
-                                                    <TableTDelement width="2%" />
-                                                    <TableTDelement width="5%" />
-                                                    <TableTDelement width="5%" />
-                                                    <TableTDelement width="5%" />
-                                                    <TableTDelement width="5%" />
-                                                    <TableTDelement width="5%" />
-                                                    <TableTDelement width="5%" />
-                                                    <TableTDelement width="5%" />
-                                                    <TableTDelement width="5%" />
+                                                    <TableTDelement width="2%"/>
+                                                    <TableTDelement width="5%"/>
+                                                    <TableTDelement width="5%"/>
+                                                    <TableTDelement width="5%"/>
+                                                    <TableTDelement width="5%"/>
+                                                    <TableTDelement width="5%"/>
+                                                    <TableTDelement width="5%"/>
+                                                    <TableTDelement width="5%"/>
+                                                    <TableTDelement width="5%"/>
                                                     <TableTDelement width="5%">
                                                         {
                                                             buildingData?.data?.floor_summaries_heating &&
@@ -100,7 +100,7 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                                                 .filter(key => key === floor)
                                                                 .map(key => (
                                                                     <React.Fragment key={key}>
-                                                                        <span className="text-heating-color"><strong>{Number(buildingData.data.floor_summaries_heating[key].demand.toFixed(0)).toLocaleString()}<br />W</strong></span>
+                                                                        <span className="text-heating-color"><strong>{Number(buildingData.data.floor_summaries_heating[key].demand.toFixed(0)).toLocaleString()}<br/>W</strong></span>
                                                                     </React.Fragment>
                                                                 ))
                                                         }
@@ -112,14 +112,14 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                                                 .filter(key => key === floor)
                                                                 .map(key => (
                                                                     <React.Fragment key={key}>
-                                                                        <span className="text-heating-color"><strong>{Number(buildingData.data.floor_summaries_heating[key].chosen.toFixed(0)).toLocaleString()}<br />W</strong></span>
+                                                                        <span className="text-heating-color"><strong>{Number(buildingData.data.floor_summaries_heating[key].chosen.toFixed(0)).toLocaleString()}<br/>W</strong></span>
                                                                     </React.Fragment>
                                                                 ))
                                                         }
                                                     </TableTDelement>
-                                                    <TableTDelement width="5%" />
-                                                    <TableTDelement width="8%" />
-                                                    <TableTDelement width="10%" />
+                                                    <TableTDelement width="5%"/>
+                                                    <TableTDelement width="8%"/>
+                                                    <TableTDelement width="10%"/>
                                                 </tr>
                                             </tbody>
                                         </TableWrapper>
@@ -127,8 +127,8 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                 ))
                             }
 
-                            <TableWrapper>
-                                <tfoot>
+                            <table className="text-primary-color dark:text-dark-primary-color text-xs border-none border-collapse w-full max-w-full whitespace-nowrap dark:bg-dark-secondary-color">
+                                <tbody>
                                     <tr>
                                         <TableTDelement width="2%" />
                                         <TableTDelement width="5%">
@@ -155,8 +155,8 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                         <TableTDelement width="8%" />
                                         <TableTDelement width="10%" />
                                     </tr>
-                                </tfoot>
-                            </TableWrapper>
+                                </tbody>
+                            </table>
 
                         </TableContainer>
                     </>

@@ -1,18 +1,17 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required, verify_jwt_in_request
 from .. import db_operations as dbo
 from .. import db_ops_users as dbu
+from firebase_admin import auth
 from functools import wraps
 
 projects_bp = Blueprint('projects', __name__, static_folder='static', template_folder='templates')
 
 def admin_required(func):
     @wraps(func)
-    @jwt_required()
+    @firebase_required
     def wrapper(*args, **kwargs):
-        verify_jwt_in_request()
-        uuid = get_jwt_identity()
-        user = dbu.get_user(uuid)
+        user_identity = request.user_uid
+        user = dbo.get_user(user_identity)
         if not user:
             return jsonify({"success": False, "message": "Fant ikke bruker"}),404
         if not user.admin:
@@ -20,8 +19,27 @@ def admin_required(func):
         return func(*args, **kwargs)
     return wrapper
 
+def firebase_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        id_token = request.headers.get('Authorization')
+        #print(f"ID token received: {id_token}")
+        if id_token is None:
+            return jsonify({"success": False, "message": "Unauthorized"}), 401
+        token = id_token.split(" ")[1]
+        try:
+            decoded_token = auth.verify_id_token(token)
+            request.user = decoded_token
+            uid = decoded_token['uid']
+            request.user_uid = uid
+            #print(f"UID: {uid}")
+        except Exception as e:
+            return jsonify({"success": False, "message": str(e)}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
 @projects_bp.route('/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def projects():
     projects = dbo.get_all_projects()
     if projects:
@@ -40,7 +58,7 @@ def stats():
     return jsonify({"success": False, "message": "Fant ikke noe statistikk"})
 
 @projects_bp.route('/new_project/', methods=['POST'])
-@jwt_required()
+@firebase_required
 def new_project():
     data = request.get_json()
     if not data:

@@ -1,6 +1,6 @@
 
 import { useContext } from "react";
-import { GlobalContext } from '../GlobalContext';
+import { GlobalContext } from '../context/GlobalContext';
 import TodoButton from './TodoButton';
 
 function SubTitleComponent(props) {
