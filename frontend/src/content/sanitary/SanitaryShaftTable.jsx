@@ -6,6 +6,8 @@ import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import TableWrapper from "../../layout/tableelements/TableWrapper.jsx";
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableContainer from '../../layout/tableelements/TableContainer.jsx';
+import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
+import TableFooter from '../../layout/tableelements/TableFooter.jsx'
 import TableTop from '../../layout/TableTop.jsx';
 import TableHeader from '../../layout/tableelements/TableHeader.jsx'
 
@@ -55,6 +57,9 @@ function SanitaryShaftTable({ projectId, buildingUid }) {
                                 ))
                             }
                         </TableContainer>
+                        <TableFooter>
+                            <td className="h-6" colspan="8"></td>
+                        </TableFooter>
                     </>
                 )
             }

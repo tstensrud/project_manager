@@ -11,7 +11,7 @@ def admin_required(func):
     @firebase_required
     def wrapper(*args, **kwargs):
         user_identity = request.user_uid
-        user = dbo.get_user(user_identity)
+        user = dbu.get_user(user_identity)
         if not user:
             return jsonify({"success": False, "message": "Fant ikke bruker"}),404
         if not user.admin:

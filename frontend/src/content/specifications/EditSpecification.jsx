@@ -1,13 +1,11 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 
-import { GlobalContext } from '../../context/GlobalContext';
 import useFetch from '../../hooks/useFetch'
 import useDeleteData from '../../hooks/useDeleteData';
 
 // SVG
 import HeaderIcon from '../../assets/svg/editIcon.jsx';
-import DeleteIcon from '../../assets/svg/deleteIcon.jsx'
 
 // Components
 import SubTitleComponent from '../../layout/SubTitleComponent';
@@ -16,6 +14,8 @@ import DeleteBox from './DeleteBox';
 import TableTop from '../../layout/TableTop';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import Table from '../../layout/tableelements/Table.jsx';
+import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
+import TableFooter from '../../layout/tableelements/TableFooter.jsx'
 import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
@@ -110,6 +110,9 @@ function EditSpecification() {
                                     }
                                 </tbody>
                             </Table>
+                            <TableFooter>
+                                <td className="h-6" colspan="13"></td>
+                            </TableFooter>
                         </>
                     )
                 }

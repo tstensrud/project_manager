@@ -13,6 +13,7 @@ import LoadingSpinner from '../../layout/LoadingSpinner';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
+import Table from '../../layout/tableelements/Table.jsx';
 
 // help
 import { title, sections } from '../help/VentsystemsHelp.jsx'
@@ -39,41 +40,37 @@ function VentSystems() {
 
                             </div>
                             {
-                                receivedSystemsData ? (
-                                    receivedSystemsData.systems_data === null ? (
-                                        <>Ingen sytemer lagt til</>
-                                    ) : (
-                                        <>
-                                            <TableTop title={title} sections={sections} />
-                                            <TableHeader>
-                                                <thead>
-                                                    <tr>
-                                                        <TableTHelement width="2%" text="#" />
-                                                        <TableTHelement width="5%" text="Systemnr" />
-                                                        <TableTHelement width="10%" text="Plassering" />
-                                                        <TableTHelement width="10%" text="Betjeningsområde" />
-                                                        <TableTHelement width="7%">Viftekapasitet<br /> m<sup>3</sup>/h</TableTHelement>
-                                                        <TableTHelement width="5%" text="Gjenvinner" />
-                                                        <TableTHelement width="7%">Prosjektert tilluft<br /> m<sup>3</sup>/h</TableTHelement>
-                                                        <TableTHelement width="7%">Prosjektert avtrekk<br /> m<sup>3</sup>/h</TableTHelement>
-                                                        <TableTHelement width="5%" text="Spesialsystem" />
-                                                        <TableTHelement width="32%" text="Merknad" />
-                                                        <TableTHelement width="10%" text="Slett system" />
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {
-                                                        receivedSystemsData && receivedSystemsData.systems_data ? (
-                                                            receivedSystemsData.systems_data.map((system) => <SystemsTableRowComponent systemsRefetch={systemsRefetch} key={system.uid} cols={11} systemId={system.uid} />)
-                                                        ) : (
-                                                            <></>
-                                                        )
-                                                    }
-                                                </tbody>
-                                            </TableHeader>
-                                        </>
-                                    )
-                                ) : (<></>)
+                                receivedSystemsData?.success ? (
+                                    <>
+                                        <TableTop title={title} sections={sections} />
+                                        <TableHeader>
+                                            <TableTHelement width="2%" text="#" />
+                                            <TableTHelement width="5%" text="Systemnr" />
+                                            <TableTHelement width="10%" text="Plassering" />
+                                            <TableTHelement width="10%" text="Betjeningsområde" />
+                                            <TableTHelement width="7%">Viftekapasitet<br /> m<sup>3</sup>/h</TableTHelement>
+                                            <TableTHelement width="5%" text="Gjenvinner" />
+                                            <TableTHelement width="7%">Prosjektert tilluft<br /> m<sup>3</sup>/h</TableTHelement>
+                                            <TableTHelement width="7%">Prosjektert avtrekk<br /> m<sup>3</sup>/h</TableTHelement>
+                                            <TableTHelement width="5%" text="Spesialsystem" />
+                                            <TableTHelement width="32%" text="Merknad" />
+                                            <TableTHelement width="10%" text="Slett system" />
+                                        </TableHeader>
+                                        <Table>
+                                            <tbody>
+                                                {
+                                                    receivedSystemsData?.data && (
+                                                        Object.keys(receivedSystemsData.data).map((system) => <SystemsTableRowComponent systemsRefetch={systemsRefetch} key={receivedSystemsData.data[system].uid} cols={11} systemId={receivedSystemsData.data[system].uid} />)
+                                                    )
+                                                }
+                                            </tbody>
+                                        </Table>
+                                    </>
+                                ) : (
+                                    <div className="w-full text-center">
+                                        {receivedSystemsData.message}
+                                    </div>
+                                )
                             }
                         </>
                     )

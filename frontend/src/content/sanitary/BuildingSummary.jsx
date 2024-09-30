@@ -75,7 +75,7 @@ function BuildingSummary({ buildingUid, projectId }) {
         e.preventDefault();
         await handleSubmit();
     }
-    //console.log(buildingUid)
+
     return (
         <>
         {

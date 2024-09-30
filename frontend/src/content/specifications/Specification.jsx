@@ -10,6 +10,8 @@ import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeaderIcon from '../../assets/svg/specificationsIcon.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import TableTop from '../../layout/TableTop';
+import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
+import TableFooter from '../../layout/tableelements/TableFooter.jsx'
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import Table from '../../layout/tableelements/Table.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
@@ -31,24 +33,6 @@ function Specification() {
 
     const [warning, setWarning] = useState('');
     const navigate = useNavigate();
-
-    const handleFileChange = (e) => {
-        const selectedFile = e.target.files[0];
-        setFile(selectedFile);
-
-    }
-
-    const handleFileSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!file && file === "") {
-            setWarning('Ingen fil valgt.')
-            return;
-        } else {
-            await handleSubmit(e);
-            setFile('');
-        }
-    }
 
     const handleEditClick = () => {
         navigate(`/specifications/edit/${suid}/${data.spec_name}`)
@@ -133,6 +117,9 @@ function Specification() {
                                     </tbody>
                                 </Table>
                             </TableContainer>
+                            <TableFooter>
+                                <td className="h-6" colspan="13"></td>
+                            </TableFooter>
                         </>
                     )
                 }

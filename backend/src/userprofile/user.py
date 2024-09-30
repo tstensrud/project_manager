@@ -42,7 +42,26 @@ def firebase_required(f):
 def user_profile(uuid):
     user = dbo.get_user(uuid)
     if user:
-        user_data = dbo.get_user_data(user_uid=uuid)
+        user_data = {}
+        user_data["server"] = dbo.get_user_data(user_uid=uuid)
+        try:
+            firebase_record = auth.get_user(uuid)
+            user_data["firebase"] = {
+                'uid': firebase_record.uid,
+                'email': firebase_record.email,
+                'email_verified': firebase_record.email_verified,
+                'display_name': firebase_record.display_name,
+                'phone_number': firebase_record.phone_number,
+                'photo_url': firebase_record.photo_url,
+                'disabled': firebase_record.disabled,
+                'provider_data': [provider.__dict__ for provider in firebase_record.provider_data],
+                'custom_claims': firebase_record.custom_claims,
+                'creation_timestamp': firebase_record.user_metadata.creation_timestamp,
+                'last_sign_in_timestamp': firebase_record.user_metadata.last_sign_in_timestamp
+            }
+        except Exception as e:
+            globals.log(f"Could not retrieve firebase user data {e}")
+            return jsonify({"success": False, "message": "Kunne ikke finne brukerdata"})
         is_admin = user.admin
         if is_admin:
             return jsonify({"success": True, "data": user_data, "admin": "admin"})

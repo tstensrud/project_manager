@@ -8,10 +8,12 @@ import { customSortFloors } from '../../utils/customSortFloors.js'
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
 import TableContainer from '../../layout/tableelements/TableContainer.jsx';
 import TableWrapper from "../../layout/tableelements/TableWrapper.jsx";
 import HeatingTableRowComponent from "./HeatingTableRowComponent";
 import TableTop from '../../layout/TableTop.jsx';
+import TableFooter from '../../layout/tableelements/TableFooter.jsx'
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 
 // help
@@ -127,36 +129,32 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                 ))
                             }
 
-                            <table className="text-primary-color dark:text-dark-primary-color text-xs border-none border-collapse w-full max-w-full whitespace-nowrap dark:bg-dark-secondary-color">
-                                <tbody>
-                                    <tr>
-                                        <TableTDelement width="2%" />
-                                        <TableTDelement width="5%">
+                            <TableFooter>
+                                        <TableTDFooter width="2%" />
+                                        <TableTDFooter width="5%">
                                             Sum
-                                        </TableTDelement>
-                                        <TableTDelement width="5%" />
-                                        <TableTDelement width="5%" />
-                                        <TableTDelement width="5%" />
-                                        <TableTDelement width="5%" />
-                                        <TableTDelement width="5%" />
-                                        <TableTDelement width="5%" />
-                                        <TableTDelement width="5%" />
-                                        <TableTDelement width="5%">
+                                        </TableTDFooter>
+                                        <TableTDFooter width="5%" />
+                                        <TableTDFooter width="5%" />
+                                        <TableTDFooter width="5%" />
+                                        <TableTDFooter width="5%" />
+                                        <TableTDFooter width="5%" />
+                                        <TableTDFooter width="5%" />
+                                        <TableTDFooter width="5%" />
+                                        <TableTDFooter width="5%">
                                             <strong>
                                                 {buildingData?.data?.heatingDemand ? <><span className="text-heating-color">{((buildingData.data.heatingDemand) / 1000).toFixed(1)}</span> <br />kW</> : ''}
                                             </strong>
-                                        </TableTDelement>
-                                        <TableTDelement width="5%">
+                                        </TableTDFooter>
+                                        <TableTDFooter width="5%">
                                             <strong>
                                                 {buildingData?.data?.heating ? <><span className="text-heating-color">{((buildingData.data.heating) / 1000).toFixed(1)}</span> <br />kW</> : ''}
                                             </strong>
-                                        </TableTDelement>
-                                        <TableTDelement width="5%" />
-                                        <TableTDelement width="8%" />
-                                        <TableTDelement width="10%" />
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        </TableTDFooter>
+                                        <TableTDFooter width="5%" />
+                                        <TableTDFooter width="8%" />
+                                        <TableTDFooter width="10%" />
+                            </TableFooter>
 
                         </TableContainer>
                     </>

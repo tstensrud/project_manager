@@ -62,7 +62,7 @@ function NewSystem() {
     const fanCapacityRef = useRef(null);
     const heatExRef = useRef(null);
     const specialSystemRef = useRef(null);
-    console.log(systemResponse)
+
     return (
         <>
             {systemResponse?.success && systemResponse.success === false && <MessageBox message={systemResponse.message} />}

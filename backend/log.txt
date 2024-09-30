@@ -513,3 +513,243 @@
 
 - 2024-09-30 15:58:32.500332: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
 
+- 2024-09-30 19:54:39.551540: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:54:39.557786: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:54:39.557786: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:54:39.910291: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:54:39.931351: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:54:39.956860: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:54:40.285849: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:54:40.303281: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:54:40.312234: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:54:40.596922: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:54:40.972621: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:54:41.340296: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:54:55.506018: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:54:55.518352: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:54:55.865729: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:54:55.887057: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:54:56.232982: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:54:56.260563: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:54:56.728706: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:54:56.728706: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:54:57.084483: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:54:57.101491: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:54:57.444002: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:54:57.458520: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:55:17.572989: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:55:17.588680: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:55:17.934980: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:55:17.950694: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:55:18.277731: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:55:18.300086: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:55:19.086210: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:55:19.090211: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:55:19.441445: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:55:19.455348: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:55:19.797851: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:55:19.812626: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:55:26.472824: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:55:26.476826: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:55:26.489130: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:55:26.824347: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:55:26.834964: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:55:26.834964: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:55:27.176321: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:55:27.179318: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:55:27.179318: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:55:27.452239: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:55:27.821231: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:55:28.175271: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:58:00.186713: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:58:00.195474: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:58:00.554530: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:58:00.558492: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:58:00.919700: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:58:00.934657: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:58:02.068228: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:58:02.086242: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:58:02.451128: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:58:02.459312: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:58:02.800712: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:58:02.860096: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:58:33.486948: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:58:33.840895: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:58:34.232565: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:58:34.488613: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:58:34.865412: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:58:35.230311: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:58:40.225023: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:58:40.233086: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:58:40.592704: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:58:40.600729: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:58:40.962164: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:58:40.964165: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:58:48.677638: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:58:48.677638: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 19:58:49.035325: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:58:49.094345: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 19:58:49.384583: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 19:58:49.484105: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:00:44.705835: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:00:44.705835: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:00:44.736029: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:00:44.753339: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:00:45.055337: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:00:45.082602: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:00:45.101897: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:00:45.156228: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:00:45.409871: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:00:45.447893: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:00:45.466726: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:00:45.516622: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:01:45.842910: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:01:45.846420: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:01:46.197586: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:01:46.230919: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:01:46.572584: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:01:46.589250: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:01:59.864184: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:01:59.877458: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:02:00.226187: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:02:00.243422: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:02:00.603626: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:02:00.619214: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:02:09.709628: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:02:09.712131: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:02:10.081502: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:02:10.092444: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:02:10.446232: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:02:10.460857: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:02:45.667126: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:02:45.669872: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:02:46.034698: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:02:46.092360: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:02:46.412228: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:02:46.446883: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:02:52.241696: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:02:52.245221: Value error getting firebase user account: No user record found for the provided user ID: oWhEAVHJQBCq6EzE2iJ_wg. 
+
+- 2024-09-30 20:02:52.589875: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:02:52.601687: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-09-30 20:02:52.976872: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-09-30 20:02:53.012881: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+

@@ -16,7 +16,7 @@ export const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         //const unsubscribe = onAuthStateChanged(auth, async (user) => {
-        const unsubscribe = onIdTokenChanged(auth, async (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userInfo = {
                     uid: user.uid,
@@ -24,7 +24,6 @@ export const AuthContextProvider = ({ children }) => {
                 }
                 localStorage.setItem("user", JSON.stringify(userInfo));
                 const idToken = await user.getIdToken();
-                //console.log("ID Token:", idToken);
                 dispatch({ type: "LOGIN", payload: {user, idToken} });
                 
             } else {

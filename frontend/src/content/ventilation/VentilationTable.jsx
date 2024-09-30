@@ -8,6 +8,8 @@ import { customSortFloors } from '../../utils/customSortFloors.js'
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
+import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
+import TableFooter from '../../layout/tableelements/TableFooter.jsx'
 import TableContainer from '../../layout/tableelements/TableContainer.jsx';
 import TableWrapper from "../../layout/tableelements/TableWrapper.jsx";
 import VentilationTableRowComponent from "./VentilationTableRowComponent";
@@ -163,34 +165,29 @@ function VentilationTable({ projectId, buildingUid }) {
                                     </React.Fragment>
                                 ))
                             }
-                            <table className="text-primary-color dark:text-dark-primary-color text-xs border-none border-collapse w-full max-w-full whitespace-nowrap dark:bg-dark-secondary-color">
-                                <tbody>
-                                    <tr>
-                                        <TableTDelement width="2%" />
-                                        <TableTDelement width="10%">
-                                            <strong>Sum</strong>
-                                        </TableTDelement>
-                                        <TableTDelement width="6%" />
-                                        <TableTDelement width="6%" />
-                                        <TableTDelement width="6%" />
-
-                                        <TableTDelement width="6%">
-                                            <strong>{buildingData?.data?.demand != null ? <>{Number((buildingData?.data).demand.toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
-                                        </TableTDelement>
-                                        <TableTDelement width="6%">
-                                            <strong>{buildingData?.data?.supplyAir != null ? <>{Number((buildingData?.data.supplyAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
-                                        </TableTDelement>
-                                        <TableTDelement width="6%">
-                                            <strong>{buildingData?.data?.extractAir ? <>{Number((buildingData?.data.extractAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</> : (<></>)}</strong>
-                                        </TableTDelement>
-                                        <TableTDelement width="6%" />
-                                        <TableTDelement width="6%" />
-                                        <TableTDelement width="6%" />
-                                        <TableTDelement width="34%" />
-                                    </tr>
-                                </tbody>
-                            </table>
                         </TableContainer>
+                        <TableFooter>
+                            <TableTDFooter width="2%" />
+                            <TableTDFooter width="10%">
+                                <strong>Sum</strong>
+                            </TableTDFooter>
+                            <TableTDFooter width="6%" />
+                            <TableTDFooter width="6%" />
+                            <TableTDFooter width="6%" />
+                            <TableTDFooter width="6%">
+                                <strong>{buildingData?.data?.demand && <>{Number((buildingData?.data).demand.toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</>}</strong>
+                            </TableTDFooter>
+                            <TableTDFooter width="6%">
+                                <strong>{buildingData?.data?.supplyAir && <>{Number((buildingData?.data.supplyAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</>}</strong>
+                            </TableTDFooter>
+                            <TableTDFooter width="6%">
+                                <strong>{buildingData?.data?.extractAir && <>{Number((buildingData?.data.extractAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</>}</strong>
+                            </TableTDFooter>
+                            <TableTDFooter width="6%" />
+                            <TableTDFooter width="6%" />
+                            <TableTDFooter width="6%" />
+                            <TableTDFooter width="34%" />
+                        </TableFooter>
                     </>
                 )
             }

@@ -4,7 +4,7 @@ import CardTitle from '../../layout/CardTitle';
 import ContentCard from '../../layout/ContentCard';
 
 function BuildingRoomData({ buildingData }) {
-    console.log(buildingData)
+    
     return (
         <ContentCard>
             <CardTitle svg={<BuildingIcon />} title="Bygnings- og romdata" />

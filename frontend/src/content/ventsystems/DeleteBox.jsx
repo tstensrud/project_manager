@@ -17,7 +17,7 @@ function DeleteBox({ systemName, setShowDeleteDialog, deleteSystem }) {
             <span style={{ fontSize: "15px" }}>
                 <Link to="#" onClick={closeDialog}>AVBRYT</Link>
                 <br />
-                Dette kan ikke angres. Alle systemene til rom tilknyttet {systemName} nullstilles.
+                Dette kan ikke angres. All systemdata for rom tilhørende {systemName} nullstilles.
             </span>
             <br />
             <br />

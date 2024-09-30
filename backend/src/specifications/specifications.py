@@ -1,32 +1,33 @@
 import json
-from datetime import datetime, timezone, timedelta
-#import pandas as pd
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, jwt_required
-from flask_jwt_extended import jwt_required
 from .. import db_operations as dbo
 from ..globals import replace_and_convert_to_float
 from markupsafe import escape
+from functools import wraps
+from firebase_admin import auth
 
 specifications_bp = Blueprint('specifications',__name__, static_folder='static', template_folder='templates')
-@specifications_bp.after_request
-def refresh_expiring_jwts(response):
-    try:
-        exp_timestamp = get_jwt()["exp"]
-        now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
-        if target_timestamp > exp_timestamp:
-            access_token = create_access_token(identity=get_jwt_identity())
-            data = response.get_json()
-            if type(data) is dict:
-                data["access_token"] = access_token
-                response.data = json.dumps(data)
-        return response
-    except (RuntimeError, KeyError):
-        return response
+def firebase_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        id_token = request.headers.get('Authorization')
+        #print(f"ID token received: {id_token}")
+        if id_token is None:
+            return jsonify({"success": False, "message": "Unauthorized"}), 401
+        token = id_token.split(" ")[1]
+        try:
+            decoded_token = auth.verify_id_token(token)
+            request.user = decoded_token
+            uid = decoded_token['uid']
+            request.user_uid = uid
+            #print(f"UID: {uid}")
+        except Exception as e:
+            return jsonify({"success": False, "message": str(e)}), 401
+        return f(*args, **kwargs)
+    return decorated_function
     
 @specifications_bp.route('/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def specifications():
     spec = "Skok skoler 2022-o2023"
     specification_data = dbo.get_specification_room_types(spec)
@@ -38,7 +39,7 @@ def specifications():
 
 
 @specifications_bp.route('/get_specifications/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_specifications():
     specifications = dbo.get_specifications()
     spec_data = {}
@@ -47,7 +48,7 @@ def get_specifications():
     return jsonify({"success": True, "data": spec_data})
 
 @specifications_bp.route('/get_spec_room_data/<spec_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_spec(spec_uid):
     specification = dbo.get_specification_room_data(spec_uid)
     spec = dbo.get_specification(spec_uid)
@@ -59,7 +60,7 @@ def get_spec(spec_uid):
         return jsonify({"error": "Ingen romdata lagt inn", "spec_name": spec_name})
 
 @specifications_bp.route('/get_spec_rooms/<spec_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_spec_rooms(spec_uid):
     room_types = dbo.get_specification_room_data(spec_uid)
     if room_types:
@@ -71,7 +72,7 @@ def get_spec_rooms(spec_uid):
         return jsonify({"success": False, "message": "No roomtypes found"})
     
 @specifications_bp.route('/get_spec_room_types/<spec_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_specification_room_types(spec_uid):
     specification_data = dbo.get_specification_room_types(spec_uid)
     room_uid_type = {}
@@ -80,28 +81,8 @@ def get_specification_room_types(spec_uid):
     room_types_list = [{"uid": key, "name": value} for key, value in room_uid_type.items()]
     return jsonify({"data": room_types_list})
 
-""" @jwt_required()
-
-@specifications_bp.route('/new_rooms/<spec_uid>/', methods=['POST'])
-def new_room(spec_uid):
-    file = request.files['file']
-    #spec = dbo.get_specification_by_name(spec_uid)
-    if 'file' not in request.files:
-        return jsonify({"error": "Ingen fil lagt ved"})
-    if file.filename == '':
-        return jsonify({"error": "Ingen fil mottatt"})
-    
-    df = pd.read_csv(file, sep=";")
-    file_columns = []
-    for index, row in df.iterrows():
-        for column in df.columns:
-            value = row[column]
-            print(f"Value in column {column}: {value}")
-    
-    return jsonify({"message": "Fil mottatt"}) """
-
 @specifications_bp.route('/new_room/<spec_uid>/', methods=['POST'])
-@jwt_required()
+@firebase_required
 def new_room_for_spec(spec_uid):
     data = request.get_json()
     if data:
@@ -128,9 +109,8 @@ def new_room_for_spec(spec_uid):
             return jsonify({"success": True, "message": "Rom lagt til"})
     return jsonify({"success": False, "message": "Kunne ikke legge til nytt rom."})
 
-
 @specifications_bp.route('/new_specification/', methods=['POST'])
-@jwt_required()
+@firebase_required
 def new_specification():
     data = request.get_json()
     if data:
@@ -147,7 +127,7 @@ def new_specification():
         return jsonify({"success": False, "message": "Ingen data mottatt"})
 
 @specifications_bp.route('/delete_spec_room_type/<room_type_uid>/', methods=['DELETE'])
-@jwt_required()
+@firebase_required
 def delete_spec_room_type(room_type_uid):
     room = dbo.get_room_type(room_type_uid)
     if room:
@@ -159,7 +139,7 @@ def delete_spec_room_type(room_type_uid):
         return jsonify({"success": False, "message": f"Fant ikke romtype {room.name}"})
 
 @specifications_bp.route('/get_room_type_data/<room_uid>/', methods=['GET'])
-@jwt_required()
+@firebase_required
 def get_room_type_data(room_uid):
     room_data = dbo.get_spec_room_type_data(room_uid)
     
@@ -169,7 +149,7 @@ def get_room_type_data(room_uid):
         return jsonify({"success": False, "message": "No room type data found"})
 
 @specifications_bp.route('/delete_room_type/<room_uid>/', methods=['DELETE'])
-@jwt_required()
+@firebase_required
 def delete_room_type(room_uid):
     deleted_room = dbo.delete_room_type_from_spec(room_uid)
     if deleted_room:
@@ -179,7 +159,7 @@ def delete_room_type(room_uid):
 
 
 @specifications_bp.route('/delete_spec/<spec_uid>/', methods=['DELETE'])
-@jwt_required()
+@firebase_required
 def delete_spec(spec_uid):
     spec = dbo.get_specification(spec_uid)
     if spec:
@@ -195,7 +175,7 @@ def delete_spec(spec_uid):
 
 
 @specifications_bp.route('/update_room/<room_uid>/', methods=['PATCH'])
-@jwt_required()
+@firebase_required
 def update_room(room_uid):
     data = request.get_json()
     if data:

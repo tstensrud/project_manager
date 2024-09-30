@@ -51,15 +51,6 @@ function Navbar() {
         setDisplayDashboardContainer(false);
     }
 
-    const handleLogOut = async (e) => {
-        e.preventDefault();
-        await signOut(auth).then(() => {
-            dispatch({type: "LOGOUT" });
-            navigate("/");
-        }).catch((error) => {
-            console.log(error);
-        })
-    }
     return (
         <>
             {

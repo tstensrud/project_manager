@@ -10,6 +10,8 @@ import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableTDelement from '../../layout/tableelements/TableTDelement.jsx';
 import TableContainer from '../../layout/tableelements/TableContainer.jsx';
+import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
+import TableFooter from '../../layout/tableelements/TableFooter.jsx'
 import TableWrapper from "../../layout/tableelements/TableWrapper.jsx";
 import SanitaryTableRowComponent from "./SanitaryTableRowComponent.jsx";
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
@@ -128,6 +130,9 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                             </div>
                         </div> */}
                         </TableContainer>
+                        <TableFooter>
+                            <td className="h-6" colspan="14"></td>
+                        </TableFooter>
                     </>
                 )
             }

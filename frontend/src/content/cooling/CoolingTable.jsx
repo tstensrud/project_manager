@@ -9,6 +9,8 @@ import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableContainer from '../../layout/tableelements/TableContainer.jsx';
 import TableWrapper from "../../layout/tableelements/TableWrapper.jsx";
+import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
+import TableFooter from '../../layout/tableelements/TableFooter.jsx'
 import CoolingTableRowComponent from "./CoolingTableRowComponent.jsx";
 import TableTop from '../../layout/TableTop.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
@@ -87,6 +89,9 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                 ))
                             }
                         </TableContainer>
+                        <TableFooter>
+                            <td className="h-6" colspan="14"></td>
+                        </TableFooter>
                     </>
                 )
             }

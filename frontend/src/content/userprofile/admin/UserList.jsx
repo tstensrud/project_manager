@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
-import { auth } from '../../../utils/firebase.js';
 
 // hooks
 import useFetch from '../../../hooks/useFetch'
 import useUpdateData from '../../../hooks/useUpdateData.jsx';
+import LoadingSpinner from '../../../layout/LoadingSpinner.jsx';
 
 function UserList({ newUserFlag }) {
     const { data: userData, loading: userDataLoading, refetch: userDataRefetch } = useFetch(`/user/all_users/`);
@@ -36,76 +36,89 @@ function UserList({ newUserFlag }) {
         <>
             <div className="flex flex-col">
                 <div className="flex flex-col w-full">
-                    <table>
-                        <thead>
-                            <tr className="border-default-border-color text-grey-text dark:text-dark-grey-text  border-b dark:border-b-dark-default-border-color w-56">
-                                <th className="pt-1 pb-1 pl-3 min-w-[300px] max-w-[300px] w-[300px] text-start">
-                                    Navn
-                                </th>
-                                <th className="pt-1 pb-1 min-w-[400px] max-w-[400px] w-[400px] text-start">
-                                    Epost
-                                </th>
-                                <th className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-start">
-                                    Sist innlogget
-                                </th>
-                                <th className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-start">
-                                    Admin
-                                </th>
-                                <th className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-start">
-                                    Aktiv
-                                </th>
-                                <th className="pt-1 pb-1 pr-3 min-w-[150px] max-w-[150px] w-[150px] text-end">
-                                    Deaktiver
-                                </th>
-                                <th className="pt-1 pb-1 pr-3 min-w-[300px] max-w-[300px] w-[300px] text-end">
-                                    Bruker-ID
-                                </th>
-                                <th className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-end">
-                                    Slett
-                                </th>
-                            </tr>
-                        </thead>
+                    {
+                        userDataLoading ? (
+                            <LoadingSpinner text="brukere" />
+                        ) : (
+                            <table>
+                                <thead>
+                                    <tr className="border-default-border-color text-grey-text dark:text-dark-grey-text  border-b dark:border-b-dark-default-border-color w-56">
+                                        <th className="pt-1 pb-1 pl-3 min-w-[300px] max-w-[300px] w-[300px] text-start">
+                                            Navn
+                                        </th>
+                                        <th className="pt-1 pb-1 min-w-[400px] max-w-[400px] w-[400px] text-start">
+                                            Epost
+                                        </th>
+                                        <th className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-start">
+                                            Sist innlogget
+                                        </th>
+                                        <th className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-start">
+                                            Admin
+                                        </th>
+                                        <th className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-start">
+                                            Aktiv
+                                        </th>
+                                        <th className="pt-1 pb-1 pr-3 min-w-[150px] max-w-[150px] w-[150px] text-end">
+                                            Deaktiver
+                                        </th>
+                                        <th className="pt-1 pb-1 pr-3 min-w-[300px] max-w-[300px] w-[300px] text-end">
+                                            Bruker-ID
+                                        </th>
+                                        <th className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-end">
+                                            Slett
+                                        </th>
+                                    </tr>
+                                </thead>
 
-                        <tbody>
-                            {
-                                userData?.success === true && (
-                                    Object.keys(userData.data).map((key, index) => (
-                                        <tr key={index} className="hover:bg-table-hover dark:hover:bg-dark-table-hover">
-                                            <td className="pt-1 pb-1 pl-3 min-w-[300px] max-w-[300px] w-[300px] text-start">
-                                                {userData.data[key]["server"].name}
-                                            </td>
-                                            <td className="pt-1 pb-1 min-w-[400px] max-w-[400px] w-[400px]">
-                                                {userData.data[key]["server"].email}
-                                            </td>
-                                            <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
-                                                {userData.data[key]["firebase"].last_sign_in_timestamp}
-                                            </td>
-                                            <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
-                                                {userData.data[key]["server"].admin ? 'Ja' : 'Nei'}
-                                            </td>
-                                            <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
-                                                {userData.data[key]["server"].disabled ? 'Nei' : 'Ja'}
-                                            </td>
-                                            <td className="pt-1 pb-1 pr-3 min-w-[150px] max-w-[150px] w-[150px] text-end">
-                                                <button onClick={(e) => handleActiveStatus(e, userData.data[key]["firebase"].uid)} className="font-semibold hover:text-accent-accent-color dark:hover:text-dark-accent-color">
-                                                    {
-                                                        userData.data[key]["firebase"].disabled ? 'Aktiver' : 'Deaktiver'
-                                                    }
-                                                </button>
-                                            </td>
-                                            <td className="pt-1 pb-1 pr-3 min-w-[300px] max-w-[300px] w-[300px] text-end">
-                                                {userData.data[key]["firebase"].uid}
-                                            </td>
-                                            <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-end">
-                                                <button disabled>Slett</button>
-                                            </td>
-                                        </tr>
-                                    )
-                                    )
-                                )
-                            }
-                        </tbody>
-                    </table>
+                                <tbody>
+                                    {
+                                        userData?.success === true && (
+                                            Object.keys(userData.data).map((key, index) => (
+                                                <tr key={index} className="hover:bg-table-hover dark:hover:bg-dark-table-hover">
+                                                    <td className="pt-1 pb-1 pl-3 min-w-[300px] max-w-[300px] w-[300px] text-start">
+                                                        {userData.data[key]["server"].name}
+                                                    </td>
+                                                    <td className="pt-1 pb-1 min-w-[400px] max-w-[400px] w-[400px]">
+                                                        {userData.data[key]["server"].email}
+                                                    </td>
+                                                    <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
+                                                        {
+                                                            new Date(userData.data[key]["firebase"].last_sign_in_timestamp).toLocaleString('no-NO', {
+                                                                year: 'numeric',
+                                                                month: 'short',
+                                                                day: 'numeric',
+                                                            })
+                                                        }
+                                                    </td>
+                                                    <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
+                                                        {userData.data[key]["server"].admin ? 'Ja' : 'Nei'}
+                                                    </td>
+                                                    <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px]">
+                                                        {userData.data[key]["firebase"].disabled ? 'Nei' : 'Ja'}
+                                                    </td>
+                                                    <td className="pt-1 pb-1 pr-3 min-w-[150px] max-w-[150px] w-[150px] text-end">
+                                                        <button onClick={(e) => handleActiveStatus(e, userData.data[key]["firebase"].uid)} className="font-semibold hover:text-accent-accent-color dark:hover:text-dark-accent-color">
+                                                            {
+                                                                userData.data[key]["firebase"].disabled ? 'Aktiver' : 'Deaktiver'
+                                                            }
+                                                        </button>
+                                                    </td>
+                                                    <td className="pt-1 pb-1 pr-3 min-w-[300px] max-w-[300px] w-[300px] text-end">
+                                                        {userData.data[key]["firebase"].uid}
+                                                    </td>
+                                                    <td className="pt-1 pb-1 pr-3 min-w-[100px] max-w-[100px] w-[100px] text-end">
+                                                        <button disabled>Slett</button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                            )
+                                        )
+                                    }
+                                </tbody>
+                            </table>
+                        )
+                    }
+
                 </div>
             </div>
         </>

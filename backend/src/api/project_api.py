@@ -402,10 +402,12 @@ def undo_delete(project_uid, room_uid):
 @firebase_required
 def ventsystems(project_uid):
     systems = dbo.get_all_systems(project_uid)
-    if systems == []:
-        return jsonify({"error": "Ingen systemer i databasen"})
-    systems_data = list(map(lambda x: x.get_json(), systems))
-    return jsonify({"systems_data": systems_data})
+    if systems:
+        system_data = {}
+        for system in systems:
+            system_data[system.uid] = system.get_json()
+        return jsonify({"success": True, "data": system_data})
+    return jsonify({"success": False, "message": "Ingen systemer i databasen"})
 
 @project_api_bp.route('/get_system/<system_uid>/', methods=['GET'])
 @firebase_required

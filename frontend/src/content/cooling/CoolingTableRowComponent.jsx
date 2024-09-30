@@ -49,12 +49,10 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
 
     useEffect(() => {
         if (updateVentDataResponse?.success === true) {
-            //console.log("Vent data response: ", updateVentDataResponse);
             setUpdateVentData({});
             coolingRefetch();
         }
         if (updateRoomDataResponse?.success === true) {
-            //console.log("Room data response: ", updateRoomDataResponse);
             setData({});
             coolingRefetch();
         }

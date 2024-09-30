@@ -7,7 +7,7 @@ function RoomData({ heatingData, setShowRoomData }) {
   const handleClick = (e) => {
     setShowRoomData(false);
   }
-  console.log(heatingData)
+  
   return (
     <div className="fixed h-full w-full justify-center items-center z-[1000] left-0 top-0 bg-background-shade">
       <div className="fixed shadow-lg bg-secondary-color dark:bg-dark-secondary-color shadow-background-shade border border-default-border-color dark:border-dark-default-border-color top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1000] h-1/2 w-[450px] overflow-y-auto rounded-lg">

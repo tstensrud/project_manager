@@ -30,7 +30,7 @@ function NewSpec() {
         await handleSubmit();
         setData('');
     }
-    console.log(response)
+    
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Ny kravspesifikasjon"} projectName={""} projectNumber={""} />

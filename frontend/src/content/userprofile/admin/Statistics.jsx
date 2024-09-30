@@ -5,12 +5,12 @@ import LoadingSpinner from '../../../layout/LoadingSpinner';
 
 function Statistics() {
     const { data, loading, error, refetch } = useFetch(`/projects/stats/`);
-
+    console.log(data)
     return (
         <>
             {
                 loading ? (
-                    <LoadingSpinner />
+                    <LoadingSpinner text="statistikk" />
                 ) : (
                     <div className="w-1/3 flex flex-col">
 
