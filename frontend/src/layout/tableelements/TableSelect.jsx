@@ -12,7 +12,9 @@ function TableSelect({ currentSystemName, systems, handleSystemChange }) {
         hover:rounded-bl-none
         hover:rounded-br-none
         bg-tertiary-color
-        dark:bg-dark-tertiary-color relative">
+        dark:bg-dark-tertiary-color
+        relative
+        ">
             <div className="bg-tertiary-color dark:bg-dark-tertiary-color p-1 rounded-lg cursor-default flex flex-row">
                 <div className="w-[10%]">
 
@@ -38,7 +40,7 @@ function TableSelect({ currentSystemName, systems, handleSystemChange }) {
             group-hover:rounded-lg
              group-hover:absolute
              group-hover:block
-             group-hover:z-50
+             group-hover:z-[9999]
              group-hover:top-full
              group-hover:left-0
              group-hover:rounded-tl-none
