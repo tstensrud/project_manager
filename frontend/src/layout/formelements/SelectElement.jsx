@@ -12,8 +12,8 @@ const SelectElement = forwardRef((props, ref) => {
                 dark:border-dark-form-border-color
                 text-primary-color
                 dark:text-dark-primary-color
-                border-2
-                rounded-3xl
+                border
+                rounded-lg
                 text-sm
                 pl-5
                 pr-5

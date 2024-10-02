@@ -83,7 +83,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                         <form onSubmit={submitNameChange}>
                             <div className="flex flex-col">
                                 <div className="flex mb-1">
-                                    <CardInputField changeFunction={handleNameChange} name="buildingName" placeholder="Endre navn.." />
+                                    <CardInputField changeFunction={handleNameChange} name="buildingName" placeholder="Endre navn.." required={true} />
                                 </div>
                                 <div className="flex items-center">
                                     <CardButton buttonText="Lagre" /> {error && error}

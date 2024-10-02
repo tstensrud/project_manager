@@ -13,8 +13,8 @@ function SortingButton({name, index, sortButtonClick, buttonText, disabled}) {
         outline-none
         bg-secondary-color
         dark:bg-dark-secondary-color
-        rounded-3xl
-        border-2
+        rounded-lg
+        border
         border-form-border-color
         dark:border-dark-form-border-color
         pr-5

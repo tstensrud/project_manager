@@ -833,3 +833,61 @@
 
 - 2024-10-01 09:34:02.983918: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
 
+- 2024-10-02 08:57:51.530420: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-10-02 08:57:51.862383: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-10-02 08:57:52.634359: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-10-02 08:57:52.653122: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-10-02 08:57:52.693628: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-10-02 08:57:52.954418: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-10-02 08:57:53.011254: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-10-02 08:57:53.039075: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-10-02 15:56:02.321038: new todo item: (psycopg2.errors.ForeignKeyViolation) insert or update on table "TodoItem" violates foreign key constraint "TodoItem_project_uid_fkey"
+DETAIL:  Key (project_uid)=(undefined) is not present in table "Projects".
+
+[SQL: INSERT INTO "TodoItem" (uid, project_uid, author_uid, date, content, completed, date_completed, completed_by) VALUES (%(uid)s, %(project_uid)s, %(author_uid)s, %(date)s, %(content)s, %(completed)s, %(date_completed)s, %(completed_by)s) RETURNING "TodoItem".id]
+[parameters: {'uid': '23kWu1FITnCdv2mfhKokrg', 'project_uid': 'undefined', 'author_uid': 'CADOUxWMStPcXgZhhROtTEQu6aQ2', 'date': '2024-10-02', 'content': 'test', 'completed': False, 'date_completed': 0, 'completed_by': ''}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+- 2024-10-02 15:56:04.175002: new todo item: (psycopg2.errors.ForeignKeyViolation) insert or update on table "TodoItem" violates foreign key constraint "TodoItem_project_uid_fkey"
+DETAIL:  Key (project_uid)=(undefined) is not present in table "Projects".
+
+[SQL: INSERT INTO "TodoItem" (uid, project_uid, author_uid, date, content, completed, date_completed, completed_by) VALUES (%(uid)s, %(project_uid)s, %(author_uid)s, %(date)s, %(content)s, %(completed)s, %(date_completed)s, %(completed_by)s) RETURNING "TodoItem".id]
+[parameters: {'uid': 'wVlBf-acR8yfqeHnwVusSA', 'project_uid': 'undefined', 'author_uid': 'CADOUxWMStPcXgZhhROtTEQu6aQ2', 'date': '2024-10-02', 'content': 'test', 'completed': False, 'date_completed': 0, 'completed_by': ''}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+- 2024-10-02 15:56:04.757361: new todo item: (psycopg2.errors.ForeignKeyViolation) insert or update on table "TodoItem" violates foreign key constraint "TodoItem_project_uid_fkey"
+DETAIL:  Key (project_uid)=(undefined) is not present in table "Projects".
+
+[SQL: INSERT INTO "TodoItem" (uid, project_uid, author_uid, date, content, completed, date_completed, completed_by) VALUES (%(uid)s, %(project_uid)s, %(author_uid)s, %(date)s, %(content)s, %(completed)s, %(date_completed)s, %(completed_by)s) RETURNING "TodoItem".id]
+[parameters: {'uid': 'kN5bXhZ9Qhy3AzSRBWnp_w', 'project_uid': 'undefined', 'author_uid': 'CADOUxWMStPcXgZhhROtTEQu6aQ2', 'date': '2024-10-02', 'content': 'test', 'completed': False, 'date_completed': 0, 'completed_by': ''}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+- 2024-10-02 15:56:05.276509: new todo item: (psycopg2.errors.ForeignKeyViolation) insert or update on table "TodoItem" violates foreign key constraint "TodoItem_project_uid_fkey"
+DETAIL:  Key (project_uid)=(undefined) is not present in table "Projects".
+
+[SQL: INSERT INTO "TodoItem" (uid, project_uid, author_uid, date, content, completed, date_completed, completed_by) VALUES (%(uid)s, %(project_uid)s, %(author_uid)s, %(date)s, %(content)s, %(completed)s, %(date_completed)s, %(completed_by)s) RETURNING "TodoItem".id]
+[parameters: {'uid': 'DntRvusqQGuwZILl63K8qw', 'project_uid': 'undefined', 'author_uid': 'CADOUxWMStPcXgZhhROtTEQu6aQ2', 'date': '2024-10-02', 'content': 'test', 'completed': False, 'date_completed': 0, 'completed_by': ''}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+- 2024-10-02 15:56:22.322767: new todo item: (psycopg2.errors.ForeignKeyViolation) insert or update on table "TodoItem" violates foreign key constraint "TodoItem_project_uid_fkey"
+DETAIL:  Key (project_uid)=(undefined) is not present in table "Projects".
+
+[SQL: INSERT INTO "TodoItem" (uid, project_uid, author_uid, date, content, completed, date_completed, completed_by) VALUES (%(uid)s, %(project_uid)s, %(author_uid)s, %(date)s, %(content)s, %(completed)s, %(date_completed)s, %(completed_by)s) RETURNING "TodoItem".id]
+[parameters: {'uid': 'ROuereCkQUilPplzO1jXxg', 'project_uid': 'undefined', 'author_uid': 'CADOUxWMStPcXgZhhROtTEQu6aQ2', 'date': '2024-10-02', 'content': 'test', 'completed': False, 'date_completed': 0, 'completed_by': ''}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+- 2024-10-02 15:57:08.238455: new todo item: (psycopg2.errors.ForeignKeyViolation) insert or update on table "TodoItem" violates foreign key constraint "TodoItem_project_uid_fkey"
+DETAIL:  Key (project_uid)=(undefined) is not present in table "Projects".
+
+[SQL: INSERT INTO "TodoItem" (uid, project_uid, author_uid, date, content, completed, date_completed, completed_by) VALUES (%(uid)s, %(project_uid)s, %(author_uid)s, %(date)s, %(content)s, %(completed)s, %(date_completed)s, %(completed_by)s) RETURNING "TodoItem".id]
+[parameters: {'uid': 'c5r8twZtSoiL-6FTXVNkYQ', 'project_uid': 'undefined', 'author_uid': 'CADOUxWMStPcXgZhhROtTEQu6aQ2', 'date': '2024-10-02', 'content': 'test', 'completed': False, 'date_completed': 0, 'completed_by': ''}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+

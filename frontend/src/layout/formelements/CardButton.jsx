@@ -12,11 +12,11 @@ function CardButton(props) {
                             dark:bg-dark-tertiary-color
                             border-form-border-color
                             dark:border-dark-form-border-color
-                            border-2 uppercase outline-none
+                            border
+                            uppercase outline-none
                             text-primary-color
                             dark:text-dark-primary-color
-                            font-bold
-                            text-xs cursor-pointer rounded-3xl h-9 pl-5 pr-5
+                            text-xs cursor-pointer rounded-lg h-9 pl-5 pr-5
                             hover:border-form-element-hover
                             hover:dark:border-dark-form-element-hover
                             focus:border-form-element-hover
@@ -34,11 +34,12 @@ function CardButton(props) {
                             bg-tertiary-color
                             dark:bg-dark-tertiary-color
                             dark:border-dark-form-border-color
-                            border-form-border-color border-2 uppercase outline-none 
+                            border-form-border-color
+                            uppercase outline-none 
+                            border
                             text-primary-color
                             dark:text-dark-primary-color
-                            font-bold
-                            text-xs cursor-pointer rounded-3xl h-9 pl-5 pr-5
+                            text-xs cursor-pointer rounded-lg h-9 pl-5 pr-5
                             hover:border-form-element-hover
                             hover:dark:border-dark-form-element-hover 
                             focus:border-form-element-hover

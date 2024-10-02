@@ -12,6 +12,7 @@ import useDeleteData from '../../hooks/useDeleteData'
 import MessageBox from '../../layout/MessageBox';
 import LoadingRow from '../../layout/tableelements/LoadingRow.jsx';
 import MarkedRow from "../../layout/tableelements/MarkedRow.jsx";
+import EditableTableCell from "../../layout/tableelements/EditableTableCell.jsx";
 
 // Svg
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -116,7 +117,9 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
                 editingCell === cellName && roomData ? (
                     <EditableInputField value={roomData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
-                    roomData ? roomData.room_data[cellName] : ''
+                    <EditableTableCell>
+                        {roomData ? roomData.room_data[cellName] : ''}
+                    </EditableTableCell>
                 )
             }
         </TableTDelement>

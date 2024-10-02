@@ -66,15 +66,15 @@ function Login(props) {
                                     Structor TS prosjekter
                                 </div>
                                 <div className="mt-5">
-                                    <input className="border-2 border-dark-form-border-color bg-dark-form-background-color rounded-3xl w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-form-element-hover" type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-post" />
+                                    <input className="border border-dark-form-border-color bg-dark-form-background-color rounded-lg w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-form-element-hover" type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-post" />
                                 </div>
                                 <div className="mt-3">
-                                    <input className="border-2 border-dark-form-border-color bg-dark-form-background-color rounded-3xl w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-form-element-hover" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passord" />
+                                    <input className="border border-dark-form-border-color bg-dark-form-background-color rounded-lg w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-form-element-hover" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passord" />
                                 </div>
 
                                 <div className="flex flex-col mt-3 justify-center">
                                     <div className="mb-5">
-                                        <button onClick={firebaseLogin} className="border-2 border-dark-form-border-color bg-dark-form-background-color text-dark-primary-color rounded-3xl pt-2 pb-2 pl-5 pr-5 focus:border-dark-form-focus-border-color focus:outline-none hover:border-dark-form-element-hover" type="submit">
+                                        <button onClick={firebaseLogin} className="border border-dark-form-border-color bg-dark-form-background-color text-dark-primary-color rounded-lg pt-2 pb-2 pl-5 pr-5 focus:border-dark-form-focus-border-color focus:outline-none hover:border-dark-form-element-hover" type="submit">
                                             Logg inn
                                         </button>
                                     </div>

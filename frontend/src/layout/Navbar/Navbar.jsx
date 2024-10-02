@@ -131,7 +131,7 @@ function Navbar() {
                             <div className="flex flex-col w-[250px] tracking-wide">
                                 <div className="flex flex-col w-[250px] tracking-wide">
                                     <NavbarMenuTitle title="Brukervalg" />
-                                    <NavbarLink url={'userprofile'} linkText="Min side" />
+                                    <NavbarLink url={'/'} linkText="Min side" />
                                     <NavbarLink url={`logout`} linkText="Logg ut" />
                                 </div>
                             </div>
@@ -158,7 +158,7 @@ function Navbar() {
                 <div className="flex w-[60%] h-full justify-center items-center">
                     {
                         activeProjectName && (
-                            <div className="flex items-center justify-center text-center uppercase bg-primary-color dark:bg-dark-tertiary-color rounded-3xl pl-10 pr-10 mt-1 mb-1 text-3xl font-semibold text-secondary-color dark:text-dark-primary-color">
+                            <div className="flex items-center justify-center text-center uppercase bg-primary-color dark:bg-dark-tertiary-color rounded-lg pl-10 pr-10 mt-1 mb-1 text-3xl font-semibold text-secondary-color dark:text-dark-primary-color">
                                 {activeProjectName}
                             </div>
                         )

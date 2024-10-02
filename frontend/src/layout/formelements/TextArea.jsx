@@ -8,7 +8,7 @@ const TextArea = forwardRef((props, ref) => {
             ref={ref}
             className="
             bg-tertiary-color
-            border-2
+            border
             dark:bg-dark-tertiary-color
             border-form-border-color
             dark:border-dark-form-border-color

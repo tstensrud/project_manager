@@ -11,6 +11,8 @@ import EditableInputField from "../../layout/tableelements/EditableInputField.js
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import TableButton from "../../layout/tableelements/TableButton.jsx";
 import LoadingRow from "../../layout/tableelements/LoadingRow.jsx";
+import EditableTableCell from "../../layout/tableelements/EditableTableCell.jsx";
+
 
 function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
 
@@ -23,15 +25,9 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
 
     // Edit of cells
     const [editingCell, setEditingCell] = useState(null);
-    const [editedData, setEditedData] = useState(null);
     const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
 
     // useEffects
-    useEffect(() => {
-        if (roomData) {
-            setEditedData('');
-        }
-    }, [roomData]);
 
     // Use effects
     useEffect(() => {
@@ -91,7 +87,9 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
                 editingCell === cellName && roomData ? (
                     <EditableInputField value={roomData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
-                    roomData ? roomData.data[cellName] : ''
+                    <EditableTableCell>
+                        {roomData ? roomData.data[cellName] : ''}
+                    </EditableTableCell>
                 )
             }
         </TableTDelement>

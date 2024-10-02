@@ -9,7 +9,7 @@ function TableButton(props) {
         uppercase
         h-6
         outline-none
-        border-2
+        border
         border-form-border-color
         dark:border-dark-form-border-color
         bg-form-background-color
@@ -18,7 +18,7 @@ function TableButton(props) {
         cursor-pointer
         transition
         duration-200
-        rounded-3xl
+        rounded-lg
         pl-4
         pr-4 
         hover:border-form-element-hover

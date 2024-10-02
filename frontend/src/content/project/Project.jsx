@@ -1,6 +1,8 @@
 import { useEffect, useContext } from 'react';
-import useFetch from '../../hooks/useFetch'
 import { useParams } from 'react-router-dom';
+
+// hooks and utils
+import useFetch from '../../hooks/useFetch'
 import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
@@ -52,25 +54,13 @@ function Project() {
                                         <VentilationSummary systemData={data.data.ventsystemData} totalAirflow={data.data.airflow} projectId={projectId} />
                                         <HeatingCoolingSummary totalCooling={data.data.cooling} totalHeating={data.data.heating} projectId={projectId} />
                                     </div>
-
                                 )
                             }
                         </>
                     )
                 }
-                <div class="group p-4">
-
-                    <div class="bg-gray-200 p-4 rounded-md hover:bg-gray-400 cursor-pointer">
-                        Hover over me
-                    </div>
-
-
-                    <div class="bg-yellow-300 p-4 mt-2 hidden group-hover:block">
-                        I appear when you hover over the first div
-                    </div>
-                </div>
-
             </MainContentContainer>
+
         </>
     );
 }

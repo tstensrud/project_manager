@@ -10,8 +10,8 @@ function ActiveSortingButton({name, index, sortButtonClick, buttonText, disabled
             className="uppercase h-11 outline-none 
             bg-secondary-color
             dark:bg-dark-secondary-color
-            rounded-3xl
-            border-2
+            rounded-lg
+            border
             border-form-focus-color
             dark:border-dark-form-focus-border-color
             pl-5

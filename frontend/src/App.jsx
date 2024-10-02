@@ -35,7 +35,6 @@ import NotFound from './layout/NotFound.jsx';
 
 function App() {
 
-  //const { token, removeToken, setToken } = useToken();
   const { currentUser } = useContext(AuthContext);
 
   const RequiredAuth = ({ children }) => {
@@ -54,13 +53,13 @@ function App() {
           ) : (
             <>
               <Route path="/" element={<Layout />}>
+                <Route path="/" element={<RequiredAuth><UserProfile /></RequiredAuth>} />
                 <Route path="dashboard" element={<RequiredAuth><Dashboard /></RequiredAuth>} />
                 <Route path="specifications/edit/:suid/:name" element={<RequiredAuth><EditSpecification /></RequiredAuth>} />
                 <Route path="specifications" element={<RequiredAuth><Specifications /></RequiredAuth>} />
                 <Route path="specifications/:suid/" element={<RequiredAuth><Specification /></RequiredAuth>} />
                 <Route path="specifications/:suid/new_room" element={<RequiredAuth><NewRoomSpec /></RequiredAuth>} />
                 <Route path="newspecification" element={<RequiredAuth><NewSpec /> </RequiredAuth>} />
-                <Route path="userprofile" element={<RequiredAuth><UserProfile /></RequiredAuth>} />
                 <Route path="admin" element={<RequiredAuth><Admin /> </RequiredAuth>} />
                 <Route path="newproject" element={<RequiredAuth><NewProject /></RequiredAuth>} />
                 <Route path="project/:projectId" element={<RequiredAuth><Project /> </RequiredAuth>} />

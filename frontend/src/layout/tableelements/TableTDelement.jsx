@@ -7,15 +7,14 @@ function TableTDelement(props) {
         ${props?.cellClass && props.cellClass === "supply" && 'bg-supply-color text-secondary-color dark:text-dark-primary-color'}
         ${props?.cellClass && props.cellClass === "extract" && 'bg-extract-color text-secondary-color dark:text-dark-primary-color'}
         ${props?.cellClass && props.cellClass === "grey" && 'text-grey-text dark:text-dark-grey-text'}
+        overflow-visible
         text-center
         box-border
         h-10
         border-table-border-color
         dark:border-dark-table-border-color
         border-t
-        
         text-sm
-        overflow-hidden
         text-wrap
         `}
         name={props.name}

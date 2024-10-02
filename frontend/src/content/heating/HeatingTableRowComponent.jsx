@@ -9,6 +9,7 @@ import useUpdateData from '../../hooks/useUpdateData';
 import RoomData from './RoomData';
 import MessageBox from '../../layout/MessageBox';
 import MarkedRow from "../../layout/tableelements/MarkedRow.jsx";
+import EditableTableCell from "../../layout/tableelements/EditableTableCell.jsx";
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -27,7 +28,6 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
-    const [editedData, setEditedData] = useState(null);
 
     // Marking a row
     const [markedRow, setMarkedRow] = useState(false);
@@ -39,12 +39,6 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
     useEffect(() => { // Refetch upon received message theat heating settings has changed
         heatingRefetch();
     }, [settingsUpdatedState]);
-
-    useEffect(() => {
-        if (heatingData) {
-            setEditedData('');
-        }
-    }, [heatingData]);
 
     useEffect(() => {
         if (response?.success === true) {
@@ -100,7 +94,9 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                 editingCell === cellName && heatingData ? (
                     <EditableInputField value={heatingData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
-                    heatingData ? heatingData.heating_data[cellName] : ''
+                    <EditableTableCell>
+                        {heatingData ? heatingData.heating_data[cellName] : ''}
+                    </EditableTableCell>
                 )
             }
         </TableTDelement>

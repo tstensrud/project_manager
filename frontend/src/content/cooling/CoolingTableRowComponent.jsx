@@ -8,12 +8,14 @@ import useUpdateData from '../../hooks/useUpdateData';
 // Components
 import MessageBox from '../../layout/MessageBox';
 import MarkedRow from "../../layout/tableelements/MarkedRow.jsx";
+import EditableTableCell from "../../layout/tableelements/EditableTableCell.jsx";
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
 import EditableInputField from "../../layout/tableelements/EditableInputField.jsx";
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import LoadingRow from "../../layout/tableelements/LoadingRow.jsx";
+
 
 
 function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }) {
@@ -30,7 +32,6 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
-    const [editedData, setEditedData] = useState(null);
 
     // Marking a row
     const [markedRow, setMarkedRow] = useState(false);
@@ -42,7 +43,6 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
 
     useEffect(() => {
         if (coolingData) {
-            setEditedData('');
             calculateExtraAirNeeded();
         }
     }, [coolingData]);
@@ -112,7 +112,9 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
                 editingCell === cellName && coolingData ? (
                     <EditableInputField value={coolingData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
-                    coolingData ? coolingData.cooling_data[cellName] : ''
+                    <EditableTableCell>
+                        {coolingData ? coolingData.cooling_data[cellName] : ''}
+                    </EditableTableCell>
                 )
             }
         </TableTDelement>

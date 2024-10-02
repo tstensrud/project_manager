@@ -9,6 +9,7 @@ import useUpdateData from '../../hooks/useUpdateData';
 import MessageBox from '../../layout/MessageBox';
 import LoadingRow from '../../layout/tableelements/LoadingRow.jsx';
 import MarkedRow from "../../layout/tableelements/MarkedRow.jsx";
+import EditableTableCell from "../../layout/tableelements/EditableTableCell.jsx";
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -25,21 +26,13 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
     // Update data
     const { response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/sanitary/update_room/${roomId}/`);
 
-
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
-    const [editedData, setEditedData] = useState(null);
 
     // Marking a row
     const [markedRow, setMarkedRow] = useState('');
 
     // useEffects
-    useEffect(() => {
-        if (sanitaryData) {
-            setEditedData('');
-        }
-    }, [sanitaryData]);
-
     useEffect(() => {
         if(response?.success === true) {
             setData('');
@@ -90,7 +83,9 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
                 editingCell === cellName && sanitaryData ? (
                     <EditableInputField value={sanitaryData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
-                    sanitaryData ? sanitaryData.sanitary_data[cellName] : ''
+                    <EditableTableCell>
+                        {sanitaryData ? sanitaryData.sanitary_data[cellName] : ''}
+                    </EditableTableCell>
                 )
             }
         </TableTDelement>

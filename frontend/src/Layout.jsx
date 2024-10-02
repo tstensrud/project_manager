@@ -1,19 +1,20 @@
 import { useContext, useState } from "react";
 import { Outlet } from 'react-router-dom';
-import { GlobalContext } from './context/GlobalContext';
-import Header from './layout/Header';
+
+import { AuthContext } from './context/AuthContext.jsx';
+import Navbar from './layout/Navbar/Navbar';
 
 
 
-function Layout() {
-    const { userUuid, setUserUuid } = useContext(GlobalContext);
+function Layout({ children }) {
+    const { currentUser, idToken } = useContext(AuthContext);
 
     return (
         <>
-            <Header/>
-            
-                <Outlet />
-            
+            <Navbar></Navbar>
+            <Outlet>
+                {children}
+            </Outlet>
         </>
     );
 }

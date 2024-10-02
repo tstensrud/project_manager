@@ -13,11 +13,11 @@ const InputField = forwardRef((props, ref) => {
                 dark:text-dark-primary-color
                 outline-none
                 w-full
-                border-2
+                border
                 pl-5
                 pr-5
                 text-sm
-                rounded-3xl
+                rounded-lg
                 h-9
                 focus:border-form-focus-border-color
                 focus:dark:border-dark-form-focus-border-color

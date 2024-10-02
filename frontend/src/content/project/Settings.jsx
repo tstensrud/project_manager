@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 
 import { useParams, useNavigate } from 'react-router-dom';
-import { GlobalContext } from '../../context/GlobalContext';
 
 // Hooks
 import useFetch from '../../hooks/useFetch'
@@ -17,6 +16,7 @@ import CardSelect from '../../layout/formelements/CardSelect';
 import CardInputField from '../../layout/formelements/CardInputField.jsx';
 import TextArea from '../../layout/formelements/TextArea.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
+import MessageBox from '../../layout/MessageBox.jsx';
 
 function Settings() {
     const { projectId } = useParams();

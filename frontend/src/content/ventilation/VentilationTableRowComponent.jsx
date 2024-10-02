@@ -11,6 +11,7 @@ import RoomData from './RoomData';
 import MessageBox from '../../layout/MessageBox';
 import LoadingRow from '../../layout/tableelements/LoadingRow.jsx';
 import MarkedRow from "../../layout/tableelements/MarkedRow.jsx";
+import EditableTableCell from "../../layout/tableelements/EditableTableCell.jsx";
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
@@ -31,7 +32,6 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
-    const [editedData, setEditedData] = useState(null);
     const [currentSystemId, setCurrentSystemId] = useState('');
     const [currentSystemName, setCurrentSystemName] = useState('');
 
@@ -43,9 +43,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
 
     // useEffects
     useEffect(() => {
-        if (ventData) {
-            setEditedData('');
-        }
+
         if (ventData && ventData.vent_data) {
             setCurrentSystemId(ventData.vent_data.SystemId);
             setCurrentSystemName(ventData.vent_data.SystemName);
@@ -111,19 +109,21 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
     };
 
     const renderEditableCell = (cellName, cellClass, width) => (
-        <TableTDelement cellClass={cellClass} pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
+        <TableTDelement overFlow={true} cellClass={cellClass} pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
             {
                 editingCell === cellName && ventData ? (
                     <EditableInputField value={ventData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
-                    ventData ? ventData.vent_data[cellName] : ''
+                    <EditableTableCell>
+                        {ventData ? ventData.vent_data[cellName] : ''}
+                    </EditableTableCell>
                 )
             }
         </TableTDelement>
     );
 
-    const handleSystemChange = (e) => {
-        const newSystemData = { [e.target.name]: e.target.value }
+    const handleSystemChange = (newSystemUid) => {
+        const newSystemData = {systemUid: newSystemUid}
         setSystemData(newSystemData);
     };
 
@@ -208,14 +208,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                                 {calculateMinAirFlow()}
                             </TableTDelement>
                             <TableTDelement width="6%">
-                                <TableSelect value={currentSystemName} name="systemUid" changeFunction={handleSystemChange}>
-                                    {currentSystemName ? (<option key="0">{currentSystemName}</option>) : ''}
-                                    {
-                                        systems?.data && Object.keys(systems.data).map((key, index) => (
-                                            <option key={index} value={systems.data[key].uid}>{systems.data[key].SystemName}</option>
-                                        ))
-                                    }
-                                </TableSelect>
+                                <TableSelect handleSystemChange={handleSystemChange} currentSystemName={currentSystemName} systems={systems?.data && systems.data} />
                             </TableTDelement>
                             <TableTDelement lastCell={true} width="34%">
                                 <div className="flex flex-row w-full">

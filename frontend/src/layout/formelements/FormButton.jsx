@@ -12,7 +12,7 @@ function FormButton(props) {
                         uppercase
                         bg-form-background-color
                         dark:bg-dark-form-background-color 
-                        border-2 
+                        border 
                         border-form-border-color 
                         dark:border-dark-form-border-color
                         pl-5 pr-5 
@@ -22,7 +22,7 @@ function FormButton(props) {
                         ease-in-out
                         duration-200
                         cursor-pointer
-                        rounded-3xl
+                        rounded-lg
                         h-9
                         hover:border-form-element-hover
                         hover:dark:border-dark-form-element-hover
@@ -40,7 +40,7 @@ function FormButton(props) {
                         uppercase
                         bg-form-background-color
                         dark:bg-dark-form-background-color 
-                        border-2
+                        border
                         border-form-border-color
                         dark:border-dark-form-border-color
                         pl-5
@@ -51,7 +51,7 @@ function FormButton(props) {
                         ease-in-out
                         duration-200
                         cursor-pointer
-                        rounded-3xl
+                        rounded-lg
                         h-9
                         hover:border-form-element-hover
                         hover:dark:border-dark-form-element-hover

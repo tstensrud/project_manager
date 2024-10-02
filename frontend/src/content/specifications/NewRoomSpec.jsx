@@ -126,15 +126,14 @@ function NewRoomSpec() {
                             <div className="flex justify-start w-full mb-2">
                                 <Link onClick={toggleHelpBox} to="#"><HelpIcon /></Link>
                             </div>
-                            <h2>Fyll inn romdata - <Link to={`/specifications/${suid}`} >{data && data.spec_name}</Link></h2>
+                            <h3>Fyll inn romdata - <Link to={`/specifications/${suid}`} >{data && data.spec_name}</Link></h3>
 
                             <div className="relative mt-5 w-full">
                                 <div>Romtype</div>
                                 <CardInputField ref={roomTypeRef} changeFunction={handleInputChange} name="room_type" placeholder="eks: Kontor" tabIndex="1" required={true} />
                             </div>
 
-                            <h4>Luftmengdekrav</h4>
-                            <div className="relative mt-1 w-full">
+                            <div className="relative mt-5 w-full">
                                 <div>Personbelastning</div>
                                 <CardInputField ref={airPerPersonRef} changeFunction={handleInputChange} name="air_per_person" placeholder="m3/pers" tabIndex="2" required={true} />
                                 <div>
@@ -165,8 +164,9 @@ function NewRoomSpec() {
                                     {response && response.error_air_minimum && <>NB! Kun tall i luftmengder</>}
                                 </div>
                             </div>
-
-                            <h4>Ventilasjonsprinsipp</h4>
+                            <div className="pt-3">
+                                Ventilasjonsprinsipp
+                            </div>
                             <div>
                                 <CardSelect ref={ventilationPrincipleRef} changeFunction={handleInputChange} name="ventilation_principle" tabIndex="6">
                                     <option value="Omrøring">Omrøring</option>
@@ -175,8 +175,9 @@ function NewRoomSpec() {
                                 </CardSelect>
                             </div>
 
-
-                            <h4>Gjenvinner</h4>
+                            <div className="pt-3">
+                                Gjenvinner
+                            </div>
                             <div>
                                 <CardSelect ref={heatExRef} changeFunction={handleInputChange} name="heat_ex" tabIndex="7">
                                     <option value="R">Roterenede</option>
@@ -187,8 +188,6 @@ function NewRoomSpec() {
                         </ContentCard>
 
                         <ContentCard>
-                            <h4>Lydkrav</h4>
-
                             <div className="relative mt-5 w-full">
                                 <div>dB teknisk</div>
                                 <CardInputField ref={dbTechnicalRef} changeFunction={handleInputChange} name="db_technical" placeholder="dB" tabIndex="8" required={false} />
@@ -203,8 +202,9 @@ function NewRoomSpec() {
                                 <div>dB mot korridorsone</div>
                                 <CardInputField ref={dbCorridorRef} changeFunction={handleInputChange} name="db_corridor" placeholder="dB" tabIndex="10" required={false} />
                             </div>
-
-                            <h4>Romstyring</h4>
+                            <div className="pt-3">
+                                Romstyring
+                            </div>
                             <div className="checkbox-group">
                                 <p>
                                     <CardSelect ref={vavRef} changeFunction={handleInputChange} name="vav" tabIndex="11">

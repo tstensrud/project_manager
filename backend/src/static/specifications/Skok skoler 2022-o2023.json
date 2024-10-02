@@ -217,7 +217,7 @@
     "ventilation_principle": "Omrøring",
     "heat_exchange": "P, B",
     "room_control": "VAV,T,B,F",
-    "notes": "All tilluft tilfores i garderobe, avtrekk overstrømning  til dusj",
+    "notes": "All tilluft tilfores i garderobe, avtrekk overstrømning  til dusj. 50m3/h per dusj prosess",
       "db_technical": "33dBA",
       "db_neighbour": "48dB",
       "db_corridor": "34dB",

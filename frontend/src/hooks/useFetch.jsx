@@ -13,7 +13,7 @@ const useFetch = (endpoint) => {
       const response = await AxiosInstance.get(endpoint);
       setData(response.data);
     } catch (err) {
-      setError(err.response ? err.response.data : err.message);
+      setError(err.response && err.message);
     } finally {
       setLoading(false);
     }
