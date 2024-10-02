@@ -25,7 +25,7 @@ function Login(props) {
             .then((userCredential) => {
                 const user = userCredential.user;
                 dispatch({ type: "LOGIN", payload: user })
-                navigate("/userprofile");
+                navigate("/");
             })
             .catch((error) => {
                 const errorCode = error.code;
