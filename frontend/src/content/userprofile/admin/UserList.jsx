@@ -42,7 +42,7 @@ function UserList({ newUserFlag }) {
                         ) : (
                             <table>
                                 <thead>
-                                    <tr className="border-default-border-color text-grey-text dark:text-dark-grey-text  border-b dark:border-b-dark-default-border-color w-56">
+                                    <tr className="border-default-border-color text-grey-text dark:text-dark-grey-text font-normal border-b dark:border-b-dark-default-border-color w-56">
                                         <th className="pt-1 pb-1 pl-3 min-w-[300px] max-w-[300px] w-[300px] text-start">
                                             Navn
                                         </th>
@@ -97,7 +97,7 @@ function UserList({ newUserFlag }) {
                                                         {userData.data[key]["firebase"].disabled ? 'Nei' : 'Ja'}
                                                     </td>
                                                     <td className="pt-1 pb-1 pr-3 min-w-[150px] max-w-[150px] w-[150px] text-end">
-                                                        <button onClick={(e) => handleActiveStatus(e, userData.data[key]["firebase"].uid)} className="font-semibold hover:text-accent-accent-color dark:hover:text-dark-accent-color">
+                                                        <button onClick={(e) => handleActiveStatus(e, userData.data[key]["firebase"].uid)} className="text-accent-color dark:text-dark-accent-color hover:text-primary-color dark:hover:text-dark-primary-color">
                                                             {
                                                                 userData.data[key]["firebase"].disabled ? 'Aktiver' : 'Deaktiver'
                                                             }

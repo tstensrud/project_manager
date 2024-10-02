@@ -1,22 +1,17 @@
-import { Link } from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 
 // Hooks and utils
 import { AuthContext } from '../../context/AuthContext.jsx';
-import useFetch from '../../hooks/useFetch'
 import useFetchRequest from '../../hooks/useFetchRequest.jsx';
-import useDeleteData from '../../hooks/useDeleteData.jsx';
 
 // Components
 import ChangePassword from './ChangePassword.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import AccountIcon from '../../assets/svg/accountIcon.jsx'
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
-import BookMarkIcon from '../../assets/svg/bookMarkIcon.jsx'
 import LoadingBar from '../../layout/LoadingBar.jsx';
 import AdminPanel from './admin/AdminPanel.jsx';
 import Userinfo from './Userinfo.jsx';
-import ContentCard from '../../layout/ContentCard.jsx';
 import UserFavs from './UserFavs.jsx';
 
 function UserProfile() {

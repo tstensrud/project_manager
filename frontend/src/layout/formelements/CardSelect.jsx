@@ -11,7 +11,14 @@ const CardSelect = forwardRef((props, ref) => {
             border-2
             border-form-border-color
             dark:border-dark-form-border-color
-            rounded-3xl text-sm pl-5 pr-5 h-9 transition duration-200 outline-none 
+            rounded-3xl
+            text-sm
+            pl-5
+            pr-5
+            h-9
+            transition
+            duration-200
+            outline-none 
             focus:border-form-focus-border-color
             focus:dark:border-dark-form-focus-border-color
             focus:outline-none

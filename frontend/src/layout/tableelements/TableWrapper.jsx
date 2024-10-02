@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import FloorTitleBar from "./FloorTitleBar";
 
-function TableWrapper({floor, children, collapseAll, shaft}) {
+function TableWrapper({ floor, children, collapseAll, shaft }) {
 
     const [showTable, setShowTable] = useState(false);
     const tableRef = useRef(null);
@@ -10,17 +10,21 @@ function TableWrapper({floor, children, collapseAll, shaft}) {
 
     useEffect(() => {
         if (tableRef.current) {
-            setTableHeight(tableRef.current.scrollHeight);
+            if (showTable) {
+                setTableHeight(tableRef.current.scrollHeight + 6);
+            } else {
+                setTableHeight(0);
+            }
         }
-    },[]);
-    
+    }, [children]);
+
     useEffect(() => {
         if (collapseAll) {
             setShowTable(false);
         } else {
             setShowTable(true);
         }
-    },[collapseAll]);
+    }, [collapseAll]);
 
     useEffect(() => {
         if (tableRef.current) {
@@ -30,14 +34,14 @@ function TableWrapper({floor, children, collapseAll, shaft}) {
                 setTableHeight(0);
             }
         }
-    },[showTable]);
-    
+    }, [showTable]);
+
     return (
-        <div className="pb-1">
+        <div className="pb-3">
             {
                 floor ? <FloorTitleBar setShowTable={setShowTable} showTable={showTable} floor={floor} shaft={null} /> : <FloorTitleBar setShowTable={setShowTable} showTable={showTable} floor={null} shaft={shaft} />
             }
-            <div style={{maxHeight: `${tableHeight}px`}} className={showTable ?
+            <div style={{ maxHeight: `${tableHeight}px` }} className={showTable ?
                 `flex overflow-y-auto flex-col transition-all duration-700 ease-in-out mt-0 bg-secondary-color dark:bg-dark-secondary-color shadow-sm shadow-background-shade dark:shadow-none` :
                 "max-h-0 overflow-hidden transition-all duration-700 ease-in-out"}>
                 <div className="flex flex-col mt-0 h-auto bg-secondary-color dark:bg-dark-secondary-color">

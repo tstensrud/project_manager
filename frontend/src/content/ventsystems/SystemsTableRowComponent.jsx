@@ -17,7 +17,6 @@ import LoadingRow from '../../layout/tableelements/LoadingRow.jsx'
 
 // SVG
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
-import LoadingSpinner from "../../layout/LoadingSpinner.jsx";
 
 function SystemTableRowComponent({ systemId, systemsRefetch, cols }) {
     const { projectId } = useParams();

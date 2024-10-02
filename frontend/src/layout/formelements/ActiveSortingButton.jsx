@@ -5,8 +5,6 @@ function ActiveSortingButton({name, index, sortButtonClick, buttonText, disabled
 
     return (
         <button
-
-
             name={name}
             onClick={handleClick}
             className="uppercase h-11 outline-none 
@@ -21,7 +19,6 @@ function ActiveSortingButton({name, index, sortButtonClick, buttonText, disabled
             text-primary-color
             dark:text-dark-primary-color
             text-sm
-            font-bold
             transition
             duration-200
             cursor-pointer

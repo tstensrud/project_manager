@@ -11,7 +11,6 @@ import { AuthContext } from "../../context/AuthContext";
 import NavbarLink from './NavbarLink';
 import NavbarMenuTitle from "./NavbarMenuTitle";
 import DarkmodeContainer from "./DarkmodeContainer";
-import { useNavigate } from "react-router-dom";
 
 function Navbar() {
     const { currentUser, idToken, dispatch, loading: authLoading } = useContext(AuthContext);
@@ -20,8 +19,6 @@ function Navbar() {
     const { activeProject, setActiveProject, userUuid, setUserUuid, setUserName, activeProjectName, setActiveProjectName } = useContext(GlobalContext);
     const [displayMenuContainer, setDisplayMenuContainer] = useState(false);
     const [displayDashboardMenu, setDisplayDashboardContainer] = useState(false);
-
-    const navigate = useNavigate();
 
     // useEffects
     useEffect(() => {
@@ -150,7 +147,7 @@ function Navbar() {
                 <div className="flex pl-5 justify-start items-center min-w-[30%] h-gull text-base">
                     {
                         activeProject && activeProject !== "0" && (
-                            <div onMouseEnter={handleShowProjectMenu} className="font-semibold pl-2 pr-2 hover:cursor-default tracking-wide">
+                            <div onMouseEnter={handleShowProjectMenu} className="pl-2 pr-2 hover:cursor-default tracking-wide">
                                 Prosjektmeny
                             </div>
                         )
@@ -170,7 +167,7 @@ function Navbar() {
 
                 <div className="flex pr-5 justify-end text-end min-w-[30%] h-full text-base items-center">
 
-                    <div onMouseEnter={handleShowDashboardMenu} className="font-semibold pl-2 pr-2 hover:cursor-default tracking-wide">
+                    <div onMouseEnter={handleShowDashboardMenu} className="pl-2 pr-2 hover:cursor-default tracking-wide">
                         Dashboard
                     </div>
                     <div className="flex text-center items-center pl-3 h-full border-l dark:border-dark-default-border-color border-default-border-color">

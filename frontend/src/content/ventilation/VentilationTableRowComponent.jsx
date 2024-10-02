@@ -211,13 +211,13 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                                 <TableSelect value={currentSystemName} name="systemUid" changeFunction={handleSystemChange}>
                                     {currentSystemName ? (<option key="0">{currentSystemName}</option>) : ''}
                                     {
-                                        systems?.systems_data && Object.keys(systems.systems_data).map((key, index) => (
-                                            <option key={index} value={systems.systems_data[key].uid}>{systems.systems_data[key].SystemName}</option>
+                                        systems?.data && Object.keys(systems.data).map((key, index) => (
+                                            <option key={index} value={systems.data[key].uid}>{systems.data[key].SystemName}</option>
                                         ))
                                     }
                                 </TableSelect>
                             </TableTDelement>
-                            <TableTDelement width="34%">
+                            <TableTDelement lastCell={true} width="34%">
                                 <div className="flex flex-row w-full">
                                     <div className="text-start pl-2 animate-fade w-44">
                                         {

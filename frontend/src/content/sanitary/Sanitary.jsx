@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom';
 
 import useFetch from '../../hooks/useFetch'
+
+// components
 import TapwaterIcon from '../../assets/svg/tapWaterIcon.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
 import BuildingSummary from './BuildingSummary';

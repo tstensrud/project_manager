@@ -1,6 +1,7 @@
 export const title = "Romliste";
 export const sections = [
     { subTitle: "Legg til nytt rom", text: "Øverst på siden kan du legge til nytt rom. Velg bygg, etasje og romnr. Romtypene hentes fra romtyper lagt inn i kravspesifikasjonen til prosjektet. Fyll deretter inn navn på rom, areal og personbelastning. Personer settes til 0 dersom det ikke har noen belastning." },
+    { subTitle: null, text: "For etasje anbefales det å angi plan over bakken med 10, 20 osv. Og plan under bakken 01 for U1, 02 for U2 osv. Dette vil gjøre sorteringen i tabellen mer oversiktlig"},
     { subTitle: null, text: "Når alt er fylt ut klikk \"Legg til\" og rommet dukker opp i tabellene under. Rommet vil da være tilgjengelig i alle de andre VVS-beregningene som gjøres" },
     { subTitle: "#", text: "Kolonne 1 er merket med \"#\". Du kan klikke på binders-symbolet for å markere raden ved behov." },
     { subTitle: "Redigere rom", text: "Du kan redigere følgende kolonner  for hvert rom" },

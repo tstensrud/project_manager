@@ -143,10 +143,10 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                             </TableTDelement>
 
                             <TableTDelement width="5%">
-                                {heatingData ? heatingData.heating_data.ChosenHeating : ''}
+                                {heatingData?.heating_data?.ChosenHeating}
                             </TableTDelement>
                             <TableTDelement width="5%">
-                                {heatingData && heatingData ? (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1) : ''}
+                                {heatingData && heatingData && (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1)}
                             </TableTDelement>
                             {renderEditableCell("HeatSource", "8%")}
 

@@ -22,7 +22,7 @@ function SortingButton({name, index, sortButtonClick, buttonText, disabled}) {
         r-5
         text-primary-color
         dark:text-dark-primary-color
-        text-sm font-bold
+        text-sm
         transition
         duration-200
         cursor-pointer

@@ -61,7 +61,7 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
                     ) : (
                         <>
                             <div className="flex pl-3 sticky top-0 bg-secondary-color dark:bg-dark-secondary-color flex-col border-default-border-color p-1 font-semibold w-full border-b dark:border-dark-default-border-color">
-                                <div className="flex flex-row w-full items-center mb-5">
+                                <div className="flex flex-row w-full items-center pb-1 pt-1">
                                     <div className="w-[10%]">
 
                                     </div>

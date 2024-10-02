@@ -33,7 +33,7 @@ function UserFavs({ userData, fetchData }) {
 
     return (
         <ContentCard>
-            <div className="flex flex-row mb-3">
+            <div className="flex flex-row mb-3 w-[450px]">
                 <div>
                     <h2 className="text-grey-text dark:text-dark-grey-text">Dine prosjekter</h2>
                 </div>
@@ -48,7 +48,7 @@ function UserFavs({ userData, fetchData }) {
                             <div className="flex w-[70%] text-grey-text dark:text-dark-grey-text">
                                 Prosjektnavn
                             </div>
-                            <div className="flex flex-1 text-end text-grey-text dark:text-dark-grey-text">
+                            <div className="flex flex-1 justify-end text-grey-text dark:text-dark-grey-text">
                                 Rediger favoritt
                             </div>
                         </div>
@@ -61,7 +61,7 @@ function UserFavs({ userData, fetchData }) {
                                         </Link>
                                     </div>
                                     <div className="flex flex-1 justify-end">
-                                        <button className="text-accent-color dark:text-dark-accent-color hover:text-primary-color font-semibold hover:dark:text-dark-primary-color transition duration-300" onClick={(e) => handleDeleteClick(e, userData[key].uid)}>Fjern</button>
+                                        <button className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300" onClick={(e) => handleDeleteClick(e, userData[key].uid)}>Fjern</button>
                                     </div>
                                 </div>
                             ))

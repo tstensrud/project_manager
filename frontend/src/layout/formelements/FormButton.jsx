@@ -1,6 +1,5 @@
 function FormButton(props) {
 
-
     return (
         <>
             {
@@ -11,7 +10,8 @@ function FormButton(props) {
                         className="
                         outline-0
                         uppercase
-                        bg-form-background-color dark:bg-dark-form-background-color 
+                        bg-form-background-color
+                        dark:bg-dark-form-background-color 
                         border-2 
                         border-form-border-color 
                         dark:border-dark-form-border-color
@@ -36,7 +36,8 @@ function FormButton(props) {
                 ) : (
                     <button
                         type="submit"
-                        className="outline-0 uppercase
+                        className="outline-0
+                        uppercase
                         bg-form-background-color
                         dark:bg-dark-form-background-color 
                         border-2
@@ -60,11 +61,9 @@ function FormButton(props) {
                         disabled={props.disabled}
                         >
                         {props.buttonText}
-                        
                     </button>
                 )
             }
-
         </>
     );
 }

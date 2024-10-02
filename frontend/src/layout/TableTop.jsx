@@ -31,7 +31,7 @@ function TableTop({ title, sections, collapseAll, setCollapseAll }) {
                     {
                         setCollapseAll && (
                             <div className="cursor-pointer flex flex-row h-full" onClick={handleCollapseAll}>
-                                <div className="h-full flex items-center text-center pr-3 text-lg font-semibold tracking-wide tansition duration-300 text-grey-text dark:text-dark-grey-text hover:text-primary-color dark:hover:text-dark-primary-color">
+                                <div className="h-full flex items-center text-center pr-3 text-base tracking-wide tansition duration-300 text-grey-text dark:text-dark-grey-text hover:text-primary-color dark:hover:text-dark-primary-color">
                                     {
                                         collapseAll ? "Utvid alle" : "Kollaps alle"
                                     }

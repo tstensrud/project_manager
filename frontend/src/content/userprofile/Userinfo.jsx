@@ -5,7 +5,7 @@ function Userinfo({ firebaseData, userData }) {
 
     return (
         <ContentCard>
-            <div className="flex flex-row mb-3">
+            <div className="flex flex-row mb-3 w-[450px]">
                 <div>
                     <h2 className="text-grey-text dark:text-dark-grey-text">Din brukerinformasjon</h2>
                 </div>

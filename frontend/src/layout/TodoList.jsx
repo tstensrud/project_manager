@@ -1,23 +1,25 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useContext, useRef } from 'react';
 
-import { GlobalContext } from '../context/GlobalContext';
+// hooks and utils
 import useFetch from '../hooks/useFetch'
 import useSubmitData from '../hooks/useSubmitData'
+import { AuthContext } from "../context/AuthContext";
 
+// components
 import TodoItem from './TodoItem';
 import LoadingSpinner from './LoadingSpinner';
 import CardButton from './formelements/CardButton';
 
 
 
-function TodoList({ setShowTodoList }) {
+function TodoList({ setShowTodoList, showTodoList }) {
     const { projectId } = useParams();
-    const { userUuid, activeProject } = useContext(GlobalContext);
+    const { currentUser, idToken, dispatch, loading: authLoading } = useContext(AuthContext);
 
     // Hooks
     const { data: todo, loading, error, refetch } = useFetch(`/project_api/${projectId}/todo/`);
-    const { data: newTodo, response, setData, handleSubmit } = useSubmitData(`/project_api/${projectId}/new_todo_item/${userUuid}/`);
+    const { data: newTodo, response, setData, handleSubmit } = useSubmitData(`/project_api/${projectId}/new_todo_item/${currentUser.uid}/`);
 
     const inputRef = useRef(null);
 
@@ -28,9 +30,10 @@ function TodoList({ setShowTodoList }) {
             setData({})
         }
     }, [response]);
+    
     // Handlers
     const handleClick = (e) => {
-        setShowTodoList(false);
+        setShowTodoList(!showTodoList);
     }
 
     const handleInputChange = (e) => {
@@ -49,9 +52,10 @@ function TodoList({ setShowTodoList }) {
     }
 
     return (
-        <div className="flex fixed left-0 top-0 w-full z-40 h-full bg-background-shade">
+        <div className="flex fixed left-0 top-0 w-full z-10 h-full bg-background-shade">
             <div className="flex top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 fixed border rounded-lg dark:border-dark-form-border-color border-default-border-color h-[500px] bg-secondary-color dark:bg-dark-secondary-color shadow-lg shadow-background-shade justify-start flex-col items-start z-[1000] w-[400px] text-xs">
-                <div className="flex flex-col top-0 sticky border-b items-center border-default-border-color dark:border-dark-default-border-color w-full">
+                <div className="flex flex-col sticky border-b items-center border-default-border-color dark:border-dark-default-border-color w-full">
+                    
                     <div className="flex flex-row w-full items-center justify-center h-10">
                         <div className="w-[10%] h-full">
 
@@ -60,9 +64,10 @@ function TodoList({ setShowTodoList }) {
                             Huskeliste
                         </div>
                         <div className="flex justify-center w-[10%] h-full items-start font-extrabold">
-                            <span onClick={(e) => handleClick(e, setShowTodoList)} className="text-xl cursor-pointer hover:text-accent-color hover:dark:text-dark-accent-color">&times;</span>
+                            <div onClick={handleClick} className="text-xl cursor-pointer hover:text-accent-color hover:dark:text-dark-accent-color">&times;</div>
                         </div>
                     </div>
+
                     <div className="w-full">
                         <form id="todoItem" onSubmit={submitTodoItem}>
                             <div className="bg-tertiary-color dark:bg-dark-tertiary-color p-2 relative h-12 w-full">
@@ -73,6 +78,7 @@ function TodoList({ setShowTodoList }) {
                             </div>
                         </form>
                     </div>
+                    
                 </div>
                 <div className="overflow-y-auto w-full">
                     {
@@ -87,14 +93,13 @@ function TodoList({ setShowTodoList }) {
                                         </div>
                                     ) : (
                                         todo && todo.todo && Object.keys(todo.todo).map((key, index) => (
-                                            <TodoItem key={index} user={userUuid} itemData={todo.todo[key]} />
+                                            <TodoItem key={index} user={currentUser.uid} itemData={todo.todo[key]} />
                                         ))
                                     )
                                 }
                             </>
                         )
                     }
-
                 </div>
             </div>
         </div>

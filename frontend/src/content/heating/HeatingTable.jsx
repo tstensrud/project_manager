@@ -9,11 +9,11 @@ import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
+import TableFooter from '../../layout/tableelements/TableFooter.jsx'
 import TableContainer from '../../layout/tableelements/TableContainer.jsx';
 import TableWrapper from "../../layout/tableelements/TableWrapper.jsx";
 import HeatingTableRowComponent from "./HeatingTableRowComponent";
 import TableTop from '../../layout/TableTop.jsx';
-import TableFooter from '../../layout/tableelements/TableFooter.jsx'
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 
 // help

@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    @apply m-0 p-0 h-full w-full;
+    @apply m-0 p-0 h-full w-full antialiased;
   }
   body {
     @apply overflow-hidden m-0 p-0 h-full w-full antialiased;
@@ -54,5 +54,5 @@
 }
 
 .test {
-  background-color: #1d2d3d;
+  background-color: #121c26;
 }

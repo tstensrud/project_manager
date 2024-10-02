@@ -6,13 +6,13 @@ import useUpdateData from '../../hooks/useUpdateData'
 
 // components
 import LoadingSpinner from '../../layout/LoadingSpinner';
-import BuildingIcon from '../../assets/svg/building.jsx';
 import ContentCard from '../../layout/ContentCard.jsx';
 import CardSelect from '../../layout/formelements/CardSelect.jsx';
 import CardButton from '../../layout/formelements/CardButton.jsx';
 import SummaryHeader from './components/SummaryHeader.jsx';
 import EquipmentContainer from './components/EquipmentContainer.jsx';
 import MessageBox from '../../layout/MessageBox';
+import BuildingIcon from '../../assets/svg/buildingIcon.jsx';
 
 function BuildingSummary({ buildingUid, projectId }) {
 
