@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react'
 
 // Hooks and utils
-import useFetch from '../../hooks/useFetch'
+import useFetch from '../../hooks/useFetch';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import CoolingIcon from '../../assets/svg/coolingIcon.jsx'
@@ -15,10 +15,10 @@ import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
 
 function Cooling() {
-    const { projectId } = useParams();
+    const { activeProject } = useContext(GlobalContext);
 
     // Fetches
-    const { data: buildingData, error: buildingDataError, loading, refetch: buildingReFetch } = useFetch(`/project_api/${projectId}/buildings/get_project_buildings/`);
+    const { data: buildingData, error: buildingDataError, loading, refetch: buildingReFetch } = useFetch(activeProject ? `/project_api/${activeProject}/buildings/get_project_buildings/` : null);
 
     // State changes between child components
     const [settingsUpdatedState, setSettingsUpdatedState] = useState(false);
@@ -56,6 +56,7 @@ function Cooling() {
         <>
             <SubTitleComponent svg={<CoolingIcon />} headerText={"Kjølebehovsberegninger"} projectName={""} projectNumber={""} />
             <MainContentContainer>
+                {buildingDataError && <MessageBox closeable={false} message={buildingDataError} />}
                 {
                     loading ? (
                         <LoadingSpinner text="bygg" />
@@ -79,12 +80,12 @@ function Cooling() {
                                                     Velg bygg
                                                 </div>
                                             ) : (
-                                                <CoolingTable settingsUpdatedState={settingsUpdatedState} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                                <CoolingTable settingsUpdatedState={settingsUpdatedState} projectId={activeProject} buildingUid={buildings[currentBuilding].uid} />
                                             )
                                         }
                                     </>
                                 ) : (
-                                    <MessageBox closeable={false} message={`${buildingData.message}. ${buildingDataError}`} />
+                                    <MessageBox message={`${buildingData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
                                 )
                             }
                         </>

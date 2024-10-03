@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react'
 
 // Hooks
-import useFetch from '../../hooks/useFetch'
+import useFetch from '../../hooks/useFetch';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import VentilationIcon from '../../assets/svg/ventilationIcon.jsx';
@@ -16,11 +16,10 @@ import MessageBox from '../../layout/MessageBox.jsx';
 //import BuildingSummary from './BuildingSummary';
 
 function Ventilation() {
-    const { projectId } = useParams();
-    const [searchParams] = useSearchParams();
+    const { activeProject } = useContext(GlobalContext);
 
     // Initial fetch of data
-    const { data: buildingData, loading, error } = useFetch(`/project_api/${projectId}/buildings/get_project_buildings/`);
+    const { data: buildingData, loading, error } = useFetch(activeProject ? `/project_api/${activeProject}/buildings/get_project_buildings/` : null);
 
     // Sorting
     const [buildings, setBuildings] = useState([]);
@@ -57,11 +56,7 @@ function Ventilation() {
                     ) : (
                         <>
                             {
-                                buildingData?.success === false ? (
-                                    <div className="flex w-full h-full justify-center text-center items-center">
-                                        {buildingData.message}
-                                    </div>
-                                ) : (
+                                buildingData?.success ? (
                                     <>
                                         <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
                                         {
@@ -70,13 +65,16 @@ function Ventilation() {
                                                     Velg bygg
                                                 </div>
                                             ) : (
-                                                <VentilationTable projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                                <VentilationTable projectId={activeProject} buildingUid={buildings[currentBuilding].uid} />
                                             )
                                         }
                                     </>
+                                ) : (
+                                    <div className="flex w-full h-full justify-center text-center items-center">
+                                    <MessageBox message={buildingData.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis den vedvarer'} closeable={false} />
+                                </div>
                                 )
                             }
-
                         </>
                     )
                 }

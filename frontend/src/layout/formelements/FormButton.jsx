@@ -23,6 +23,7 @@ function FormButton(props) {
                         duration-200
                         cursor-pointer
                         rounded-lg
+                        text-sm
                         h-9
                         hover:border-form-element-hover
                         hover:dark:border-dark-form-element-hover
@@ -43,6 +44,7 @@ function FormButton(props) {
                         border
                         border-form-border-color
                         dark:border-dark-form-border-color
+                        text-sm
                         pl-5
                         pr-5 
                         text-primary-color

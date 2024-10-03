@@ -18,6 +18,7 @@ import TableTop from '../../layout/TableTop';
 
 // help
 import { title, sections } from '../help/VentilationTableHelp.jsx';
+import MessageBox from '../../layout/MessageBox.jsx';
 
 function VentilationTable({ projectId, buildingUid }) {
 
@@ -43,151 +44,164 @@ function VentilationTable({ projectId, buildingUid }) {
                     <LoadingSpinner text="rom" />
                 ) : (
                     <>
-                        <TableTop collapseAll={collapseAll} setCollapseAll={setCollapseAll} title={title} sections={sections} />
-                        <TableContainer>
-                            <TableHeader>
-                                <TableTHelement width="2%" text="#" />
-                                <TableTHelement width="10%" text="Rom" />
-                                <TableTHelement width="6%">Sum personer<br />m³/h</TableTHelement>
-                                <TableTHelement width="6%">Sum emisjon<br /> m³/h</TableTHelement>
-                                <TableTHelement width="6%">Prosess <br />m³/h </TableTHelement>
-                                <TableTHelement width="6%">Dimensjonert<br /> m³/h</TableTHelement>
-                                <TableTHelement width="6%">Tilluft<br /> m³/h</TableTHelement>
-                                <TableTHelement width="6%">Avtrekk<br /> m³/h</TableTHelement>
-                                <TableTHelement width="6%">m³/m²</TableTHelement>
-                                <TableTHelement width="6%">Min m³/h</TableTHelement>
-                                <TableTHelement width="6%" text="System" />
-                                <TableTHelement width="34%" text="Merknad" />
-                            </TableHeader>
-                            {
-                                floors && floors.map((floor, floorIndex) => (
-                                    <React.Fragment key={floor}>
-                                        <TableWrapper collapseAll={collapseAll} floor={floor}>
-                                            <tbody>
-                                                {
-                                                    roomData?.data &&
-                                                    Object.entries(roomData.data)
-                                                        .filter(([key, room]) => room.Floor === floor)
-                                                        .sort(([, roomA], [, roomB]) => {
-                                                            return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
-                                                                numeric: true,
-                                                                sensitivity: "base"
-                                                            });
-                                                        })
-                                                        .map(([key, room], rowIndex) => (
-                                                            <VentilationTableRowComponent index={rowIndex} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={12} roomId={room.uid} systems={ventSystemData} />
-                                                        )
-                                                        )
-                                                }
+                        {
+                            roomData?.success ? (
+                                <>
+                                    <TableTop collapseAll={collapseAll} setCollapseAll={setCollapseAll} title={title} sections={sections} />
+                                    <TableContainer>
+                                        <TableHeader>
+                                            <TableTHelement width="2%" text="#" />
+                                            <TableTHelement width="10%" text="Rom" />
+                                            <TableTHelement width="6%">Sum personer<br />m³/h</TableTHelement>
+                                            <TableTHelement width="6%">Sum emisjon<br /> m³/h</TableTHelement>
+                                            <TableTHelement width="6%">Prosess <br />m³/h </TableTHelement>
+                                            <TableTHelement width="6%">Dimensjonert<br /> m³/h</TableTHelement>
+                                            <TableTHelement width="6%">Tilluft<br /> m³/h</TableTHelement>
+                                            <TableTHelement width="6%">Avtrekk<br /> m³/h</TableTHelement>
+                                            <TableTHelement width="6%">m³/m²</TableTHelement>
+                                            <TableTHelement width="6%">Min m³/h</TableTHelement>
+                                            <TableTHelement width="6%" text="System" />
+                                            <TableTHelement width="34%" text="Merknad" />
+                                        </TableHeader>
+                                        {
+                                            floors && floors.map((floor, floorIndex) => (
+                                                <React.Fragment key={floor}>
+                                                    <TableWrapper collapseAll={collapseAll} floor={floor}>
+                                                        <tbody>
+                                                            {
+                                                                roomData?.data &&
+                                                                Object.entries(roomData.data)
+                                                                    .filter(([key, room]) => room.Floor === floor)
+                                                                    .sort(([, roomA], [, roomB]) => {
+                                                                        return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
+                                                                            numeric: true,
+                                                                            sensitivity: "base"
+                                                                        });
+                                                                    })
+                                                                    .map(([key, room], rowIndex) => (
+                                                                        <VentilationTableRowComponent index={rowIndex} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={12} roomId={room.uid} systems={ventSystemData} />
+                                                                    )
+                                                                    )
+                                                            }
 
-                                                <tr className="bg-secondary-color dark:bg-dark-secondary-color">
-                                                    <TableTDelement width="2%" />
-                                                    <TableTDelement width="10%" />
-                                                    <TableTDelement width="6%" />
-                                                    <TableTDelement width="6%" />
-                                                    <TableTDelement width="6%" />
-                                                    <TableTDelement width="6%">
-                                                        {
-                                                            buildingData?.data?.floor_summaries &&
-                                                            Object.keys(buildingData?.data.floor_summaries)
-                                                                .filter(key => key === floor)
-                                                                .map(key => (
-                                                                    <React.Fragment key={key}>
-                                                                        <span className="font-bold">
-                                                                            {Number(buildingData.data.floor_summaries[key].demand.toFixed(0)).toLocaleString()}
-                                                                            <br /> m<sup>3</sup>/h
-                                                                        </span>
-                                                                    </React.Fragment>
-                                                                ))
-                                                        }
+                                                            <tr className="bg-secondary-color dark:bg-dark-secondary-color">
+                                                                <TableTDelement width="2%" />
+                                                                <TableTDelement width="10%" />
+                                                                <TableTDelement width="6%" />
+                                                                <TableTDelement width="6%" />
+                                                                <TableTDelement width="6%" />
+                                                                <TableTDelement width="6%">
+                                                                    {
+                                                                        buildingData?.data?.floor_summaries &&
+                                                                        Object.keys(buildingData?.data.floor_summaries)
+                                                                            .filter(key => key === floor)
+                                                                            .map(key => (
+                                                                                <React.Fragment key={key}>
+                                                                                    <span className="font-bold">
+                                                                                        {Number(buildingData.data.floor_summaries[key].demand.toFixed(0)).toLocaleString()}
+                                                                                        <br /> m<sup>3</sup>/h
+                                                                                    </span>
+                                                                                </React.Fragment>
+                                                                            ))
+                                                                    }
 
-                                                    </TableTDelement>
-                                                    <TableTDelement width="6%">
-                                                        {
-                                                            buildingData?.data?.floor_summaries &&
-                                                            Object.keys(buildingData?.data.floor_summaries)
-                                                                .filter(key => key === floor)
-                                                                .map(key => (
-                                                                    <React.Fragment key={key}>
-                                                                        <span className="text-supply-color font-bold">
-                                                                            {Number(buildingData.data.floor_summaries[key].supply.toFixed(0)).toLocaleString()}
-                                                                            <br /> m<sup>3</sup>/h
-                                                                        </span>
-                                                                    </React.Fragment>
-                                                                ))
-                                                        }
-                                                    </TableTDelement>
-                                                    <TableTDelement width="6%">
-                                                        {
-                                                            buildingData?.data?.floor_summaries &&
-                                                            Object.keys(buildingData?.data.floor_summaries)
-                                                                .filter(key => key === floor)
-                                                                .map(key => (
-                                                                    <React.Fragment key={key}>
-                                                                        <span className="text-extract-color font-bold">
-                                                                            {Number(buildingData.data.floor_summaries[key].extract.toFixed(0)).toLocaleString()}
-                                                                            <br /> m<sup>3</sup>/h
-                                                                        </span>
-                                                                    </React.Fragment>
-                                                                ))
-                                                        }
+                                                                </TableTDelement>
+                                                                <TableTDelement width="6%">
+                                                                    {
+                                                                        buildingData?.data?.floor_summaries &&
+                                                                        Object.keys(buildingData?.data.floor_summaries)
+                                                                            .filter(key => key === floor)
+                                                                            .map(key => (
+                                                                                <React.Fragment key={key}>
+                                                                                    <span className="text-supply-color font-bold">
+                                                                                        {Number(buildingData.data.floor_summaries[key].supply.toFixed(0)).toLocaleString()}
+                                                                                        <br /> m<sup>3</sup>/h
+                                                                                    </span>
+                                                                                </React.Fragment>
+                                                                            ))
+                                                                    }
+                                                                </TableTDelement>
+                                                                <TableTDelement width="6%">
+                                                                    {
+                                                                        buildingData?.data?.floor_summaries &&
+                                                                        Object.keys(buildingData?.data.floor_summaries)
+                                                                            .filter(key => key === floor)
+                                                                            .map(key => (
+                                                                                <React.Fragment key={key}>
+                                                                                    <span className="text-extract-color font-bold">
+                                                                                        {Number(buildingData.data.floor_summaries[key].extract.toFixed(0)).toLocaleString()}
+                                                                                        <br /> m<sup>3</sup>/h
+                                                                                    </span>
+                                                                                </React.Fragment>
+                                                                            ))
+                                                                    }
 
-                                                    </TableTDelement>
-                                                    <TableTDelement width="6%" />
-                                                    <TableTDelement width="6%" />
-                                                    <TableTDelement width="6%" />
-                                                    <TableTDelement width="34%">
-                                                        <div className="flex flex-row w-full">
-                                                            <div className="text-start animate-fade w-44">
+                                                                </TableTDelement>
+                                                                <TableTDelement width="6%" />
+                                                                <TableTDelement width="6%" />
+                                                                <TableTDelement width="6%" />
+                                                                <TableTDelement width="34%">
+                                                                    <div className="flex flex-row w-full">
+                                                                        <div className="text-start animate-fade w-44">
 
-                                                            </div>
-                                                            <div>
-                                                                {
-                                                                    buildingData?.data?.floor_summaries &&
-                                                                    Object.keys(buildingData?.data.floor_summaries)
-                                                                        .filter(key => key === floor)
-                                                                        .map(key => (
-                                                                            <React.Fragment key={key}>
-                                                                                <div className="font-semibold">
-                                                                                    {buildingData.data.floor_summaries[key].supply < buildingData.data.floor_summaries[key].demand && 'For lite luftmengde ift dimensjonert. '}
-                                                                                    {buildingData.data.floor_summaries[key].supply !== buildingData.data.floor_summaries[key].extract && 'Ubalanse i etasje.'}
-                                                                                </div>
-                                                                            </React.Fragment>
-                                                                        ))
-                                                                }
-                                                            </div>
-                                                        </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            {
+                                                                                buildingData?.data?.floor_summaries &&
+                                                                                Object.keys(buildingData?.data.floor_summaries)
+                                                                                    .filter(key => key === floor)
+                                                                                    .map(key => (
+                                                                                        <React.Fragment key={key}>
+                                                                                            <div className="font-semibold">
+                                                                                                {buildingData.data.floor_summaries[key].supply < buildingData.data.floor_summaries[key].demand && 'For lite luftmengde ift dimensjonert. '}
+                                                                                                {buildingData.data.floor_summaries[key].supply !== buildingData.data.floor_summaries[key].extract && 'Ubalanse i etasje.'}
+                                                                                            </div>
+                                                                                        </React.Fragment>
+                                                                                    ))
+                                                                            }
+                                                                        </div>
+                                                                    </div>
 
-                                                    </TableTDelement>
-                                                </tr>
-                                            </tbody>
-                                        </TableWrapper>
-                                    </React.Fragment>
-                                ))
-                            }
-                        </TableContainer>
-                        <TableFooter>
-                            <TableTDFooter width="2%" />
-                            <TableTDFooter width="10%">
-                                <strong>Sum</strong>
-                            </TableTDFooter>
-                            <TableTDFooter width="6%" />
-                            <TableTDFooter width="6%" />
-                            <TableTDFooter width="6%" />
-                            <TableTDFooter width="6%">
-                                <strong>{buildingData?.data?.demand && <>{Number((buildingData?.data).demand.toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</>}</strong>
-                            </TableTDFooter>
-                            <TableTDFooter width="6%">
-                                <strong>{buildingData?.data?.supplyAir && <>{Number((buildingData?.data.supplyAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</>}</strong>
-                            </TableTDFooter>
-                            <TableTDFooter width="6%">
-                                <strong>{buildingData?.data?.extractAir && <>{Number((buildingData?.data.extractAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</>}</strong>
-                            </TableTDFooter>
-                            <TableTDFooter width="6%" />
-                            <TableTDFooter width="6%" />
-                            <TableTDFooter width="6%" />
-                            <TableTDFooter width="34%" />
-                        </TableFooter>
+                                                                </TableTDelement>
+                                                            </tr>
+                                                        </tbody>
+                                                    </TableWrapper>
+                                                </React.Fragment>
+                                            ))
+                                        }
+                                    </TableContainer>
+                                    <TableFooter>
+                                        <TableTDFooter width="2%" />
+                                        <TableTDFooter width="10%">
+                                            <strong>Sum</strong>
+                                        </TableTDFooter>
+                                        <TableTDFooter width="6%" />
+                                        <TableTDFooter width="6%" />
+                                        <TableTDFooter width="6%" />
+                                        <TableTDFooter width="6%">
+                                            <strong>{buildingData?.data?.demand && <>{Number((buildingData?.data).demand.toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</>}</strong>
+                                        </TableTDFooter>
+                                        <TableTDFooter width="6%">
+                                            <strong>{buildingData?.data?.supplyAir && <>{Number((buildingData?.data.supplyAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</>}</strong>
+                                        </TableTDFooter>
+                                        <TableTDFooter width="6%">
+                                            <strong>{buildingData?.data?.extractAir && <>{Number((buildingData?.data.extractAir).toFixed(0)).toLocaleString()} <br /> m<sup>3</sup>/h</>}</strong>
+                                        </TableTDFooter>
+                                        <TableTDFooter width="6%" />
+                                        <TableTDFooter width="6%" />
+                                        <TableTDFooter width="6%" />
+                                        <TableTDFooter width="34%" />
+                                    </TableFooter>
+                                </>
+                            ) : (
+                                <>
+                                {
+                                    loading && <MessageBox message={roomData?.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis den vedvarer'} closeable={false} />
+                                }
+                                </>
+                            )
+                        }
+
                     </>
                 )
             }

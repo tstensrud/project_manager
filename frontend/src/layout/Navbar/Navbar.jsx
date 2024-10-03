@@ -34,8 +34,8 @@ function Navbar() {
     }, []);
 
     useEffect(() => {
-        setUserUuid(userData && userData.data.uuid);
-        setUserName(userData && userData.data.name);
+        setUserUuid(userData?.data?.uuid);
+        setUserName(userData?.data?.name);
     }, [userData]);
 
     const handleShowProjectMenu = () => setDisplayMenuContainer(true);

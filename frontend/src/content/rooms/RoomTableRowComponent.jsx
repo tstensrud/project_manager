@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams } from 'react-router-dom';
 import { GlobalContext } from '../../context/GlobalContext';
 
 // Hooks
@@ -22,15 +21,14 @@ import TableButton from "../../layout/tableelements/TableButton.jsx";
 
 
 function RoomTableRowComponent({ roomId, totalColumns }) {
-    const { projectId } = useParams();
-    const { setActiveProject } = useContext(GlobalContext);
+    const { activeProject } = useContext(GlobalContext);
 
     // Initial fetches
-    const { data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch } = useFetch(`/project_api/${projectId}/rooms/get_room/${roomId}/`);
+    const { data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch } = useFetch(activeProject ? `/project_api/${activeProject}/rooms/get_room/${roomId}/` : null);
 
     // Update and delete
-    const {  response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/rooms/update_room/${roomId}/`);
-    const {  setData: setDeleteData, handleSubmit: deleteSubmit, response: deleteResponse } = useDeleteData(`/project_api/${projectId}/rooms/delete_room/${roomId}/`);
+    const { response, setData, handleSubmit: updateRoomData } = useUpdateData(activeProject ? `/project_api/${activeProject}/rooms/update_room/${roomId}/` : null);
+    const { setData: setDeleteData, handleSubmit: deleteSubmit, response: deleteResponse } = useDeleteData(activeProject ? `/project_api/${activeProject}/rooms/delete_room/${roomId}/` : null);
 
     // Edit cells
     const [editingCell, setEditingCell] = useState(null);
@@ -41,12 +39,11 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     // Undo and deletion
     const [deletedRoom, setDeletedRoom] = useState(false);
     const [undoButton, setUndoButton] = useState(false);
-    const { setData: setUndoDeleteData, response: undoDeleteResponse, handleSubmit: handleUndoDelete } = useSubmitData(`/project_api/${projectId}/rooms/undo_delete/${roomId}/`);
+    const { setData: setUndoDeleteData, response: undoDeleteResponse, handleSubmit: handleUndoDelete } = useSubmitData(activeProject ? `/project_api/${activeProject}/rooms/undo_delete/${roomId}/` : null);
 
     // Use effects
     useEffect(() => {
-        setActiveProject(projectId);
-        setDeleteData({ "roomId": roomId });
+        setDeleteData({ roomId: roomId });
     }, []);
 
     useEffect(() => {
@@ -54,22 +51,22 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
             setData('');
             roomRefetch();
         }
-    },[response]);
+    }, [response]);
 
     useEffect(() => {
-        if(deleteResponse?.success === true) {
+        if (deleteResponse?.success === true) {
             setUndoButton(true);
             setUndoDeleteData({ "undo": true });
             setDeletedRoom(true);
         }
-    },[deleteResponse]);
+    }, [deleteResponse]);
 
     useEffect(() => {
-        if(undoDeleteResponse?.success === true) {
+        if (undoDeleteResponse?.success === true) {
             setUndoButton(false);
             setDeletedRoom(false);
         }
-    },[undoDeleteResponse])
+    }, [undoDeleteResponse])
 
     // Handlers
     const handleEdit = (cellName) => {
@@ -83,7 +80,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
         }));
     };
 
-    const onDelete = async (e) => {
+    const handleDelete = async (e) => {
         e.preventDefault();
         await deleteSubmit();
     }
@@ -133,38 +130,47 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     return (
         <>
             {response?.success === false && <MessageBox closeable={true} message={response.message} />}
+            {roomError && <MessageBox message={roomError} closeable={true} />}
             <MarkedRow deleted={deletedRoom} markedRow={markedRow}>
                 {
                     roomLoading && roomLoading === true ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
-                            <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
-                                <MarkRowIcon />
-                            </TableTDelement>
+                            {
+                                roomData?.success ? (
+                                    <>
+                                        <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
+                                            <MarkRowIcon />
+                                        </TableTDelement>
 
-                            <TableTDelement width="12%">
-                                {roomData ? roomData.room_data.BuildingName : ''}
-                            </TableTDelement>
+                                        <TableTDelement width="12%">
+                                            {roomData ? roomData.room_data.BuildingName : ''}
+                                        </TableTDelement>
 
-                            {renderEditableCell("RoomNumber", "10%")}
-                            <TableTDelement width="15%">
-                                {roomData ? roomData.room_data.RoomTypeName : ''}
-                            </TableTDelement>
-                            {renderEditableCell("RoomName", "10%")}
-                            {renderEditableCell("Area", "5%")}
-                            {renderEditableCell("RoomPopulation", "5%")}
-                            {renderEditableCell("Comments", "30%")}
-                            <TableTDelement width="10%">
-                                <div className="pt-1 pb-1">
-                                {
-                                    undoButton ?
-                                    <TableButton clickFunction={handleUndo} buttonText="Angre" disabled={false} />
-                                     : 
-                                    <TableButton clickFunction={onDelete} buttonText="Slett" />
-                                }
-                                </div>
-                            </TableTDelement>
+                                        {renderEditableCell("RoomNumber", "10%")}
+                                        <TableTDelement width="15%">
+                                            {roomData ? roomData.room_data.RoomTypeName : ''}
+                                        </TableTDelement>
+                                        {renderEditableCell("RoomName", "10%")}
+                                        {renderEditableCell("Area", "5%")}
+                                        {renderEditableCell("RoomPopulation", "5%")}
+                                        {renderEditableCell("Comments", "30%")}
+                                        <TableTDelement width="10%">
+                                            <div className="pt-1 pb-1">
+                                                {
+                                                    undoButton ?
+                                                        <TableButton clickFunction={handleUndo} buttonText="Angre" disabled={false} />
+                                                        :
+                                                        <TableButton clickFunction={handleDelete} buttonText="Slett" />
+                                                }
+                                            </div>
+                                        </TableTDelement>
+                                    </>
+                                ) : (
+                                    <td colspan={totalColumns} className="text-center">{roomData?.message ?? 'En feil har oppstått. Prøve igjen og kontakt admin ved vedvarende feil.'}</td>
+                                )
+                            }
                         </>
                     )
                 }

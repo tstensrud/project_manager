@@ -26,7 +26,7 @@ function NewRoomSpec() {
 
     // Hooks
     const { data, error: specError } = useFetch(`/specifications/get_spec_room_data/${suid}/`);
-    const { data: newData, setData, loading, response, error, handleSubmit } = useSubmitData(`/specifications/new_room/${suid}/`);
+    const { data: newData, setData, response, error, handleSubmit } = useSubmitData(`/specifications/new_room/${suid}/`);
 
     // useStates
     const [submitted, setSubmitted] = useState(false);
@@ -106,12 +106,14 @@ function NewRoomSpec() {
         e.preventDefault();
         setShowHelpBox(!showHelpBox);
     }
-
+    console.log(data)
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText="Nytt rom til kravspesifikasjon" projectName={data && data.spec_name} />
             <MainContentContainer>
                 {response?.error && <><MessageBox closeable={true} message={response.message} /> </>}
+                {error && <MessageBox message={error} closeable={true}/>}
+                {specError && <MessageBox message={specError} closeable={true}/>}
 
                 {
                     showHelpBox === true && (

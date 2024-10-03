@@ -1,7 +1,8 @@
-import { useParams } from 'react-router-dom';
+import { useContext } from 'react';
 
 // Hooks
-import useFetch from '../../hooks/useFetch'
+import useFetch from '../../hooks/useFetch';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import SubTitleComponent from '../../layout/SubTitleComponent';
@@ -19,10 +20,10 @@ import Table from '../../layout/tableelements/Table.jsx';
 import { title, sections } from '../help/VentsystemsHelp.jsx'
 
 function VentSystems() {
-    const { projectId } = useParams();
+    const { activeProject } = useContext(GlobalContext);
 
     // Hooks
-    const { data: receivedSystemsData, loading: systemsLoading, error: systemsError, refetch: systemsRefetch } = useFetch(`/project_api/${projectId}/systems/`);
+    const { data: receivedSystemsData, loading: systemsLoading, error: systemsError, refetch: systemsRefetch } = useFetch(activeProject ? `/project_api/${activeProject}/systems/` : null);
     
     return (
         <>
@@ -56,7 +57,13 @@ function VentSystems() {
                                     <tbody>
                                         {
                                             receivedSystemsData?.data && (
-                                                Object.keys(receivedSystemsData.data).map((system) => <SystemsTableRowComponent systemsRefetch={systemsRefetch} key={receivedSystemsData.data[system].uid} cols={11} systemId={receivedSystemsData.data[system].uid} />)
+                                                Object.keys(receivedSystemsData.data)
+                                                .sort((a,b) => {
+                                                    const nameA = receivedSystemsData.data[a].SystemName;
+                                                    const nameB = receivedSystemsData.data[b].SystemName;
+                                                    return nameA.localeCompare(nameB)
+                                                })
+                                                .map((system) => <SystemsTableRowComponent systemsRefetch={systemsRefetch} key={receivedSystemsData.data[system].uid} cols={11} systemId={receivedSystemsData.data[system].uid} />)
                                             )
                                         }
                                     </tbody>
@@ -64,9 +71,11 @@ function VentSystems() {
 
                             </>
                         ) : (
-                            <div className="flex w-full h-full justify-center text-center items-center">
-                                {receivedSystemsData?.message} {systemsError}
-                            </div>
+                            <>
+                             {
+                                !systemsLoading && <MessageBox message={receivedSystemsData?.message} closeable={false} />
+                             }
+                            </>
                         )
                     )
                 }

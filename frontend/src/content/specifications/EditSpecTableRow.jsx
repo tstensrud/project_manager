@@ -14,14 +14,14 @@ import LoadingRow from "../../layout/tableelements/LoadingRow.jsx";
 import EditableTableCell from "../../layout/tableelements/EditableTableCell.jsx";
 
 
-function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
+function EditSpecTableRow({ roomUid, totalColumns, refetch, loading }) {
 
     // Initial room data fetch
     const { data: roomData, loading: roomLoading, error: roomDataError, refetch: roomRefetch } = useFetch(`/specifications/get_room_type_data/${roomUid}/`);
 
     // Update room type data and delete room
-    const { data: updatedRoomData, loading: updateRoomDataLoading, response: updateRoomDataResponse, setData, handleSubmit: updateRoomData } = useUpdateData(`/specifications/update_room/${roomUid}/`);
-    const { data: deleteRoomId, response: responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/specifications/delete_room_type/${roomUid}/`);
+    const { loading: updateRoomDataLoading, response: updateRoomDataResponse, setData, handleSubmit: updateRoomData } = useUpdateData(`/specifications/update_room/${roomUid}/`);
+    const { response: responseDeleteRoom, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/specifications/delete_room_type/${roomUid}/`);
 
     // Edit of cells
     const [editingCell, setEditingCell] = useState(null);
@@ -94,32 +94,43 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
             }
         </TableTDelement>
     );
-    
+
     return (
         <>
             {updateRoomDataResponse?.error && <MessageBox closeable={true} message={updateRoomDataResponse.error} />}
+            {roomDataError && <MessageBox message={roomDataError} closeable={true} />}
+
             <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover">
                 {
                     roomLoading || updateRoomDataLoading ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
-                            {renderEditableCell("name", "15%")}
-                            {renderEditableCell("air_per_person", "5%")}
-                            {renderEditableCell("air_emission", "5%")}
-                            {renderEditableCell("air_process", "5%")}
-                            {renderEditableCell("air_minimum", "5%")}
-                            {renderEditableCell("ventilation_principle", "5%")}
-                            {renderEditableCell("heat_exchange", "5%")}
-                            {renderEditableCell("room_control", "5%")}
-                            {renderEditableCell("notes", "25%")}
-                            {renderEditableCell("db_technical", "5%")}
-                            {renderEditableCell("db_neighbour", "5%")}
-                            {renderEditableCell("db_corridor", "5%")}
-                            {renderEditableCell("comments", "5%")}
-                            <TableTDelement width="5%">
-                                <TableButton clickFunction={onDelete} buttonText="Slett" />
-                            </TableTDelement>
+                            {
+                                roomData?.success ? (
+                                    <>
+                                        {renderEditableCell("name", "15%")}
+                                        {renderEditableCell("air_per_person", "5%")}
+                                        {renderEditableCell("air_emission", "5%")}
+                                        {renderEditableCell("air_process", "5%")}
+                                        {renderEditableCell("air_minimum", "5%")}
+                                        {renderEditableCell("ventilation_principle", "5%")}
+                                        {renderEditableCell("heat_exchange", "5%")}
+                                        {renderEditableCell("room_control", "5%")}
+                                        {renderEditableCell("notes", "25%")}
+                                        {renderEditableCell("db_technical", "5%")}
+                                        {renderEditableCell("db_neighbour", "5%")}
+                                        {renderEditableCell("db_corridor", "5%")}
+                                        {renderEditableCell("comments", "5%")}
+                                        <TableTDelement width="5%">
+                                            <TableButton clickFunction={onDelete} buttonText="Slett" />
+                                        </TableTDelement>
+                                    </>
+                                ) : (
+                                    <td colspan={totalColumns} className="text-center"></td>
+                                )
+                            }
+
                         </>
                     )
                 }

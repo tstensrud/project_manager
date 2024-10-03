@@ -2,7 +2,6 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 // Hooks
-import useSubmitFile from '../../hooks/useSubmitFile'
 import useFetch from '../../hooks/useFetch'
 
 // SVG
@@ -11,6 +10,7 @@ import HeaderIcon from '../../assets/svg/specificationsIcon.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import TableTop from '../../layout/TableTop';
 import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
+import MessageBox from '../../layout/MessageBox';
 import TableFooter from '../../layout/tableelements/TableFooter.jsx'
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import Table from '../../layout/tableelements/Table.jsx';
@@ -29,7 +29,6 @@ function Specification() {
 
     // Hooks
     const { data, loading, error, refetch } = useFetch(`/specifications/get_spec_room_data/${suid}/`);
-    const { file, response, error: fileError, setFile, handleSubmit } = useSubmitFile(`/specifications/new_rooms/${suid}/`);
 
     const [warning, setWarning] = useState('');
     const navigate = useNavigate();
@@ -37,11 +36,13 @@ function Specification() {
     const handleEditClick = () => {
         navigate(`/specifications/edit/${suid}/${data.spec_name}`)
     }
+
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Kravspesifikasjon"} projectName={data && data.spec_name} projectNumber={""} />
 
             <MainContentContainer>
+                {error && <MessageBox message={error} closeable={true} />}
                 {
                     loading ? (
                         <LoadingSpinner text="romtyper" />
@@ -63,63 +64,64 @@ function Specification() {
                                     </div>
                                 </div>
                             </div>
-                            <TableTop title={title} sections={sections} setCollapseAll={null} />
-                            <TableContainer>
-                                <TableHeader>
-                                    <TableTHelement width="15%">Romtype</TableTHelement>
-                                    <TableTHelement width="5%">Luft per person<br />m<sup>3</sup>/h/pers</TableTHelement>
-                                    <TableTHelement width="5%">Emisjon<br />m<sup>3</sup>/m<sup>2</sup>/h</TableTHelement>
-                                    <TableTHelement width="5%">Prosess<br />m<sup>3</sup>/h</TableTHelement>
-                                    <TableTHelement width="5%">Luft minimum<br />m<sup>3</sup>/h</TableTHelement>
-                                    <TableTHelement width="5%">Vent.prinsipp</TableTHelement>
-                                    <TableTHelement width="5%">Gjenvinner</TableTHelement>
-                                    <TableTHelement width="5%">Styring</TableTHelement>
-                                    <TableTHelement width="30%">Presiseringer</TableTHelement>
-                                    <TableTHelement width="5%">dB teknisk</TableTHelement>
-                                    <TableTHelement width="5%">dB naborom</TableTHelement>
-                                    <TableTHelement width="5%">dB korridor</TableTHelement>
-                                    <TableTHelement width="5%">Kommentar</TableTHelement>
-                                </TableHeader>
-                                <Table>
-                                    <tbody>
-                                        {
-                                            data?.data ? (
-                                                data.data.slice()
-                                                    .sort((a, b) => {
-                                                        if (a.name && b.name) {
-                                                            return a.name.localeCompare(b.name);
-                                                        }
-                                                        return 0;
-                                                    })
-                                                    .map((rowData, index) =>
-                                                        <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover" key={index}>
-                                                            <TableTDelement width="15%">{rowData ? rowData.name : ''}</TableTDelement>
-                                                            <TableTDelement width="5%">{rowData ? rowData.air_per_person : ''}</TableTDelement>
-                                                            <TableTDelement width="5%">{rowData ? rowData.air_emission : ''}</TableTDelement>
-                                                            <TableTDelement width="5%">{rowData ? rowData.air_process : ''}</TableTDelement>
-                                                            <TableTDelement width="5%">{rowData ? rowData.air_minimum : ''}</TableTDelement>
-                                                            <TableTDelement width="5%">{rowData ? rowData.ventilation_principle : ''}</TableTDelement>
-                                                            <TableTDelement width="5%">{rowData ? rowData.heat_exchange : ''}</TableTDelement>
-                                                            <TableTDelement width="5%">{rowData ? rowData.room_control : ''}</TableTDelement>
-                                                            <TableTDelement width="30%">{rowData ? rowData.notes : ''}</TableTDelement>
-                                                            <TableTDelement width="5%">{rowData ? rowData.db_technical : ''}</TableTDelement>
-                                                            <TableTDelement width="5%">{rowData ? rowData.db_neighbour : ''}</TableTDelement>
-                                                            <TableTDelement width="5%">{rowData ? rowData.db_corridor : ''}</TableTDelement>
-                                                            <TableTDelement width="5%">{rowData ? rowData.comments : ''}</TableTDelement>
-                                                        </tr>
-                                                    )
-                                            ) : (
-                                                <>
-                                                    {data && data.error}
-                                                </>
-                                            )
-                                        }
-                                    </tbody>
-                                </Table>
-                            </TableContainer>
-                            <TableFooter>
-                                <td className="h-6" colspan="13"></td>
-                            </TableFooter>
+                            {
+                                data?.success ? (
+                                    <>
+                                        <TableTop title={title} sections={sections} setCollapseAll={null} />
+                                        <TableContainer>
+                                            <TableHeader>
+                                                <TableTHelement width="15%">Romtype</TableTHelement>
+                                                <TableTHelement width="5%">Luft per person<br />m<sup>3</sup>/h/pers</TableTHelement>
+                                                <TableTHelement width="5%">Emisjon<br />m<sup>3</sup>/m<sup>2</sup>/h</TableTHelement>
+                                                <TableTHelement width="5%">Prosess<br />m<sup>3</sup>/h</TableTHelement>
+                                                <TableTHelement width="5%">Luft minimum<br />m<sup>3</sup>/h</TableTHelement>
+                                                <TableTHelement width="5%">Vent.prinsipp</TableTHelement>
+                                                <TableTHelement width="5%">Gjenvinner</TableTHelement>
+                                                <TableTHelement width="5%">Styring</TableTHelement>
+                                                <TableTHelement width="30%">Presiseringer</TableTHelement>
+                                                <TableTHelement width="5%">dB teknisk</TableTHelement>
+                                                <TableTHelement width="5%">dB naborom</TableTHelement>
+                                                <TableTHelement width="5%">dB korridor</TableTHelement>
+                                                <TableTHelement width="5%">Kommentar</TableTHelement>
+                                            </TableHeader>
+                                            <Table>
+                                                <tbody>
+                                                    {
+                                                        data?.data && Object.keys(data.data)
+                                                            .sort((a, b) => {
+                                                                const nameA = data.data[a].name;
+                                                                const nameB = data.data[b].name;
+                                                                return nameA.localeCompare(nameB);
+                                                            })
+                                                            .map((key, index) =>
+                                                                <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover" key={index}>
+                                                                    <TableTDelement width="15%">{data.data[key].name}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].air_per_person}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].air_emission}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].air_process}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].air_minimum}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].ventilation_principle}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].heat_exchange}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].room_control}</TableTDelement>
+                                                                    <TableTDelement width="30%">{data.data[key].notes}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].db_technical}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].db_neighbour}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].db_corridor}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].comments}</TableTDelement>
+                                                                </tr>
+                                                            )
+                                                    }
+                                                </tbody>
+                                            </Table>
+                                        </TableContainer>
+                                        <TableFooter>
+                                            <td className="h-6" colspan="13"></td>
+                                        </TableFooter>
+                                    </>
+                                ) : (
+                                    <MessageBox message={data?.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis feilen vedvarer'} closeable={false} />
+                                )
+                            }
                         </>
                     )
                 }

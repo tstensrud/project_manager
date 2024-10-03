@@ -1,17 +1,14 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Hooks and utils
 import useFetch from '../../hooks/useFetch'
-import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import StarIcon from '../../assets/svg/starIcon.jsx';
 import CardTitle from '../../layout/CardTitle';
-import LoadingSpinner from '../../layout/LoadingSpinner';
 import ContentCard from '../../layout/ContentCard';
 import useSubmitData from '../../hooks/useSubmitData.jsx';
-import BookMarkIcon from '../../assets/svg/bookMarkIcon.jsx'
 
 function ProjectSummary({ projectId, projectData }) {
     const { data: isFavData } = useFetch(`/user/is_favourite/${projectId}/`)

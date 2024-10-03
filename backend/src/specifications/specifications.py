@@ -50,14 +50,18 @@ def get_specifications():
 @specifications_bp.route('/get_spec_room_data/<spec_uid>/', methods=['GET'])
 @firebase_required
 def get_spec(spec_uid):
-    specification = dbo.get_specification_room_data(spec_uid)
     spec = dbo.get_specification(spec_uid)
-    spec_name = spec.name
-    specification_data = list(map(lambda x: x.get_json(), specification))
-    if specification:
-        return jsonify({"data": specification_data, "spec_name": spec_name})
+    if spec:
+        specification_room_types = dbo.get_specification_room_data(spec_uid)
+        spec_name = spec.name
+        if specification_room_types:
+            specification_room_data = {}
+            for room_type in specification_room_types:
+                specification_room_data[room_type.uid] = room_type.get_json()
+            return jsonify({"success": True, "data": specification_room_data, "spec_name": spec_name})
+        return jsonify({"success": False, "message": "Ingen romtyper lagt inn", "spec_name": spec_name})
     else:
-        return jsonify({"error": "Ingen romdata lagt inn", "spec_name": spec_name})
+        return jsonify({"success": False, "message": "Fant ikke kravspesifikasjonen"})
 
 @specifications_bp.route('/get_spec_rooms/<spec_uid>/', methods=['GET'])
 @firebase_required
@@ -69,7 +73,7 @@ def get_spec_rooms(spec_uid):
             room_type_data[room_type.name] = room_type.uid
         return jsonify({"success": True, "data": room_type_data})
     else:
-        return jsonify({"success": False, "message": "No roomtypes found"})
+        return jsonify({"success": False, "message": "Ingen romtyper lagt inn"})
     
 @specifications_bp.route('/get_spec_room_types/<spec_uid>/', methods=['GET'])
 @firebase_required
@@ -79,7 +83,7 @@ def get_specification_room_types(spec_uid):
     for room_type in specification_data:
         room_uid_type[room_type.uid] = room_type.name
     room_types_list = [{"uid": key, "name": value} for key, value in room_uid_type.items()]
-    return jsonify({"data": room_types_list})
+    return jsonify({"success": True, "data": room_types_list})
 
 @specifications_bp.route('/new_room/<spec_uid>/', methods=['POST'])
 @firebase_required

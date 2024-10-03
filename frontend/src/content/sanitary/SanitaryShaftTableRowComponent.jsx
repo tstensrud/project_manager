@@ -19,13 +19,13 @@ function SanitaryShaftTableRowComponent({ data, shaft, floor }) {
     return (
         <tr className={`${markedRow} hover:bg-table-hover hover:dark:bg-dark-table-hover`}>
             <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{floor}</TableTDelement>
-            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data.cumulative_sum_cold_water.toFixed(2)}</TableTDelement>
-            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data.cumulative_sum_hot_water.toFixed(2)}</TableTDelement>
-            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data.cumulative_sum_drainage.toFixed(2)}</TableTDelement>
-            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data.pipe_size_cold_water}</TableTDelement>
-            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data.pipe_size_warm_water}</TableTDelement>
-            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data.pipe_size_1_60}</TableTDelement>
-            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data.pipe_size_vertical}</TableTDelement>
+            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data?.cumulative_sum_cold_water.toFixed(2)}</TableTDelement>
+            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data?.cumulative_sum_hot_water.toFixed(2)}</TableTDelement>
+            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data?.cumulative_sum_drainage.toFixed(2)}</TableTDelement>
+            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data?.pipe_size_cold_water}</TableTDelement>
+            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data?.pipe_size_warm_water}</TableTDelement>
+            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data?.pipe_size_1_60}</TableTDelement>
+            <TableTDelement width="12%" pointer={true} clickFunction={handleOnMarkedRow}>{data?.pipe_size_vertical}</TableTDelement>
         </tr>
     );
 }

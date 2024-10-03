@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // hooks ++
@@ -7,6 +7,7 @@ import useSubmitData from '../../hooks/useSubmitData'
 // components
 import SubTitleComponent from "../../layout/SubTitleComponent";
 import HeaderIcon from '../../assets/svg/newSpecIcon.jsx';
+import MessageBox from '../../layout/MessageBox';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import ContentCard from '../../layout/ContentCard.jsx';
 import CardInputField from '../../layout/formelements/CardInputField.jsx';
@@ -17,6 +18,11 @@ function NewSpec() {
     const { data: newData, setData, loading, response, error, handleSubmit } = useSubmitData('/specifications/new_specification/');
     const [specName, setSpecName] = useState("");
 
+    useEffect(() => {
+        if(newData?.success) {
+            setData('');
+        }
+    },[response])
     const handleInputChange = (e) => {
         setData({
             ...newData,
@@ -28,13 +34,13 @@ function NewSpec() {
     const submitNewSpec = async (e) => {
         e.preventDefault();
         await handleSubmit();
-        setData('');
     }
     
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Ny kravspesifikasjon"} projectName={""} projectNumber={""} />
             <MainContentContainer>
+                {error && <MessageBox message={error} closeable={true}/>}
                 <div className="flex justify-center flex-row w-full">
                     <ContentCard>
                         <div>
@@ -54,7 +60,7 @@ function NewSpec() {
                                 <CardInputField name="spec_name" changeFunction={handleInputChange} placeholder="Navn på kravspesifikasjon" />
                             </div>
                             <div className="mt-3">
-                                <CardButton clickFunction={submitNewSpec} buttonText="Legg til"/>
+                                <CardButton loading={loading} clickFunction={submitNewSpec} buttonText="Legg til"/>
                             </div>
                         </form>
                         <div>

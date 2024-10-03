@@ -14,6 +14,9 @@ function TableSelect({ currentSystemName, systems, handleSystemChange }) {
         bg-tertiary-color
         dark:bg-dark-tertiary-color
         relative
+        hover:shadow-sm
+        hover:shadow-background-shade
+        hover:dark:shadow-dark-background-shade
         ">
             <div className="bg-tertiary-color dark:bg-dark-tertiary-color p-1 rounded-lg cursor-default flex flex-row">
                 <div className="w-[10%]">
@@ -45,7 +48,12 @@ function TableSelect({ currentSystemName, systems, handleSystemChange }) {
              group-hover:left-0
              group-hover:rounded-tl-none
              group-hover:rounded-tr-none
-             cursor-pointer">
+             cursor-pointer
+             shadow-sm
+            group-hover:shadow-background-shade
+            group-hover:dark:shadow-dark-background-shade
+            dark:shadow-dark-background-shade
+            ">
                 {
                     systems && Object.keys(systems)
                         .sort((a, b) => {

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useContext } from 'react'
 
-import useFetch from '../../hooks/useFetch'
-import useSubmitData from '../../hooks/useSubmitData'
+import useFetch from '../../hooks/useFetch';
+import useSubmitData from '../../hooks/useSubmitData';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // components
 import RoomIcon from '../../assets/svg/roomsIcon.jsx'
@@ -18,7 +18,7 @@ import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import LoadingBar from '../../layout/LoadingBar.jsx';
 
 function Rooms() {
-    const { projectId } = useParams();
+    const { activeProject } = useContext(GlobalContext);
 
     // Form fields
     const roomTypeRef = useRef(null);
@@ -28,8 +28,8 @@ function Rooms() {
     const inputPopRef = useRef(null);
 
     // Initial fetch of data
-    const { data: buildingData, loading: buildingDataLoading } = useFetch(`/project_api/${projectId}/buildings/get_project_buildings/`);
-    const { data: specData, loading: specDataLoading } = useFetch(`/project_api/${projectId}/project_specification/`);
+    const { data: buildingData, loading: buildingDataLoading, error: buildingDataError } = useFetch(activeProject ? `/project_api/${activeProject}/buildings/get_project_buildings/` : null);
+    const { data: specData, loading: specDataLoading, error: specDataError } = useFetch(activeProject ? `/project_api/${activeProject}/project_specification/` : null);
     const { data: roomTypeData, loading: roomTypeLoading, error: roomTypeError } = useFetch(specData?.data?.uid ? `/specifications/get_spec_room_types/${specData.data.uid}/` : null);
 
     // child loading
@@ -72,7 +72,7 @@ function Rooms() {
 
     useEffect(() => {
         if (buildings[currentBuilding]) {
-            setSubmitUrl(`/project_api/${projectId}/rooms/new_room/${buildings[currentBuilding].uid}/`);
+            setSubmitUrl(`/project_api/${activeProject}/rooms/new_room/${buildings[currentBuilding].uid}/`);
         }
     }, [currentBuilding])
 
@@ -99,23 +99,23 @@ function Rooms() {
 
     return (
         <>
-            {newRoomDataResponse?.success === false && (<MessageBox closeable={true} message={newRoomDataResponse.message} />)}
             <SubTitleComponent svg={<RoomIcon />} headerText={"Romskjema"} projectName={""} projectNumber={""} />
             <MainContentContainer>
+                {buildingDataError && <MessageBox message={buildingDataError} closeable={true} />}
+                {specDataError && <MessageBox message={specDataError} closeable={true} />}
+                {roomTypeError && <MessageBox message={roomTypeError} closeable={true} />}
+                {newRoomDataResponse?.success === false && (<MessageBox closeable={true} message={newRoomDataResponse.message} />)}
                 {
                     childLoading && <LoadingBar />
                 }
+
                 {
                     buildingDataLoading || specDataLoading || roomTypeLoading ? (
                         <LoadingSpinner text="data" />
                     ) : (
                         <>
                             {
-                                buildingData?.success === false ? (
-                                    <div className="flex w-full h-full justify-center text-center items-center">
-                                        {buildingData.message}
-                                    </div>
-                                ) : (
+                                buildingData?.success && specData?.success && roomTypeData?.success ? (
                                     <>
                                         {
                                             currentBuilding !== -1 && (
@@ -160,7 +160,6 @@ function Rooms() {
                                             )
                                         }
 
-
                                         <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
 
                                         {
@@ -169,13 +168,14 @@ function Rooms() {
                                                     Velg bygg
                                                 </div>
                                             ) : (
-                                                <RoomTable setChildLoading={setChildLoading} childLoading={childLoading} callRefetchOfRooms={callRefetchOfRooms} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                                <RoomTable setChildLoading={setChildLoading} childLoading={childLoading} callRefetchOfRooms={callRefetchOfRooms} projectId={activeProject} buildingUid={buildings[currentBuilding].uid} />
                                             )
                                         }
                                     </>
+                                ) : (
+                                    <MessageBox message={`${buildingData?.message ?? ''} ${specData?.message ?? ''} ${roomTypeData?.message ?? ''}`} closeable={false} />
                                 )
                             }
-
                         </>
                     )
                 }

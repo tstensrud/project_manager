@@ -13,6 +13,7 @@ import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import CardButton from '../../layout/formelements/CardButton.jsx';
 import CardInputField from '../../layout/formelements/CardInputField.jsx';
 import TextArea from '../../layout/formelements/TextArea.jsx';
+import MessageBox from '../../layout/MessageBox.jsx';
 
 function NewProject() {
 
@@ -70,16 +71,16 @@ function NewProject() {
                                 <TextArea name="projectDescription" changeFunction={handleChange} tabIndex={3}  required={true}/>
                             </div>
                             <div className="mt-3">
-                                <CardButton buttonText="Legg til" tabIndex={4}/>
+                                <CardButton loading={loading} buttonText="Legg til" tabIndex={4}/>
                             </div>
                         </form>
                         </div>
                         <div>
                             {
-                                response?.success === false && response.message
+                                response?.success === false && <MessageBox message={response.message} closeable={true} />
                             }
                             {
-                                error && error
+                                error && <MessageBox message={error} closeable={true} />
                             }
                         </div>
                     </ContentCard>

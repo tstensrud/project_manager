@@ -1,8 +1,9 @@
-import { useParams } from 'react-router-dom';
+import { useContext } from 'react';
 
 // Hooks
 import useFetch from '../../hooks/useFetch'
 import useUpdateData from '../../hooks/useUpdateData';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import MessageBox from '../../layout/MessageBox';
@@ -13,14 +14,13 @@ import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 
 
 function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate }) {
-
-    const { projectId } = useParams();
+    const { activeProject } = useContext(GlobalContext);
 
     // Hooks
-    const { data, loading, error, refetch } = useFetch(`/project_api/${projectId}/heating/buildingsettings/${buildingUid}/`);
+    const { data, loading, error, refetch } = useFetch(`/project_api/${activeProject}/heating/buildingsettings/${buildingUid}/`);
 
     // Update data
-    const { data: updatedBuildingData, response, setData, handleSubmit: updateBuildingData } = useUpdateData(`/project_api/${projectId}/cooling/update_all_rooms/${buildingUid}/`);
+    const { data: updatedBuildingData, response, loading: updateDataLoading, setData, handleSubmit: updateBuildingData } = useUpdateData(`/project_api/${activeProject}/cooling/update_all_rooms/${buildingUid}/`);
 
     useEffect(() => {
         if (response?.success === true) {
@@ -49,7 +49,6 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
         })
     }
 
-
     return (
         <>
             {response?.success === false && (<MessageBox closeable={true} message={response.message} />)}
@@ -66,7 +65,7 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
 
                                     </div>
                                     <div className="flex flex-1 justify-center text-xl text-center">
-                                        Kjøleparametre {data && data.building_data.BuildingName}
+                                        Kjøleparametre {data?.data?.BuildingName}
                                     </div>
                                     <div className="flex w-[10%] justify-end pr-3">
                                         <span onClick={handleCloseWindow} className="cursor-pointer text-2xl hover:text-accent-color hover:dark:text-dark-accent-color">&times;</span>
@@ -121,7 +120,7 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
                                             </div>
 
                                             <div className="mt-3">
-                                                <CardButton buttonText="Oppdater" />
+                                                <CardButton loading={updateDataLoading} buttonText="Oppdater" />
                                             </div>
                                         </div>
 

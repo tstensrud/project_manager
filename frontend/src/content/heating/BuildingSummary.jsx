@@ -2,8 +2,8 @@ import React from 'react';
 import FloorSummary from './FloorSummary';
 
 function BuildingSummary({data}) {
-    const summaries = data && data.floor_summaries_heating;
-    const safety = data && data.Safety;
+    const summaries = data?.floor_summaries_heating;
+    const safety = data?.Safety;
     return(
         <>
             {

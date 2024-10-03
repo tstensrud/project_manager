@@ -16,6 +16,7 @@ import MessageBox from '../../layout/MessageBox.jsx'
 import PlusIcon from '../../assets/svg/plusIcon.jsx';
 import MinusIcon from '../../assets/svg/minusIcon.jsx';
 import BuildingIcon from '../../assets/svg/buildingIcon.jsx';
+import ButtonLoadingSpinner from '../../layout/ButtonLoadingSpinner.jsx';
 
 function BuildingSummary({ refetchBuildingData, buildingData }) {
 
@@ -164,7 +165,9 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                                 </div>
                             </div>
                         ) : (
-                            <CardButton buttonText="Rediger bygg" clickFunction={showEditOptions} />
+                            <>
+                                <CardButton buttonText="Rediger bygg" clickFunction={showEditOptions} loading={loading} />
+                            </>
                         )
                     }
                 </div>

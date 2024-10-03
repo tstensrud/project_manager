@@ -150,7 +150,7 @@ function Dashboard() {
                     </ContentCard>
                   </div>
                 ) : (
-                  <MessageBox message={data?.message} closeable={false} />
+                  <MessageBox message={data?.message ?? 'En alvorlig feil har oppstått. Kontakt admin.'} closeable={false} />
                 )
               }
             </>

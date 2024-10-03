@@ -128,54 +128,62 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
     return (
         <>
             {updateRoomDataResponse?.success === false && <MessageBox closeable={true} message={updateRoomDataResponse.message} />}
-            {coolingError && <MessageBox closeable={true} message={coolingError} /> }
+            {coolingError && <MessageBox closeable={true} message={coolingError} />}
             <MarkedRow markedRow={markedRow}>
                 {
                     coolingLoading || updateCoolingDataLoading ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
-                            <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
-                                <MarkRowIcon />
-                            </TableTDelement>
-                            <TableTDelement width="5%">
-                            <div className="flex flex-col">
-                                    <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
-                                        {coolingData && coolingData.room_data.RoomNumber}
-                                    </div>
-                                    <div className="text-grey-text dark:text-dark-grey-text uppercase">
-                                        {coolingData && coolingData.room_data.RoomName}
-                                    </div>
-                                </div>
-                            </TableTDelement>
-                            {renderEditableCell("RoomTempSummer", "5%")}
-                            {renderEditableCell("VentairTempSummer", "5%")}
-                            {renderEditableCell("InternalHeatloadPeople", "5%")}
-                            {renderEditableCell("InternalHeatloadLights", "5%")}
-                            {renderEditableCell("InternalHeatloadEquipment", "5%")}
-                            {renderEditableCell("SunAdition", "5%")}
-                            {renderEditableCell("SunReduction", "5%")}
-                            <TableTDelement width="5%">
-                                {coolingData ? coolingData.cooling_data.SumInternalHeatLoad : ''}
-                            </TableTDelement>
-                            {renderEditableCell("CoolingEquipment", "5%")}
-                            <TableTDelement width="5%">
-                                <strong>
-                                    {coolingData ? (coolingData.cooling_data.CoolingSum).toFixed(0) : ''}
-                                </strong>
-                            </TableTDelement>
-                            <TableTDelement width="5%">
-                                {extraAirNeeded}
-                            </TableTDelement>
-                            <TableTDelement width="34%">
-                                {
-                                    extraAirNeeded < 0 && (
-                                        <>
-                                            Det mangler {extraAirNeeded * -1} m3/h for å dekke kjøling ved luft. <Link to="" onClick={handleUpdateVentilation}>Oppdater luftmengde</Link>
-                                        </>
-                                    )
-                                }
-                            </TableTDelement>
+                            {
+                                coolingData?.success ? (
+                                    <>
+                                        <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
+                                            <MarkRowIcon />
+                                        </TableTDelement>
+                                        <TableTDelement width="5%">
+                                            <div className="flex flex-col">
+                                                <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
+                                                    {coolingData && coolingData.room_data.RoomNumber}
+                                                </div>
+                                                <div className="text-grey-text dark:text-dark-grey-text uppercase">
+                                                    {coolingData && coolingData.room_data.RoomName}
+                                                </div>
+                                            </div>
+                                        </TableTDelement>
+                                        {renderEditableCell("RoomTempSummer", "5%")}
+                                        {renderEditableCell("VentairTempSummer", "5%")}
+                                        {renderEditableCell("InternalHeatloadPeople", "5%")}
+                                        {renderEditableCell("InternalHeatloadLights", "5%")}
+                                        {renderEditableCell("InternalHeatloadEquipment", "5%")}
+                                        {renderEditableCell("SunAdition", "5%")}
+                                        {renderEditableCell("SunReduction", "5%")}
+                                        <TableTDelement width="5%">
+                                            {coolingData ? coolingData.cooling_data.SumInternalHeatLoad : ''}
+                                        </TableTDelement>
+                                        {renderEditableCell("CoolingEquipment", "5%")}
+                                        <TableTDelement width="5%">
+                                            <strong>
+                                                {coolingData ? (coolingData.cooling_data.CoolingSum).toFixed(0) : ''}
+                                            </strong>
+                                        </TableTDelement>
+                                        <TableTDelement width="5%">
+                                            {extraAirNeeded}
+                                        </TableTDelement>
+                                        <TableTDelement width="34%">
+                                            {
+                                                extraAirNeeded < 0 && (
+                                                    <>
+                                                        Det mangler {extraAirNeeded * -1} m3/h for å dekke kjøling ved luft. <Link to="" onClick={handleUpdateVentilation}>Oppdater luftmengde</Link>
+                                                    </>
+                                                )
+                                            }
+                                        </TableTDelement>
+                                    </>
+                                ) : (
+                                    <td colspan="totalColumns" className="text-center">{coolingData.message}</td>
+                                )
+                            }
                         </>
                     )
                 }

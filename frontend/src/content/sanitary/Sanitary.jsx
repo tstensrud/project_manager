@@ -1,5 +1,7 @@
-import { useParams } from 'react-router-dom';
+import { useContext } from 'react';
 
+// hooks and utils
+import { GlobalContext } from '../../context/GlobalContext';
 import useFetch from '../../hooks/useFetch'
 
 // components
@@ -10,10 +12,10 @@ import LoadingSpinner from '../../layout/LoadingSpinner';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 
 function Sanitary() {
-    const { projectId } = useParams();
+    const { activeProject } = useContext(GlobalContext);
 
     // Hooks
-    const { data, loading } = useFetch(`/project_api/${projectId}/sanitary/buildings/`);
+    const { data, loading } = useFetch(activeProject ? `/project_api/${activeProject}/sanitary/buildings/` : null);
 
     return (
         <>
@@ -29,7 +31,7 @@ function Sanitary() {
                                     <p className="text-primary-color text-xs">{data.error}</p>
                                 ) : (
                                     data?.building_data && Object.values(data.building_data).map((value) => (
-                                        <BuildingSummary buildingUid={value} projectId={projectId} key={value} />
+                                        <BuildingSummary buildingUid={value} projectId={activeProject} key={value} />
                                     )
                                 ))
                             }

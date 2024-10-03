@@ -17,9 +17,10 @@ import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 
 // help
 import { title, sections } from '../help/CoolingTableHelp.jsx'
+import MessageBox from '../../layout/MessageBox.jsx';
 
 function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
-    const { data: roomData, loading } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
+    const { data: roomData, loading: roomDataLoading, error } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
     const { data: buildingData, refetch: buildingReFetch } = useFetch(`/project_api/${projectId}/cooling/building_data/${buildingUid}/`);
 
     const [floors, setFloors] = useState([]);
@@ -39,59 +40,73 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
 
     return (
         <>
+            {error && <MessageBox closeable={true} message={error}/>}
             {
-                loading ? (
+                roomDataLoading ? (
                     <LoadingSpinner text="rom" />
                 ) : (
                     <>
-                        <TableTop collapseAll={collapseAll} setCollapseAll={setCollapseAll} title={title} sections={sections} />
-                        <TableContainer>
-                            <TableHeader>
-                                <TableTHelement width="2%" text="#" />
-                                <TableTHelement width="5%">Romnr</TableTHelement>
-                                <TableTHelement width="5%">Romtemp <br /> &#176;C</TableTHelement>
-                                <TableTHelement width="5%">Temp vent<br /> &#176;C</TableTHelement>
-                                <TableTHelement width="5%">W/Pers</TableTHelement>
-                                <TableTHelement width="5%">Lys<br /> W/m<sup>2</sup></TableTHelement>
-                                <TableTHelement width="5%">Ustyr<br /> W/m<sup>2</sup></TableTHelement>
-                                <TableTHelement width="5%">Soltilskudd<br /> W/m<sup>2</sup></TableTHelement>
-                                <TableTHelement width="5%">Solreduksjon<br /> (0-1,0)</TableTHelement>
-                                <TableTHelement width="5%">&#8721; Internlast<br /> W</TableTHelement>
-                                <TableTHelement width="5%">Kjøling utstyr<br /> W</TableTHelement>
-                                <TableTHelement width="5%">&#8721; kjøling<br /> W</TableTHelement>
-                                <TableTHelement width="5%">Ekstra vent. <br />m<sup>3</sup>/h</TableTHelement>
-                                <TableTHelement width="34%">Merknad</TableTHelement>
-                            </TableHeader>
+                        {
+                            roomData?.success ? (
+                                <>
+                                    <TableTop collapseAll={collapseAll} setCollapseAll={setCollapseAll} title={title} sections={sections} />
+                                    <TableContainer>
+                                        <TableHeader>
+                                            <TableTHelement width="2%" text="#" />
+                                            <TableTHelement width="5%">Romnr</TableTHelement>
+                                            <TableTHelement width="5%">Romtemp <br /> &#176;C</TableTHelement>
+                                            <TableTHelement width="5%">Temp vent<br /> &#176;C</TableTHelement>
+                                            <TableTHelement width="5%">W/Pers</TableTHelement>
+                                            <TableTHelement width="5%">Lys<br /> W/m<sup>2</sup></TableTHelement>
+                                            <TableTHelement width="5%">Ustyr<br /> W/m<sup>2</sup></TableTHelement>
+                                            <TableTHelement width="5%">Soltilskudd<br /> W/m<sup>2</sup></TableTHelement>
+                                            <TableTHelement width="5%">Solreduksjon<br /> (0-1,0)</TableTHelement>
+                                            <TableTHelement width="5%">&#8721; Internlast<br /> W</TableTHelement>
+                                            <TableTHelement width="5%">Kjøling utstyr<br /> W</TableTHelement>
+                                            <TableTHelement width="5%">&#8721; kjøling<br /> W</TableTHelement>
+                                            <TableTHelement width="5%">Ekstra vent. <br />m<sup>3</sup>/h</TableTHelement>
+                                            <TableTHelement width="34%">Merknad</TableTHelement>
+                                        </TableHeader>
 
-                            {
-                                floors && floors.map(floor => (
-                                    <React.Fragment key={floor}>
-                                        <TableWrapper collapseAll={collapseAll} floor={floor}>
-                                            <tbody>
-                                                {
-                                                    roomData?.data && (
-                                                        Object.entries(roomData.data)
-                                                            .filter(([key, room]) => room.Floor === floor)
-                                                            .sort(([, roomA], [, roomB]) => {
-                                                                return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
-                                                                    numeric: true,
-                                                                    sensitivity: "base"
-                                                                });
-                                                            })
-                                                            .map(([key, room]) => (
-                                                                <CoolingTableRowComponent settingsUpdatedState={settingsUpdatedState} key={room.uid} totalColumns={14} roomId={room.uid} />
-                                                            ))
-                                                    )
-                                                }
-                                            </tbody>
-                                        </TableWrapper>
-                                    </React.Fragment>
-                                ))
-                            }
-                        </TableContainer>
-                        <TableFooter>
-                            <td className="h-6" colspan="14"></td>
-                        </TableFooter>
+                                        {
+                                            floors && floors.map(floor => (
+                                                <React.Fragment key={floor}>
+                                                    <TableWrapper collapseAll={collapseAll} floor={floor}>
+                                                        <tbody>
+                                                            {
+                                                                roomData?.data && (
+                                                                    Object.entries(roomData.data)
+                                                                        .filter(([key, room]) => room.Floor === floor)
+                                                                        .sort(([, roomA], [, roomB]) => {
+                                                                            return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
+                                                                                numeric: true,
+                                                                                sensitivity: "base"
+                                                                            });
+                                                                        })
+                                                                        .map(([key, room]) => (
+                                                                            <CoolingTableRowComponent settingsUpdatedState={settingsUpdatedState} key={room.uid} totalColumns={14} roomId={room.uid} />
+                                                                        )
+                                                                    )
+                                                                )
+                                                            }
+                                                        </tbody>
+                                                    </TableWrapper>
+                                                </React.Fragment>
+                                            ))
+                                        }
+                                    </TableContainer>
+                                    <TableFooter>
+                                        <td className="h-6" colspan="14"></td>
+                                    </TableFooter>
+                                </>
+                            ) : (
+                                <>
+                                {
+                                    !roomDataLoading && <MessageBox message={`${roomData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                }
+                                </>
+                            )
+                        }
                     </>
                 )
             }

@@ -21,7 +21,7 @@ import MessageBox from '../../layout/MessageBox.jsx';
 import { title, sections } from '../help/HeatingTableHelp.jsx'
 
 function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
-    const { data: roomData, loading, error: roomDataError } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
+    const { data: roomData, loading: roomDataLoading, error: roomDataError } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
     const { data: buildingData, error: buildngDataError, refetch: buildingReFetch } = useFetch(`/project_api/${projectId}/heating/building_data/${buildingUid}/`);
 
     const [floors, setFloors] = useState([]);
@@ -42,7 +42,7 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
     return (
         <>
             {
-                loading ? (
+                roomDataLoading ? (
                     <LoadingSpinner text="rom" />
                 ) : (
                     <>
@@ -170,7 +170,11 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                                 </TableContainer>
                                             </>
                                         ) : (
-                                            <MessageBox message={roomData?.message} closeable={false} />
+                                            <>
+                                            {
+                                                !roomDataLoading && <MessageBox message={`${roomData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                            }
+                                            </>
                                         )
                                     }
                                 </>

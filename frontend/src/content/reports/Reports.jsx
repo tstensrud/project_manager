@@ -9,6 +9,7 @@ import HeaderIcon from '../../assets/svg/reportsIcon.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import ContentCard from '../../layout/ContentCard.jsx';
+import MessageBox from '../../layout/MessageBox.jsx';
 
 
 function Reports() {
@@ -64,50 +65,40 @@ function Reports() {
                     <ContentCard>
                         <h3>Klartgjorte filer</h3>
                         {
-                            ventLoading && ventLoading === true || heatingLoading && heatingLoading === true ? (
+                            ventLoading || heatingLoading ? (
                                 <>
                                     Genererer fil <LoadingSpinner />
                                 </>
                             ) : (
                                 <>
-                                    <span className="flex flex-col w-full">
-                                        {
-                                            ventError && ventError || heatingError && heatingError ? (
-                                                <>
-                                                    <p>
-                                                        {ventError}
-                                                    </p>
-                                                    <p>
-                                                        {heatingError}
-                                                    </p>
-                                                </>
-                                            ) : (<></>)
-                                        }
+                                    <div className="flex flex-col w-full">
+                                        { ventError && <MessageBox message={ventError} closeable={true} /> }
+                                        { heatingError && <MessageBox message={heatingError} closeable={true} /> }
 
                                         {
-                                            ventResponse && ventResponse.success === true ? (
-                                                <span>
+                                            ventResponse?.success  ? (
+                                                <div>
                                                     -&nbsp;<Link to={ventResponse.data}>Luftmengdetabell.xlsx</Link>
-                                                </span>
-                                            ) : (<>{ventResponse && ventResponse.message}</>)
+                                                </div>
+                                            ) : (<>{ventResponse?.message}</>)
                                         }
 
                                         {
-                                            heatingResponse && heatingResponse.success === true ? (
-                                                <span>
+                                            heatingResponse?.success ? (
+                                                <div>
                                                     -&nbsp;<Link to={heatingResponse.data}>Varmetapsberegning.xlsx</Link>
-                                                </span>
-                                            ) : (<>{heatingResponse && heatingResponse.message}</>)
+                                                </div>
+                                            ) : (<>{heatingResponse?.message}</>)
                                         }
 
                                         {
-                                            coolingResponse && coolingResponse.success === true ? (
-                                                <span>
+                                            coolingResponse?.success ? (
+                                                <div>
                                                     -&nbsp;<Link to={coolingResponse.data}>Kjøleberegning.xlsx</Link>
-                                                </span>
-                                            ) : (<>{coolingResponse && coolingResponse.message}</>)
+                                                </div>
+                                            ) : (<>{coolingResponse?.message}</>)
                                         }
-                                    </span>
+                                    </div>
                                 </>
                             )
                         }

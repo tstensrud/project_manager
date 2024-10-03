@@ -1,10 +1,11 @@
 import { useEffect, useState, useContext } from 'react';
 
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // Hooks
-import useFetch from '../../hooks/useFetch'
-import useUpdateData from '../../hooks/useUpdateData'
+import useFetch from '../../hooks/useFetch';
+import useUpdateData from '../../hooks/useUpdateData';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import SubTitleComponent from '../../layout/SubTitleComponent';
@@ -19,10 +20,10 @@ import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
 
 function Settings() {
-    const { projectId } = useParams();
-    const { data, loading, error } = useFetch(`/project_api/${projectId}/settings/`);
+    const { activeProject } = useContext(GlobalContext);
+    const { data, loading, error } = useFetch(activeProject ? `/project_api/${activeProject}/settings/` : null);
     const { data: specData, loading: specLoading, error: specError } = useFetch(`/specifications/get_specifications/`);
-    const { data: updatedProjectData, setData: setUpdatedProjectData, response: updatedDataResponse, error: updatedProjectDataError, handleSubmit: updateProjectDataSubmit } = useUpdateData(`/project_api/${projectId}/settings/update_project/`);
+    const { data: updatedProjectData, setData: setUpdatedProjectData, response: updatedDataResponse, error: updatedProjectDataError, handleSubmit: updateProjectDataSubmit } = useUpdateData(activeProject ? `/project_api/${activeProject}/settings/update_project/` : null);
 
     const [description, setDescription] = useState();
     const [projectNumber, setProjectNumber] = useState();
@@ -39,7 +40,7 @@ function Settings() {
 
     useEffect(() => {
         if (updatedDataResponse?.success && updatedDataResponse.success === true) {
-            navigate(`/project/${projectId}`);
+            navigate(`/project/${activeProject}`);
         }
     }, [updatedDataResponse]);
 
@@ -68,61 +69,73 @@ function Settings() {
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektinnstillinger"} projectName={data && data.data.ProjectName} projectNumber={data && data.data.ProjectNumber} />
             <MainContentContainer>
-
+                {error || specError && <MessageBox closeable={true} message={`${error ?? ''} ${specError ?? ''}`}/>}
                 <div className="flex justify-center flex-row w-full">
                     <ContentCard>
                         <div className="w-[900px]">
                             {
-                                loading && specLoading ? (
+                                loading || specLoading ? (
                                     <LoadingSpinner text="prosjektinnstillinger" />
                                 ) : (
-                                    <form onSubmit={handleOnSubmit}>
-                                        <h2 >Rediger prosjektinnstillinger</h2>
-                                        <div>Prosjektnummer</div>
-                                        <div>
-                                            <CardInputField type="text" name="project_number" changeFunction={handleChange} key="number" value={projectNumber} />
-                                        </div>
-
-                                        <div className="mt-3">Prosjektnavn</div>
-                                        <div>
-                                            <CardInputField type="text" name="project_name" changeFunction={handleChange} key="name" value={projectName} />
-                                        </div>
-                                        <div className="mt-3">Prosjektbeskrivelse</div>
-                                        <div>
-                                            <TextArea className="form-text-area" name="description" changeFunction={handleChange} value={description} />
-                                        </div>
-                                        <div className="mt-3">Kravspesifikasjon</div>
-                                        <div>
-                                            <CardSelect name="project_specification" changeFunction={handleChange}>
-                                                <option value="none">- Velg -</option>
-
-                                                {
-                                                    specData?.success === true ? (
-                                                        Object.keys(specData.data).map((key, index) => (
-                                                            <option key={index} value={specData.data[key].uid}>{specData.data[key].name}</option>
-                                                        ))
-
-                                                    ) : (
-                                                        <option>Ingen spesifikasjoner</option>
-                                                    )
-                                                }
-                                            </CardSelect>
-
-                                        </div>
-                                        <div className="mt-3">
-                                            <CardButton buttonText="Oppdater" />
-                                        </div>
+                                    <>
                                         {
-                                            updatedDataResponse?.success === false && (
-                                                <MessageBox closeable={true} message={updatedDataResponse.message} />
+                                            data?.success && specData?.success ? (
+                                                <>
+                                                    <form onSubmit={handleOnSubmit}>
+                                                        <h2 >Rediger prosjektinnstillinger</h2>
+                                                        <div>Prosjektnummer</div>
+                                                        <div>
+                                                            <CardInputField type="text" name="project_number" changeFunction={handleChange} key="number" value={projectNumber} />
+                                                        </div>
+
+                                                        <div className="mt-3">Prosjektnavn</div>
+                                                        <div>
+                                                            <CardInputField type="text" name="project_name" changeFunction={handleChange} key="name" value={projectName} />
+                                                        </div>
+                                                        <div className="mt-3">Prosjektbeskrivelse</div>
+                                                        <div>
+                                                            <TextArea className="form-text-area" name="description" changeFunction={handleChange} value={description} />
+                                                        </div>
+                                                        <div className="mt-3">Kravspesifikasjon</div>
+                                                        <div>
+                                                            <CardSelect name="project_specification" changeFunction={handleChange}>
+                                                                <option value="none">- Velg -</option>
+
+                                                                {
+                                                                    specData?.success === true ? (
+                                                                        Object.keys(specData.data).map((key, index) => (
+                                                                            <option key={index} value={specData.data[key].uid}>{specData.data[key].name}</option>
+                                                                        ))
+
+                                                                    ) : (
+                                                                        <option>Ingen spesifikasjoner</option>
+                                                                    )
+                                                                }
+                                                            </CardSelect>
+
+                                                        </div>
+                                                        <div className="mt-3">
+                                                            <CardButton buttonText="Oppdater" />
+                                                        </div>
+                                                        {
+                                                            updatedDataResponse?.success === false && (
+                                                                <MessageBox closeable={true} message={updatedDataResponse.message} />
+                                                            )
+                                                        }
+                                                        {
+                                                            updatedProjectDataError && (
+                                                                <MessageBox closeable={true} message={updatedProjectDataError} />
+                                                            )
+                                                        }
+                                                    </form>
+                                                </>
+                                            ) : (
+                                                <>
+                                                <MessageBox message={`${data?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                                </>
                                             )
                                         }
-                                        {
-                                            updatedProjectDataError && (
-                                                <MessageBox closeable={true} message={updatedProjectDataError} />
-                                            )
-                                        }
-                                    </form>
+                                    </>
                                 )
                             }
                         </div>

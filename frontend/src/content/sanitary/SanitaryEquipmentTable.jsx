@@ -19,10 +19,11 @@ import TableTop from '../../layout/TableTop.jsx';
 
 // help
 import { title, sections } from '../help/SanitaryEquipmentHelp.jsx'
+import MessageBox from '../../layout/MessageBox.jsx';
 
 function SanitaryEquipmentTable({ projectId, buildingUid }) {
-    const { data: roomData, loading } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
-    const { data: buildingData, loading: buildingDataLoading, refetch: buildingReFetch } = useFetch(`/project_api/${projectId}/sanitary/get_building/${buildingUid}/`);
+    const { data: roomData, loading: roomDataLoading, error: roomDataError } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
+    const { data: buildingData, loading: buildingDataLoading, error: buildingDataError, refetch: buildingReFetch } = useFetch(`/project_api/${projectId}/sanitary/get_building/${buildingUid}/`);
 
     const [floors, setFloors] = useState([]);
     const [collapseAll, setCollapseAll] = useState(true);
@@ -38,70 +39,75 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
 
     return (
         <>
+            {roomDataError && <MessageBox message={roomDataError} closeable={true} />}
+            {buildingDataError && <MessageBox message={buildingDataError} closeable={true} />}
             {
-                loading ? (
+                roomDataLoading ? (
                     <LoadingSpinner text="romdata" />
                 ) : (
                     <>
-                        <TableTop collapseAll={collapseAll} setCollapseAll={setCollapseAll} title={title} sections={sections} />
-                        <TableContainer>
+                        {
+                            roomData?.success ? (
+                                <>
+                                    <TableTop collapseAll={collapseAll} setCollapseAll={setCollapseAll} title={title} sections={sections} />
+                                    <TableContainer>
 
-                            <TableHeader>
-                                <TableTHelement width="2%" text="#" />
-                                <TableTHelement width="12%">Rom</TableTHelement>
-                                <TableTHelement width="5%">Sjakt</TableTHelement>
-                                <TableTHelement width="5%">1/14" servant</TableTHelement>
-                                <TableTHelement width="5%">1" servant</TableTHelement>
-                                <TableTHelement width="5%">Drikkefontene</TableTHelement>
-                                <TableTHelement width="5%">Utslagsvask</TableTHelement>
-                                <TableTHelement width="5%">WC</TableTHelement>
-                                <TableTHelement width="5%">Urinal</TableTHelement>
-                                <TableTHelement width="5%">Oppvaskmaskin</TableTHelement>
-                                <TableTHelement width="5%">Dusjbatteri</TableTHelement>
-                                <TableTHelement width="5%">Badekar</TableTHelement>
-                                <TableTHelement width="5%">Vaskemaskin</TableTHelement>
-                                <TableTHelement width="5%">Tappekran <br />inne</TableTHelement>
-                                <TableTHelement width="5%">Tappekran <br />ute</TableTHelement>
-                                <TableTHelement width="5%">Brannskap</TableTHelement>
-                                <TableTHelement width="5%">Sluk<br />75mm</TableTHelement>
-                                <TableTHelement width="5%">Sluk<br />110mm</TableTHelement>
-                            </TableHeader>
-                            {
-                                buildingDataLoading ? (
-                                    <LoadingSpinner text="utstyr" />
-                                ) : (
-                                    <>
+                                        <TableHeader>
+                                            <TableTHelement width="2%" text="#" />
+                                            <TableTHelement width="12%">Rom</TableTHelement>
+                                            <TableTHelement width="5%">Sjakt</TableTHelement>
+                                            <TableTHelement width="5%">1/14" servant</TableTHelement>
+                                            <TableTHelement width="5%">1" servant</TableTHelement>
+                                            <TableTHelement width="5%">Drikkefontene</TableTHelement>
+                                            <TableTHelement width="5%">Utslagsvask</TableTHelement>
+                                            <TableTHelement width="5%">WC</TableTHelement>
+                                            <TableTHelement width="5%">Urinal</TableTHelement>
+                                            <TableTHelement width="5%">Oppvaskmaskin</TableTHelement>
+                                            <TableTHelement width="5%">Dusjbatteri</TableTHelement>
+                                            <TableTHelement width="5%">Badekar</TableTHelement>
+                                            <TableTHelement width="5%">Vaskemaskin</TableTHelement>
+                                            <TableTHelement width="5%">Tappekran <br />inne</TableTHelement>
+                                            <TableTHelement width="5%">Tappekran <br />ute</TableTHelement>
+                                            <TableTHelement width="5%">Brannskap</TableTHelement>
+                                            <TableTHelement width="5%">Sluk<br />75mm</TableTHelement>
+                                            <TableTHelement width="5%">Sluk<br />110mm</TableTHelement>
+                                        </TableHeader>
                                         {
-                                            floors && floors.map(floor => (
-                                                <React.Fragment key={floor}>
-                                                    <TableWrapper collapseAll={collapseAll} floor={floor}>
-                                                        <tbody>
-                                                            {
-                                                                roomData?.data && (
-                                                                    Object.entries(roomData.data)
-                                                                        .filter(([key, room]) => room.Floor === floor)
-                                                                        .sort(([, roomA], [, roomB]) => {
-                                                                            return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
-                                                                                numeric: true,
-                                                                                sensitivity: "base"
-                                                                            });
-                                                                        })
-                                                                        .map(([key, room]) => (
-                                                                            <SanitaryTableRowComponent buildingReFetch={buildingReFetch} key={room.uid} totalColumns={14} roomId={room.uid} />
-                                                                        )
-                                                                        )
-                                                                )
-                                                            }
-                                                        </tbody>
-                                                    </TableWrapper>
-                                                </React.Fragment>
-                                            ))
+                                            buildingDataLoading ? (
+                                                <LoadingSpinner text="utstyr" />
+                                            ) : (
+                                                <>
+                                                    {
+                                                        floors && floors.map(floor => (
+                                                            <React.Fragment key={floor}>
+                                                                <TableWrapper collapseAll={collapseAll} floor={floor}>
+                                                                    <tbody>
+                                                                        {
+                                                                            roomData?.data && (
+                                                                                Object.entries(roomData.data)
+                                                                                    .filter(([key, room]) => room.Floor === floor)
+                                                                                    .sort(([, roomA], [, roomB]) => {
+                                                                                        return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
+                                                                                            numeric: true,
+                                                                                            sensitivity: "base"
+                                                                                        });
+                                                                                    })
+                                                                                    .map(([key, room]) => (
+                                                                                        <SanitaryTableRowComponent buildingReFetch={buildingReFetch} key={room.uid} totalColumns={14} roomId={room.uid} />
+                                                                                    )
+                                                                                    )
+                                                                            )
+                                                                        }
+                                                                    </tbody>
+                                                                </TableWrapper>
+                                                            </React.Fragment>
+                                                        ))
+                                                    }
+                                                </>
+                                            )
                                         }
-                                    </>
-                                )
-                            }
 
-                            {/*                         <div style={{ marginBottom: "30px" }}>
+                                        {/*                         <div style={{ marginBottom: "30px" }}>
                             <div className="flex flex-col ml-5 mr-5 mt-0 h-auto rounded-bl-lg rounded-br-lg bg-secondary-color dark:bg-dark-secondary-color shadow-lg shadow-background-shade mb-5">
                                 <Table>
                                     <tfoot>
@@ -129,14 +135,18 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                                 </Table>
                             </div>
                         </div> */}
-                        </TableContainer>
-                        <TableFooter>
-                            <td className="h-6" colspan="14"></td>
-                        </TableFooter>
+                                    </TableContainer>
+                                    <TableFooter>
+                                        <td className="h-6" colspan="14"></td>
+                                    </TableFooter>
+                                </>
+                            ) : (
+                                <MessageBox message={roomData?.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis feilen vedvarer'} closeable={false} />
+                            )
+                        }
                     </>
                 )
             }
-
         </>
     );
 }

@@ -19,7 +19,7 @@ import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 
 function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
     const { projectId } = useParams();
-    
+
     // Initial fetches and refetch
     const { data: sanitaryData, loading: sanitaryLoading, error: sanitaryError, refetch: sanitaryRefetch } = useFetch(`/project_api/${projectId}/sanitary/get_room/${roomId}/`);
 
@@ -34,12 +34,12 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
 
     // useEffects
     useEffect(() => {
-        if(response?.success === true) {
+        if (response?.success === true) {
             setData('');
             sanitaryRefetch();
             //buildingReFetch();
         }
-    },[response])
+    }, [response])
 
 
     // Handlers
@@ -90,10 +90,10 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
             }
         </TableTDelement>
     );
-    
+
     return (
         <>
-
+            {sanitaryError && <MessageBox message={sanitaryError} closeable={true}/>}
             {response?.success === false ? <MessageBox closeable={true} message={response.message} /> : null}
             <MarkedRow markedRow={markedRow}>
                 {
@@ -101,34 +101,43 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
-                            <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
-                                <MarkRowIcon />
-                            </TableTDelement>
+                            {
+                                sanitaryData?.success ? (
+                                    <>
+                                        <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
+                                            <MarkRowIcon />
+                                        </TableTDelement>
 
-                            <TableTDelement width="12%">
-                                <div className="font-semibold">
-                                {sanitaryData?.room_data ? sanitaryData.room_data.RoomNumber : ''}
-                                </div>
-                                <div className="text-grey-text dark:text-dark-grey-text uppercase font-semibold">
-                                    {sanitaryData?.room_data ? sanitaryData.room_data.RoomName : ''}
-                                </div>
-                            </TableTDelement>
-                            {renderEditableCell("shaft", "5%")}
-                            {renderEditableCell("sink_1_14_inch", "5%")}
-                            {renderEditableCell("sink_large", "5%")}
-                            {renderEditableCell("drinking_fountain", "5%")}
-                            {renderEditableCell("sink_utility", "5%")}
-                            {renderEditableCell("wc", "5%")}
-                            {renderEditableCell("urinal", "5%")}
-                            {renderEditableCell("dishwasher", "5%")}
-                            {renderEditableCell("shower", "5%")}
-                            {renderEditableCell("tub", "5%")}
-                            {renderEditableCell("washing_machine", "5%")}
-                            {renderEditableCell("tap_water_outlet_inside", "5%")}
-                            {renderEditableCell("tap_water_outlet_outside", "5%")}
-                            {renderEditableCell("firehose", "5%")}
-                            {renderEditableCell("drain_75_mm", "5%")}
-                            {renderEditableCell("drain_110_mm", "5%")}
+                                        <TableTDelement width="12%">
+                                            <div className="font-semibold">
+                                                {sanitaryData?.room_data ? sanitaryData.room_data.RoomNumber : ''}
+                                            </div>
+                                            <div className="text-grey-text dark:text-dark-grey-text uppercase font-semibold">
+                                                {sanitaryData?.room_data ? sanitaryData.room_data.RoomName : ''}
+                                            </div>
+                                        </TableTDelement>
+                                        {renderEditableCell("shaft", "5%")}
+                                        {renderEditableCell("sink_1_14_inch", "5%")}
+                                        {renderEditableCell("sink_large", "5%")}
+                                        {renderEditableCell("drinking_fountain", "5%")}
+                                        {renderEditableCell("sink_utility", "5%")}
+                                        {renderEditableCell("wc", "5%")}
+                                        {renderEditableCell("urinal", "5%")}
+                                        {renderEditableCell("dishwasher", "5%")}
+                                        {renderEditableCell("shower", "5%")}
+                                        {renderEditableCell("tub", "5%")}
+                                        {renderEditableCell("washing_machine", "5%")}
+                                        {renderEditableCell("tap_water_outlet_inside", "5%")}
+                                        {renderEditableCell("tap_water_outlet_outside", "5%")}
+                                        {renderEditableCell("firehose", "5%")}
+                                        {renderEditableCell("drain_75_mm", "5%")}
+                                        {renderEditableCell("drain_110_mm", "5%")}
+                                    </>
+                                ) : (
+                                    <td colspan={totalColumns} className="text-center"></td>
+                                )
+                            }
+
                         </>
                     )
                 }

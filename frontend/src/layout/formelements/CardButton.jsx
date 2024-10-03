@@ -1,13 +1,30 @@
-function CardButton(props) {
+import { useEffect, useRef, useState } from "react";
+import ButtonLoadingSpinner from "../ButtonLoadingSpinner";
+
+function CardButton({ clickFunction, tabIndex, disabled, buttonText, loading }) {
+    const buttonRef = useRef(null);
+    const [buttonWidth, setButtonWidth] = useState(0)
+
+    useEffect(() => {
+        setButtonWidth(buttonRef.current.offsetWidth);
+    }, [])
 
     return (
+
         <>
             {
-                props.clickFunction ? (
-                    <button
-                        type="submit"
-                        onClick={props.clickFunction}
-                        className="
+                loading ? (
+                    <ButtonLoadingSpinner width={buttonWidth} />
+                ) : (
+                    <>
+                        {
+                            clickFunction ? (
+                                <button
+                                    ref={buttonRef}
+                                    type="submit"
+                                    id="cardButton"
+                                    onClick={clickFunction}
+                                    className="
                             bg-tertiary-color
                             dark:bg-dark-tertiary-color
                             border-form-border-color
@@ -22,15 +39,17 @@ function CardButton(props) {
                             focus:border-form-element-hover
                             focus:dark:border-dark-form-focus-color
                             "
-                        tabIndex={props.tabIndex}
-                        disabled={props.disabled}
-                    >
-                        {props.buttonText}
-                    </button>
-                ) : (
-                    <button
-                        type="submit"
-                        className="
+                                    tabIndex={tabIndex}
+                                    disabled={disabled}
+                                >
+                                    {buttonText}
+                                </button>
+                            ) : (
+                                <button
+                                    ref={buttonRef}
+                                    type="submit"
+                                    id="cardButton"
+                                    className="
                             bg-tertiary-color
                             dark:bg-dark-tertiary-color
                             dark:border-dark-form-border-color
@@ -44,13 +63,17 @@ function CardButton(props) {
                             hover:dark:border-dark-form-element-hover 
                             focus:border-form-element-hover
                             focus:dark:border-dark-form-focus-color"
-                        tabIndex={props.tabIndex}
-                        disabled={props.disabled}
-                    >
-                        {props.buttonText}
-                    </button>
+                                    tabIndex={tabIndex}
+                                    disabled={disabled}
+                                >
+                                    {buttonText}
+                                </button>
+                            )
+                        }
+                    </>
                 )
             }
+
         </>
     );
 }

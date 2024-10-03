@@ -24,7 +24,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
     const { data: heatingData, loading: heatingLoading, refetch: heatingRefetch } = useFetch(`/project_api/${projectId}/heating/get_room/${roomId}/`);
 
     // Update data
-    const { data: updatedRoomData, response, setData, handleSubmit: updateRoomData, loading: updateHeatingDataLoading } = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomId}/`);
+    const { data: updatedRoomData, response: updateRoomDataResponse, setData, handleSubmit: updateRoomData, loading: updateRoomDataLoading } = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomId}/`);
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
@@ -41,12 +41,12 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
     }, [settingsUpdatedState]);
 
     useEffect(() => {
-        if (response?.success === true) {
+        if (updateRoomDataResponse?.success === true) {
             setData('');
             heatingRefetch();
             buildingReFetch();
         }
-    }, [response])
+    }, [updateRoomDataResponse])
 
     // Handlers
     const handleEdit = (cellName) => {
@@ -105,60 +105,67 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
     return (
         <>
             {showRoomData ? <RoomData buildingData={buildingData} roomData={allRoomData} heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
-            {response?.success === false && <MessageBox closeable={true} message={response.message} />}
+            {updateRoomDataResponse?.success === false && <MessageBox closeable={true} message={updateRoomDataResponse.message} />}
             <MarkedRow markedRow={markedRow}>
                 {
-                    heatingLoading || updateHeatingDataLoading ? (
+                    heatingLoading || updateRoomDataLoading ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
-                            <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
-                                <MarkRowIcon />
-                            </TableTDelement>
-                            <TableTDelement pointer={true} width="5%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
-                                <div className="flex flex-col">
-                                    <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
-                                        {heatingData && heatingData.room_data.RoomNumber}
-                                    </div>
-                                    <div className="text-grey-text dark:text-dark-grey-text uppercase">
-                                        {heatingData && heatingData.room_data.RoomName}
-                                    </div>
-                                </div>
-                            </TableTDelement>
-                            {renderEditableCell("RoomHeight", "5%")}
-                            {renderEditableCell("OuterWallArea", "5%")}
-                            {renderEditableCell("InnerWallArea", "5%")}
-                            {renderEditableCell("WindowDoorArea", "5%")}
-                            {renderEditableCell("RoofArea", "5%")}
-                            {renderEditableCell("FloorGroundArea", "5%")}
-                            {renderEditableCell("FloorAirArea", "5%")}
-                            <TableTDelement width="5%">
-                                <strong>
-                                    {heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}
-                                </strong>
-                            </TableTDelement>
+                            {
+                                heatingData?.success ? (
+                                    <>
+                                        <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
+                                            <MarkRowIcon />
+                                        </TableTDelement>
+                                        <TableTDelement pointer={true} width="5%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
+                                            <div className="flex flex-col">
+                                                <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
+                                                    {heatingData && heatingData.room_data.RoomNumber}
+                                                </div>
+                                                <div className="text-grey-text dark:text-dark-grey-text uppercase">
+                                                    {heatingData && heatingData.room_data.RoomName}
+                                                </div>
+                                            </div>
+                                        </TableTDelement>
+                                        {renderEditableCell("RoomHeight", "5%")}
+                                        {renderEditableCell("OuterWallArea", "5%")}
+                                        {renderEditableCell("InnerWallArea", "5%")}
+                                        {renderEditableCell("WindowDoorArea", "5%")}
+                                        {renderEditableCell("RoofArea", "5%")}
+                                        {renderEditableCell("FloorGroundArea", "5%")}
+                                        {renderEditableCell("FloorAirArea", "5%")}
+                                        <TableTDelement width="5%">
+                                            <strong>
+                                                {heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}
+                                            </strong>
+                                        </TableTDelement>
 
-                            <TableTDelement width="5%">
-                                {heatingData?.heating_data?.ChosenHeating}
-                            </TableTDelement>
-                            <TableTDelement width="5%">
-                                {heatingData && heatingData && (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1)}
-                            </TableTDelement>
-                            {renderEditableCell("HeatSource", "8%")}
+                                        <TableTDelement width="5%">
+                                            {heatingData?.heating_data?.ChosenHeating}
+                                        </TableTDelement>
+                                        <TableTDelement width="5%">
+                                            {heatingData && heatingData && (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1)}
+                                        </TableTDelement>
+                                        {renderEditableCell("HeatSource", "8%")}
 
-                            <TableTDelement width="10%">
-                                {
-                                    heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum && (
-                                        <>
-                                            <strong>NB!</strong> For lite valgt varme
-                                        </>
-                                    )
-                                }
-                            </TableTDelement>
+                                        <TableTDelement width="10%">
+                                            {
+                                                heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum && (
+                                                    <>
+                                                        <strong>NB!</strong> For lite valgt varme
+                                                    </>
+                                                )
+                                            }
+                                        </TableTDelement>
+                                    </>
+                                ) : (
+                                    <td colspan={totalColumns} className="text-center">{heatingData.message}</td>
+                                )
+                            }
                         </>
                     )
                 }
-
             </MarkedRow>
         </>
     );

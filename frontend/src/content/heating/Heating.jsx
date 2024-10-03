@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react'
 
 // Hooks and utils
-import useFetch from '../../hooks/useFetch'
+import useFetch from '../../hooks/useFetch';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import HeatingIcon from '../../assets/svg/heatingIcon.jsx'
@@ -15,10 +15,10 @@ import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
 
 function Heating() {
-    const { projectId } = useParams();
+    const { activeProject } = useContext(GlobalContext);
 
     // Fetches
-    const { data: buildingData, error: buildingDataError, refetch: buildingReFetch, loading } = useFetch(`/project_api/${projectId}/buildings/get_project_buildings/`);
+    const { data: buildingData, error: buildingDataError, refetch: buildingReFetch, loading } = useFetch(activeProject ? `/project_api/${activeProject}/buildings/get_project_buildings/` : null);
 
     // State changes between child components
     const [settingsUpdatedState, setSettingsUpdatedState] = useState(false);
@@ -57,6 +57,7 @@ function Heating() {
         <>
             <SubTitleComponent svg={<HeatingIcon />} headerText={"Varmetapsberegninger"} projectName={""} projectNumber={""} />
             <MainContentContainer>
+                {buildingDataError && <MessageBox message={buildingDataError} closeable={true} />}
                 {
                     loading ? (
                         <LoadingSpinner text="data" />
@@ -77,15 +78,15 @@ function Heating() {
                                         {
                                             currentBuilding === -1 ? (
                                                 <div className="w-full flex justify-center mt-12">
-                                                    Velg bygg
+                                                    Velg bygg.
                                                 </div>
                                             ) : (
-                                                <HeatingTable settingsUpdatedState={settingsUpdatedState} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                                <HeatingTable settingsUpdatedState={settingsUpdatedState} projectId={activeProject} buildingUid={buildings[currentBuilding].uid} />
                                             )
                                         }
                                     </>
                                 ) : (
-                                    <MessageBox message={`${buildingData?.message}. ${buildingDataError}`} closeable={false} />
+                                    <MessageBox message={`${buildingData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
                                 )
                             }
                         </>

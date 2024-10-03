@@ -5,8 +5,9 @@ import FloorTitleBar from "./FloorTitleBar";
 function TableWrapper({ floor, children, collapseAll, shaft }) {
 
     const [showTable, setShowTable] = useState(false);
-    const tableRef = useRef(null);
     const [tableHeight, setTableHeight] = useState(0);
+    const tableContainerRef = useRef(null);
+    const tableRef = useRef(null);
 
     useEffect(() => {
         if (tableRef.current) {
@@ -41,15 +42,15 @@ function TableWrapper({ floor, children, collapseAll, shaft }) {
             {
                 floor ? <FloorTitleBar setShowTable={setShowTable} showTable={showTable} floor={floor} shaft={null} /> : <FloorTitleBar setShowTable={setShowTable} showTable={showTable} floor={null} shaft={shaft} />
             }
-            <div id="dropDownContainer" style={{ maxHeight: `${tableHeight}px` }}
+            <div ref={tableContainerRef} style={{ maxHeight: `${tableHeight}px` }}
                 className={showTable ?
-                `flex flex-col overflow-y-auto transition-all duration-700 ease-in-out mt-0 bg-secondary-color dark:bg-dark-secondary-color shadow-sm shadow-background-shade dark:shadow-none` :
-                "max-h-0 overflow-hidden transition-all duration-700 ease-in-out"
+                    `flex flex-col overflow-y-auto transition-all duration-700 ease-in-out mt-0 bg-secondary-color dark:bg-dark-secondary-color shadow-sm shadow-background-shade dark:shadow-none` :
+                    "max-h-0 overflow-hidden transition-all duration-700 ease-in-out"
                 }
                 onTransitionEnd={() => {
                     if (showTable) {
-                        document.getElementById("dropDownContainer").classList.remove('overflow-y-auto');
-                        document.getElementById("dropDownContainer").classList.add("overflow-visible");
+                        tableContainerRef.current.classList.remove('overflow-y-auto');
+                        tableContainerRef.current.classList.add("overflow-visible");
                     }
                 }}>
                 <div className="flex flex-col mt-0 h-auto bg-secondary-color dark:bg-dark-secondary-color">

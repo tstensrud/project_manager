@@ -107,7 +107,9 @@ def get_project_specification(project_uid: str):
 def settings(project_uid):
     project = dbo.get_project(project_uid)
     project_data = project.get_json()
-    return jsonify({"success": True, "data": project_data})
+    if project_data:
+        return jsonify({"success": True, "data": project_data})
+    return jsonify({"success": False, "message": "Fant ikke noe prosjektdata"})
 
 @project_api_bp.route('/settings/update_project/', methods=['PATCH'])
 @firebase_required
@@ -336,10 +338,12 @@ def get_rooms_in_building(project_uid: str, building_uid: str):
 @firebase_required
 def get_room(project_uid, room_uid):
     room = dbo.get_room(room_uid)
-    room_data = room.get_json_room_data()
-    building = dbo.get_building(room.building_uid)
-    room_data["BuildingName"] = building.building_name
-    return jsonify({"room_data": room_data})
+    if room:
+        room_data = room.get_json_room_data()
+        building = dbo.get_building(room.building_uid)
+        room_data["BuildingName"] = building.building_name
+        return jsonify({"success": True, "room_data": room_data})
+    return jsonify({"success": False, "message": "Fant ikke rom"})
 
 @project_api_bp.route('/rooms/update_room/<room_uid>/', methods=['PATCH'])
 @firebase_required
@@ -438,9 +442,8 @@ def get_system(project_uid, system_uid):
 
 @project_api_bp.route('/new_system/', methods=['POST'])
 @firebase_required
+@project_exists
 def new_system(project_uid):
-    if not project:
-        return jsonify({"success": False, "message": "Prosjektet finnes ikke i databasen."})
     data = request.get_json()
     if data:
         project = dbo.get_project(project_uid)
@@ -537,9 +540,9 @@ def ventilation_get_room(project_uid, room_uid):
             vent_data["SystemName"] = system_name.system_name
         else:
             vent_data["SystemName"] = "Ikke satt"
-        return jsonify({"vent_data": vent_data})
+        return jsonify({"success": True, "data": vent_data})
     else:
-        return jsonify({"room_data": None})
+        return jsonify({"success": False, "message": "Fant ikke romdata"})
 
 @project_api_bp.route('/ventilation/update_room/<room_uid>/<cooling>/', methods=['PATCH'])
 @firebase_required
@@ -615,9 +618,9 @@ def heating_room_data(project_uid, room_uid):
         room_data = room.get_json_room_data()
         room_heating_data = room.get_json_heating_data()
         room_heating_data["Airflow"] = room.air_supply
-        return jsonify({"room_data": room_data, "heating_data": room_heating_data, "building_data": building_data})
+        return jsonify({"success": True, "room_data": room_data, "heating_data": room_heating_data, "building_data": building_data})
     else:
-        return ({"error": "Fant ikke rom"})
+        return ({"success": False, "message": "Fant ikke rom"})
 
 @project_api_bp.route('/heating/update_room/<room_uid>/', methods=['PATCH'])
 @firebase_required
@@ -652,9 +655,9 @@ def buildingsettings(project_uid, building_uid):
     building = dbo.get_building(building_uid)
     if building:
         building_data = building.get_json()
-        return jsonify({"building_data": building_data})
+        return jsonify({"success": True, "data": building_data})
     else:
-        return jsonify({"error": "Fant ingen bygg"})
+        return jsonify({"success": False, "message": "Fant ingen bygg"})
     
 
 @project_api_bp.route('/heating/buildingsettings/update/<building_uid>/', methods=['PATCH'])

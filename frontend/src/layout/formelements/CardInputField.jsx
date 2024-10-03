@@ -25,13 +25,13 @@ const CardInputField = forwardRef((props, ref) => {
             hover:border-form-element-hover
             dark:hover:border-dark-form-element-hover
             "
-                onChange={props.changeFunction}
-                type={props.password ? 'password' : 'text'}
-                value={props.value}
-                name={props.name}
-                placeholder={props.placeholder}
-                required={props.required}
-                tabIndex={props.tabIndex}
+                onChange={props?.changeFunction}
+                type={props?.password ? 'password' : 'text'}
+                value={props?.value}
+                name={props?.name}
+                placeholder={props?.placeholder}
+                required={props?.required}
+                tabIndex={props?.tabIndex}
             />
         </div>
     );
