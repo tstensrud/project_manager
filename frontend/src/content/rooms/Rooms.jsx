@@ -99,7 +99,7 @@ function Rooms() {
 
     return (
         <>
-            {newRoomDataResponse?.success === false && (<MessageBox message={newRoomDataResponse.message} />)}
+            {newRoomDataResponse?.success === false && (<MessageBox closeable={true} message={newRoomDataResponse.message} />)}
             <SubTitleComponent svg={<RoomIcon />} headerText={"Romskjema"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 {
@@ -111,60 +111,71 @@ function Rooms() {
                     ) : (
                         <>
                             {
-                                currentBuilding !== -1 && (
-                                    <div className="flex h-20 items-center justify-center text-center flex-row w-full">
-                                        <form onSubmit={handleOnSubmit}>
-                                            <div className="flex flex-row w-full h-full">
-                                                <div className="mr-2 w-24">
-                                                    <InputField name="floor" changeFunction={handleFormChange} placeholder="Etasje" tabIndex={2} required={true} />
-                                                </div>
-                                                <div className="mr-2 w-36 h-full">
-                                                    <InputField ref={inputRoomNumberRef} name="roomNumber" changeFunction={handleFormChange} placeholder="Romnr" tabIndex={3} required={true} />
-                                                </div>
-                                                <div className="mr-2">
-                                                    <SelectElement ref={roomTypeRef} name="roomType" changeFunction={handleFormChange} tabIndex={4}>
-                                                        <option key="0" value="">- Velg romtype -</option>
-                                                        {
-                                                            roomTypeData?.data && roomTypeData.data
-                                                                .sort((a, b) => a.name.localeCompare(b.name))
-                                                                .map(type => (
-                                                                    <option key={type.uid} value={type.uid}>
-                                                                        {type.name}
-                                                                    </option>
-                                                                ))
-                                                        }
-                                                    </SelectElement>
-                                                </div>
-                                                <div className="mr-2 w-52">
-                                                    <InputField ref={inputRoomNameRef} name="roomName" changeFunction={handleFormChange} placeholder="Romnavn" tabIndex={5} required={true} />
-                                                </div>
-                                                <div className="mr-2 w-24">
-                                                    <InputField ref={inputAreaRef} name="roomArea" changeFunction={handleFormChange} placeholder="Areal" tabIndex={6} required={true} />
-                                                </div>
-                                                <div className="mr-2 w-28">
-                                                    <InputField ref={inputPopRef} name="roomPeople" changeFunction={handleFormChange} placeholder="Personer" tabIndex={7} />
-                                                </div>
-                                                <div className="mr-2">
-                                                    <FormButton buttonText="Legg til" tabIndex={7} />
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                )
-                            }
-
-
-                            <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
-
-                            {
-                                currentBuilding === -1 ? (
-                                    <div className="w-full flex justify-center mt-12">
-                                        Velg bygg
+                                buildingData?.success === false ? (
+                                    <div className="flex w-full h-full justify-center text-center items-center">
+                                        {buildingData.message}
                                     </div>
                                 ) : (
-                                    <RoomTable setChildLoading={setChildLoading} childLoading={childLoading} callRefetchOfRooms={callRefetchOfRooms} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                    <>
+                                        {
+                                            currentBuilding !== -1 && (
+                                                <div className="flex h-20 items-center justify-center text-center flex-row w-full">
+                                                    <form onSubmit={handleOnSubmit}>
+                                                        <div className="flex flex-row w-full h-full">
+                                                            <div className="mr-2 w-24">
+                                                                <InputField name="floor" changeFunction={handleFormChange} placeholder="Etasje" tabIndex={2} required={true} />
+                                                            </div>
+                                                            <div className="mr-2 w-36 h-full">
+                                                                <InputField ref={inputRoomNumberRef} name="roomNumber" changeFunction={handleFormChange} placeholder="Romnr" tabIndex={3} required={true} />
+                                                            </div>
+                                                            <div className="mr-2">
+                                                                <SelectElement ref={roomTypeRef} name="roomType" changeFunction={handleFormChange} tabIndex={4}>
+                                                                    <option key="0" value="">- Velg romtype -</option>
+                                                                    {
+                                                                        roomTypeData?.data && roomTypeData.data
+                                                                            .sort((a, b) => a.name.localeCompare(b.name))
+                                                                            .map(type => (
+                                                                                <option key={type.uid} value={type.uid}>
+                                                                                    {type.name}
+                                                                                </option>
+                                                                            ))
+                                                                    }
+                                                                </SelectElement>
+                                                            </div>
+                                                            <div className="mr-2 w-52">
+                                                                <InputField ref={inputRoomNameRef} name="roomName" changeFunction={handleFormChange} placeholder="Romnavn" tabIndex={5} required={true} />
+                                                            </div>
+                                                            <div className="mr-2 w-24">
+                                                                <InputField ref={inputAreaRef} name="roomArea" changeFunction={handleFormChange} placeholder="Areal" tabIndex={6} required={true} />
+                                                            </div>
+                                                            <div className="mr-2 w-28">
+                                                                <InputField ref={inputPopRef} name="roomPeople" changeFunction={handleFormChange} placeholder="Personer" tabIndex={7} />
+                                                            </div>
+                                                            <div className="mr-2">
+                                                                <FormButton buttonText="Legg til" tabIndex={7} />
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            )
+                                        }
+
+
+                                        <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
+
+                                        {
+                                            currentBuilding === -1 ? (
+                                                <div className="w-full flex justify-center mt-12">
+                                                    Velg bygg
+                                                </div>
+                                            ) : (
+                                                <RoomTable setChildLoading={setChildLoading} childLoading={childLoading} callRefetchOfRooms={callRefetchOfRooms} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                            )
+                                        }
+                                    </>
                                 )
                             }
+
                         </>
                     )
                 }

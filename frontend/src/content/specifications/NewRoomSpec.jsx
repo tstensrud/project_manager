@@ -111,7 +111,7 @@ function NewRoomSpec() {
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText="Nytt rom til kravspesifikasjon" projectName={data && data.spec_name} />
             <MainContentContainer>
-                {response?.error && <><MessageBox message={response.message} /> </>}
+                {response?.error && <><MessageBox closeable={true} message={response.message} /> </>}
 
                 {
                     showHelpBox === true && (

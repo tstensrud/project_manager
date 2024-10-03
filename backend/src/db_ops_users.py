@@ -17,7 +17,7 @@ def generate_password(length: int) -> str:
 
 def send_registration_mail(email_adress: str, uuid: str, password: str) -> bool:
     subject = "Din brukerkonto i Structor TS"
-    body = f"Du er registrert i Structor TS sitt beregningsprogram for VVS.\nDitt passord er {password}.\nDu kan bytte dette ved å nullstille passord etter innlogging."
+    body = f"Du er registrert i Structor TS sitt beregningsprogram for VVS.\nDitt passord er {password}.\nDu kan bytte dette ved å nullstille passord etter innlogging.\nhttps://tstensrud.github.io/project_manager/"
     sender_email = os.getenv('EMAIL')
     password = os.getenv('MAIL_PASSWORD')
     message = MIMEMultipart()

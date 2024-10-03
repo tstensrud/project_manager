@@ -165,9 +165,9 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
     return (
         <>
             {showRoomData ? <RoomData roomData={allRoomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
-            {response?.success === false && <MessageBox message={response.message} />}
-            {systemResponse?.success === false && <MessageBox message={systemResponse.message} />}
-            {ventError && <MessageBox message={ventError} />}
+            {response?.success === false && <MessageBox closeable={true} message={response.message} />}
+            {systemResponse?.success === false && <MessageBox closeable={true} message={systemResponse.message} />}
+            {ventError && <MessageBox closeable={true} message={ventError} />}
             <MarkedRow markedRow={markedRow}>
                 {
                     ventLoading || updateRoomLoading ? (

@@ -132,7 +132,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
 
     return (
         <>
-            {response?.success === false && <MessageBox message={response.message} />}
+            {response?.success === false && <MessageBox closeable={true} message={response.message} />}
             <MarkedRow deleted={deletedRoom} markedRow={markedRow}>
                 {
                     roomLoading && roomLoading === true ? (

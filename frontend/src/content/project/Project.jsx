@@ -14,7 +14,7 @@ import ProjectSummary from './ProjectSummary';
 import VentilationSummary from './VentilationSummary';
 import HeatingCoolingSummary from './HeatingCoolingSummary';
 import LoadingBar from '../../layout/LoadingBar.jsx'
-
+import MessageBox from '../../layout/MessageBox.jsx'
 
 function Project() {
     const { projectId } = useParams();
@@ -39,7 +39,7 @@ function Project() {
 
     return (
         <>
-            <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektoversikt"} projectName={data && data.data.ProjectName} projectNumber={data && data.data.ProjectNumber} />
+            <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektoversikt"} projectName={data?.data?.ProjectName} projectNumber={data?.data?.ProjectNumber} />
             <MainContentContainer>
                 {
                     loading ? (
@@ -47,13 +47,15 @@ function Project() {
                     ) : (
                         <>
                             {
-                                data?.success === true && (
+                                data?.success === true ? (
                                     <div className="flex justify-evenly flex-row w-full flex-wrap">
                                         <ProjectSummary projectData={data.data} projectId={projectId} />
                                         <BuildingRoomData buildingData={data.data.buildingData} projectId={projectId} />
                                         <VentilationSummary systemData={data.data.ventsystemData} totalAirflow={data.data.airflow} projectId={projectId} />
                                         <HeatingCoolingSummary totalCooling={data.data.cooling} totalHeating={data.data.heating} projectId={projectId} />
                                     </div>
+                                ) : (
+                                    <MessageBox message={`${data?.message} - ${error}`} closeable={false} />
                                 )
                             }
                         </>

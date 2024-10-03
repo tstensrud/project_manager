@@ -29,6 +29,15 @@ def firebase_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def project_exists(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        project_uid = kwargs.get('project_uid') if 'project_uid' in kwargs else args[0]
+        project = dbo.get_project(project_uid=project_uid)
+        if not project:
+            return jsonify({"success": False, "message": "Dette prosjektet finnes ikke.."}),404
+        return f(*args, **kwargs)
+    return decorated_function
 #
 # 
 #   PROJECT 
@@ -36,74 +45,73 @@ def firebase_required(f):
 #    
 @project_api_bp.route('/', methods=['GET'])
 @firebase_required
+@project_exists
 def project(project_uid):
     project = dbo.get_project(project_uid)
-    if project:
-        # Project data
-        specification = dbo.get_specification(project.specification)
-        total_area: float = dbo.summarize_project_area(project.uid)
-        project_data = project.get_json()
-        if specification:
-            project_data["SpecificationName"] = specification.name
-            project_data["SpecUid"] = specification.uid
-        else:
-            project_data["SpecificationName"] = None
-        project_data["area"] = total_area
-
-        # Building data
-        buildings = dbo.get_all_project_buildings(project_uid=project_uid)
-        total_rooms = dbo.count_rooms_in_project(project_uid=project_uid)
-        buildings_summary = {}
-        building_data = {}
-        if buildings:
-            for building in buildings:
-                building_data[building.building_name] = dbo.get_building_data(building.uid, False, False, False)
-            buildings_summary["building_data"] = building_data
-            buildings_summary["rooms"] = total_rooms
-            project_data["buildingData"] = buildings_summary
-
-        # Ventilation systems
-        systems = dbo.get_all_systems(project_uid=project_uid)
-        if systems:
-            system_data = {}
-            for system in systems:
-                system_data[system.system_name] = system.get_json()
-            project_data["ventsystemData"] = system_data
-
-        # Ventilation
-        total_air_flow = dbo.summarize_project_airflow(project_uid=project_uid)
-        project_data["airflow"] = total_air_flow
-
-        # Energy
-        total_heating = dbo.sum_heat_loss_project_chosen(project_uid)
-        total_cooling_equipment = dbo.sum_cooling_from_equipment_project(project_uid)
-        project_data["heating"] = total_heating
-        project_data["cooling"] = total_cooling_equipment
-        return jsonify({"success": True, "data": project_data})
+    # Project data
+    specification = dbo.get_specification(project.specification)
+    total_area: float = dbo.summarize_project_area(project.uid)
+    project_data = project.get_json()
+    if specification:
+        project_data["SpecificationName"] = specification.name
+        project_data["SpecUid"] = specification.uid
     else:
-        return jsonify({"error": "Fant ikke prosjekt"})
+        project_data["SpecificationName"] = None
+    project_data["area"] = total_area
+
+    # Building data
+    buildings = dbo.get_all_project_buildings(project_uid=project_uid)
+    total_rooms = dbo.count_rooms_in_project(project_uid=project_uid)
+    buildings_summary = {}
+    building_data = {}
+    if buildings:
+        for building in buildings:
+            building_data[building.building_name] = dbo.get_building_data(building.uid, False, False, False)
+        buildings_summary["building_data"] = building_data
+        buildings_summary["rooms"] = total_rooms
+        project_data["buildingData"] = buildings_summary
+
+    # Ventilation systems
+    systems = dbo.get_all_systems(project_uid=project_uid)
+    if systems:
+        system_data = {}
+        for system in systems:
+            system_data[system.system_name] = system.get_json()
+        project_data["ventsystemData"] = system_data
+
+    # Ventilation
+    total_air_flow = dbo.summarize_project_airflow(project_uid=project_uid)
+    project_data["airflow"] = total_air_flow
+
+    # Energy
+    total_heating = dbo.sum_heat_loss_project_chosen(project_uid)
+    total_cooling_equipment = dbo.sum_cooling_from_equipment_project(project_uid)
+    project_data["heating"] = total_heating
+    project_data["cooling"] = total_cooling_equipment
+    return jsonify({"success": True, "data": project_data})
 
 @project_api_bp.route('/project_specification/', methods=['GET'])
 @firebase_required
+@project_exists
 def get_project_specification(project_uid: str):
     project = dbo.get_project(project_uid)
-    if project:
-        specification = dbo.get_specification(project.specification)
-        if specification:
-            specification_data = specification.get_json()
-            return jsonify({"success": True, "data": specification_data})
-        return jsonify({"success": False, "message": "Ingen spesifikasjon satt"})
-    return jsonify({"success": False, "message": "Fant ikke prosjekt"})
+    specification = dbo.get_specification(project.specification)
+    if specification:
+        specification_data = specification.get_json()
+        return jsonify({"success": True, "data": specification_data})
+    return jsonify({"success": False, "message": "Ingen spesifikasjon satt"})
     
 @project_api_bp.route('/settings/', methods=['GET'])
 @firebase_required
+@project_exists
 def settings(project_uid):
     project = dbo.get_project(project_uid)
     project_data = project.get_json()
-    return jsonify({"data": project_data})
+    return jsonify({"success": True, "data": project_data})
 
 @project_api_bp.route('/settings/update_project/', methods=['PATCH'])
 @firebase_required
+@project_exists
 def set_spec(project_uid):
     data = request.get_json()
     project_number = None
@@ -135,12 +143,16 @@ def set_spec(project_uid):
 #
 @project_api_bp.route('/todo/', methods=['GET'])
 @firebase_required
+@project_exists
 def todo(project_uid):
     todo_list = dbo.get_project_todo_items(project_uid)
-    return jsonify({"todo": todo_list})
+    if todo_list:
+        return jsonify({"success": True, "todo": todo_list})
+    return jsonify({"success": False, "message": "Ingen huskepunkter"})
 
 @project_api_bp.route('/new_todo_item/<user_uuid>/', methods=['POST'])
 @firebase_required
+@project_exists
 def new_todo_item(project_uid, user_uuid):
     data = request.get_json()
     if data:
@@ -170,16 +182,17 @@ def todo_item_complete(project_uid):
 #
 @project_api_bp.route('/buildings/', methods=['GET'])
 @firebase_required
+@project_exists
 def buildings(project_uid):
     buildings = dbo.get_all_project_buildings(project_uid)
     total_rooms = dbo.count_rooms_in_project(project_uid)
     if buildings is None:
-        return jsonify({"error": "Ingen bygg lagt til enda"})
+        return jsonify({"success": False, "message": "Ingen bygg lagt til enda"})
     else:
         building_data = []
         for building in buildings:
             building_data.append(dbo.get_building_data(building.uid, True, True, False))
-        return jsonify({"building_data": building_data, "rooms": total_rooms})
+        return jsonify({"success": True, "building_data": building_data, "rooms": total_rooms})
 
 @project_api_bp.route('/buildings/get_building/<building_uid>/', methods=['GET'])
 @firebase_required
@@ -191,6 +204,7 @@ def get_building_data(project_uid: str, building_uid: str):
 
 @project_api_bp.route('/buildings/get_project_buildings/', methods=['GET'])
 @firebase_required
+@project_exists
 def get_project_buildings(project_uid: str):
     buildings = dbo.get_all_project_buildings(project_uid)
     if buildings:
@@ -198,10 +212,11 @@ def get_project_buildings(project_uid: str):
         for building in buildings:
             data[building.building_name] = building.get_json()
         return jsonify({"success": True, "message":" Building data", "data": data})
-    return jsonify({"success": False, "message": "Fant ingen bygg"})
+    return jsonify({"success": False, "message": "Ingen bygg lagt til"})
 
 @project_api_bp.route('/buildings/new_building/', methods=["POST"])
 @firebase_required
+@project_exists
 def new_building(project_uid):
     data = request.get_json()
     if not data:
@@ -218,6 +233,7 @@ def new_building(project_uid):
 
 @project_api_bp.route('/buildings/edit/<building_uid>/', methods=['PATCH'])
 @firebase_required
+@project_exists
 def edit_building(project_uid, building_uid):
     data = request.get_json()
     if data:
@@ -250,20 +266,20 @@ def delete_building(project_uid, building_uid):
 #
 @project_api_bp.route('/rooms/', methods=['GET'])
 @firebase_required
+@project_exists
 def rooms(project_uid):
     project = dbo.get_project(project_uid)
     specification = project.specification
-
-    if request.method == "GET":
-        project_rooms = dbo.get_all_project_rooms(project_uid)
-        if project_rooms:
-            project_room_data = list(map(lambda room: room.get_json_room_data(), project_rooms))
-            return jsonify({"success": True, "room_data": project_room_data, "spec": specification})
-        else:
-            return jsonify({"room_data": None, "spec": specification})
+    project_rooms = dbo.get_all_project_rooms(project_uid)
+    if project_rooms:
+        project_room_data = list(map(lambda room: room.get_json_room_data(), project_rooms))
+        return jsonify({"success": True, "room_data": project_room_data, "spec": specification})
+    else:
+        return jsonify({"room_data": None, "spec": specification})
 
 @project_api_bp.route('/rooms/new_room/<building_uid>/', methods=['POST'])
 @firebase_required
+@project_exists
 def new_room(project_uid: str, building_uid: str):
     project = dbo.get_project(project_uid)
     project_specification = project.specification
@@ -314,7 +330,7 @@ def get_rooms_in_building(project_uid: str, building_uid: str):
         for room in rooms:
             room_data[room.uid] = room.get_json_room_data()
         return jsonify({"success": True, "data": room_data})
-    return jsonify({"success": False, "message": "No rooms found"})
+    return jsonify({"success": False, "message": "Fant ingen rom"})
 
 @project_api_bp.route('/rooms/get_room/<room_uid>/', methods=['GET'])
 @firebase_required
@@ -400,6 +416,7 @@ def undo_delete(project_uid, room_uid):
 
 @project_api_bp.route('/systems/', methods=['GET'])
 @firebase_required
+@project_exists
 def ventsystems(project_uid):
     systems = dbo.get_all_systems(project_uid)
     if systems:
@@ -422,41 +439,45 @@ def get_system(project_uid, system_uid):
 @project_api_bp.route('/new_system/', methods=['POST'])
 @firebase_required
 def new_system(project_uid):
+    if not project:
+        return jsonify({"success": False, "message": "Prosjektet finnes ikke i databasen."})
     data = request.get_json()
-    project = dbo.get_project(project_uid)
-    system_number = data["systemNumber"].strip()
+    if data:
+        project = dbo.get_project(project_uid)
+        system_number = data["systemNumber"].strip()
 
-    if dbo.check_if_system_number_exists(project_uid, system_number):
-        return jsonify({"success": False, "message": "Systemnummer finnes allerede"})
-    try:
-        airflow = float(data["airflow"].strip())
-    except ValueError:
-        return jsonify({"success": False, "message": "Luftmengde må kun inneholde tall"})
-    
-    service_area = data["serviceArea"].strip()
-    placement = data["placement"].strip()
-    if "special_system" in data:
-        special_system = data["special_system"]
-        if special_system is True or special_system == "True":
-            special_system = "Ja"
+        if dbo.check_if_system_number_exists(project_uid, system_number):
+            return jsonify({"success": False, "message": "Systemnummer finnes allerede"})
+        try:
+            airflow = float(data["airflow"].strip())
+        except ValueError:
+            return jsonify({"success": False, "message": "Luftmengde må kun inneholde tall"})
+        
+        service_area = data["serviceArea"].strip()
+        placement = data["placement"].strip()
+        if "special_system" in data:
+            special_system = data["special_system"]
+            if special_system is True or special_system == "True":
+                special_system = "Ja"
+            else:
+                special_system = ""
         else:
             special_system = ""
-    else:
-        special_system = ""
-    
-    if "heat_exchange" not in data:
-        return jsonify({"success": False, "message": "Du må velge type gjenvinner"})
-    system_h_ex_in = data["heat_exchange"]
-    if system_h_ex_in != "0":
-        system_h_ex = system_h_ex_in.capitalize()
-    else:
-        system_h_ex = None
+        
+        if "heat_exchange" not in data:
+            return jsonify({"success": False, "message": "Du må velge type gjenvinner"})
+        system_h_ex_in = data["heat_exchange"]
+        if system_h_ex_in != "0":
+            system_h_ex = system_h_ex_in.capitalize()
+        else:
+            system_h_ex = None
 
-    new_system = dbo.new_ventilation_system(project.uid, system_number, placement, service_area, system_h_ex, airflow, special_system)
-    if new_system:
-        return jsonify({"success": True, "message": "System opprettet"})
-    else:
-        return jsonify({"success": False, "message": "Kunne ikke opprette nytt system"})
+        new_system = dbo.new_ventilation_system(project.uid, system_number, placement, service_area, system_h_ex, airflow, special_system)
+        if new_system:
+            return jsonify({"success": True, "message": "System opprettet"})
+        else:
+            return jsonify({"success": False, "message": "Kunne ikke opprette nytt system"})
+    return jsonify({"success": False, "message": "Mottok ingen data"})
 
 @project_api_bp.route('/update_system/<system_uid>/', methods=['PATCH'])
 @firebase_required
@@ -571,10 +592,11 @@ def ventilation_update_room(project_uid, room_uid, cooling):
 #
 @project_api_bp.route('/energy/', methods=['GET'])
 @firebase_required
+@project_exists
 def heating(project_uid):
     total_heating = dbo.sum_heat_loss_project_chosen(project_uid)
     total_cooling_equipment = dbo.sum_cooling_from_equipment_project(project_uid)
-    return jsonify({"heating_data": total_heating, "cooling_data": total_cooling_equipment})
+    return jsonify({"success": True, "heating_data": total_heating, "cooling_data": total_cooling_equipment})
 
 @project_api_bp.route('/heating/building_data/<building_uid>/', methods=['GET'])
 def get_building_heating_data(project_uid, building_uid):
@@ -685,7 +707,7 @@ def get_room_cooling(project_uid, room_uid):
         room_cooling_data["Airflow"] = room.air_supply
         return jsonify({"success": True, "room_data": room_data, "cooling_data": room_cooling_data})
     else:
-        return ({"success": False, "message": "Fant ikke rom"})
+        return ({"success": False, "message": "Fant ingen rom"})
 
 @project_api_bp.route('/cooling/building_data/<building_uid>/', methods=['GET'])
 def get_building_cooling_data(project_uid, building_uid):
@@ -761,6 +783,7 @@ def get_sanitary_room(project_uid, room_uid):
 
 @project_api_bp.route('/sanitary/buildings/', methods=['GET'])
 @firebase_required
+@project_exists
 def get_buildings_sanitary(project_uid):
     buildings = dbo.get_all_project_buildings(project_uid)
     if buildings is None:
@@ -845,6 +868,7 @@ def update_curve(project_uid, building_uid):
 
 @project_api_bp.route('/excel/<sheet>/', methods=['GET'])
 @firebase_required
+@project_exists
 def ventilation_excel(project_uid, sheet):
     if sheet == "ventilation":
         file = excel.generate_excel_report(project_uid, vent=True)

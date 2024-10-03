@@ -97,7 +97,7 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch }) {
     
     return (
         <>
-            {updateRoomDataResponse?.error && <MessageBox message={updateRoomDataResponse.error} />}
+            {updateRoomDataResponse?.error && <MessageBox closeable={true} message={updateRoomDataResponse.error} />}
             <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover">
                 {
                     roomLoading || updateRoomDataLoading ? (

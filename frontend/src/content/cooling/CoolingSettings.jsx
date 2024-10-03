@@ -52,8 +52,8 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
 
     return (
         <>
-            {response?.success === false && (<MessageBox message={response.message} />)}
-            {error && (<MessageBox message={`Feil: ${error}`} />)}
+            {response?.success === false && (<MessageBox closeable={true} message={response.message} />)}
+            {error && (<MessageBox closeable={true} message={`Feil: ${error}`} />)}
             <div className="flex flex-col absolute top-1/2 rounded-lg border border-primary-color dark:border-dark-default-border-color left-1/2 transform -translate-x-1/2 overflow-y-auto -translate-y-1/2 h-1/2 w-[450px] bg-secondary-color dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color shadow-lg shadow-background-shade justify-start z-[900] text-base">
                 {
                     loading ? (

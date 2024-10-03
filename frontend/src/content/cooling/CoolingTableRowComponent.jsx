@@ -127,8 +127,8 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
 
     return (
         <>
-            {updateRoomDataResponse?.success === false && <MessageBox message={updateRoomDataResponse.message} />}
-            {coolingError && <MessageBox message={coolingError} /> }
+            {updateRoomDataResponse?.success === false && <MessageBox closeable={true} message={updateRoomDataResponse.message} />}
+            {coolingError && <MessageBox closeable={true} message={coolingError} /> }
             <MarkedRow markedRow={markedRow}>
                 {
                     coolingLoading || updateCoolingDataLoading ? (

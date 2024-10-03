@@ -85,7 +85,7 @@ function BuildingSummary({ buildingUid, projectId }) {
     return (
         <>
             {
-                response?.success === false && <MessageBox message={response.message} />
+                response?.success === false && <MessageBox closeable={true} message={response.message} />
             }
 
             <ContentCard>

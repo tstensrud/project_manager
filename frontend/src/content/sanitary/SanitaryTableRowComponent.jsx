@@ -94,7 +94,7 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
     return (
         <>
 
-            {response?.success === false ? <MessageBox message={response.message} /> : null}
+            {response?.success === false ? <MessageBox closeable={true} message={response.message} /> : null}
             <MarkedRow markedRow={markedRow}>
                 {
                     sanitaryLoading && sanitaryLoading === true ? (

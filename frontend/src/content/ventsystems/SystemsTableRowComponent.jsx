@@ -108,7 +108,7 @@ function SystemTableRowComponent({ systemId, systemsRefetch, cols }) {
 
     return (
         <>
-            {updateSystemDataResponse?.success === false && (<MessageBox message={updateSystemDataResponse.message} />)}
+            {updateSystemDataResponse?.success === false && (<MessageBox closeable={true} message={updateSystemDataResponse.message} />)}
             {
                 systemLoading ? (
                     <LoadingRow cols={cols}/>

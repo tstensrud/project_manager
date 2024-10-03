@@ -114,16 +114,12 @@ function Settings() {
                                         </div>
                                         {
                                             updatedDataResponse?.success === false && (
-                                                <div className="mt-3">
-                                                    {updatedDataResponse.message}
-                                                </div>
+                                                <MessageBox closeable={true} message={updatedDataResponse.message} />
                                             )
                                         }
                                         {
                                             updatedProjectDataError && (
-                                                <div className="mt-3">
-                                                    {JSON.stringify(updatedProjectDataError)}
-                                                </div>
+                                                <MessageBox closeable={true} message={updatedProjectDataError} />
                                             )
                                         }
                                     </form>

@@ -48,7 +48,7 @@ function Ventilation() {
 
     return (
         <>
-            {error && <MessageBox message={error} />}
+            {error && <MessageBox closeable={true} message={error} />}
             <SubTitleComponent svg={<VentilationIcon />} headerText={"Luftmengdetabeller"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 {
@@ -56,16 +56,27 @@ function Ventilation() {
                         <LoadingSpinner />
                     ) : (
                         <>
-                            <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
                             {
-                                currentBuilding === -1 ? (
-                                    <div className="w-full flex justify-center mt-12">
-                                        Velg bygg
+                                buildingData?.success === false ? (
+                                    <div className="flex w-full h-full justify-center text-center items-center">
+                                        {buildingData.message}
                                     </div>
                                 ) : (
-                                    <VentilationTable projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                    <>
+                                        <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
+                                        {
+                                            currentBuilding === -1 ? (
+                                                <div className="w-full flex justify-center mt-12">
+                                                    Velg bygg
+                                                </div>
+                                            ) : (
+                                                <VentilationTable projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                            )
+                                        }
+                                    </>
                                 )
                             }
+
                         </>
                     )
                 }

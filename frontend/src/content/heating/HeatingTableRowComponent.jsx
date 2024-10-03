@@ -105,7 +105,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
     return (
         <>
             {showRoomData ? <RoomData buildingData={buildingData} roomData={allRoomData} heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
-            {response?.success === false && <MessageBox message={response.message} />}
+            {response?.success === false && <MessageBox closeable={true} message={response.message} />}
             <MarkedRow markedRow={markedRow}>
                 {
                     heatingLoading || updateHeatingDataLoading ? (

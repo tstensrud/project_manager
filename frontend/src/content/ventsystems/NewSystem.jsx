@@ -65,7 +65,7 @@ function NewSystem() {
 
     return (
         <>
-            {systemResponse?.success && systemResponse.success === false && <MessageBox message={systemResponse.message} />}
+            {systemResponse?.success === false && <MessageBox closeable={true} message={systemResponse.message} />}
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Legg til nytt ventilasjonssystem"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 <div className="flex justify-center flex-row w-full">

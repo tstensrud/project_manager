@@ -12,12 +12,13 @@ import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import SortingButtons from '../../layout/SortingButtons.jsx';
 import HeatingTable from './HeatingTable.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
+import MessageBox from '../../layout/MessageBox.jsx';
 
 function Heating() {
     const { projectId } = useParams();
 
     // Fetches
-    const { data: buildingData, refetch: buildingReFetch, loading } = useFetch(`/project_api/${projectId}/buildings/get_project_buildings/`);
+    const { data: buildingData, error: buildingDataError, refetch: buildingReFetch, loading } = useFetch(`/project_api/${projectId}/buildings/get_project_buildings/`);
 
     // State changes between child components
     const [settingsUpdatedState, setSettingsUpdatedState] = useState(false);
@@ -58,32 +59,38 @@ function Heating() {
             <MainContentContainer>
                 {
                     loading ? (
-                        <LoadingSpinner text="bygg" />
+                        <LoadingSpinner text="data" />
                     ) : (
                         <>
-                            <div className="overflow-y-hidden flex flex-col justify-center items-center mr-5 ml-5 h-32">
-                                <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
-                                <div className="mt-3">
-                                    {
-                                        currentBuilding !== -1 &&
-                                        <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate} buildingUid={buildings[currentBuilding].uid} buttonText={`Parametre for varme`} />
-                                    }
-                                </div>
-                            </div>
                             {
-                                currentBuilding === -1 ? (
-                                    <div className="w-full flex justify-center mt-12">
-                                        Velg bygg
-                                    </div>
+                                buildingData?.success ? (
+                                    <>
+                                        <div className="overflow-y-hidden flex flex-col justify-center items-center mr-5 ml-5 h-32">
+                                            <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
+                                            <div className="mt-3">
+                                                {
+                                                    currentBuilding !== -1 &&
+                                                    <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate} buildingUid={buildings[currentBuilding].uid} buttonText={`Parametre for varme`} />
+                                                }
+                                            </div>
+                                        </div>
+                                        {
+                                            currentBuilding === -1 ? (
+                                                <div className="w-full flex justify-center mt-12">
+                                                    Velg bygg
+                                                </div>
+                                            ) : (
+                                                <HeatingTable settingsUpdatedState={settingsUpdatedState} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                            )
+                                        }
+                                    </>
                                 ) : (
-                                    <HeatingTable settingsUpdatedState={settingsUpdatedState} projectId={projectId} buildingUid={buildings[currentBuilding].uid} />
+                                    <MessageBox message={`${buildingData?.message}. ${buildingDataError}`} closeable={false} />
                                 )
                             }
                         </>
                     )
                 }
-
-
             </MainContentContainer>
         </>
     );
