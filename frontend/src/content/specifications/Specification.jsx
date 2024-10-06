@@ -119,7 +119,12 @@ function Specification() {
                                         </TableFooter>
                                     </>
                                 ) : (
-                                    <MessageBox message={data?.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis feilen vedvarer'} closeable={false} />
+                                    <>
+                                    {
+                                        !loading && <MessageBox message={data?.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis feilen vedvarer'} closeable={false} />
+                                    }
+                                    </>
+                                    
                                 )
                             }
                         </>

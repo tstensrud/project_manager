@@ -34,11 +34,11 @@ function EditSpecification() {
     const { data, loading, error, refetch } = useFetch(`/specifications/get_spec_rooms/${suid}/`);
     const { loading: deleteLoading, error: deleteError, response: deleteResponse, handleSubmit } = useDeleteData(`/specifications/delete_spec/${suid}/`);
 
-    useEffect(() =>{
+    useEffect(() => {
         if (deleteResponse?.success) {
             navigate(`/specifications`);
         }
-    },[deleteResponse]);
+    }, [deleteResponse]);
 
     // Handlers
     const deleteSpecification = async (e) => {
@@ -127,7 +127,12 @@ function EditSpecification() {
                                         </TableFooter>
                                     </>
                                 ) : (
-                                    <MessageBox message={data?.message ?? 'En feil har oppstått. Prøv å nytt og kontakt admin hvis feilen vedvarer' } closeable={false} />
+                                    <>
+                                        {
+                                            !loading && <MessageBox message={data?.message ?? 'En feil har oppstått. Prøv å nytt og kontakt admin hvis feilen vedvarer'} closeable={false} />
+                                        }
+                                    </>
+
                                 )
                             }
                         </>

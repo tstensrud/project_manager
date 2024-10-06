@@ -1,16 +1,17 @@
 import InfoIcon from '../../assets/svg/infoIcon.jsx'
+import Avatar from '../../layout/Avatar.jsx';
 import ContentCard from '../../layout/ContentCard.jsx';
 
 function Userinfo({ firebaseData, userData }) {
 
     return (
         <ContentCard>
-            <div className="flex flex-row mb-3 w-[450px]">
+            <div className="flex flex-row items-center mb-3 w-[450px]">
                 <div>
                     <h2 className="text-grey-text dark:text-dark-grey-text">Din brukerinformasjon</h2>
                 </div>
                 <div className="flex flex-1 justify-end items-center">
-                    <InfoIcon />
+                    <Avatar letter={userData?.name[0]} />
                 </div>
             </div>
             <div className="flex flex-col">

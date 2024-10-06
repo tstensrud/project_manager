@@ -133,7 +133,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
             {roomError && <MessageBox message={roomError} closeable={true} />}
             <MarkedRow deleted={deletedRoom} markedRow={markedRow}>
                 {
-                    roomLoading && roomLoading === true ? (
+                    roomLoading ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
@@ -168,7 +168,11 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
                                         </TableTDelement>
                                     </>
                                 ) : (
-                                    <td colspan={totalColumns} className="text-center">{roomData?.message ?? 'En feil har oppstått. Prøve igjen og kontakt admin ved vedvarende feil.'}</td>
+                                    <>
+                                        {
+                                            !roomLoading && <td colspan={totalColumns} className="text-center">{roomData?.message ?? 'En feil har oppstått. Prøve igjen og kontakt admin ved vedvarende feil.'}</td>
+                                        }
+                                    </>
                                 )
                             }
                         </>

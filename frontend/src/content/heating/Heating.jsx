@@ -86,7 +86,12 @@ function Heating() {
                                         }
                                     </>
                                 ) : (
-                                    <MessageBox message={`${buildingData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                    <>
+                                    {
+                                        !loading && <MessageBox message={`${buildingData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                    }
+                                        
+                                    </>
                                 )
                             }
                         </>

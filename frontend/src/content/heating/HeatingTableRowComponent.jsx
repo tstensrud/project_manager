@@ -160,7 +160,12 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                                         </TableTDelement>
                                     </>
                                 ) : (
-                                    <td colspan={totalColumns} className="text-center">{heatingData.message}</td>
+                                    <>
+                                    {
+                                        !heatingLoading && !updateRoomDataLoading && <td colspan={totalColumns} className="text-center">{heatingData.message}</td>
+                                    }
+                                    
+                                    </>
                                 )
                             }
                         </>

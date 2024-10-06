@@ -64,16 +64,16 @@ function SanitaryEquipment() {
                                                     Velg bygg
                                                 </div>
                                             ) : (
-                                                <>
-
-                                                    <SanitaryEquipmentTable projectId={activeProject} buildingUid={buildings[currentBuilding].uid} />
-                                                </>
+                                                <SanitaryEquipmentTable projectId={activeProject} buildingUid={buildings[currentBuilding].uid} />
                                             )
                                         }
                                     </>
                                 ) : (
-                                    <MessageBox message={buildingData?.message ?? ''} closeable={false} />
-
+                                    <>
+                                        {
+                                            !buildingDataLoading && <MessageBox message={buildingData?.message ?? ''} closeable={false} />
+                                        }
+                                    </>
                                 )
                             }
                         </>

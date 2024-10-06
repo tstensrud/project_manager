@@ -181,7 +181,11 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
                                         </TableTDelement>
                                     </>
                                 ) : (
-                                    <td colspan="totalColumns" className="text-center">{coolingData.message}</td>
+                                    <>
+                                        {
+                                            !coolingLoading && !updateCoolingDataLoading && <td colspan="totalColumns" className="text-center">{coolingData.message}</td>
+                                        }
+                                    </>
                                 )
                             }
                         </>

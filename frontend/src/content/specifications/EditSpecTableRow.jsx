@@ -127,7 +127,11 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch, loading }) {
                                         </TableTDelement>
                                     </>
                                 ) : (
-                                    <td colspan={totalColumns} className="text-center"></td>
+                                    <>
+                                        {
+                                            !roomLoading && !updateRoomDataLoading && <td colspan={totalColumns} className="text-center"></td>
+                                        }
+                                    </>
                                 )
                             }
 

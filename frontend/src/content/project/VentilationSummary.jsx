@@ -18,7 +18,7 @@ function VentilationSummary({ systemData, totalAirflow }) {
                                 </div>
                                 {
                                     systemData && Object.keys(systemData).map((system, index) => (
-                                        <div key={index} className="flex flex-row w-full">
+                                        <div key={index} className="flex flex-row w-full text-sm">
                                             <div className="flex">
                                                 {systemData[system].SystemName}
                                             </div>
@@ -35,7 +35,7 @@ function VentilationSummary({ systemData, totalAirflow }) {
                             {
                                 totalAirflow ? (
                                     <>
-                                        <div className="flex flex-row w-full">
+                                        <div className="flex flex-row w-full text-sm">
                                             {totalAirflow.toLocaleString()} <div className="ml-1">m<sup>3</sup>/h</div>
                                         </div>
                                     </>

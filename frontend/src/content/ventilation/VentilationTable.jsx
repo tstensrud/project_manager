@@ -195,17 +195,15 @@ function VentilationTable({ projectId, buildingUid }) {
                                 </>
                             ) : (
                                 <>
-                                {
-                                    loading && <MessageBox message={roomData?.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis den vedvarer'} closeable={false} />
-                                }
+                                    {
+                                        loading && <MessageBox message={roomData?.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis den vedvarer'} closeable={false} />
+                                    }
                                 </>
                             )
                         }
-
                     </>
                 )
             }
-
         </>
     );
 }

@@ -10,6 +10,7 @@ import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
 import BuildingSummary from './BuildingSummary';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import MessageBox from '../../layout/MessageBox.jsx';
 
 function Sanitary() {
     const { activeProject } = useContext(GlobalContext);
@@ -22,20 +23,28 @@ function Sanitary() {
             <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitæranlegg - oppsummering"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 {
-                    loading && loading === true ? (
+                    loading ? (
                         <LoadingSpinner text="bygg" />
                     ) : (
-                        <div className="flex justify-center flex-row w-full flex-wrap">
+                        <>
                             {
-                                data && data.building_data === null ? (
-                                    <p className="text-primary-color text-xs">{data.error}</p>
+                                data?.success ? (
+                                    <div className="flex justify-center flex-row w-full flex-wrap">
+                                        {
+                                            data?.data && Object.values(data.data).map((value) => (
+                                                <BuildingSummary buildingUid={value} projectId={activeProject} key={value} />
+                                            ))
+                                        }
+                                    </div>
                                 ) : (
-                                    data?.building_data && Object.values(data.building_data).map((value) => (
-                                        <BuildingSummary buildingUid={value} projectId={activeProject} key={value} />
-                                    )
-                                ))
+                                    <>
+                                        {
+                                            !loading && <MessageBox message={data?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'} closeable={false} />
+                                        }
+                                    </>
+                                )
                             }
-                        </div>
+                        </>
                     )
                 }
             </MainContentContainer>

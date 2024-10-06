@@ -119,9 +119,9 @@ function Rooms() {
                                     <>
                                         {
                                             currentBuilding !== -1 && (
-                                                <div className="flex h-20 items-center justify-center text-center flex-row w-full">
+                                                <div className="flex items-center pt-5 justify-evenly text-center flex-row w-full">
                                                     <form onSubmit={handleOnSubmit}>
-                                                        <div className="flex flex-row w-full h-full">
+                                                        <div className="flex flex-row w-full h-full  flex-wrap">
                                                             <div className="mr-2 w-24">
                                                                 <InputField name="floor" changeFunction={handleFormChange} placeholder="Etasje" tabIndex={2} required={true} />
                                                             </div>
@@ -173,7 +173,11 @@ function Rooms() {
                                         }
                                     </>
                                 ) : (
-                                    <MessageBox message={`${buildingData?.message ?? ''} ${specData?.message ?? ''} ${roomTypeData?.message ?? ''}`} closeable={false} />
+                                    <>
+                                    {
+                                        !buildingDataLoading && !specDataLoading && !roomTypeLoading && <MessageBox message={`${buildingData?.message ?? ''} ${specData?.message ?? ''} ${roomTypeData?.message ?? ''}`} closeable={false} />
+                                    }   
+                                    </>
                                 )
                             }
                         </>

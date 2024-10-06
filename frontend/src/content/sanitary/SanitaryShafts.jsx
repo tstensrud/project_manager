@@ -13,8 +13,6 @@ import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
 
-
-
 function SanitaryShafts() {
     const { activeProject } = useContext(GlobalContext);
 
@@ -70,7 +68,11 @@ function SanitaryShafts() {
                                         }
                                     </>
                                 ) : (
-                                    <MessageBox message={`${buildingData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                    <>
+                                        {
+                                            !buildingDataLoading && <MessageBox message={`${buildingData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                        }
+                                    </>
                                 )
                             }
                         </>

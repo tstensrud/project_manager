@@ -26,7 +26,7 @@ function UserProfile() {
 
     return (
         <>
-            <SubTitleComponent svg={<AccountIcon />} headerText={`Velkommen tilbake, ${data?.data?.server?.user_info?.name}!`} projectName={""} projectNumber={""} />
+            <SubTitleComponent svg={<AccountIcon />} headerText={!loading && `Velkommen tilbake, ${data?.data?.server?.user_info?.name ?? ''}!`} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 {
                     loading ? (

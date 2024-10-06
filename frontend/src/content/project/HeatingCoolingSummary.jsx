@@ -12,7 +12,7 @@ function HeatingSummary({ totalHeating, totalCooling }) {
                 <div className="text-grey-text dark:text-dark-grey-text mb-1">
                     <h4>Prosjektert varmetap</h4>
                 </div>
-                <div className="mb-10">
+                <div className="mb-10 text-sm">
                     {
                         totalHeating ? (
                             <>
@@ -28,7 +28,7 @@ function HeatingSummary({ totalHeating, totalCooling }) {
                 <div className="text-grey-text dark:text-dark-grey-text mb-1">
                     <h4>Tilført kjøling</h4>
                 </div>
-                <div>
+                <div className="text-sm">
                 {
                         totalCooling ? (
                             <>

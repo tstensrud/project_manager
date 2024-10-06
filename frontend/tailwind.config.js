@@ -20,7 +20,7 @@ export default {
 
       "table-hover": "#f0f8ff",
       "marked-row": "#d72f597a",
-      "grey-text": "rgb(112, 112, 112)",
+      "grey-text": "#7C8496",
       "system-summary": "rgba(89, 113, 157, 0.2)",
       "background-shade": "rgba(0, 0, 0, 0.356)",
     
@@ -51,7 +51,7 @@ export default {
       "dark-grey-text": "rgba(212, 212, 212, 0.644)",
       "dark-system-summary": "rgba(89, 113, 157, 0.2)",
       "dark-background-shade": "rgba(255, 255, 255, 0.329)",
-    
+      "dark-navbar-active-bg-color" : "#122c1c",
       "dark-form-border-color": "rgb(43, 53, 64)",
       "dark-form-focus-border-color": "#00FFA7",
       "dark-form-background-color": "#0c1219",
@@ -87,11 +87,21 @@ export default {
           '0%' : {left: '-30%'},
           '50%': {left: '50%'},
           '100%': {left: '100%'},
+        },
+        slideInFromLeft: {
+          '0%': {left: '-100%'},
+          '100%': {left: '0'}
+        },
+        slideOutToLeft: {
+          '0%': {left: '0'},
+          '100%': {left: '-100%'}
         }
       },
       animation: {
         fade: 'fadeOut 5s forwards',
-        slide: 'slide 3.0s linear infinite'
+        slide: 'slide 3.0s linear infinite',
+        slideInFromLeft: 'slideInFromLeft 0.3s ease-in forwards',
+        slideOutToLeft: 'slideOutToLeft 0.3s ease-in forwards'
       }
     },
   },

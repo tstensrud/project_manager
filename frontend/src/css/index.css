@@ -31,11 +31,11 @@
 
 @layer components {
   .slider {
-    @apply absolute cursor-pointer top-0 bottom-0 right-0 left-0 bg-tertiary-color dark:bg-dark-tertiary-color transition duration-300 border border-accent-color dark:border-dark-accent-color rounded-[20px] hover:border-primary-color hover:dark:border-dark-primary-color;
+    @apply absolute cursor-pointer top-[2px] bottom-0 right-0 left-0 bg-tertiary-color dark:bg-dark-tertiary-color transition duration-300 border border-accent-color dark:border-dark-accent-color rounded-[20px] hover:border-primary-color hover:dark:border-dark-primary-color;
   }
 
   .slider::before {
-    @apply absolute content-[""] h-[15px] w-[15px] left-[2px] top-[2px] bottom-[2px] bg-accent-color dark:bg-dark-accent-color transition duration-300 rounded-[50%];
+    @apply absolute content-[""] h-[12px] w-[12px] left-[2px] top-[2px] bottom-[2px] bg-accent-color dark:bg-dark-accent-color transition duration-300 rounded-[50%];
   }
 
   input:checked + .slider {

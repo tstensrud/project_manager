@@ -55,7 +55,11 @@ function Project() {
                                         <HeatingCoolingSummary totalCooling={data.data.cooling} totalHeating={data.data.heating} projectId={projectId} />
                                     </div>
                                 ) : (
-                                    <MessageBox message={`${data?.message} - ${error}`} closeable={false} />
+                                    <>
+                                    {
+                                        !loading && <MessageBox message={`${data?.message} - ${error}`} closeable={false} />
+                                    }
+                                    </>
                                 )
                             }
                         </>

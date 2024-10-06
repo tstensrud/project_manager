@@ -23,7 +23,7 @@ function MessageBox({ message, closeable }) {
                                 </div>
                             </div>
                             <div className="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="stroke-primary-color dark:stroke-dark-primary-color fill-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-primary-color dark:stroke-dark-primary-color fill-none">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="12" y1="8" x2="12" y2="12"></line>
                                     <line x1="12" y1="16" x2="12" y2="16"></line>
@@ -38,7 +38,7 @@ function MessageBox({ message, closeable }) {
                     <div className="flex flex-row w-full h-full items-center justify-center text-center">
                         <div className="flex border p-5 rounded-lg border-accent-color dark:border-dark-accent-color items-center">
                             <div className="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="stroke-accent-color dark:stroke-dark-accent-color fill-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-accent-color dark:stroke-dark-accent-color fill-none">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="12" y1="8" x2="12" y2="12"></line>
                                     <line x1="12" y1="16" x2="12" y2="16"></line>

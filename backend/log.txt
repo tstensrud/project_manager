@@ -891,3 +891,19 @@ DETAIL:  Key (project_uid)=(undefined) is not present in table "Projects".
 [parameters: {'uid': 'c5r8twZtSoiL-6FTXVNkYQ', 'project_uid': 'undefined', 'author_uid': 'CADOUxWMStPcXgZhhROtTEQu6aQ2', 'date': '2024-10-02', 'content': 'test', 'completed': False, 'date_completed': 0, 'completed_by': ''}]
 (Background on this error at: https://sqlalche.me/e/20/gkpj)
 
+- 2024-10-06 20:41:44.370198: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-10-06 20:41:44.700934: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-10-06 20:41:45.627007: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-10-06 20:41:45.673885: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-10-06 20:41:45.689891: Value error getting firebase user account: No user record found for the provided user ID: arTeIrsJQD6E99x4jltusQ. 
+
+- 2024-10-06 20:41:45.988429: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-10-06 20:41:46.004057: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+
+- 2024-10-06 20:41:46.491233: Value error getting firebase user account: No user record found for the provided user ID: IV2_7z1IQs6DyTwp-gExug. 
+

@@ -70,7 +70,7 @@ function ProjectSummary({ projectId, projectData }) {
                             <div className="mb-1 text-grey-text dark:text-dark-grey-text">
                                 <h4>Prosjektbeskrivelse</h4>
                             </div>
-                            <div className="mb-10 whitespace-pre-wrap">
+                            <div className="mb-10 whitespace-pre-wrap text-sm">
                                 {projectData.ProjectDescription}
                             </div>
 
@@ -78,7 +78,7 @@ function ProjectSummary({ projectId, projectData }) {
                                 <h4>Kravspesifikasjon</h4>
                             </div>
 
-                            <div className="mb-10">
+                            <div className="mb-10 text-sm">
                                 {
                                     projectData?.SpecUid ? (
                                         <Link to={`/specifications/${projectData.SpecUid}`}>{projectData.SpecificationName}</Link>
@@ -93,7 +93,7 @@ function ProjectSummary({ projectId, projectData }) {
                             <div className="text-grey-text dark:text-dark-grey-text mb-1">
                                 <h4>Prosjektert areal</h4>
                             </div>
-                            <div>
+                            <div className="text-sm">
                                 {
                                     projectData?.area ? (
                                         <>

@@ -36,7 +36,6 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
         }
     }, [buildingData]);
 
-
     return (
         <>
             {roomDataError && <MessageBox message={roomDataError} closeable={true} />}
@@ -141,7 +140,11 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                                     </TableFooter>
                                 </>
                             ) : (
-                                <MessageBox message={roomData?.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis feilen vedvarer'} closeable={false} />
+                                <>
+                                    {
+                                        !roomDataLoading && <MessageBox message={roomData?.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis feilen vedvarer'} closeable={false} />
+                                    }
+                                </>
                             )
                         }
                     </>

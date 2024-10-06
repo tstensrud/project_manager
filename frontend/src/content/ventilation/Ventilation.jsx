@@ -70,9 +70,12 @@ function Ventilation() {
                                         }
                                     </>
                                 ) : (
-                                    <div className="flex w-full h-full justify-center text-center items-center">
-                                    <MessageBox message={buildingData.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis den vedvarer'} closeable={false} />
-                                </div>
+                                    <>
+                                        {
+                                            !loading && <MessageBox message={buildingData.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis den vedvarer'} closeable={false} />
+                                        }
+                                    </>
+
                                 )
                             }
                         </>

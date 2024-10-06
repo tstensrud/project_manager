@@ -88,7 +88,11 @@ function Buildings() {
                                         </div>
                                     </>
                                 ) : (
-                                    <MessageBox closeable={false} message={`${data?.message} - ${error}`} />
+                                    <>
+                                    {
+                                        !loading && <MessageBox closeable={false} message={`${data?.message} - ${error}`} />
+                                    }
+                                    </>
                                 )
                             }
                         </>

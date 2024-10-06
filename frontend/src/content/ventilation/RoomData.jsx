@@ -10,12 +10,12 @@ function RoomData({ roomData, ventData, setShowRoomData }) {
 
   const calculateMinAirFlow = () => {
     let minimumAir = 0;
-    const supply = ventData.vent_data.AirSupply;
-    const extract = ventData.vent_data.AirExtract;
-    const min = ventData.vent_data.AirMinimum;
+    const supply = ventData.data.AirSupply;
+    const extract = ventData.data.AirExtract;
+    const min = ventData.data.AirMinimum;
     const area = roomData.Area;
-    const emission = ventData.vent_data.AirEmissionSum;
-    const controls = ventData.vent_data.RoomControl;
+    const emission = ventData.data.AirEmissionSum;
+    const controls = ventData.data.RoomControl;
     const cav = controls.toUpperCase().includes("CAV");
     const vav = controls.toUpperCase().includes("VAV");
 
@@ -54,27 +54,27 @@ function RoomData({ roomData, ventData, setShowRoomData }) {
           
           <RoomDataRowTitle title="Ventilasjonsdata oppsummert" />
 
-          <RoomDataRow rowName="System">{ventData.vent_data.SystemName}</RoomDataRow>
-          <RoomDataRow rowName="Beregnet luftmengde">{ventData.vent_data.AirDemand} m3/h</RoomDataRow>
+          <RoomDataRow rowName="System">{ventData.data.SystemName}</RoomDataRow>
+          <RoomDataRow rowName="Beregnet luftmengde">{ventData.data.AirDemand} m3/h</RoomDataRow>
           <RoomDataRow rowName="Beregnet luftmengde min.">{calculateMinAirFlow()} m3/h</RoomDataRow>
-          <RoomDataRow rowName="Valgt tilluft"><div className="text-supply-color mr-1">{ventData.vent_data.AirSupply}</div> m3/h</RoomDataRow>
-          <RoomDataRow rowName="Valgt avtrekk"><div className="text-extract-color mr-1">{ventData.vent_data.AirExtract}</div> m3/h</RoomDataRow>
-          <RoomDataRow rowName="Summert personbelastning">{ventData.vent_data.AirPersonSum} m3/h</RoomDataRow>
-          <RoomDataRow rowName="Summert emisjonsbelastning">{ventData.vent_data.AirEmissionSum} m3/h</RoomDataRow>
+          <RoomDataRow rowName="Valgt tilluft"><div className="text-supply-color mr-1">{ventData.data.AirSupply}</div> m3/h</RoomDataRow>
+          <RoomDataRow rowName="Valgt avtrekk"><div className="text-extract-color mr-1">{ventData.data.AirExtract}</div> m3/h</RoomDataRow>
+          <RoomDataRow rowName="Summert personbelastning">{ventData.data.AirPersonSum} m3/h</RoomDataRow>
+          <RoomDataRow rowName="Summert emisjonsbelastning">{ventData.data.AirEmissionSum} m3/h</RoomDataRow>
 
           <RoomDataRowTitle title="Grunnlagsdata ventilasjon" />
 
-          <RoomDataRow rowName="Luft per person">{ventData.vent_data.AirPerPerson} m3/pers</RoomDataRow>
-          <RoomDataRow rowName="Emisjonsbelastning">{ventData.vent_data.AirEmission} m3/m2</RoomDataRow>
-          <RoomDataRow rowName="Prosessventilasjon">{ventData.vent_data.AirProcess} m3/h</RoomDataRow>
-          <RoomDataRow rowName="Minimum ventilasjon">{ventData.vent_data.AirMinimum} m3/h</RoomDataRow>
-          <RoomDataRow rowName="Ventilasjonsprinsipp">{ventData.vent_data.VentilationPrinciple}</RoomDataRow>
-          <RoomDataRow rowName="Varmeveksler">{ventData.vent_data.HeatExchange}</RoomDataRow>
-          <RoomDataRow rowName="Styring">{ventData.vent_data.RoomControl}</RoomDataRow>
-          <RoomDataRow rowName="Presiseringer">{ventData.vent_data.Notes}</RoomDataRow>
-          <RoomDataRow rowName="dB teknisk utstyr">{ventData.vent_data.DbTechnical}</RoomDataRow>
-          <RoomDataRow rowName="dB korridor naborom">{ventData.vent_data.DbNeighbour}</RoomDataRow>
-          <RoomDataRow rowName="dB mot korridor">{ventData.vent_data.DbCorridor}</RoomDataRow>
+          <RoomDataRow rowName="Luft per person">{ventData.data.AirPerPerson} m3/pers</RoomDataRow>
+          <RoomDataRow rowName="Emisjonsbelastning">{ventData.data.AirEmission} m3/m2</RoomDataRow>
+          <RoomDataRow rowName="Prosessventilasjon">{ventData.data.AirProcess} m3/h</RoomDataRow>
+          <RoomDataRow rowName="Minimum ventilasjon">{ventData.data.AirMinimum} m3/h</RoomDataRow>
+          <RoomDataRow rowName="Ventilasjonsprinsipp">{ventData.data.VentilationPrinciple}</RoomDataRow>
+          <RoomDataRow rowName="Varmeveksler">{ventData.data.HeatExchange}</RoomDataRow>
+          <RoomDataRow rowName="Styring">{ventData.data.RoomControl}</RoomDataRow>
+          <RoomDataRow rowName="Presiseringer">{ventData.data.Notes}</RoomDataRow>
+          <RoomDataRow rowName="dB teknisk utstyr">{ventData.data.DbTechnical}</RoomDataRow>
+          <RoomDataRow rowName="dB korridor naborom">{ventData.data.DbNeighbour}</RoomDataRow>
+          <RoomDataRow rowName="dB mot korridor">{ventData.data.DbCorridor}</RoomDataRow>
           <RoomDataRow rowName="Kommentar"></RoomDataRow>
 
         </div>

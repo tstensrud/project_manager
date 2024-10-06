@@ -20,6 +20,7 @@ import CheckBox from '../../layout/formelements/CheckBox.jsx';
 // help
 import HelpBox from '../../layout/HelpBox.jsx'
 import { title, sections } from '../help/SpecNewRoomHelp.jsx'
+import NavPanel from '../../layout/NavPanel/NavPanel.jsx';
 
 function NewRoomSpec() {
     const { suid } = useParams();
@@ -58,7 +59,7 @@ function NewRoomSpec() {
     useEffect(() => {
         setData({ "vav": "1", "ventilation_principle": "Omrøring", "heat_ex": "R", "co2": false, "temp": false, "movement": false, "moisture": false, "time": false, "notes": '' })
     }, [submitted]);
-    
+
     useEffect(() => {
         if (response?.success === true) {
             setData('');
@@ -81,7 +82,7 @@ function NewRoomSpec() {
             timeRef.current.checked = false;
             notesRef.current.value = '';
         }
-    },[response]);
+    }, [response]);
 
     const handleInputChange = (e) => {
         setData({
@@ -106,14 +107,14 @@ function NewRoomSpec() {
         e.preventDefault();
         setShowHelpBox(!showHelpBox);
     }
-    console.log(data)
+
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText="Nytt rom til kravspesifikasjon" projectName={data && data.spec_name} />
             <MainContentContainer>
                 {response?.error && <><MessageBox closeable={true} message={response.message} /> </>}
-                {error && <MessageBox message={error} closeable={true}/>}
-                {specError && <MessageBox message={specError} closeable={true}/>}
+                {error && <MessageBox message={error} closeable={true} />}
+                {specError && <MessageBox message={specError} closeable={true} />}
 
                 {
                     showHelpBox === true && (

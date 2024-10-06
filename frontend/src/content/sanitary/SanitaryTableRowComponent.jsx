@@ -84,7 +84,7 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
                     <EditableInputField value={sanitaryData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
                     <EditableTableCell>
-                        {sanitaryData ? sanitaryData.sanitary_data[cellName] : ''}
+                        {sanitaryData ? sanitaryData.data[cellName] : ''}
                     </EditableTableCell>
                 )
             }
@@ -93,11 +93,11 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
 
     return (
         <>
-            {sanitaryError && <MessageBox message={sanitaryError} closeable={true}/>}
+            {sanitaryError && <MessageBox message={sanitaryError} closeable={true} />}
             {response?.success === false ? <MessageBox closeable={true} message={response.message} /> : null}
             <MarkedRow markedRow={markedRow}>
                 {
-                    sanitaryLoading && sanitaryLoading === true ? (
+                    sanitaryLoading ? (
                         <LoadingRow cols={totalColumns} />
                     ) : (
                         <>
@@ -134,10 +134,13 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
                                         {renderEditableCell("drain_110_mm", "5%")}
                                     </>
                                 ) : (
-                                    <td colspan={totalColumns} className="text-center"></td>
+                                    <>
+                                        {
+                                            !sanitaryLoading && <td colspan={totalColumns} className="text-center"></td>
+                                        }
+                                    </>
                                 )
                             }
-
                         </>
                     )
                 }

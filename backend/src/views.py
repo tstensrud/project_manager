@@ -1,16 +1,13 @@
-from datetime import datetime, timezone, timedelta
 import os
 import json
 import time
 import random
+import string
 from uuid import uuid4
-from werkzeug.security import generate_password_hash
-from flask import Blueprint, request, jsonify, send_from_directory
+from flask import Blueprint, jsonify, send_from_directory
 from . import models, db, globals
-from .models import Users
 from . import db_operations as dbo
 from werkzeug.security import check_password_hash
-from flask_jwt_extended import create_access_token, get_jwt, get_jwt_identity, unset_jwt_cookies, jwt_required, verify_jwt_in_request
 
 views = Blueprint("views", __name__)
 
@@ -44,10 +41,20 @@ def logout(user_uid):
     except Exception as e:
         print(e)
     response = jsonify({"message": "user logged out"})
-    unset_jwt_cookies(response)
     return jsonify({"message": "user logged out"})
     
-
+""" @views.route('/rename/', methods=['GET'])
+def rename():
+    rooms = db.session.query(models.Rooms).all()
+    for room in rooms:
+        room_name = ''.join(random.choices(string.ascii_letters, k=10))
+        room.room_name = room_name
+    try:
+        db.session.commit()
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "message": f"{str(e)}"}) """
+    
 """ @views.route('/initialize', methods=['GET'])
 def initialize():
         
@@ -178,6 +185,7 @@ def dummy_project(project_name=None, project_number=None):
         project_name = "Dummy project"
         project_number = "123456"    
 
+    room_name = ''.join(random.choices(string.ascii_letters, k=10))
     new_project = dbo.new_project(f"{project_number}", f"{project_name}-D", "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus voluptatem odio vitae pariatur sint ipsum possimus porro, molestias ab sunt quidem sit quasi vel vero. Earum, ut? Dolorum, ipsa recusandae?")
     spec = dbo.get_specification_by_row(1)
     dbo.set_project_specification(new_project.uid, spec.uid)
@@ -204,7 +212,7 @@ def dummy_project(project_name=None, project_number=None):
         room_number = f"{floor}{number}"
 
 
-        new_room = dbo.new_room(new_project.uid, building.uid, room_type.uid, floor, room_number, f"Navn{i}", area, pop,
+        new_room = dbo.new_room(new_project.uid, building.uid, room_type.uid, floor, room_number, room_name, area, pop,
                      room_type.air_per_person, room_type.air_emission, room_type.air_process, room_type.air_minimum,
                      room_type.ventilation_principle, room_type.heat_exchange, room_type.room_control,
                      room_type.notes, room_type.db_technical, room_type.db_neighbour, room_type.db_corridor)

@@ -13,6 +13,9 @@ function ContentCard(props) {
                     shadow-background-shade
                     transition
                     duration-100
+                    border
+                    dark:border-dark-default-border-color
+                    border-table-border-color
         ">
             <div className="flex flex-col p-4 h-full">
                 {props.children}

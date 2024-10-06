@@ -235,7 +235,12 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                                         </TableTDelement>
                                     </>
                                 ) : (
-                                    <td colspan={totalColumns} className="text-center">{ventData?.message ?? ''} </td>
+                                    <>
+                                        {
+                                            !ventLoading && !updateRoomLoading && <td colspan={totalColumns} className="text-center">{ventData?.message ?? ''} </td>
+                                        }
+                                    </>
+
                                 )
                             }
                         </>

@@ -780,7 +780,7 @@ def get_sanitary_room(project_uid, room_uid):
     if room:
         room_data = room.get_json_room_data()
         room_sanitary_data = room.get_json_sanitary_data()
-        return jsonify({"room_data": room_data, "sanitary_data": room_sanitary_data})
+        return jsonify({"success": True, "room_data": room_data, "data": room_sanitary_data})
     else:
         return jsonify({"success": False, "message": "Fant ikke rom"})
 
@@ -793,10 +793,9 @@ def get_buildings_sanitary(project_uid):
         return jsonify({"success": False, "message": "Ingen bygg lagt til enda"})
     else:
         building_data = []
-
         for building in buildings:
             building_data.append(building.uid)
-        return jsonify({"building_data": building_data})
+        return jsonify({"success": True, "data": building_data})
 
 @project_api_bp.route('/sanitary/get_building/<building_uid>/', methods=['GET'])
 def get_sanitary_building_data(project_uid, building_uid):
@@ -850,7 +849,7 @@ def get_sanitary_building_summary(project_uid, building_uid):
             }
         }
         building_data = dbo.get_building_data(building_uid, False, False, True)
-        return jsonify({"success": True, "message": "Building data fetched", "building_data": building_data, "totals": totals})
+        return jsonify({"success": True, "message": "Building data fetched", "data": building_data, "totals": totals})
     else:
         return jsonify({"success": False, "message": "No building found"})
 

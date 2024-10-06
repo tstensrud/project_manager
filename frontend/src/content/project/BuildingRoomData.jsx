@@ -15,7 +15,7 @@ function BuildingRoomData({ buildingData }) {
                             <div className="text-grey-text dark:text-dark-grey-text mb-1">
                                 <h4>Bygg og areal</h4>
                             </div>
-                            <div className="mb-10">
+                            <div className="mb-10 text-sm">
                                 {
                                     buildingData && Object.keys(buildingData.building_data).map((building, index) => (
                                         <div key={index} className="flex flex-row w-full">
@@ -32,7 +32,7 @@ function BuildingRoomData({ buildingData }) {
                             <div className="text-grey-text dark:text-dark-grey-text mb-1">
                                 <h4>Antall rom prosjektert</h4>
                             </div>
-                            <div>
+                            <div className="text-sm">
                                 {buildingData.rooms}
                             </div>
                         </>

@@ -24,7 +24,7 @@ function VentSystems() {
 
     // Hooks
     const { data: receivedSystemsData, loading: systemsLoading, error: systemsError, refetch: systemsRefetch } = useFetch(activeProject ? `/project_api/${activeProject}/systems/` : null);
-    
+
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Ventilasjonssytemer"} projectName={""} projectNumber={""} />
@@ -58,12 +58,12 @@ function VentSystems() {
                                         {
                                             receivedSystemsData?.data && (
                                                 Object.keys(receivedSystemsData.data)
-                                                .sort((a,b) => {
-                                                    const nameA = receivedSystemsData.data[a].SystemName;
-                                                    const nameB = receivedSystemsData.data[b].SystemName;
-                                                    return nameA.localeCompare(nameB)
-                                                })
-                                                .map((system) => <SystemsTableRowComponent systemsRefetch={systemsRefetch} key={receivedSystemsData.data[system].uid} cols={11} systemId={receivedSystemsData.data[system].uid} />)
+                                                    .sort((a, b) => {
+                                                        const nameA = receivedSystemsData.data[a].SystemName;
+                                                        const nameB = receivedSystemsData.data[b].SystemName;
+                                                        return nameA.localeCompare(nameB)
+                                                    })
+                                                    .map((system) => <SystemsTableRowComponent systemsRefetch={systemsRefetch} key={receivedSystemsData.data[system].uid} cols={11} systemId={receivedSystemsData.data[system].uid} />)
                                             )
                                         }
                                     </tbody>
@@ -72,9 +72,9 @@ function VentSystems() {
                             </>
                         ) : (
                             <>
-                             {
-                                !systemsLoading && <MessageBox message={receivedSystemsData?.message} closeable={false} />
-                             }
+                                {
+                                    !systemsLoading && <MessageBox message={receivedSystemsData?.message} closeable={false} />
+                                }
                             </>
                         )
                     )

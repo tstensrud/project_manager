@@ -135,9 +135,7 @@ function SystemTableRowComponent({ systemId, systemsRefetch, cols }) {
                         </TableTDelement>
                         <TableTDelement width="32%">
                             {
-                                showDeleteDialog === true ? (
-                                    <DeleteBox systemName={systemData && systemData.system_data.SystemName} setShowDeleteDialog={setShowDeleteDialog} deleteSystem={deleteSystem} />
-                                ) : (<></>)
+                                showDeleteDialog &&  <DeleteBox systemName={systemData && systemData.system_data.SystemName} setShowDeleteDialog={setShowDeleteDialog} deleteSystem={deleteSystem} />
                             }
                             {systemData && systemData.system_data.AirFlowSupply !== systemData.system_data.AirFlowExtract ? (<>Ubalanse på system. </>) : (<></>)}
                             {systemData && systemData.system_data.AirFlowSupply > systemData.system_data.AirFlow ? (<>For mye tilluft. </>) : (<></>)}
@@ -145,7 +143,7 @@ function SystemTableRowComponent({ systemId, systemsRefetch, cols }) {
                         </TableTDelement>
                         <TableTDelement width="10%">
                             <div className="pt-1 pb-1">
-                                {showDeleteDialog === true ? (<></>) : (<TableButton clickFunction={showDeleteBox} buttonText="Slett" />)}
+                                {showDeleteDialog && (<TableButton clickFunction={showDeleteBox} buttonText="Slett" />)}
                             </div>
                         </TableTDelement>
                     </MarkedRow>

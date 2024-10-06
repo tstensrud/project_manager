@@ -94,7 +94,7 @@ function BuildingSummary({ buildingUid, projectId }) {
                         <BuildingIcon />
                     </div>
                     <div className="flex w-[60%] text-center items-center justify-end text-2xl">
-                        {buildingSummaryData && buildingSummaryData.building_data.BuildingName}
+                        {buildingSummaryData && buildingSummaryData.data.BuildingName}
                     </div>
                 </div>
                 {
@@ -107,7 +107,7 @@ function BuildingSummary({ buildingUid, projectId }) {
                                     Avløpskurve
                                 </div>
                                 <strong>
-                                    {buildingSummaryData && buildingSummaryData.building_data.GraphCurve}
+                                    {buildingSummaryData && buildingSummaryData.data.GraphCurve}
                                 </strong>
                             </div>
 
@@ -139,7 +139,7 @@ function BuildingSummary({ buildingUid, projectId }) {
                                 <h3>Installert sanitærustyr</h3>
                                 <div className="border-0 p-1 rounder-lg">
                                     {
-                                        buildingSummaryData && Object.entries(buildingSummaryData && buildingSummaryData.building_data.sanitary_summary).map((equip, index) => (
+                                        buildingSummaryData && Object.entries(buildingSummaryData && buildingSummaryData.data.sanitary_summary).map((equip, index) => (
                                             <EquipmentContainer type={translateEquipment(equip[0])} key={index}>{equip[1]} stk</EquipmentContainer>
                                         ))
                                     }
