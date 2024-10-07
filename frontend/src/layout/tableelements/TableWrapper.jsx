@@ -44,7 +44,7 @@ function TableWrapper({ floor, children, collapseAll, shaft }) {
             }
             <div ref={tableContainerRef} style={{ maxHeight: `${tableHeight}px` }}
                 className={showTable ?
-                    `flex flex-col overflow-y-auto transition-all duration-700 ease-in-out mt-0 bg-secondary-color dark:bg-dark-secondary-color shadow-sm shadow-background-shade dark:shadow-none` :
+                    `flex flex-col overflow-y-auto transition-all duration-700 ease-in-out mt-0 bg-secondary-color dark:bg-dark-secondary-color` :
                     "max-h-0 overflow-hidden transition-all duration-700 ease-in-out"
                 }
                 onTransitionEnd={() => {

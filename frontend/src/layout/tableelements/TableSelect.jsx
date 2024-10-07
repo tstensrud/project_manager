@@ -14,9 +14,6 @@ function TableSelect({ currentSystemName, systems, handleSystemChange }) {
         bg-tertiary-color
         dark:bg-dark-tertiary-color
         relative
-        hover:shadow-sm
-        hover:shadow-background-shade
-        hover:dark:shadow-dark-background-shade
         ">
             <div className="bg-tertiary-color dark:bg-dark-tertiary-color p-1 rounded-lg cursor-default flex flex-row">
                 <div className="w-[10%]">

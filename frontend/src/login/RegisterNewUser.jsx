@@ -78,12 +78,12 @@ function RegisterNewUser() {
                                     </div>
 
                                     <div className="mt-5 flex flex-row w-full items-center">
-                                        <input type="password" className="border border-dark-form-border-color bg-dark-form-background-color rounded-lg w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-form-element-hover" value={newPassword} onChange={(e) => (setNewPassword(e.target.value))} placeholder="Nytt passord" />
+                                        <input type="password" className="border border-dark-default-border-color bg-dark-secondary-color rounded-lg w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-accent-color" value={newPassword} onChange={(e) => (setNewPassword(e.target.value))} placeholder="Nytt passord" />
                                     </div>
 
                                     <div className="mt-2 flex flex-col items-center w-full">
                                             <div className="flex items-center flex-row w-full">
-                                                <input className="border border-dark-form-border-color bg-dark-form-background-color rounded-lg w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-form-element-hover" type="password" value={confirmPass} onChange={(e) => (setConfirmPass(e.target.value))} placeholder="Gjenta passord" />
+                                                <input className="border border-dark-default-border-color bg-dark-secondary-color rounded-lg w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-accent-color" type="password" value={confirmPass} onChange={(e) => (setConfirmPass(e.target.value))} placeholder="Gjenta passord" />
                                             </div>
                                             <div className="flex justify-center w-full h-20 items-center">
                                                 {
@@ -94,7 +94,7 @@ function RegisterNewUser() {
 
                                     <div className="flex flex-col mt-3 justify-center">
                                         <div className="mb-5">
-                                            <button className="border border-dark-form-border-color bg-dark-form-background-color text-dark-primary-color rounded-lg pt-2 pb-2 pl-5 pr-5 focus:border-dark-form-focus-border-color focus:outline-none hover:border-dark-form-element-hover" type="submit" disabled={!passwordMatch}>
+                                            <button className="border border-dark-default-border-color bg-dark-secondary-color text-dark-primary-color rounded-lg pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-accent-color" type="submit" disabled={!passwordMatch}>
                                                 Fortsett
                                             </button>
                                         </div>

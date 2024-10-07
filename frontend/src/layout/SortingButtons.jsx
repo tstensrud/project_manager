@@ -3,7 +3,7 @@ import SortingButton from './formelements/SortingButton.jsx';
 
 function SortingButtons({ buildings, currentBuilding, sortButtonClick }) {
     return (
-        <div className="flex flex-row w-full justify-center mt-5">
+        <div className="flex flex-row justify-center pt-5 pb-5">
         {
             buildings && buildings.map((building, index) => (
                 <div key={index}>

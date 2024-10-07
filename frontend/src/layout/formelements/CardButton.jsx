@@ -26,18 +26,21 @@ function CardButton({ clickFunction, tabIndex, disabled, buttonText, loading }) 
                                     onClick={clickFunction}
                                     className="
                             bg-tertiary-color
-                            dark:bg-dark-tertiary-color
+                            dark:bg-dark-secondary-color
                             border-form-border-color
-                            dark:border-dark-form-border-color
+                            dark:border-dark-default-border-color
                             border
                             uppercase outline-none
                             text-primary-color
                             dark:text-dark-primary-color
-                            text-xs cursor-pointer rounded-lg h-9 pl-5 pr-5
-                            hover:border-form-element-hover
-                            hover:dark:border-dark-form-element-hover
-                            focus:border-form-element-hover
-                            focus:dark:border-dark-form-focus-color
+                            text-xs cursor-pointer rounded-lg
+                            h-9
+                            pl-5
+                            pr-5
+                            hover:border-primary-color
+                            hover:dark:border-dark-accent-color
+                            focus:border-primary-color
+                            focus:dark:border-dark-accent-color
                             "
                                     tabIndex={tabIndex}
                                     disabled={disabled}
@@ -51,18 +54,21 @@ function CardButton({ clickFunction, tabIndex, disabled, buttonText, loading }) 
                                     id="cardButton"
                                     className="
                             bg-tertiary-color
-                            dark:bg-dark-tertiary-color
-                            dark:border-dark-form-border-color
+                            dark:bg-dark-secondary-color
+                            dark:border-dark-default-border-color
                             border-form-border-color
                             uppercase outline-none 
                             border
                             text-primary-color
                             dark:text-dark-primary-color
-                            text-xs cursor-pointer rounded-lg h-9 pl-5 pr-5
-                            hover:border-form-element-hover
-                            hover:dark:border-dark-form-element-hover 
-                            focus:border-form-element-hover
-                            focus:dark:border-dark-form-focus-color"
+                            text-xs cursor-pointer rounded-lg
+                            h-9
+                            pl-5
+                            pr-5
+                            hover:border-primary-color
+                            hover:dark:border-dark-accent-color
+                            focus:border-primary-color
+                            focus:dark:border-dark-accent-color"
                                     tabIndex={tabIndex}
                                     disabled={disabled}
                                 >

@@ -36,9 +36,9 @@ const CustomSelect = forwardRef((props, ref) => {
             group-hover:left-0
             group-hover:rounded-bl-lg
             group-hover:rounded-br-lg
-             group-hover:rounded-tl-none
-             group-hover:rounded-tr-none
-             cursor-pointer">
+            group-hover:rounded-tl-none
+            group-hover:rounded-tr-none
+            cursor-pointer">
                 {
                     props.selections && Object.keys(props.selections)
                         .sort((a, b) => {

@@ -67,7 +67,7 @@ function Settings() {
 
     return (
         <>
-            <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektinnstillinger"} projectName={data && data.data.ProjectName} projectNumber={data && data.data.ProjectNumber} />
+            <SubTitleComponent svg={<HeaderIcon />} headerText={"Prosjektinnstillinger"} projectName={data?.data?.ProjectName} projectNumber={data?.data?.ProjectNumber} />
             <MainContentContainer>
                 {error || specError && <MessageBox closeable={true} message={`${error ?? ''} ${specError ?? ''}`}/>}
                 <div className="flex justify-center flex-row w-full">

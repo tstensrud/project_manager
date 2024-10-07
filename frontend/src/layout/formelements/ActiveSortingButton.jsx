@@ -9,11 +9,12 @@ function ActiveSortingButton({name, index, sortButtonClick, buttonText, disabled
             onClick={handleClick}
             className="uppercase h-11 outline-none 
             bg-secondary-color
-            dark:bg-dark-secondary-color
+            dark:bg-dark-navbar-active-bg-color
+            font-semibold
             rounded-lg
             border
-            border-form-focus-color
-            dark:border-dark-form-focus-border-color
+            border-primary-color
+            dark:border-dark-navbar-active-bg-color
             pl-5
             pr-5
             text-primary-color

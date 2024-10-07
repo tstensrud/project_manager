@@ -82,8 +82,8 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                 editBuildingContainer && editBuildingContainer === true ? (
                     <>
                         <form onSubmit={submitNameChange}>
-                            <div className="flex flex-col">
-                                <div className="flex mb-1">
+                            <div className="flex flex-row pb-1">
+                                <div className="flex pr-3">
                                     <CardInputField changeFunction={handleNameChange} name="buildingName" placeholder="Endre navn.." required={true} />
                                 </div>
                                 <div className="flex items-center">

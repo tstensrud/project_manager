@@ -9,9 +9,9 @@ const TextArea = forwardRef((props, ref) => {
             className="
             bg-tertiary-color
             border
-            dark:bg-dark-tertiary-color
+            dark:bg-dark-secondary-color
             border-form-border-color
-            dark:border-dark-form-border-color
+            dark:border-dark-default-border-color
             rounded-md
             text-primary-color
             dark:text-dark-primary-color
@@ -20,9 +20,9 @@ const TextArea = forwardRef((props, ref) => {
             w-full
             h-52
             hover:border-form-border-color
-            hover:dark:border-dark-form-border-color
-            focus:border-form-focus-border-color
-            focus:dark:border-dark-form-focus-border-color
+            hover:dark:border-dark-default-border-color
+            focus:border-primary-color
+            focus:dark:border-dark-accent-color
             focus:outline-none"
             tabIndex={props.tabIndex}
             required={props.required}

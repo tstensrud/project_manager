@@ -7,57 +7,39 @@ export default {
   ],
   theme: {
     colors: {
-      "primary-color": "black",
-      "secondary-color": "white",
-      "tertiary-color": "#EFF1F6",
-      "accent-color": "#ec2828",
+      "primary-color": "#000000",
+      "secondary-color": "#FFFFFF",
+      "tertiary-color": "#F3F5F8",
+      "accent-color": "#0460FD",
       "default-border-color": "black",
-      "table-footer": "#161F29",
-      "table-row-even": "#ececec",
-      "table-button-border": "#1f1c2e",
-      "table-button-background": "#121c26",
       "table-border-color": "#4747478f",
 
       "table-hover": "#f0f8ff",
       "marked-row": "#d72f597a",
-      "grey-text": "#7C8496",
+      "grey-text": "#40475A",
       "system-summary": "rgba(89, 113, 157, 0.2)",
-      "background-shade": "rgba(0, 0, 0, 0.356)",
     
       "form-border-color": "#00000036",
-      "form-focus-border-color": "black",
-      "form-background-color": "white",
-      "form-element-hover": "black",
-      "form-focus-color": "black",
-      "form-table-button-border-color": "#00000036",
 
       "supply-color" : "#2ba972",
       "extract-color" : "#a92b3c",
       "heating-color" : "#FF7F27",
       "deleted-row" : "#aa4444",
+      "background-shade": "rgba(0, 0, 0, 0.356)",
 
-      "dark-primary-color": "white",
-      "dark-secondary-color": "#121c26",
-      "dark-tertiary-color": "#0c1219",
-      "dark-accent-color": "#00FFA7",
+      "dark-primary-color": "#ECEBF0",
+      "dark-secondary-color": "#161618",
+      "dark-tertiary-color": "#1F1F21",
+      "dark-accent-color": "#0059B3",
       "dark-default-border-color": "rgb(43, 53, 64)",
-      "dark-inner-card-backgrounnd-color": "rgba(33, 50, 68, 0.432)",
-      "dark-table-footer": "#161F29",
-      "dark-table-button-border": "#1f1c2e",
-      "dark-table-button-background": "#121c26",
-      "dark-table-border-color": "rgb(43, 53, 64)",
+      "dark-table-header-color" : "#171B26",
       "dark-table-hover": "#1e2a35",
       "dark-marked-row": "#1e7e3659",
       "dark-grey-text": "rgba(212, 212, 212, 0.644)",
       "dark-system-summary": "rgba(89, 113, 157, 0.2)",
-      "dark-background-shade": "rgba(255, 255, 255, 0.329)",
-      "dark-navbar-active-bg-color" : "#122c1c",
-      "dark-form-border-color": "rgb(43, 53, 64)",
-      "dark-form-focus-border-color": "#00FFA7",
+      "dark-navbar-hover-bg-color" : "#3B3B3D",
+      "dark-navbar-active-bg-color" : "#3B3B3D",
       "dark-form-background-color": "#0c1219",
-      "dark-form-element-hover": "#00FFA7",
-      "dark-form-focus-color": "#00FFA7",
-      "dark-form-table-button-border-color": "rgb(43, 53, 64)",
     }
     ,
     extend: {
@@ -95,13 +77,23 @@ export default {
         slideOutToLeft: {
           '0%': {left: '0'},
           '100%': {left: '-100%'}
+        },
+        slideInFromTop: {
+          '0%': {top: '-100%'},
+          '100%': {top: '8px'}
+        },
+        slideOutToTop: {
+          '0%': {top: '8px'},
+          '100%': {top: '-100%'}
         }
       },
       animation: {
         fade: 'fadeOut 5s forwards',
         slide: 'slide 3.0s linear infinite',
-        slideInFromLeft: 'slideInFromLeft 0.3s ease-in forwards',
-        slideOutToLeft: 'slideOutToLeft 0.3s ease-in forwards'
+        slideInFromLeft: 'slideInFromLeft 0.5s ease-in forwards',
+        slideOutToLeft: 'slideOutToLeft 0.5s ease-in forwards',
+        slideInFromTop: 'slideInFromTop 0.5s ease-in forwards',
+        slideOutToTop: 'slideOutToTop 0.5s ease-in forwards'
       }
     },
   },

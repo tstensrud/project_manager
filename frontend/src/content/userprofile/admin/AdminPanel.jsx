@@ -22,7 +22,7 @@ function AdminPanel() {
 
 
     return (
-        <div className="bg-secondary-color dark:bg-dark-secondary-color rounded-lg shadow-lg w-full shadow-background-shade">
+        <div className="bg-secondary-color dark:bg-dark-tertiary-color rounded-lg w-full">
             <div className="flex flex-col h-full overflow-y-auto">
                 <div className="flex flex-row mb-3 p-5">
                     <div>

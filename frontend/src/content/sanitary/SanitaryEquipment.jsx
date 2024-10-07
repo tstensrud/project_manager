@@ -6,7 +6,7 @@ import { GlobalContext } from '../../context/GlobalContext';
 import useFetch from '../../hooks/useFetch.jsx'
 
 // components
-import TapwaterIcon from '../../assets/svg/tapWaterIcon.jsx';
+import TapwaterIcon from '../../assets/svg/sanEquipIcon.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import SortingButtons from '../../layout/SortingButtons.jsx';

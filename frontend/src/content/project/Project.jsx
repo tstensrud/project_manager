@@ -50,7 +50,7 @@ function Project() {
                                 data?.success === true ? (
                                     <div className="flex justify-evenly flex-row w-full flex-wrap">
                                         <ProjectSummary projectData={data.data} projectId={projectId} />
-                                        <BuildingRoomData buildingData={data.data.buildingData} projectId={projectId} />
+                                        <BuildingRoomData data={data.data} projectId={projectId} />
                                         <VentilationSummary systemData={data.data.ventsystemData} totalAirflow={data.data.airflow} projectId={projectId} />
                                         <HeatingCoolingSummary totalCooling={data.data.cooling} totalHeating={data.data.heating} projectId={projectId} />
                                     </div>

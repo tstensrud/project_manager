@@ -13,6 +13,7 @@ import EditSpecTableRow from './EditSpecTableRow';
 import DeleteBox from './DeleteBox';
 import TableTop from '../../layout/TableTop';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
+import LinkButton from '../../layout/Linkbutton.jsx'
 import Table from '../../layout/tableelements/Table.jsx';
 import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
 import TableFooter from '../../layout/tableelements/TableFooter.jsx'
@@ -53,7 +54,7 @@ function EditSpecification() {
 
     return (
         <>
-            <SubTitleComponent svg={<HeaderIcon />} headerText={"Rediger kravspesifikasjon"} projectName={data && data.spec_name} projectNumber={""} />
+            <SubTitleComponent svg={<HeaderIcon width={24} height={24} primary />} headerText={"Rediger kravspesifikasjon"} projectName={data && data.spec_name} projectNumber={""} />
             <MainContentContainer>
                 {error && <MessageBox message={error} closeable={true} />}
                 {deleteError && <MessageBox message={deleteError} closeable={true} />}
@@ -70,11 +71,9 @@ function EditSpecification() {
                             {
                                 data?.success ? (
                                     <>
-                                        <div className="w-full h-10 mt-3 flex flex-row items-center bg-tertiary-color dark:bg-dark-tertiary-color text-primary-color dark:text-dark-primary-color pl-5 pr-5">
+                                        <div className="w-full flex flex-row items-center bg-tertiary-color dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color p-5">
                                             <div className="items-center text-center">
-                                                <h3>
-                                                    <Link to={`/specifications/${suid}`}>{name}</Link>
-                                                </h3>
+                                                <LinkButton url={`/specifications/${suid}`} text={name} />
                                             </div>
                                             <div className="group flex flex-row flex-1 justify-end items-center cursor-pointer text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300">
                                                 <div className="pr-3" onClick={openDeleteDialog}>
@@ -88,6 +87,7 @@ function EditSpecification() {
                                                 </div>
                                             </div>
                                         </div>
+
                                         <TableTop title={title} sections={sections} />
                                         <TableHeader>
                                             <TableTHelement width="15%">Romtype</TableTHelement>

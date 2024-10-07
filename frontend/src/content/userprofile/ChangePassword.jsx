@@ -66,7 +66,9 @@ function ChangePassword() {
                     <h2 className="text-grey-text dark:text-dark-grey-text mb-3">Bytt passord</h2>
                 </div>
                 <div className="flex flex-1 justify-end items-center">
-                    <EditIcon width={20} height={20} primary={true} />
+                    <div className="w-fit dark:bg-dark-accent-color bg-accent-color p-1 border border-accent-color dark:border-dark-accent-color rounded-lg">
+                        <EditIcon width={20} height={20} primary={true} />
+                    </div>
                 </div>
             </div>
 

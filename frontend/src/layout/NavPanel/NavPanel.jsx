@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import SubMenuItem from "./SubMenuItem";
 
 function NavPanel() {
-    const { activeProject, activeProjectName } = useContext(GlobalContext);
+    const { activeProject, activeProjectName, userName } = useContext(GlobalContext);
     const [showMenu, setShowMenu] = useState(true);
 
     const projectMenuItems = {
@@ -30,7 +30,7 @@ function NavPanel() {
                 url: `/buildings/${activeProject}`
             },
             {
-                menuItem: "Romliste",
+                menuItem: "Romskjema",
                 svg:
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition duration-300 stroke-grey-text dark:stroke-dark-grey-text group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color fill-none">
                         <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon>
@@ -224,9 +224,9 @@ function NavPanel() {
         <>
             {
                 !showMenu &&
-                <div onClick={handleToggleMenu} className={`dark:bg-dark-secondary-color bg-secondary-color cursor-pointer ${!showMenu ? 'animate-slideInFromLeft' : 'animate-slideOutToLeft'} flex flex-col items-center border-t border-r border-b dark:border-dark-default-border-color justify-center w-6 h-10 absolute top-1/2 -translate-y-1/2 rounded-tr-lg rounded-br-lg hover:dark:border-dark-accent-color hover:border-accent-color`}>
+                <div onClick={handleToggleMenu} className={`group dark:bg-dark-secondary-color bg-secondary-color hover:bg-accent-color cursor-pointer ${!showMenu ? 'animate-slideInFromLeft' : 'animate-slideOutToLeft'} flex flex-col items-center border-t border-r border-b dark:border-dark-accent-color justify-center w-6 h-16 absolute top-1/2 -translate-y-1/2 rounded-tr-lg rounded-br-lg border-accent-color hover:dark:bg-dark-navbar-hover-bg-color transaition duration-300`}>
                     <div className="rotate-180">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-accent-color dark:stroke-dark-accent-color group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color  transition duration-300 fill-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-primary-color dark:stroke-dark-primary-color transition group-hover:stroke-secondary-color duration-300 fill-none">
                             <polyline points="15 18 9 12 15 6"></polyline>
                         </svg>
                     </div>
@@ -234,14 +234,15 @@ function NavPanel() {
             }
 
             <div className={`absolute z-50 top-1/2 -translate-y-1/2 ${showMenu ? 'animate-slideInFromLeft' : 'animate-slideOutToLeft'} flex flex-row w-70 h-4/5 overflor-x-hidden`}>
-                <div className="ml-3 w-60 flex flex-col  dark:bg-dark-tertiary-color bg-tertiary-color rounded-lg border dark:border-dark-default-border-color overflow-y-auto">
+                <div className="ml-3 w-60 flex flex-col p-1 border-primary-color  bg-secondary-color rounded-lg border dark:border-dark-default-border-color dark:bg-dark-tertiary-color overflow-y-auto">
+                    
                     <div onClick={handleToggleMenu} className="group cursor-pointer flex items-center pt-2 pl-2 pb-3 border-b dark:border-dark-default-border-color h-12 text-grey-text dark:text-dark-grey-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-grey-text dark:stroke-dark-grey-text group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color  transition duration-300 fill-none">
-                            <polyline points="15 18 9 12 15 6"></polyline>
-                        </svg>
-                        <div className="group-hover:text-primary-color pl-4 group-hover:dark:text-dark-primary-color transition duration-300">
-                            Lukk meny
+                        <div className="flex items-center justify-center w-7 h-7 border border-accent-color bg-tertiary-color group-hover:bg-accent-color dark:bg-dark-tertiary-color dark:border-dark-accent-color rounded-lg transition duration-300 group-hover:dark:bg-dark-navbar-active-bg-color">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-grey-text group-hover:stroke-secondary-color dark:stroke-dark-grey-text group-hover:dark:stroke-dark-primary-color transition duration-300 fill-none">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
                         </div>
+                        
                     </div>
 
                     {

@@ -12,6 +12,7 @@ import SummaryHeader from './components/SummaryHeader.jsx';
 import EquipmentContainer from './components/EquipmentContainer.jsx';
 import MessageBox from '../../layout/MessageBox';
 import BuildingIcon from '../../assets/svg/buildingIcon.jsx';
+import CardTitle from '../../layout/CardTitle.jsx';
 
 function BuildingSummary({ buildingUid, projectId }) {
 
@@ -90,12 +91,7 @@ function BuildingSummary({ buildingUid, projectId }) {
 
             <ContentCard>
                 <div className="flex w-[400px] mb-5">
-                    <div className="flex w-[40%]">
-                        <BuildingIcon />
-                    </div>
-                    <div className="flex w-[60%] text-center items-center justify-end text-2xl">
-                        {buildingSummaryData && buildingSummaryData.data.BuildingName}
-                    </div>
+                    <CardTitle svg={<BuildingIcon />} title={buildingSummaryData?.data?.BuildingName} />
                 </div>
                 {
                     buildingSummaryDataLoading && buildingSummaryDataLoading === true ? (
@@ -115,29 +111,28 @@ function BuildingSummary({ buildingUid, projectId }) {
                                 <CustomSelect selections={curveOptions} changeFunction={handleCurveChange} />
                             </div>
 
-                            <h3>Oppsummering vannmengder</h3>
-                            <div className="border-0 p-1 rounder-lg">
+                            <div className="border-0 rounded-lg">
                                 <SummaryHeader header="Spillvann" />
                                 <EquipmentContainer type="Vannmengde">{buildingSummaryData && buildingSummaryData.totals.drainage.total.toFixed(2)} L/s</EquipmentContainer>
                                 <EquipmentContainer type="Rørdim. (MA) 1:60">{buildingSummaryData && buildingSummaryData.totals.drainage.pipe_siz_1_60} mm</EquipmentContainer>
                                 <EquipmentContainer type="Rørdim. (MA) vertikal">{buildingSummaryData && buildingSummaryData.totals.drainage.pipe_size_vertical} mm</EquipmentContainer>
                             </div>
 
-                            <div className="border-0 p-1 rounder-lg">
+                            <div className="border-0 rounded-lg pt-3">
                                 <SummaryHeader header="Kaldtvann" />
                                 <EquipmentContainer type="Vannmengde">{buildingSummaryData && buildingSummaryData.totals.cw.total.toFixed(2)} L/s</EquipmentContainer>
                                 <EquipmentContainer type="Rørdim. (Cu)">{buildingSummaryData && buildingSummaryData.totals.cw.pipe_size} mm</EquipmentContainer>
                             </div>
 
-                            <div className="border-0 p-1 rounder-lg">
+                            <div className="border-0 rounded-lg pt-3">
                                 <SummaryHeader header="Varmtvann" />
                                 <EquipmentContainer type="Vannmengde">{buildingSummaryData && buildingSummaryData.totals.ww.total.toFixed(2)} L/s</EquipmentContainer>
                                 <EquipmentContainer type="Rørdim. (Cu)">{buildingSummaryData && buildingSummaryData.totals.ww.pipe_size} mm</EquipmentContainer>
                             </div>
 
-                            <div className="mt-4">
-                                <h3>Installert sanitærustyr</h3>
-                                <div className="border-0 p-1 rounder-lg">
+                            <div className="pt-4">
+                                <SummaryHeader header="Installert utstyr" />
+                                <div className="border-0 rounded-lg">
                                     {
                                         buildingSummaryData && Object.entries(buildingSummaryData && buildingSummaryData.data.sanitary_summary).map((equip, index) => (
                                             <EquipmentContainer type={translateEquipment(equip[0])} key={index}>{equip[1]} stk</EquipmentContainer>

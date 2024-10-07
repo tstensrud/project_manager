@@ -75,14 +75,14 @@ function Login(props) {
                                     Structor TS prosjekter
                                 </div>
                                 <div className="flex mt-5">
-                                    <input className="border border-dark-form-border-color bg-dark-form-background-color rounded-lg w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-form-element-hover" type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-post" />
+                                    <input className="border border-dark-default-border-color bg-dark-secondary-color rounded-lg w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-accent-color" type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-post" />
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-grey-text fill-none relative right-8 top-3">
                                         <circle cx="12" cy="12" r="4"></circle>
                                         <path d="M16 12v1a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
                                     </svg>
                                 </div>
                                 <div className="mt-3 flex">
-                                    <input className="border border-dark-form-border-color bg-dark-form-background-color rounded-lg w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-form-element-hover" type={passwordInputType} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passord" />
+                                    <input className="border border-dark-default-border-color bg-dark-secondary-color rounded-lg w-full pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-accent-color" type={passwordInputType} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Passord" />
                                     {
                                         passwordInputType === "password" ? (
                                             <svg onClick={handlePasswordVisibleClick} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-grey-text fill-none relative right-8 top-3 cursor-pointer hover:stroke-dark-primary-color">
@@ -103,7 +103,7 @@ function Login(props) {
 
                                 <div className="flex flex-col mt-3 justify-center">
                                     <div className="mb-5">
-                                        <button onClick={firebaseLogin} className="border border-dark-form-border-color bg-dark-form-background-color text-dark-primary-color rounded-lg pt-2 pb-2 pl-5 pr-5 focus:border-dark-form-focus-border-color focus:outline-none hover:border-dark-form-element-hover" type="submit">
+                                        <button onClick={firebaseLogin} className="border border-dark-default-border-color bg-dark-secondary-color text-dark-primary-color rounded-lg pt-2 pb-2 pl-5 pr-5 focus:border-dark-accent-color focus:outline-none hover:border-dark-accent-color" type="submit">
                                             Logg inn
                                         </button>
                                     </div>

@@ -8,8 +8,8 @@ import useFetch from '../../hooks/useFetch'
 import SubTitleComponent from '../../layout/SubTitleComponent';
 import HeaderIcon from '../../assets/svg/specificationsIcon.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner';
+import LinkButton from '../../layout/Linkbutton.jsx'
 import TableTop from '../../layout/TableTop';
-import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
 import MessageBox from '../../layout/MessageBox';
 import TableFooter from '../../layout/tableelements/TableFooter.jsx'
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
@@ -48,20 +48,12 @@ function Specification() {
                         <LoadingSpinner text="romtyper" />
                     ) : (
                         <>
-                            <div className="overflow-y-hidden flex justify-center items-center pt-5 h-32-spec">
+                            <div className="overflow-y-hidden flex justify-center items-center pt-5 pb-5 h-32-spec">
                                 <div className='container-flex-col-spec'>
-                                    <Link to={`/specifications/${suid}/new_room`}>Legg inn romtyper</Link>
+                                    <LinkButton icon={false} text="Legg inn nye romtyper" url={`/specifications/${suid}/new_room`} />
                                 </div>
-                                <div className="group flex flex-row flex-1 justify-end items-center cursor-pointer text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300">
-                                    <div className="pr-3" onClick={handleEditClick}>
-                                        Rediger kravspesifikasjon
-                                    </div>
-                                    <div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-accent-color dark:stroke-dark-accent-color group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color fill-none transition duration-300">
-                                            <polygon points="14 2 18 6 7 17 3 17 3 13 14 2"></polygon>
-                                            <line x1="3" y1="22" x2="21" y2="22"></line>
-                                        </svg>
-                                    </div>
+                                <div className="flex flex-row flex-1 justify-end items-center cursor-pointer text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300">
+                                        <LinkButton icon={false} text="Rediger kravspesifikasjon" url={`/specifications/edit/${suid}/${data.spec_name}`} />
                                 </div>
                             </div>
                             {

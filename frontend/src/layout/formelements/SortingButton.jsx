@@ -16,7 +16,7 @@ function SortingButton({name, index, sortButtonClick, buttonText, disabled}) {
         rounded-lg
         border
         border-form-border-color
-        dark:border-dark-form-border-color
+        dark:border-dark-default-border-color
         pr-5
         pl-5 
         r-5
@@ -27,8 +27,8 @@ function SortingButton({name, index, sortButtonClick, buttonText, disabled}) {
         duration-200
         cursor-pointer
         mr-2
-        hover:border-form-focus-border-color
-        hover:dark:border-dark-form-focus-border-color"
+        hover:border-primary-color
+        hover:dark:border-dark-accent-color"
         disabled={disabled || false}
         >
             {buttonText}

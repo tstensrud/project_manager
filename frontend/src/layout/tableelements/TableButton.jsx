@@ -11,9 +11,9 @@ function TableButton(props) {
         outline-none
         border
         border-form-border-color
-        dark:border-dark-form-border-color
-        bg-form-background-color
-        dark:bg-dark-form-background-color
+        dark:border-dark-default-border-color
+        bg-secondary-color
+        dark:bg-dark-secondary-color
         text-sm
         cursor-pointer
         transition
@@ -21,8 +21,8 @@ function TableButton(props) {
         rounded-lg
         pl-4
         pr-4 
-        hover:border-form-element-hover
-        hover:dark:border-dark-form-element-hover
+        hover:border-primary-color
+        hover:dark:border-dark-accent-color
         hover:bg-tertiary-color
         hover:dark:bg-dark-tertiary-color">
             {props.buttonText}

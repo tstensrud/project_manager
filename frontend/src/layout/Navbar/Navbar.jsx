@@ -10,6 +10,7 @@ import { AuthContext } from "../../context/AuthContext";
 // Components
 import DarkmodeContainer from "./DarkmodeContainer";
 import NavPanel from "../NavPanel/NavPanel";
+import TodoButton from '../TodoButton';
 
 function Navbar() {
     const { currentUser, idToken, dispatch, loading: authLoading } = useContext(AuthContext);
@@ -37,15 +38,16 @@ function Navbar() {
     return (
         <>
             <NavPanel />
-            <div className="w-full bg-tertiary-color justify-between dark:bg-dark-tertiary-color text-primary-color dark:text-dark-primary-color flex min-h-10 max-h-10">
-                <div className="flex pl-5 justify-start items-center h-gull text-base">
+            <div className="w-full bg-tertiary-color justify-end pr-11 pl-11 dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color flex pt-2 pb-2">
+                <div className="flex h-full pr-3">
+                    {
+                        (activeProject && activeProject !== "0") && (
+                            <TodoButton />
+                        )
+                    }
                 </div>
-
-
-                <div className="flex pr-5 justify-end text-end h-full text-base items-center">
-                    <div className="flex text-center items-center justify-center pl-3 h-full dark:border-dark-default-border-color border-table-border-color">
-                        <DarkmodeContainer />
-                    </div>
+                <div className="flex text-center items-center justify-center h-full dark:border-dark-default-border-color border-table-border-color">
+                    <DarkmodeContainer />
                 </div>
             </div>
         </>

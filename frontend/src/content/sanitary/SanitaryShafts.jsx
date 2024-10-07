@@ -5,7 +5,7 @@ import { GlobalContext } from '../../context/GlobalContext';
 import useFetch from '../../hooks/useFetch.jsx'
 
 // components
-import TapwaterIcon from '../../assets/svg/tapWaterIcon.jsx';
+import SanShaftIcon from '../../assets/svg/sanShaftIcon.jsx';
 import SanitaryShaftTable from './SanitaryShaftTable.jsx';
 import SubTitleComponent from '../../layout/SubTitleComponent.jsx';
 import SortingButtons from '../../layout/SortingButtons.jsx';
@@ -46,7 +46,7 @@ function SanitaryShafts() {
 
     return (
         <>
-            <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitærsjakter"} projectName={""} projectNumber={""} />
+            <SubTitleComponent svg={<SanShaftIcon />} headerText={"Sanitærsjakter"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 {
                     buildingDataLoading ? (

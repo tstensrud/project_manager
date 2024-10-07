@@ -3,8 +3,8 @@ function EditableInputField(props) {
         <input
             type="text"
             className="
-            bg-form-background-color
-            dark:bg-dark-form-background-color
+            bg-secondary-color
+            dark:bg-dark-secondary-color
             text-primary-color
             dark:text-dark-primary-color
             text-base

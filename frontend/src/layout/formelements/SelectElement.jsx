@@ -6,10 +6,10 @@ const SelectElement = forwardRef((props, ref) => {
             ref={ref}
             onChange={props.changeFunction}
             className="
-                bg-form-background-color
-                dark:bg-dark-form-background-color
+                bg-secondary-color
+                dark:bg-dark-secondary-color
                 border-form-border-color
-                dark:border-dark-form-border-color
+                dark:border-dark-default-border-color
                 text-primary-color
                 dark:text-dark-primary-color
                 border
@@ -21,11 +21,11 @@ const SelectElement = forwardRef((props, ref) => {
                 transition
                 duration-200
                 outline-none 
-                focus:border-form-focus-border-color
-                focus:dark:border-dark-form-focus-border-color
+                focus:border-primary-color
+                focus:dark:border-dark-accent-color
                 focus:outline-none
-                hover:border-form-element-hover
-                hover:dark:border-dark-form-element-hover"
+                hover:border-primary-color
+                hover:dark:border-dark-accent-color"
             name={props.name}
             tabIndex={props.tabIndex}
             disabled={props.disabled}

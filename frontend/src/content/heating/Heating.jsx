@@ -66,14 +66,12 @@ function Heating() {
                             {
                                 buildingData?.success ? (
                                     <>
-                                        <div className="overflow-y-hidden flex flex-col justify-center items-center mr-5 ml-5 h-32">
+                                        <div className="overflow-y-hidden flex flex-row justify-center items-center mr-5 ml-5 h-32">
                                             <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
-                                            <div className="mt-3">
-                                                {
-                                                    currentBuilding !== -1 &&
-                                                    <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate} buildingUid={buildings[currentBuilding].uid} buttonText={`Parametre for varme`} />
-                                                }
-                                            </div>
+                                            {
+                                                currentBuilding !== -1 &&
+                                                <ToggleSettingsButton onSettingsButtonUpdate={handleSettingsButtonUpdate} buildingUid={buildings[currentBuilding].uid} buttonText={`Parametre for varme`} />
+                                            }
                                         </div>
                                         {
                                             currentBuilding === -1 ? (
@@ -87,10 +85,10 @@ function Heating() {
                                     </>
                                 ) : (
                                     <>
-                                    {
-                                        !loading && <MessageBox message={`${buildingData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
-                                    }
-                                        
+                                        {
+                                            !loading && <MessageBox message={`${buildingData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                        }
+
                                     </>
                                 )
                             }

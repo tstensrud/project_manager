@@ -7,9 +7,9 @@ const CardInputField = forwardRef((props, ref) => {
                 ref={ref}
                 className="
             bg-tertiary-color
-            dark:bg-dark-tertiary-color
+            dark:bg-dark-secondary-color
             border-form-border-color
-            dark:border-dark-form-border-color
+            dark:border-dark-default-border-color
             text-primary-color
             dark:text-dark-primary-color
             outline-none
@@ -20,10 +20,10 @@ const CardInputField = forwardRef((props, ref) => {
             text-sm
             rounded-lg
             h-9
-            focus:border-form-focus-border-color
-            focus:dark:border-dark-form-focus-border-color
-            hover:border-form-element-hover
-            dark:hover:border-dark-form-element-hover
+            focus:border-primary-color
+            focus:dark:border-dark-accent-color
+            hover:border-primary-color
+            dark:hover:border-dark-accent-color
             "
                 onChange={props?.changeFunction}
                 type={props?.password ? 'password' : 'text'}

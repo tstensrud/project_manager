@@ -10,11 +10,11 @@ function FormButton(props) {
                         className="
                         outline-0
                         uppercase
-                        bg-form-background-color
-                        dark:bg-dark-form-background-color 
+                        bg-secondary-color
+                        dark:bg-dark-secondary-color 
                         border 
                         border-form-border-color 
-                        dark:border-dark-form-border-color
+                        dark:border-dark-default-border-color
                         pl-5 pr-5 
                         text-primary-color
                         dark:text-dark-primary-color
@@ -25,10 +25,10 @@ function FormButton(props) {
                         rounded-lg
                         text-sm
                         h-9
-                        hover:border-form-element-hover
-                        hover:dark:border-dark-form-element-hover
-                        focus:border-form-focus-border-color
-                        focus:dark:border-dark-form-focus-color
+                        hover:border-primary-color
+                        hover:dark:border-dark-accent-color
+                        focus:border-primary-color
+                        focus:dark:border-dark-accent-color
                         focus:outline-none"
                         disabled={props.disabled}
                         >
@@ -39,11 +39,11 @@ function FormButton(props) {
                         type="submit"
                         className="outline-0
                         uppercase
-                        bg-form-background-color
-                        dark:bg-dark-form-background-color 
+                        bg-secondary-color
+                        dark:bg-dark-secondary-color 
                         border
                         border-form-border-color
-                        dark:border-dark-form-border-color
+                        dark:border-dark-default-border-color
                         text-sm
                         pl-5
                         pr-5 
@@ -55,10 +55,10 @@ function FormButton(props) {
                         cursor-pointer
                         rounded-lg
                         h-9
-                        hover:border-form-element-hover
-                        hover:dark:border-dark-form-element-hover
-                        focus:border-form-focus-border-color
-                        focus:dark:border-dark-form-focus-color
+                        hover:border-primary-color
+                        hover:dark:border-dark-accent-color
+                        focus:border-primary-color
+                        focus:dark:border-dark-accent-color
                         focus:outline-none"
                         disabled={props.disabled}
                         >
