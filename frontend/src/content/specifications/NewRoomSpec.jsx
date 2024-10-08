@@ -122,7 +122,7 @@ function NewRoomSpec() {
                 }
 
                 <form onSubmit={submitNewData}>
-                    <div className="flex justify-center flex-row w-full">
+                    <div className="flex justify-evenly flex-row w-full">
 
                         <ContentCard>
                             <div className="flex justify-start w-full mb-2">

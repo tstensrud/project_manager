@@ -29,7 +29,7 @@ function Sanitary() {
                         <>
                             {
                                 data?.success ? (
-                                    <div className="flex justify-center flex-row w-full flex-wrap">
+                                    <div className="flex justify-evenly flex-row w-full flex-wrap">
                                         {
                                             data?.data && Object.values(data.data).map((value) => (
                                                 <BuildingSummary buildingUid={value} projectId={activeProject} key={value} />

@@ -75,7 +75,7 @@ function Buildings() {
                                             </div>
                                         </form>
 
-                                        <div className="flex justify-center flex-row flex-wrap w-full">
+                                        <div className="flex justify-evenly flex-row flex-wrap w-full">
                                             {
                                                 data?.building_data === null ? (
                                                     <p className=" text-primary-color text-xs">{data?.message}</p>
