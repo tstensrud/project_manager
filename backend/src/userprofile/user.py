@@ -88,12 +88,14 @@ def is_project_favourite(project_uid: str):
     user_identity = request.user_uid
     if user_identity:
         fav_projects = dbo.get_fav_projects(user_identity)
-        is_fav = False
-        for fav in fav_projects:
-            if fav.project_uid == project_uid:
-                is_fav = True
-                break
-        return jsonify({"success": True, "data": is_fav})
+        if fav_projects:
+            is_fav = False
+            for fav in fav_projects:
+                if fav.project_uid == project_uid:
+                    is_fav = True
+                    break
+            return jsonify({"success": True, "data": is_fav})
+        return jsonify({"success": False, "message": "Ingen favoritter satt"})
     return jsonify({"success": False, "message": "User not found"})
 
 
