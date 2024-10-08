@@ -1,17 +1,13 @@
-from datetime import timedelta
 import firebase_admin
-from flask import Flask, request, session
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from os import path
-from flask_login import LoginManager
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 from firebase_admin import credentials
 import os
 
 db = SQLAlchemy()
-DB_NAME = "projects.db"
 
 def create_app():
     app = Flask(__name__)

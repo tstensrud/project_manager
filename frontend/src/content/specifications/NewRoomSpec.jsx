@@ -20,7 +20,6 @@ import CheckBox from '../../layout/formelements/CheckBox.jsx';
 // help
 import HelpBox from '../../layout/HelpBox.jsx'
 import { title, sections } from '../help/SpecNewRoomHelp.jsx'
-import NavPanel from '../../layout/NavPanel/NavPanel.jsx';
 
 function NewRoomSpec() {
     const { suid } = useParams();
@@ -127,7 +126,9 @@ function NewRoomSpec() {
 
                         <ContentCard>
                             <div className="flex justify-start w-full mb-2">
-                                <Link onClick={toggleHelpBox} to="#"><HelpIcon /></Link>
+                                <div onClick={toggleHelpBox} className="group relative cursor-pointer group p-1 border hover:dark:bg-dark-navbar-hover-bg-color hover:bg-tertiary-color dark:border-dark-grey-text hover:dark:border-dark-primary-color rounded-lg transition duration-300">
+                                    <Link onClick={toggleHelpBox} to="#"><HelpIcon /></Link>
+                                </div>
                             </div>
                             <h3>Fyll inn romdata - <Link to={`/specifications/${suid}`} >{data && data.spec_name}</Link></h3>
 

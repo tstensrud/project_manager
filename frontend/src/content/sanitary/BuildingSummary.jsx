@@ -108,7 +108,7 @@ function BuildingSummary({ buildingUid, projectId }) {
                             </div>
 
                             <div className="mb-3 flex flex-row w-full">
-                                <CustomSelect selections={curveOptions} changeFunction={handleCurveChange} />
+                                <CustomSelect optionZero="Endre avløpskurve" selections={curveOptions} changeFunction={handleCurveChange} />
                             </div>
 
                             <div className="border-0 rounded-lg">

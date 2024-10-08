@@ -3,6 +3,7 @@ import { useEffect, useContext } from 'react'
 // Hooks and utils
 import { AuthContext } from '../../context/AuthContext.jsx';
 import useFetchRequest from '../../hooks/useFetchRequest.jsx';
+import { GlobalContext } from '../../context/GlobalContext.jsx';
 
 // Components
 import ChangePassword from './ChangePassword.jsx';
@@ -13,9 +14,12 @@ import LoadingBar from '../../layout/LoadingBar.jsx';
 import AdminPanel from './admin/AdminPanel.jsx';
 import Userinfo from './Userinfo.jsx';
 import UserFavs from './UserFavs.jsx';
+import Messages from './messages/Messages.jsx';
 
 function UserProfile() {
-    const { currentUser, idToken, dispatch, loading: authLoading } = useContext(AuthContext);
+    const { currentUser, loading: authLoading } = useContext(AuthContext);
+    const { setActiveProject, setActiveProjectName } = useContext(GlobalContext);
+    
     const { data, loading, fetchData } = useFetchRequest(`/user/${currentUser.uid}/`);
     
     useEffect(() => {
@@ -24,9 +28,14 @@ function UserProfile() {
         }
     }, [currentUser]);
 
+    useEffect(() => {
+        setActiveProject('0');
+        setActiveProjectName('');
+      }, []);
+
     return (
         <>
-            <SubTitleComponent svg={<AccountIcon />} headerText={!loading && `Velkommen tilbake, ${data?.data?.server?.user_info?.name ?? ''}!`} projectName={""} projectNumber={""} />
+            <SubTitleComponent svg={<AccountIcon />} headerText={!loading && `${data?.data?.server?.user_info?.name ?? ''}`} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 {
                     loading ? (
@@ -39,10 +48,13 @@ function UserProfile() {
                         </div>
                     )
                 }
+                <div className="flex w-full justify-center">
+                    <Messages />
+                </div>
                 {
                     data?.success && (
                         data?.admin && (
-                            <div className="flex w-full p-5">
+                            <div className="flex w-full pt-5">
                                 <AdminPanel uuid={currentUser && currentUser.uid} />
                             </div>
                         )

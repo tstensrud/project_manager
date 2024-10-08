@@ -1,3 +1,4 @@
+import { SVG_CLASS, SVG_DIMENSION } from './svgClass.js';
 function SearchIcon(props) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-grey-text fill-none relative right-10 top-2">

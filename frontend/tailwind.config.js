@@ -13,6 +13,8 @@ export default {
       "accent-color": "#0460FD",
       "default-border-color": "black",
       "table-border-color": "#4747478f",
+      "navbar-active-bg-color" : "#045ffd2a",
+      "navbar-hover-bg-color": "#045ffd2a",
 
       "table-hover": "#f0f8ff",
       "marked-row": "#d72f597a",
@@ -37,7 +39,7 @@ export default {
       "dark-marked-row": "#1e7e3659",
       "dark-grey-text": "rgba(212, 212, 212, 0.644)",
       "dark-system-summary": "rgba(89, 113, 157, 0.2)",
-      "dark-navbar-hover-bg-color" : "#3B3B3D",
+      "dark-navbar-hover-bg-color" : "#3b3b3d41",
       "dark-navbar-active-bg-color" : "#3B3B3D",
       "dark-form-background-color": "#0c1219",
     }

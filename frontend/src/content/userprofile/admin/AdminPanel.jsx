@@ -11,7 +11,7 @@ import Statistics from './Statistics.jsx';
 function AdminPanel() {
 
     const [newUserFlag, setNewUserFlag] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(-1)
+    const [activeIndex, setActiveIndex] = useState(-1);
 
     const menuItems = [
         { text: "Brukere", component: <UserList newUserFlag={newUserFlag} /> },

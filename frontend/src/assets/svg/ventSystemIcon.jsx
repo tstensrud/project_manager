@@ -1,3 +1,4 @@
+import { SVG_CLASS, SVG_DIMENSION } from './svgClass.js';
 function ventSystemIcon() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1" className="stroke-secondary-color dark:stroke-dark-primary-color fill-secondary-color dark:fill-dark-primary-color">

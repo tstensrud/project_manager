@@ -46,7 +46,7 @@ function ChangePassword() {
 
             reauthenticateWithCredential(currentUser, credentials).then(() => {
                 updatePassword(currentUser, newPassword).then(() => {
-                    
+
                 }).catch((error) => {
                     setPasswordChangeErrorMsg("Kunne ikke oppdatere passord")
                 });
@@ -67,14 +67,17 @@ function ChangePassword() {
                 </div>
                 <div className="flex flex-1 justify-end items-center">
                     <div className="w-fit dark:bg-dark-accent-color bg-accent-color p-1 border border-accent-color dark:border-dark-accent-color rounded-lg">
-                        <EditIcon width={20} height={20} primary={true} />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="stroke-secondary-color stroke-2 dark:stroke-dark-primary-color fill-none">
+                            <polygon points="14 2 18 6 7 17 3 17 3 13 14 2"></polygon>
+                            <line x1="3" y1="22" x2="21" y2="22"></line>
+                        </svg>
                     </div>
                 </div>
             </div>
 
             <form onSubmit={handleUpdatePassword}>
                 <div className="flex flex-col mt-1">
-                    <div className="pl-2">
+                    <div className="pl-1">
                         Gammelt passord
                     </div>
                     <div>
@@ -84,7 +87,7 @@ function ChangePassword() {
 
                 <div className="mt-2 flex flex-row">
                     <div className="flex flex-col mt-1">
-                        <div className="pl-2">
+                        <div className="pl-1">
                             Nytt passord
                         </div>
                         <div>
@@ -94,7 +97,7 @@ function ChangePassword() {
                 </div>
                 <div className="mt-2 flex flex-row items-center">
                     <div className="flex flex-col mt-1">
-                        <div className="pl-2">
+                        <div className="pl-1">
                             Bekreft passord
                         </div>
                         <div className="flex items-center flex-row">

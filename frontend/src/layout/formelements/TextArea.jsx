@@ -15,15 +15,17 @@ const TextArea = forwardRef((props, ref) => {
             rounded-md
             text-primary-color
             dark:text-dark-primary-color
-            text-base
-            p-1
+            pl-5
+            pt-2
+            pr-5
             w-full
             h-52
             hover:border-form-border-color
             hover:dark:border-dark-default-border-color
             focus:border-primary-color
             focus:dark:border-dark-accent-color
-            focus:outline-none"
+            focus:outline-none
+            text-sm"
             tabIndex={props.tabIndex}
             required={props.required}
             value={props.value}

@@ -1,3 +1,4 @@
+import { SVG_CLASS, SVG_DIMENSION } from './svgClass.js';
 function bookMarkIcon({width, height, primary}) {
     return(
         <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 24 24" strokeWidth="2" className={primary ? "stroke-secondary-color dark:stroke-dark-primary-color fill-none" : `stroke-accent-color dark:stroke-dark-accent-color fill-none`} strokeLinecap="round" strokeLinejoin="round">

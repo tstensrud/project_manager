@@ -1,10 +1,17 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function SubMenuItem({ svg, text, url, index }) {
+function SubMenuItem({ svg, text, url, index, activeNavIndex, setActiveNavIndex }) {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+
+        setActiveNavIndex(index)
+        navigate(url)
+    }
     return (
         <>
-            <Link className="flex items-center" to={url}>
-                <div className="group p-[2px] flex flex-row w-full items-center cursor-pointer hover:bg-tertiary-color hover:dark:bg-dark-navbar-hover-bg-color rounded-lg pt-1 pb-1 transition duration-300">
+            <div className="flex items-center" onClick={handleClick}>
+                <div className={`group pl-[2x] mt-1 mb-1 pt-2 pb-2 flex flex-row w-full items-center cursor-pointer ${index === activeNavIndex ? 'bg-navbar-active-bg-color dark:bg-dark-navbar-hover-bg-color' : 'hover:bg-navbar-hover-bg-color hover:dark:bg-dark-navbar-hover-bg-color'}  rounded-lg transition duration-300`}>
                     <div className="pl-1 flex h-full justify-center items-center">
                         {svg}
                     </div>
@@ -12,7 +19,7 @@ function SubMenuItem({ svg, text, url, index }) {
                         {text}
                     </div>
                 </div>
-            </Link>
+            </div>
         </>
     );
 }

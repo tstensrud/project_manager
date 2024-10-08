@@ -1,3 +1,4 @@
+import { SVG_CLASS, SVG_DIMENSION } from './svgClass.js';
 function MarkRowIcon() {
     return (
         <div className="flex items-center justify-center cursor-pointer pl-3">

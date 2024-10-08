@@ -19,7 +19,7 @@ function TableTop({ title, sections, collapseAll, setCollapseAll }) {
                     <HelpBox title={title} sections={sections} setShowHelpBox={toggleHelpBox} />
                 )
             }
-            <div className="flex flex-row w-full bg-secondary-color dark:bg-dark-tertiary-color rounded-tr-lg rounded-tl-lg pt-2 pb-2">
+            <div className="flex flex-row w-full bg-secondary-color dark:bg-dark-tertiary-color rounded-lg pt-2 pb-2">
                 <div className="flex items-center pl-3">
                     <div onClick={toggleHelpBox} className="group relative cursor-pointer group p-1 border hover:dark:bg-dark-navbar-hover-bg-color hover:bg-tertiary-color dark:border-dark-grey-text hover:dark:border-dark-primary-color rounded-lg transition duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-primary-color dark:stroke-dark-primary-color fill-none transition duration-300">

@@ -13,20 +13,22 @@ import NavPanel from "../NavPanel/NavPanel";
 import TodoButton from '../TodoButton';
 
 function Navbar() {
-    const { currentUser, idToken, dispatch, loading: authLoading } = useContext(AuthContext);
+    const { currentUser, loading: authLoading } = useContext(AuthContext);
     const { data: userData, loading, refetch: refetchUserInfo } = useFetch(currentUser ? `/user/${currentUser.uid}/` : null);
 
-    const { activeProject, setActiveProject, userUuid, setUserUuid, setUserName, activeProjectName, setActiveProjectName } = useContext(GlobalContext);
+    const { activeProject, setActiveProject, setUserUuid, setUserName, setActiveProjectName, activeProjectName } = useContext(GlobalContext);
 
     // useEffects
     useEffect(() => {
-        refetchUserInfo();
-        const projectData = JSON.parse(sessionStorage.getItem("projectData"));
-        if (projectData) {
-            const projectId = projectData.projectId;
-            const projectName = projectData.projectName;
-            setActiveProject(projectId);
-            setActiveProjectName(projectName);
+        if (!authLoading) {
+            refetchUserInfo();
+            const projectData = JSON.parse(sessionStorage.getItem("projectData"));
+            if (projectData) {
+                const projectId = projectData.projectId;
+                const projectName = projectData.projectName;
+                setActiveProject(projectId);
+                setActiveProjectName(projectName);
+            }
         }
     }, []);
 

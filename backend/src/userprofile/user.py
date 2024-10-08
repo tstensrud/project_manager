@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from .. import db_ops_users as dbo
+from .. import db_ops_messages as dbm
 from functools import wraps
 from firebase_admin import auth
 from .. import globals
@@ -104,31 +105,42 @@ def remove_fav_project(fav_uid: str):
         return jsonify({"success": True})
     return jsonify({"success": False, "message": "Kunne ikke slette favoritt"})
 
+@user_bp.route('/inbox/<uuid>/', methods=['GET'])
+@firebase_required
+def inbox(uuid: str):
+    user = dbo.get_user(uuid)
+    if user:
+        messages = dbm.get_inbox(uuid)
+        if messages:
+            message_data = {}
+            for message, user in messages:
+                current_message = {
+                    "messageData": message.get_json(),
+                    "userData": user.get_json()
+                }
+                message_data[message.uid] = current_message
+            return jsonify({"success": True, "data": message_data})
+        return jsonify({"success": False, "message": "Innboksen er tom"})
+    return jsonify({"success": False, "message": "Fant ikke bruker"})
 
-###################
-# ADMIN ENDPOINTS #
-###################
-@user_bp.route('/new_user/', methods=['POST'])
-@admin_required
-def register_new_user():
+@user_bp.route('/new_message/', methods=['POST'])
+def new_message():
     data = request.get_json()
     if data:
-        email = data["email"].strip()
-        existing_email = dbo.find_email(email)
-        
-        if existing_email:
-            return jsonify({"success": False, "message": "E-post er allerede registrert"})
-        
-        name = data["name"].strip()
-        new_user = dbo.create_new_user(name=name, email=email)
-
-        if new_user is not None:
-            return jsonify({"success": True, "message": "Bruker lagt til", "data": new_user})
-        return jsonify({"success": False, "message": "Kunne ikke legge til ny bruker"})
-    return jsonify({"success": False, "message": "Mottok ingen ny brukerdata"})
+        sender_uid = data["uuid"]
+        recipient_uuid = data["recipient_uuid"]
+        recipient_user = dbo.get_user(recipient_uuid)
+        if not recipient_user:
+            return jsonify({"success": False, "message": "Fant ikke mottakers epost"})    
+        message = data["message"]
+        new_message = dbm.new_message(sender_uuid=sender_uid, receiver_uuid=recipient_uuid, message=message)
+        if new_message:
+            return jsonify({"success": True, "message": "Melding sendt"})
+        return jsonify({"success": False, "message": "Kunne ikke sende melding"})
+    return jsonify({"success": False, "message": "Mottok ingen data"})
 
 @user_bp.route('/all_users/', methods=['GET'])
-@admin_required
+@firebase_required
 def get_all_users():
     users = dbo.get_users()
     if users:
@@ -157,6 +169,29 @@ def get_all_users():
                 globals.log(f"Value error getting firebase user account: {e} ")
         return jsonify({"success": True, "data": all_user_data})
     return jsonify({"success": False, "message": "No users found"})
+
+###################
+# ADMIN ENDPOINTS #
+###################
+@user_bp.route('/new_user/', methods=['POST'])
+@admin_required
+def register_new_user():
+    data = request.get_json()
+    if data:
+        email = data["email"].strip()
+        existing_email = dbo.find_email(email)
+        
+        if existing_email:
+            return jsonify({"success": False, "message": "E-post er allerede registrert"})
+        
+        name = data["name"].strip()
+        new_user = dbo.create_new_user(name=name, email=email)
+
+        if new_user is not None:
+            return jsonify({"success": True, "message": "Bruker lagt til", "data": new_user})
+        return jsonify({"success": False, "message": "Kunne ikke legge til ny bruker"})
+    return jsonify({"success": False, "message": "Mottok ingen ny brukerdata"})
+
 
 @user_bp.route('/change_user_status/', methods=['PATCH'])
 @admin_required

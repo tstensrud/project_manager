@@ -96,7 +96,7 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                                                                     ))
                                                                             )
                                                                         }
-                                                                        <tr className="bg-secondary-color dark:bg-dark-secondary-color">
+                                                                        <tr className="bg-tertiary-color dark:bg-dark-secondary-color">
                                                                             <TableTDelement width="2%" />
                                                                             <TableTDelement width="5%" />
                                                                             <TableTDelement width="5%" />

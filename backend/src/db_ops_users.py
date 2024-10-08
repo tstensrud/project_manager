@@ -74,15 +74,15 @@ def find_email(email: str) -> bool:
         return True
     return False
 
-""" def get_new_register_record(uuid: str) -> models.NewUserRegistration:
-    record = db.session.query(models.NewUserRegistration).filter(models.NewUserRegistration.user_uid == uuid).first()
-    if record:
-        return record
-    return None """
-
 def get_user(user_uuid) -> models.Users:
     user = db.session.query(models.Users).filter(models.Users.uuid == user_uuid).first()
     return user
+
+def get_user_by_email(email: str) -> models.Users:
+    user = db.session.query(models.Users).filter(models.Users.email == email).first()
+    if user:
+        return user
+    return None
 
 def get_user_data(user_uid) -> dict:
     user = get_user(user_uuid=user_uid)

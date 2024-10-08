@@ -10,10 +10,10 @@
     @apply overflow-hidden m-0 p-0 h-full w-full antialiased;
   }
   a {
-    @apply no-underline text-accent-color dark:text-dark-accent-color;
+    @apply no-underline text-primary-color dark:text-dark-primary-color hover:no-underline;
   }
   a:hover {
-    @apply text-primary-color dark:text-dark-primary-color transition duration-300;
+    @apply text-accent-color dark:text-dark-accent-color transition duration-200;
   }
 
   h2 {

@@ -18,7 +18,7 @@ import MessageBox from '../../layout/MessageBox.jsx'
 
 function Project() {
     const { projectId } = useParams();
-    const { setActiveProject, setActiveProjectName } = useContext(GlobalContext);
+    const { setActiveProject, setActiveProjectName, activeProjectName } = useContext(GlobalContext);
 
     // Fetch requests
     const { data, loading, error } = useFetch(`/project_api/${projectId}/`);
@@ -26,15 +26,16 @@ function Project() {
 
     useEffect(() => {
         const projectName = data?.data?.ProjectName;
-        setActiveProjectName(projectName);
-        setActiveProject(projectId);
-
-        const activeProjectData = {
-            projectName: data?.data?.ProjectName,
-            projectId: data?.data?.uid
+        if (projectName && projectName !== activeProjectName) {
+            setActiveProjectName(projectName);
+            setActiveProject(projectId);
+    
+            const activeProjectData = {
+                projectName: data?.data?.ProjectName,
+                projectId: data?.data?.uid
+            }
+            sessionStorage.setItem("projectData", JSON.stringify(activeProjectData))
         }
-
-        sessionStorage.setItem("projectData", JSON.stringify(activeProjectData))
     }, [data]);
 
     return (
@@ -48,7 +49,7 @@ function Project() {
                         <>
                             {
                                 data?.success === true ? (
-                                    <div className="flex justify-evenly flex-row w-full flex-wrap">
+                                    <div className="flex justify-between flex-row w-full flex-wrap">
                                         <ProjectSummary projectData={data.data} projectId={projectId} />
                                         <BuildingRoomData data={data.data} projectId={projectId} />
                                         <VentilationSummary systemData={data.data.ventsystemData} totalAirflow={data.data.airflow} projectId={projectId} />

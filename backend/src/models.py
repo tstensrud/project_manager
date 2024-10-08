@@ -46,13 +46,40 @@ class UserFavProjects(db.Model):
             "project_name": project_name
         }
 
-""" class NewUserRegistration(db.Model):
-    __tablename__ = 'NewUserRegistration'
+class Messages(db.Model):
+    __tablename__ = "Messages"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_uid = db.Column(db.String(250), db.ForeignKey('Users.uuid'), nullable=False)
-    token_hash = db.Column(db.String(255), nullable=False)
-    timestamp = db.Column(db.String(100), nullable=False)
-    is_revoked = db.Column(db.Boolean, default=False) """
+    uid = db.Column(db.String(250), unique=True)
+    parent_msg_uid = db.Column(db.String(255), nullable=True)
+    conversation_uid = db.Column(db.String(255), nullable=False)
+    sent_by_uid = db.Column(db.String(250), db.ForeignKey('Users.uuid'), nullable=False)
+    sent_to_uid = db.Column(db.String(250), db.ForeignKey('Users.uuid'), nullable=False)
+    message_content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.String(255), nullable=False)
+    is_read = db.Column(db.Boolean, default=False)
+
+    __table_args__ = (
+        Index("idx_messages_uid", "uid"),
+        Index("idx_sent_by_uid", "sent_by_uid"),
+        Index("idx_sent_to_uid", "sent_to_uid")
+    )
+
+    def get_json(self):
+        timestamp = int(self.timestamp) / 1000
+        created_at = datetime.fromtimestamp(timestamp)
+        formatted_time = created_at.strftime("%Y-%M-%d %H.%M")
+        
+        return {
+            "id": self.id,
+            "uid": self.uid,
+            "parentUid": self.parent_msg_uid,
+            "conversationUid": self.conversation_uid,
+            "sentByUid": self.sent_by_uid,
+            "sentToUid": self.sent_to_uid,
+            "message": self.message_content,
+            "timestamp": formatted_time,
+            "isRead": self.is_read
+        }
 
 '''
 # TODO-items

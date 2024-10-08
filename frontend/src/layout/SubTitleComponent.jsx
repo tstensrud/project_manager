@@ -7,8 +7,8 @@ function SubTitleComponent(props) {
     const { activeProject, activeProjectName } = useContext(GlobalContext);
 
     return (
-        <div className="w-full h-16 flex items-center bg-tertiary-color dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color pl-8 pr-8">
-            <div className="flex justify-between items-center h-full w-full bg-secondary-color dark:bg-dark-tertiary-color rounded-lg pl-3 pr-3">
+        <div className="w-full h-16 flex items-center bg-tertiary-color dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color pl-8 pr-8 ">
+            <div className="flex justify-between items-center h-full w-full bg-secondary-color dark:bg-dark-tertiary-color rounded-lg pl-3 pr-3 ">
 
                 <div className="flex flex-row h-full w-1/4">
                     <div className="flex items-center text-center mr-5 h-full">

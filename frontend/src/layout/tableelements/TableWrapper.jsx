@@ -53,7 +53,7 @@ function TableWrapper({ floor, children, collapseAll, shaft }) {
                         tableContainerRef.current.classList.add("overflow-visible");
                     }
                 }}>
-                <div className="flex flex-col mt-0 h-auto bg-secondary-color dark:bg-dark-secondary-color">
+                <div className="flex flex-col mt-0 h-auto bg-tertiary-color dark:bg-dark-secondary-color">
                     <table ref={tableRef} className="text-primary-color dark:text-dark-primary-color text-xs border-none border-collapse w-full max-w-full whitespace-nowrap">
                         {children}
                     </table>

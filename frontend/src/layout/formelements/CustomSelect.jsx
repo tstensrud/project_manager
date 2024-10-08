@@ -2,14 +2,14 @@ import React, { forwardRef } from 'react';
 
 const CustomSelect = forwardRef((props, ref) => {
     return (
-        <div className="group text-base flex flex-col rounded-lg bg-tertiary-color border-default-border-color dark:border-dark-default-border-color dark:bg-dark-tertiary-color hover:dark:border-dark-accent-color relative hover:rounded-bl-none hover:rounded-br-none w-52">
+        <div className="group text-base flex flex-col rounded-lg bg-tertiary-color border-default-border-color dark:border-dark-default-border-color dark:bg-dark-secondary-color hover:dark:border-dark-accent-color relative hover:rounded-bl-none hover:rounded-br-none w-52">
             
-            <div className="bg-tertiary-color dark:bg-dark-tertiary-color p-1 rounded-lg items-center cursor-default flex flex-row">
+            <div className="bg-tertiary-color dark:bg-dark-secondary-color p-1 rounded-lg items-center cursor-default flex flex-row">
                 <div className="w-[10%]">
 
                 </div>
-                <div className="flex flex-1 justify-center pl-2 pr-2">
-                    Endre avløpskurve
+                <div className="flex flex-1 text-sm justify-center pl-2 pr-2">
+                    {props.optionZero}
                 </div>
                 <div className="flex justify-end items-center w-[10%]">
                     <div className="rotate-180">
@@ -25,8 +25,9 @@ const CustomSelect = forwardRef((props, ref) => {
             w-52
             transition
             duration-300
+            text-sm
             bg-tertiary-color
-            dark:bg-dark-tertiary-color
+            dark:bg-dark-secondary-color
             border-default-border-color
             dark:border-dark-default-border-color
             group-hover:absolute
@@ -49,7 +50,7 @@ const CustomSelect = forwardRef((props, ref) => {
                         }
                         )
                         .map((key, index) => (
-                            <div onClick={() => (props.changeFunction(props.selections[key].value))} key={index} className="bg-tertiary-color text-grey-text dark:text-dark-grey-text dark:bg-dark-tertiary-color hover:bg-primary-color hover:text-secondary-color hover:dark:text-dark-primary-color hover:dark:bg-dark-table-hover pt-1 pb-1 pl-2 rounded-lg">
+                            <div onClick={() => (props.changeFunction(props.selections[key].value))} key={index} className="bg-tertiary-color text-grey-text dark:text-dark-grey-text dark:bg-dark-secondary-color hover:bg-primary-color hover:text-secondary-color hover:dark:text-dark-primary-color hover:dark:bg-dark-navbar-hover-bg-color pt-1 pb-1 pl-2 rounded-lg">
                                 {props.selections[key].name}
                             </div>
                         ))

@@ -93,7 +93,7 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, setChildLoading
                                 <TableTHelement width="10%">
                                 {
                                         ascending ? (
-                                            <div className={`group flex items-center ${!sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color hover:dark:text-dark-primary-color'} cursor-pointer transition duration-300`} onClick={() => handleSortClick("number", "desc")}>
+                                            <div className={`group flex justify-center items-center ${!sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color hover:dark:text-dark-primary-color'} cursor-pointer transition duration-300`} onClick={() => handleSortClick("number", "desc")}>
                                                 <div>
                                                     Rom nr
                                                 </div>
@@ -104,7 +104,7 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, setChildLoading
                                                 </div>
                                             </div>
                                         ) : (
-                                            <div className={`group flex items-center ${!sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color hover:dark:text-dark-primary-color'}  transition duration-300 cursor-pointer`} onClick={() => handleSortClick("number", "asc")}>
+                                            <div className={`group flex justify-center items-center ${!sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color hover:dark:text-dark-primary-color'}  transition duration-300 cursor-pointer`} onClick={() => handleSortClick("number", "asc")}>
                                                 <div>
                                                     Rom nr
                                                 </div>
@@ -121,7 +121,7 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, setChildLoading
                                 <TableTHelement width="10%">
                                     {
                                         ascending ? (
-                                            <div className={`group flex items-center ${sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color font-normal hover:dark:text-dark-primary-color'} cursor-pointer transition duration-300`} onClick={() => handleSortClick("name", "desc")}>
+                                            <div className={`group flex justify-center items-center ${sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color font-normal hover:dark:text-dark-primary-color'} cursor-pointer transition duration-300`} onClick={() => handleSortClick("name", "desc")}>
                                                 <div>
                                                     Romnavn
                                                 </div>
@@ -132,7 +132,7 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, setChildLoading
                                                 </div>
                                             </div>
                                         ) : (
-                                            <div className={`group flex items-center ${sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color font-normal hover:dark:text-dark-primary-color'}  transition duration-300 cursor-pointer`} onClick={() => handleSortClick("name", "asc")}>
+                                            <div className={`group flex justify-center items-center ${sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color font-normal hover:dark:text-dark-primary-color'}  transition duration-300 cursor-pointer`} onClick={() => handleSortClick("name", "asc")}>
                                                 <div>
                                                     Romnavn
                                                 </div>
