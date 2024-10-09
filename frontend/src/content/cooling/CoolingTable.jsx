@@ -40,7 +40,7 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
 
     return (
         <>
-            {error && <MessageBox closeable={true} message={error}/>}
+            {error && <MessageBox closeable={true} message={error} />}
             {
                 roomDataLoading ? (
                     <LoadingSpinner text="rom" />
@@ -74,20 +74,20 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                                     <TableWrapper collapseAll={collapseAll} floor={floor}>
                                                         <tbody>
                                                             {
-                                                                roomData?.data && (
-                                                                    Object.entries(roomData.data)
-                                                                        .filter(([key, room]) => room.Floor === floor)
-                                                                        .sort(([, roomA], [, roomB]) => {
-                                                                            return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
-                                                                                numeric: true,
-                                                                                sensitivity: "base"
-                                                                            });
-                                                                        })
-                                                                        .map(([key, room]) => (
-                                                                            <CoolingTableRowComponent settingsUpdatedState={settingsUpdatedState} key={room.uid} totalColumns={14} roomId={room.uid} />
-                                                                        )
+                                                                roomData?.data &&
+                                                                Object.keys(roomData.data)
+                                                                    .filter((key, index) => roomData.data[key].roomData.Floor === floor)
+                                                                    .sort((roomA, roomB) => {
+                                                                        return roomData.data[roomA].roomData.RoomNumber.localeCompare(roomData.data[roomB].roomData.RoomNumber, undefined, {
+                                                                            numeric: true,
+                                                                            sensitivity: "base"
+                                                                        });
+                                                                    })
+                                                                    .map((key, index, rowIndex) => (
+                                                                        <CoolingTableRowComponent settingsUpdatedState={settingsUpdatedState} key={roomData.data[key].roomData.uid} totalColumns={14} roomId={roomData.data[key].roomData.uid} />
                                                                     )
-                                                                )
+                                                                    )
+
                                                             }
                                                         </tbody>
                                                     </TableWrapper>
@@ -101,9 +101,9 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                 </>
                             ) : (
                                 <>
-                                {
-                                    !roomDataLoading && <MessageBox message={`${roomData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
-                                }
+                                    {
+                                        !roomDataLoading && <MessageBox message={`${roomData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                    }
                                 </>
                             )
                         }

@@ -67,7 +67,7 @@ class Messages(db.Model):
     def get_json(self):
         timestamp = int(self.timestamp) / 1000
         created_at = datetime.fromtimestamp(timestamp)
-        formatted_time = created_at.strftime("%Y-%M-%d %H.%M")
+        formatted_time = created_at.strftime("%Y-%m-%d %H:%M")
         
         return {
             "id": self.id,
@@ -293,18 +293,13 @@ class Rooms(db.Model):
         Index("idx_rooms_room_type_uid", "room_type_uid"),
         Index("idx_rooms_system_uid", "system_uid"),
     )
-
+    
     def get_json_room_data(self):
-        building = db.session.query(Buildings).filter(Buildings.uid == self.building_uid).first()
-        building_name = building.building_name
-
         return {
             "id": self.id,
             "uid": self.uid,
             "BuildingUid": self.building_uid,
-            "BuildingName": building_name,
             "RoomTypeId": self.room_type_uid,
-            "RoomTypeName": self.room_type.name,
             "Floor": self.floor,
             "RoomNumber": self.room_number,
             "RoomName": self.room_name,
@@ -314,15 +309,8 @@ class Rooms(db.Model):
         }
     
     def get_json_ventilation_data(self):
-            system = db.session.query(VentilationSystems).filter(VentilationSystems.uid == self.system_uid).first()
-            if system:
-                system_name = system.system_name
-            else:
-                system_name = ""
-
             return {
                 "SystemId": self.system_uid,
-                "SystemName": system_name,
                 "AirPerPerson": self.air_per_person,
                 "AirPersonSum": self.air_person_sum,
                 "AirEmission": self.air_emission,

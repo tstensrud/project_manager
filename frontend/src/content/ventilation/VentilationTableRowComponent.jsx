@@ -43,10 +43,11 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
 
     // useEffects
     useEffect(() => {
-
-        if (ventData && ventData.data) {
-            setCurrentSystemId(ventData.data.SystemId);
-            setCurrentSystemName(ventData.data.SystemName);
+        if (ventData?.data?.systemData) {
+            setCurrentSystemId(ventData.data.systemData.uid);
+            setCurrentSystemName(ventData.data.systemData.SystemName);
+        } else {
+            setCurrentSystemName("Ikke satt")
         }
     }, [ventData]);
 
@@ -115,7 +116,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                     <EditableInputField value={ventData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
                     <EditableTableCell>
-                        {ventData ? ventData.data[cellName] : ''}
+                        {ventData?.data?.roomData?.[cellName]}
                     </EditableTableCell>
                 )
             }
@@ -134,12 +135,12 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
 
     const calculateMinAirFlow = () => {
         let minimumAir = 0;
-        const supply = ventData && ventData.data.AirSupply;
-        const extract = ventData && ventData.data.AirExtract;
-        const min = ventData && ventData.data.AirMinimum;
+        const supply = ventData && ventData.data.roomData.AirSupply;
+        const extract = ventData && ventData.data.roomData.AirExtract;
+        const min = ventData && ventData.data.roomData.AirMinimum;
         const area = allRoomData && allRoomData.Area;
-        const emission = ventData && ventData.data.AirEmissionSum;
-        const controls = ventData && ventData.data.RoomControl;
+        const emission = ventData && ventData.data.roomData.AirEmissionSum;
+        const controls = ventData && ventData.data.roomData.RoomControl;
         const cav = ventData && controls.toUpperCase().includes("CAV");
         const vav = ventData && controls.toUpperCase().includes("VAV");
 
@@ -161,10 +162,10 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
 
         return minimumAir.toFixed(0);
     }
-
+    
     return (
         <>
-            {showRoomData ? <RoomData roomData={allRoomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
+            {showRoomData ? <RoomData roomData={allRoomData} ventData={ventData?.data?.roomData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
             {response?.success === false && <MessageBox closeable={true} message={response.message} />}
             {systemResponse?.success === false && <MessageBox closeable={true} message={systemResponse.message} />}
             {ventError && <MessageBox closeable={true} message={ventError} />}
@@ -183,29 +184,29 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                                         <TableTDelement pointer={true} width="10%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
                                             <div className="flex flex-col">
                                                 <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
-                                                    {allRoomData?.RoomNumber}
+                                                    {allRoomData?.roomData.RoomNumber}
                                                 </div>
                                                 <div className="text-grey-text dark:text-dark-grey-text uppercase">
-                                                    {allRoomData?.RoomName}
+                                                    {allRoomData?.roomData.RoomName}
                                                 </div>
                                             </div>
                                         </TableTDelement>
                                         <TableTDelement width="6%">
-                                            {ventData && (ventData.data.AirPersonSum).toFixed(0)}
+                                            {ventData && (ventData.data.roomData.AirPersonSum).toFixed(0)}
                                         </TableTDelement>
                                         <TableTDelement width="6%">
-                                            {ventData && (ventData.data.AirEmissionSum).toFixed(0)}
+                                            {ventData && (ventData.data.roomData.AirEmissionSum).toFixed(0)}
                                         </TableTDelement>
                                         <TableTDelement width="6%">
-                                            {ventData && ventData.data.AirProcess}
+                                            {ventData && ventData.data.roomData.AirProcess}
                                         </TableTDelement>
                                         <TableTDelement width="6%">
-                                            {ventData && (ventData.data.AirDemand).toFixed(0)}
+                                            {ventData && (ventData.data.roomData.AirDemand).toFixed(0)}
                                         </TableTDelement>
                                         {renderEditableCell("AirSupply", "supply", "6%")}
                                         {renderEditableCell("AirExtract", "extract", "6%")}
                                         <TableTDelement width="6%">
-                                            {ventData && ventData.data.AirChosen}
+                                            {ventData && ventData.data.roomData.AirChosen}
                                         </TableTDelement>
                                         <TableTDelement width="6%">
                                             {calculateMinAirFlow()}
@@ -222,13 +223,13 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                                                 </div>
                                                 <div className="flex flex-row">
                                                     {
-                                                        ventData?.data?.AirSupply < ventData.data.AirDemand && (<div className="mr-2">For lite tilluft.</div>)
+                                                        ventData?.data?.roomData.AirSupply < ventData.data.roomData.AirDemand && (<div className="mr-2">For lite tilluft.</div>)
                                                     }
                                                     {
-                                                        ventData?.data?.AirExtract < ventData.data.AirDemand && (<div className="mr-2">For lite avtrekk.</div>)
+                                                        ventData?.data?.roomData.AirExtract < ventData.data.roomData.AirDemand && (<div className="mr-2">For lite avtrekk.</div>)
                                                     }
                                                     {
-                                                        ventData?.data?.AirSupply !== ventData.data.AirExtract && 'Ubalanse i rom.'
+                                                        ventData?.data?.roomData.AirSupply !== ventData.data.roomData.AirExtract && 'Ubalanse i rom.'
                                                     }
                                                 </div>
                                             </div>

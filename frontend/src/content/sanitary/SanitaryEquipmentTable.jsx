@@ -83,16 +83,16 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                                                                     <tbody>
                                                                         {
                                                                             roomData?.data && (
-                                                                                Object.entries(roomData.data)
-                                                                                    .filter(([key, room]) => room.Floor === floor)
-                                                                                    .sort(([, roomA], [, roomB]) => {
-                                                                                        return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
+                                                                                Object.keys(roomData.data)
+                                                                                    .filter((key, index) => roomData.data[key].roomData.Floor === floor)
+                                                                                    .sort((roomA, roomB) => {
+                                                                                        return roomData.data[roomA].roomData.RoomNumber.localeCompare(roomData.data[roomB].roomData.RoomNumber, undefined, {
                                                                                             numeric: true,
                                                                                             sensitivity: "base"
                                                                                         });
                                                                                     })
-                                                                                    .map(([key, room]) => (
-                                                                                        <SanitaryTableRowComponent buildingReFetch={buildingReFetch} key={room.uid} totalColumns={14} roomId={room.uid} />
+                                                                                    .map((key, index, rowIndex) => (
+                                                                                        <SanitaryTableRowComponent buildingReFetch={buildingReFetch} key={roomData.data[key].roomData.uid} totalColumns={14} roomId={roomData.data[key].roomData.uid} />
                                                                                     )
                                                                                     )
                                                                             )

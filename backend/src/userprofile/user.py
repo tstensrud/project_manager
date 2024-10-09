@@ -38,6 +38,37 @@ def firebase_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@user_bp.route('/all_users/', methods=['GET'])
+@firebase_required
+def get_all_users():
+    users = dbo.get_users()
+    if users:
+        all_user_data = {}
+        for user in users:
+            firebase_data = None
+            try:
+                firebase_data = auth.get_user(user.uuid)
+                user_data = {}
+                user_data["firebase"] = {
+                    'uid': firebase_data.uid,
+                    'email': firebase_data.email,
+                    'email_verified': firebase_data.email_verified,
+                    'display_name': firebase_data.display_name,
+                    'phone_number': firebase_data.phone_number,
+                    'photo_url': firebase_data.photo_url,
+                    'disabled': firebase_data.disabled,
+                    'provider_data': [provider.__dict__ for provider in firebase_data.provider_data],
+                    'custom_claims': firebase_data.custom_claims,
+                    'creation_timestamp': firebase_data.user_metadata.creation_timestamp,
+                    'last_sign_in_timestamp': firebase_data.user_metadata.last_sign_in_timestamp
+                }
+                user_data["server"] = user.get_json()
+                all_user_data[user.uuid] = user_data
+            except Exception as e:
+                globals.log(f"Value error getting firebase user account: {e} ")
+        return jsonify({"success": True, "data": all_user_data})
+    return jsonify({"success": False, "message": "No users found"})
+
 @user_bp.route('/<uuid>/', methods=['GET'])
 @firebase_required
 def user_profile(uuid):
@@ -98,7 +129,6 @@ def is_project_favourite(project_uid: str):
         return jsonify({"success": False, "message": "Ingen favoritter satt"})
     return jsonify({"success": False, "message": "User not found"})
 
-
 @user_bp.route('/remove_fav/<fav_uid>/', methods=['DELETE'])
 @firebase_required
 def remove_fav_project(fav_uid: str):
@@ -107,23 +137,23 @@ def remove_fav_project(fav_uid: str):
         return jsonify({"success": True})
     return jsonify({"success": False, "message": "Kunne ikke slette favoritt"})
 
+###################
+# MESSAGING       #
+###################
 @user_bp.route('/inbox/<uuid>/', methods=['GET'])
 @firebase_required
 def inbox(uuid: str):
-    user = dbo.get_user(uuid)
-    if user:
-        messages = dbm.get_inbox(uuid)
-        if messages:
-            message_data = {}
-            for message, user in messages:
-                current_message = {
-                    "messageData": message.get_json(),
-                    "userData": user.get_json()
-                }
-                message_data[message.uid] = current_message
-            return jsonify({"success": True, "data": message_data})
-        return jsonify({"success": False, "message": "Innboksen er tom"})
-    return jsonify({"success": False, "message": "Fant ikke bruker"})
+    messages = dbm.get_inbox(uuid)
+    if messages:
+        message_data = {}
+        for message, user in messages:
+            current_message = {
+                "messageData": message.get_json(),
+                "userData": user.get_json()
+            }
+            message_data[message.uid] = current_message
+        return jsonify({"success": True, "data": message_data})
+    return jsonify({"success": False, "message": "Innboksen er tom"})
 
 @user_bp.route('/new_message/', methods=['POST'])
 def new_message():
@@ -141,36 +171,61 @@ def new_message():
         return jsonify({"success": False, "message": "Kunne ikke sende melding"})
     return jsonify({"success": False, "message": "Mottok ingen data"})
 
-@user_bp.route('/all_users/', methods=['GET'])
+@user_bp.route('/sent/<uuid>/', methods=['GET'])
 @firebase_required
-def get_all_users():
-    users = dbo.get_users()
-    if users:
-        all_user_data = {}
-        for user in users:
-            firebase_data = None
-            try:
-                firebase_data = auth.get_user(user.uuid)
-                user_data = {}
-                user_data["firebase"] = {
-                    'uid': firebase_data.uid,
-                    'email': firebase_data.email,
-                    'email_verified': firebase_data.email_verified,
-                    'display_name': firebase_data.display_name,
-                    'phone_number': firebase_data.phone_number,
-                    'photo_url': firebase_data.photo_url,
-                    'disabled': firebase_data.disabled,
-                    'provider_data': [provider.__dict__ for provider in firebase_data.provider_data],
-                    'custom_claims': firebase_data.custom_claims,
-                    'creation_timestamp': firebase_data.user_metadata.creation_timestamp,
-                    'last_sign_in_timestamp': firebase_data.user_metadata.last_sign_in_timestamp
-                }
-                user_data["server"] = user.get_json()
-                all_user_data[user.uuid] = user_data
-            except Exception as e:
-                globals.log(f"Value error getting firebase user account: {e} ")
-        return jsonify({"success": True, "data": all_user_data})
-    return jsonify({"success": False, "message": "No users found"})
+def get_sent_messages(uuid: str):
+    messages = dbm.get_sent_messages(uuid)
+    if messages:
+        message_data = {}
+        for message, user in messages:
+            current_message = {
+                "messageData": message.get_json(),
+                "userData": user.get_json()
+            }
+            message_data[message.uid] = current_message
+        return jsonify({"success": True, "data": message_data})
+    return jsonify({"success": False, "message": "Ingen sendte meldinger."})
+
+@user_bp.route('/archive/<uuid>/', methods=['GET'])
+@firebase_required
+def get_archive(uuid: str):
+    messages = dbm.get_archive(uuid)
+    if messages:
+        message_data = {}
+        for message, user in messages:
+            current_message = {
+                "messageData": message.get_json(),
+                "userData": user.get_json()
+            }
+            message_data[message.uid] = current_message
+        return jsonify({"success": True, "data": message_data})
+    return jsonify({"success": False, "message": "Ingen meldinger i arkiv"})
+
+@user_bp.route('/markasread/', methods=['PATCH'])
+@firebase_required
+def mark_message_read():
+    data = request.get_json()
+    if data:
+        msg_uid = data["msgUid"]
+        read_status = data["read"]
+        marked_as_read = dbm.change_message_read_status(msg_uid=msg_uid, status=read_status)
+        if marked_as_read:
+            return jsonify({"success": True})
+        return jsonify({"success": False, "message": "Feil i merking av melding som lest"})
+    return jsonify({"success": False, "message": "Mottok ingen data"})
+
+@user_bp.route('/delete_msg/', methods=['DELETE'])
+@firebase_required
+def delete_message():
+    data = request.get_json()
+    if data:
+        msg_uid = data["msgUid"]
+        deleted_message = dbm.delete_message(msg_uid=msg_uid)
+        if deleted_message:
+            return jsonify({"success": True})
+        return jsonify({"success": False, "message": "Kunne ikke slette melding"})
+    return jsonify({"success": False, "message": "Mottok ingen data"})
+
 
 ###################
 # ADMIN ENDPOINTS #

@@ -19,10 +19,10 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
     const { data: settingsData, loading: settingsLoading, error: settingsError, refetch: settingsRefetch } = useFetch(activeProject ? `/project_api/${activeProject}/heating/buildingsettings/${buildingUid}/` : null);
 
     // Update data
-    const { data: updatedBuildingData, response: updateBuildingDataResponse, setData, handleSubmit: updateBuildingData } = useUpdateData(`/project_api/${activeProject}/heating/buildingsettings/update/${buildingUid}/`);
+    const { data: updatedBuildingData, response: updateBuildingDataResponse, loading: settingsUpdateLoading,  setData, handleSubmit: updateBuildingData } = useUpdateData(`/project_api/${activeProject}/heating/buildingsettings/update/${buildingUid}/`);
 
     // Set heat source for rooms in building
-    const { data: updatedHeatSourceData, response: responseHeatsource, setData: setHeatSourceData, handleSubmit: updateHeatSource } = useUpdateData(`/project_api/${activeProject}/heating/buildingsettings/setheatsource/${buildingUid}/`);
+    const { data: updatedHeatSourceData, response: responseHeatsource, setData: setHeatSourceData, loading: heatsourceUpdateLoading, handleSubmit: updateHeatSource } = useUpdateData(`/project_api/${activeProject}/heating/buildingsettings/setheatsource/${buildingUid}/`);
 
     useEffect(() => {
         if (updateBuildingDataResponse?.success === true) {
@@ -95,7 +95,7 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                                             </div>
                                         </div>
 
-                                        <div className="flex flex-row h-full text-primary-color dark:text-dark-primary-color justify-start text-base pt-2 pl-3">
+                                        <div className="flex flex-row h-full text-primary-color dark:text-dark-primary-color justify-start text-base pt-2 pl-7">
                                             <div className="flex flex-col w-1/2">
                                                 <form name="building_heating_settings" onSubmit={handleSubmit}>
                                                     <div>
@@ -192,13 +192,13 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                                                         </div>
 
                                                         <div className="mt-2 mb-5">
-                                                            <CardButton buttonText="Oppdater" />
+                                                            <CardButton loading={settingsUpdateLoading} buttonText="Oppdater" />
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
 
-                                            <div className="flex flex-col w-1/2 items-end text-end pr-3">
+                                            <div className="flex flex-col w-1/2 items-end text-end pr-7">
                                                 <form onSubmit={handleHeatSourceSubmit}>
                                                     <div>
                                                         <h3>Sett primærvarmekilde</h3>
@@ -206,8 +206,8 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                                                     <div className="mt-3">
                                                         <CardInputField name="heat_source" changeFunction={handleHeatSourceChange} />
                                                     </div>
-                                                    <div className="mt-3">
-                                                        <CardButton buttonText="Lagre varmekilde" />
+                                                    <div className="flex w-fill justify-end mt-3">
+                                                        <CardButton loading={heatsourceUpdateLoading} buttonText="Lagre varmekilde" />
                                                     </div>
 
                                                 </form>

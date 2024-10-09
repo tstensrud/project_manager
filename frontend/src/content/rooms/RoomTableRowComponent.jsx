@@ -115,7 +115,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
                     <EditableInputField value={roomData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
                     <EditableTableCell>
-                        {roomData ? roomData.room_data[cellName] : ''}
+                        {roomData?.data?.roomData?.[cellName]}
                     </EditableTableCell>
                 )
             }
@@ -126,7 +126,7 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
         e.preventDefault();
         await handleUndoDelete();
     }
-
+    
     return (
         <>
             {response?.success === false && <MessageBox closeable={true} message={response.message} />}
@@ -145,12 +145,12 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
                                         </TableTDelement>
 
                                         <TableTDelement width="12%">
-                                            {roomData ? roomData.room_data.BuildingName : ''}
+                                            {roomData?.data?.buildingData.BuildingName}
                                         </TableTDelement>
 
                                         {renderEditableCell("RoomNumber", "10%")}
                                         <TableTDelement width="15%">
-                                            {roomData ? roomData.room_data.RoomTypeName : ''}
+                                            {roomData?.data?.roomTypeData.name}
                                         </TableTDelement>
                                         {renderEditableCell("RoomName", "10%")}
                                         {renderEditableCell("Area", "5%")}

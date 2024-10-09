@@ -50,7 +50,7 @@ function NewMessage() {
     }
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
             <form>
                 <div className="flex flex-row">
                     <CustomSelect handleReceiverChange={handleReceiverChange} selections={userData?.data} userDataLoading={userDataLoading} />
@@ -61,7 +61,7 @@ function NewMessage() {
                         }
                     </div>
                 </div>
-                <div className="pt-2 pb-2">
+                <div className="pt-2 pb-2 w-full">
                     <TextArea ref={messageRef} changeFunction={handleFormChange} name="message" required={true} />
                 </div>
                 <div>

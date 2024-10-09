@@ -91,14 +91,14 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, setChildLoading
                                 <TableTHelement width="2%" text="#" />
                                 <TableTHelement width="12%" text="Bygg" />
                                 <TableTHelement width="10%">
-                                {
+                                    {
                                         ascending ? (
                                             <div className={`group flex justify-center items-center ${!sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color hover:dark:text-dark-primary-color'} cursor-pointer transition duration-300`} onClick={() => handleSortClick("number", "desc")}>
                                                 <div>
                                                     Rom nr
                                                 </div>
                                                 <div className="pl-1">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${!sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color': `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${!sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
                                                         <polyline points="18 15 12 9 6 15"></polyline>
                                                     </svg>
                                                 </div>
@@ -109,7 +109,7 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, setChildLoading
                                                     Rom nr
                                                 </div>
                                                 <div className="pr-1 rotate-180">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${!sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color': `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${!sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
                                                         <polyline points="18 15 12 9 6 15"></polyline>
                                                     </svg>
                                                 </div>
@@ -126,7 +126,7 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, setChildLoading
                                                     Romnavn
                                                 </div>
                                                 <div className="pl-1">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color': `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
                                                         <polyline points="18 15 12 9 6 15"></polyline>
                                                     </svg>
                                                 </div>
@@ -137,7 +137,7 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, setChildLoading
                                                     Romnavn
                                                 </div>
                                                 <div className="pr-1 rotate-180">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color': `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
                                                         <polyline points="18 15 12 9 6 15"></polyline>
                                                     </svg>
                                                 </div>
@@ -157,31 +157,31 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, setChildLoading
                                             <tbody>
                                                 {
                                                     roomData?.data && (
-                                                        Object.entries(roomData.data)
-                                                            .filter(([key, room]) => room.Floor === floor)
-                                                            .sort(([, roomA], [, roomB]) => {
+                                                        Object.keys(roomData.data)
+                                                            .filter((key, index) => roomData.data[key].roomData.Floor === floor)
+                                                            .sort((roomA, roomB) => {
                                                                 if (sortbyName) {
                                                                     if (ascending) {
-                                                                        return (roomA.RoomName.localeCompare(roomB.RoomName))
+                                                                        return (roomData.data[roomA].roomData.RoomName.localeCompare(roomData.data[roomB].roomData.RoomName))
                                                                     } else {
-                                                                        return (roomB.RoomName.localeCompare(roomA.RoomName))
+                                                                        return (roomData.data[roomB].roomData.RoomName.localeCompare(roomData.data[roomA].roomData.RoomName))
                                                                     }
                                                                 } else {
                                                                     if (ascending) {
-                                                                        return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
+                                                                        return roomData.data[roomA].roomData.RoomNumber.localeCompare(roomData.data[roomB].roomData.RoomNumber, undefined, {
                                                                             numeric: true,
                                                                             sensitivity: "base"
                                                                         });
                                                                     } else {
-                                                                        return roomB.RoomNumber.localeCompare(roomA.RoomNumber, undefined, {
+                                                                        return roomData.data[roomB].roomData.RoomNumber.localeCompare(roomData.data[roomA].roomData.RoomNumber, undefined, {
                                                                             numeric: true,
                                                                             sensitivity: "base"
                                                                         });
                                                                     }
                                                                 }
                                                             })
-                                                            .map(([key, room], index) => (
-                                                                <RoomTableRowComponent index={index} key={room.uid} allRoomData={room} totalColumns={9} roomId={room.uid} />
+                                                            .map((key, index) => (
+                                                                <RoomTableRowComponent index={index} key={roomData.data[key].roomData.uid} allRoomData={roomData.data[key]} totalColumns={9} roomId={roomData.data[key].roomData.uid} />
                                                             )
                                                             )
                                                     )

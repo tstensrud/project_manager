@@ -1,10 +1,15 @@
 import { useNavigate } from "react-router-dom";
 
-function Linkbutton({ text, url, icon }) {
+function Linkbutton({ text, url, icon, onClick }) {
     const navigate = useNavigate();
 
     const handleClick = (e) => {
-        navigate(url)
+        if (url) {
+            navigate(url)
+        }
+        if (onClick) {
+            onClick(e);
+        }
     }
     return (
         <div onClick={handleClick} className="group items-center cursor-pointer h-12 border rounded-lg bg-secondary-color dark:bg-dark-secondary-color hover:bg-accent-color hover:border-accent-color dark:border-dark-default-border-color hover:dark:border-dark-accent-color transition duration-300 w-fit flex flex-row">

@@ -15,34 +15,31 @@ function Inbox() {
     const { data: messageData, loading: messageLoading, error: messageError, refetch: messageRefetch } = useFetch(currentUser ? `/user/inbox/${currentUser.uid}/` : null)
 
     return (
-        <>
-            <div className="flex flex-col">
-                {
-                    messageLoading ? (
-                        <LoadingSpinner text="meldinger" />
-                    ) : (
-                        <>
-                            {
-                                messageData?.success ? (
-                                    <>
+        <div className="flex flex-col">
+            {
+                messageLoading ? (
+                    <LoadingSpinner text="meldinger" />
+                ) : (
+                    <>
+                        {
+                            messageData?.success ? (
+                                <>
                                     {
-                                        messageData?.data && Object.keys(messageData.data).map((key, index) => (
-                                            <Message key={index} data={messageData.data[key]} />
+                                        messageData?.data && Object.keys(messageData?.data).map((key, index) => (
+                                            <Message messageRefetch={messageRefetch} newMessage={true} key={index} data={messageData.data[key]} />
                                         ))
                                     }
-                                    </>
-                                ) : (
-                                    <>
-                                        {messageData?.message}
-                                    </>
-                                )
-                            }
-                        </>
-                    )
-                }
-
-            </div>
-        </>
+                                </>
+                            ) : (
+                                <>
+                                    {messageData?.message}
+                                </>
+                            )
+                        }
+                    </>
+                )
+            }
+        </div>
     );
 }
 

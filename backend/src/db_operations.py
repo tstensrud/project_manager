@@ -48,12 +48,12 @@ def get_project(project_uid: int) -> models.Projects:
     project = db.session.query(models.Projects).filter(models.Projects.uid == project_uid).first()
     return project
 
-def get_all_project_names():
+""" def get_all_project_names():
     project_names = []
     projects = models.Projects.query.all()
     for project_name in projects:
         project_names.append(project_name.ProjectName)
-    return project_names
+    return project_names """
 
 def get_all_project_rooms(project_uid: str) -> list[models.Rooms]:
     rooms = db.session.query(
@@ -339,6 +339,16 @@ def get_all_rooms_building(building_uid: int) -> list[models.Rooms]:
         return rooms
     return None
 
+def get_all_room_data_building(building_uid: int) -> tuple[models.Rooms, models.RoomTypes, models.Buildings]:
+    rooms = db.session.query(models.Rooms, models.RoomTypes, models.Buildings).join(
+        models.RoomTypes, models.Rooms.room_type_uid == models.RoomTypes.uid).join(
+            models.Buildings, models.Rooms.building_uid == models.Buildings.uid).filter(
+        models.Rooms.building_uid == building_uid).order_by(
+                models.Rooms.room_number).all()
+    if rooms:
+        return rooms
+    return None
+
 def new_building(project_uid: str, building_name: str) -> bool:
     uid = globals.encode_uid_base64(uuid4())
     new_building = models.Buildings(uid=uid,
@@ -522,6 +532,15 @@ def get_room(room_uid: str) -> models.Rooms:
         return room
     return None
 
+def get_room_data(room_uid: str) -> tuple[models.Rooms, models.Buildings, models.RoomTypes]:
+    room = db.session.query(models.Rooms, models.Buildings, models.RoomTypes).join(
+        models.Buildings, models.Buildings.uid == models.Rooms.building_uid).join(
+            models.RoomTypes, models.RoomTypes.uid == models.Rooms.room_type_uid).filter(
+            models.Rooms.uid == room_uid).first()
+    if room:
+        return room
+    return None
+
 def delete_room(room_uid: str) -> bool:
     room = db.session.query(models.Rooms).filter(models.Rooms.uid == room_uid).first()
     if room:
@@ -594,6 +613,15 @@ def update_room_data(room_uid: int, data) -> bool:
 '''
 Ventilation methods
 '''
+def get_room_ventilation_data(room_uid: str) -> tuple[models.Rooms, models.VentilationSystems]:
+    room = db.session.query(models.Rooms, models.VentilationSystems).join(
+        models.VentilationSystems, models.VentilationSystems.uid == models.Rooms.system_uid, isouter=True).filter(
+            models.Rooms.uid == room_uid
+        ).first()
+    if room:
+        return room
+    return None
+
 def initial_ventilation_calculations(room_uid: int) -> bool:
     #print(f"Room ID received: {room_uid}")
     room = get_room(room_uid)

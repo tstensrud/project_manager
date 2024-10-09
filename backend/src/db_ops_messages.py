@@ -2,15 +2,30 @@ from uuid import uuid4
 import time
 from . import models, db
 from . import globals
+from sqlalchemy import func, and_, distinct, select, update
+
+def get_message(msg_uid: str) -> models.Messages:
+    message = db.session.query(models.Messages).filter(models.Messages.uid == msg_uid).first()
+    if message:
+        return message
+    return None
 
 def get_inbox(uuid: str) -> tuple[models.Users, models.Messages]:
-    messages = db.session.query(models.Messages, models.Users).join(models.Users, models.Messages.sent_to_uid == models.Users.uuid).filter(models.Messages.sent_to_uid == uuid).all()
+    messages = db.session.query(models.Messages, models.Users).join(models.Users, models.Messages.sent_to_uid == models.Users.uuid).filter(models.Messages.sent_to_uid == uuid, models.Messages.is_read == False).all()
+    if messages:
+        return messages
+    return None
+
+def get_archive(uuid: str) -> tuple[models.Users, models.Messages]:
+    messages = db.session.query(models.Messages, models.Users).join(models.Users, models.Messages.sent_to_uid == models.Users.uuid).filter(models.Messages.sent_to_uid == uuid, models.Messages.is_read == True).all()
     if messages:
         return messages
     return None
 
 def get_sent_messages(uuid: str) -> tuple[models.Users, models.Messages]:
-    messages = db.session.query(models.Messages, models.Users).join(models.Users, models.Messages.sent_by_uid == models.Users.uuid).filter(models.Messages.sent_by_uid == uuid).all()
+    messages = db.session.query(models.Messages, models.Users).join(
+        models.Users, models.Messages.sent_by_uid == models.Users.uuid).filter(
+            models.Messages.sent_by_uid == uuid).all()
     if messages:
         return messages
     return None
@@ -53,4 +68,28 @@ def reply_to_message(parent_msg_uid: str, conversation_uid: str, sender_uuid: st
         globals.log(f"Could not send reply msg: {e}")
         return False
 
+def change_message_read_status(msg_uid: str, status: bool) -> bool:
+    message = get_message(msg_uid=msg_uid)
+    if message:
+        message.is_read = status
+        try:
+            db.session.commit()
+            return True
+        except Exception as e:
+            globals.log(f"Could not mark message as read: {e}")
+            db.session.rollback()
+            return False
+    return False
 
+def delete_message(msg_uid: str) -> bool:
+    message = get_message(msg_uid=msg_uid)
+    if message:
+        try:
+            db.session.delete(message)
+            db.session.commit()
+            return True
+        except Exception as e:
+            globals.log(f"Could not delete message: {e}")
+            db.session.rollback()
+            return False
+    return False

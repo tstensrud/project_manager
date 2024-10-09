@@ -2,7 +2,7 @@ import RoomDataRow from '../../layout/tableelements/RoomDataRow';
 import RoomDataRowTitle from '../../layout/tableelements/RoomDataRowTitle';
 import RoomDataMainTitle from '../../layout/tableelements/RoomDataMainTitle';
 
-function RoomData({ heatingData, setShowRoomData }) {
+function RoomData({ heatingData, setShowRoomData, roomData }) {
 
   const handleClick = (e) => {
     setShowRoomData(false);
@@ -12,12 +12,13 @@ function RoomData({ heatingData, setShowRoomData }) {
     <div className="fixed h-full w-full justify-center items-center z-[1000] left-0 top-0 bg-background-shade">
       <div className="fixed shadow-lg bg-secondary-color dark:bg-dark-secondary-color shadow-background-shade border border-default-border-color dark:border-dark-default-border-color top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[1000] h-1/2 w-[450px] overflow-y-auto rounded-lg">
 
-        <RoomDataMainTitle roomNumber={heatingData?.room_data.RoomNumber} roomName={heatingData?.room_data.RoomName} clickFunction={(e) => handleClick(e, setShowRoomData)} />
+        <RoomDataMainTitle roomNumber={roomData.roomData.RoomNumber} roomName={roomData.roomData.RoomName} clickFunction={(e) => handleClick(e, setShowRoomData)} />
 
-        <RoomDataRow rowName="Romtype" rowData="">{heatingData?.room_data.RoomTypeName}</RoomDataRow>
-        <RoomDataRow rowName="Bygg" rowData="">{heatingData?.building_data.BuildingName}</RoomDataRow>
-        <RoomDataRow rowName="Etasje" rowData="">{heatingData?.room_data.Floor}</RoomDataRow>
-        <RoomDataRow rowName="Areal" rowData={``}>{heatingData?.room_data.Area} m2</RoomDataRow>
+        <RoomDataRow rowName="Romtype" rowData="">{roomData.roomType}</RoomDataRow>
+        <RoomDataRow rowName="Bygg" rowData="">{roomData.buildingName}</RoomDataRow>
+        <RoomDataRow rowName="Etasje" rowData="">{roomData.roomData.Floor}</RoomDataRow>
+        <RoomDataRow rowName="Areal" rowData={``}>{roomData.roomData.Area} m2</RoomDataRow>
+        <RoomDataRow rowName="Antall personer" rowData="">{roomData.roomData.RoomPopulation} stk.</RoomDataRow>
 
         <RoomDataRowTitle title="Varmetap" />
 
@@ -34,7 +35,6 @@ function RoomData({ heatingData, setShowRoomData }) {
         <RoomDataRow rowName="Luftmengde" rowData="">{heatingData?.heating_data.Airflow} m3/h</RoomDataRow>
         <RoomDataRow rowName="DUT" rowData={``} >{heatingData?.building_data.Dut} C&#176;</RoomDataRow>
         <RoomDataRow rowName="Årsmiddeltemp" rowData={``}>{heatingData?.building_data.YearMidTemp} C&#176;</RoomDataRow>
-        <RoomDataRow rowName="Antall personer" rowData="">{heatingData?.room_data.RoomPopulation} stk.</RoomDataRow>
         <RoomDataRow rowName="Areal yttervegg" rowData={``}>{heatingData?.heating_data.OuterWallArea} m2</RoomDataRow>
         <RoomDataRow rowName="Romhøyde" rowData="">{heatingData?.heating_data.RoomHeight} m</RoomDataRow>
         <RoomDataRow rowName="Areal vindu/dører" rowData={``}>{heatingData?.heating_data.WindowDoorArea} m2</RoomDataRow>

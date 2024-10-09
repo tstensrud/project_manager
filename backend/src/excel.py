@@ -22,10 +22,9 @@ def generate_excel_report(project_uid: str, vent=False, heating=False, cooling=F
                         "dB teknisk", "db naborom", "db korridor"]
         sheet.append(column_titles)
         for room in project_rooms:
-            room_data = room.get_json_room_data()
-            vent_data = room.get_json_ventilation_data()
-            system_name = vent_data["SystemName"]
-            data = [room_data["BuildingName"], room.floor, room.room_number, room.room_name, room.room_population,
+            building_name = None
+            system_name = None
+            data = [building_name, room.floor, room.room_number, room.room_name, room.room_population,
                                 room.air_per_person, room.air_person_sum, room.air_emission, room.air_emission_sum, room.air_process,
                                 room.air_minimum, room.air_demand, room.air_supply, room.air_extract, system_name, room.vent_principle,
                                 room.heat_exchange, room.room_control, room.notes, room.db_technical, room.db_neighbour, room.db_corridor]
@@ -39,8 +38,8 @@ def generate_excel_report(project_uid: str, vent=False, heating=False, cooling=F
                         "Varmekilde"]
         sheet.append(column_titles)
         for room in project_rooms:
-            room_data = room.get_json_room_data()
-            data = [room_data["BuildingName"], room.floor, room.room_number, room.room_name, room.room_population,
+            building_name = None
+            data = [building_name, room.floor, room.room_number, room.room_name, room.room_population,
                                     room.outer_wall_area, room.room_height, room.window_door_area, room.roof_area, room.floor_ground_area,
                                     room.floor_air_area, room.heatloss_cold_bridge, room.heatloss_transmission, room.heatloss_infiltration,
                                     room.heatloss_sum, room.chosen_heating, room.heat_source]
@@ -53,8 +52,8 @@ def generate_excel_report(project_uid: str, vent=False, heating=False, cooling=F
                          "Sum internlast lys (W)", "Internlast utstyr (W)", "Sum internlast (W)"]
         sheet.append(column_titles)
         for room in project_rooms:
-            room_data = room.get_json_room_data()
-            data = [room_data["BuildingName"], room.floor, room.room_number, room.room_name, room.room_population,
+            building_name = None
+            data = [building_name, room.floor, room.room_number, room.room_name, room.room_population,
                                                 room.room_temp_summer, room.internal_heatload_people, room.internal_heatload_lights,
                                                 room.sun_adition, room.sun_reduction, room.ventair_temp_summer, room.sum_internal_heatload_people,
                                                 room.sum_internal_heatload_lights, room.internal_heatload_equipment, room.sum_internal_heatload]

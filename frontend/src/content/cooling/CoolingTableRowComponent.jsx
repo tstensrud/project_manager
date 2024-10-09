@@ -168,7 +168,9 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
                                             </strong>
                                         </TableTDelement>
                                         <TableTDelement width="5%">
-                                            {extraAirNeeded}
+                                            {
+                                                extraAirNeeded === -0 || extraAirNeeded === 0 ? '' : <>{extraAirNeeded}</>
+                                            }
                                         </TableTDelement>
                                         <TableTDelement width="34%">
                                             {

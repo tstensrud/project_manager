@@ -83,16 +83,16 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
 
                                                                         {
                                                                             roomData?.data && (
-                                                                                Object.entries(roomData.data)
-                                                                                    .filter(([key, room]) => room.Floor === floor)
-                                                                                    .sort(([, roomA], [, roomB]) => {
-                                                                                        return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
+                                                                                Object.keys(roomData.data)
+                                                                                    .filter((key, index) => roomData.data[key].roomData.Floor === floor)
+                                                                                    .sort((roomA, roomB) => {
+                                                                                        return roomData.data[roomA].roomData.RoomNumber.localeCompare(roomData.data[roomB].roomData.RoomNumber, undefined, {
                                                                                             numeric: true,
                                                                                             sensitivity: "base"
                                                                                         });
                                                                                     })
-                                                                                    .map(([key, room]) => (
-                                                                                        <HeatingTableRowComponent settingsUpdatedState={settingsUpdatedState} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={14} roomId={room.uid} buildingData={buildingData} />
+                                                                                    .map((key, index, rowIndex) => (
+                                                                                        <HeatingTableRowComponent settingsUpdatedState={settingsUpdatedState} buildingReFetch={buildingReFetch} key={roomData.data[key].roomData.uid} allRoomData={roomData.data[key]} totalColumns={14} roomId={roomData.data[key].roomData.uid} buildingData={buildingData} />
                                                                                     ))
                                                                             )
                                                                         }
@@ -171,9 +171,9 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                             </>
                                         ) : (
                                             <>
-                                            {
-                                                !roomDataLoading && <MessageBox message={`${roomData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
-                                            }
+                                                {
+                                                    !roomDataLoading && <MessageBox message={`${roomData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                                }
                                             </>
                                         )
                                     }

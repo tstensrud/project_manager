@@ -101,7 +101,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
             }
         </TableTDelement>
     );
-
+    
     return (
         <>
             {showRoomData ? <RoomData buildingData={buildingData} roomData={allRoomData} heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
@@ -121,10 +121,10 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                                         <TableTDelement pointer={true} width="5%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
                                             <div className="flex flex-col">
                                                 <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
-                                                    {heatingData && heatingData.room_data.RoomNumber}
+                                                    {allRoomData?.roomData.RoomNumber}
                                                 </div>
                                                 <div className="text-grey-text dark:text-dark-grey-text uppercase">
-                                                    {heatingData && heatingData.room_data.RoomName}
+                                                    {allRoomData?.roomData.RoomName}
                                                 </div>
                                             </div>
                                         </TableTDelement>
@@ -145,13 +145,13 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                                             {heatingData?.heating_data?.ChosenHeating}
                                         </TableTDelement>
                                         <TableTDelement width="5%">
-                                            {heatingData && heatingData && (heatingData.heating_data.ChosenHeating / heatingData.room_data.Area).toFixed(1)}
+                                            {heatingData && heatingData && (heatingData.heating_data.ChosenHeating / allRoomData.roomData.Area).toFixed(1)}
                                         </TableTDelement>
                                         {renderEditableCell("HeatSource", "8%")}
 
                                         <TableTDelement width="10%">
                                             {
-                                                heatingData && heatingData.heating_data.ChosenHeating < heatingData.heating_data.HeatLossSum && (
+                                                heatingData?.heating_data?.ChosenHeating < heatingData?.heating_data?.HeatLossSum && (
                                                     <>
                                                         <strong>NB!</strong> For lite valgt varme
                                                     </>

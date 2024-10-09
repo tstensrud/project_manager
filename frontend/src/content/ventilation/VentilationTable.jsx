@@ -70,16 +70,16 @@ function VentilationTable({ projectId, buildingUid }) {
                                                         <tbody>
                                                             {
                                                                 roomData?.data &&
-                                                                Object.entries(roomData.data)
-                                                                    .filter(([key, room]) => room.Floor === floor)
-                                                                    .sort(([, roomA], [, roomB]) => {
-                                                                        return roomA.RoomNumber.localeCompare(roomB.RoomNumber, undefined, {
+                                                                Object.keys(roomData.data)
+                                                                    .filter((key, index) => roomData.data[key].roomData.Floor === floor)
+                                                                    .sort((roomA, roomB) => {
+                                                                        return roomData.data[roomA].roomData.RoomNumber.localeCompare(roomData.data[roomB].roomData.RoomNumber, undefined, {
                                                                             numeric: true,
                                                                             sensitivity: "base"
                                                                         });
                                                                     })
-                                                                    .map(([key, room], rowIndex) => (
-                                                                        <VentilationTableRowComponent index={rowIndex} buildingReFetch={buildingReFetch} key={room.uid} allRoomData={room} totalColumns={12} roomId={room.uid} systems={ventSystemData} />
+                                                                    .map((key, index, rowIndex) => (
+                                                                        <VentilationTableRowComponent index={rowIndex} buildingReFetch={buildingReFetch} key={roomData.data[key].roomData.uid} allRoomData={roomData.data[key]} totalColumns={12} roomId={roomData.data[key].roomData.uid} systems={ventSystemData} />
                                                                     )
                                                                     )
                                                             }
