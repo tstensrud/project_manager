@@ -27,17 +27,17 @@ function SubMenuItem({ svg, text, url, index, activeNavIndex, setActiveNavIndex,
                         {
                             showToolTip && (
                                 text === "Logg ut" ? (
-                                    <div class="absolute left-12 -top-10 translate-y-1/2 z-[999] items-start gap-2.5 text-sm">
-                                        <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-2 bg-accent-color dark:bg-dark-accent-color rounded-br-xl rounded-tl-xl rounded-tr-xl">
-                                            <div class="flex items-center space-x-2 rtl:space-x-reverse text-secondary-color dark:text-dark-primary-color">
+                                    <div className="absolute left-12 -top-10 translate-y-1/2 z-[999] items-start gap-2.5 text-sm">
+                                        <div className="flex flex-col w-full max-w-[320px] leading-1.5 p-2 bg-accent-color dark:bg-dark-accent-color rounded-br-xl rounded-tl-xl rounded-tr-xl">
+                                            <div className="flex items-center space-x-2 rtl:space-x-reverse text-secondary-color dark:text-dark-primary-color">
                                                 {text}
                                             </div>
                                         </div>
                                     </div>
                                 ) : (
-                                    <div class="absolute left-12 top-0 translate-y-1/2 z-[999] items-start gap-2.5 text-sm">
-                                        <div class="flex flex-col w-full max-w-[320px] leading-1.5 p-2 bg-accent-color dark:bg-dark-accent-color rounded-e-xl rounded-es-xl">
-                                            <div class="flex items-center space-x-2 rtl:space-x-reverse text-secondary-color dark:text-dark-primary-color">
+                                    <div className="absolute left-12 top-0 translate-y-1/2 z-[999] items-start gap-2.5 text-sm">
+                                        <div className="flex flex-col w-full max-w-[320px] leading-1.5 p-2 bg-accent-color dark:bg-dark-accent-color rounded-e-xl rounded-es-xl">
+                                            <div className="flex items-center space-x-2 rtl:space-x-reverse text-secondary-color dark:text-dark-primary-color">
                                                 {text}
                                             </div>
                                         </div>

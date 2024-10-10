@@ -226,7 +226,7 @@ function NavPanel({ showMenu, setShowMenu }) {
 
     return (
         <div className={` flex flex-row h-full bg-secondary-color dark:bg-dark-tertiary-color `}>
-            <div className="w-full flex flex-col border-primary-color bg-secondary-color border-r dark:border-dark-default-border-color dark:bg-dark-tertiary-color overflow-y-auto md:overflow-visible">
+            <div className="w-full flex flex-col border-primary-color bg-secondary-color border-r dark:border-dark-default-border-color dark:bg-dark-tertiary-color">
 
                 <div onClick={handleToggleMenu} className="group sticky top-0 z-50 bg-secondary-color dark:bg-dark-tertiary-color cursor-pointer flex items-center pt-2 pl-2 pb-3 border-b dark:border-dark-default-border-color h-12 text-grey-text dark:text-dark-grey-text">
                     <div className="flex items-center justify-center w-7 h-7 border border-accent-color bg-tertiary-color group-hover:bg-accent-color dark:bg-dark-tertiary-color dark:border-dark-accent-color rounded-lg transition duration-200 group-hover:dark:bg-dark-navbar-active-bg-color">
@@ -238,7 +238,7 @@ function NavPanel({ showMenu, setShowMenu }) {
                     </div>
                 </div>
 
-                <div className={`flex flex-col ${activeProjectName && activeProjectName !== "0" && 'border-b pb-2'}border-table-border-color dark:border-dark-default-border-color pb-2`}>
+                <div className={`flex flex-col ${activeProjectName && activeProjectName !== "0" && 'border-b pb-2'}border-table-border-color dark:border-dark-default-border-color pb-2 overflow-y-auto 2xl:overflow-visible`}>
                     {
                         activeProjectName && activeProjectName !== "0" && (
                             <>
