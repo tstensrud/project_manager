@@ -51,7 +51,7 @@ function CalculatorSpeedAirflowDucts() {
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Kalkulator - lufthastighet kanaler"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 <div className="flex justify-center flex-row w-full">
-                    <ContentCard>
+                    <ContentCard width="400">
                         <h2>Lufthastighet kanaler</h2>
                         <div className="mt-3">
                             Luftmengde m3/h

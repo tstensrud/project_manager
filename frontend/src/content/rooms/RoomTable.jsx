@@ -93,23 +93,23 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, setChildLoading
                                 <TableTHelement width="10%">
                                     {
                                         ascending ? (
-                                            <div className={`group flex justify-center items-center ${!sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color hover:dark:text-dark-primary-color'} cursor-pointer transition duration-300`} onClick={() => handleSortClick("number", "desc")}>
+                                            <div className={`group flex justify-center items-center ${!sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color hover:dark:text-dark-primary-color'} cursor-pointer transition duration-200`} onClick={() => handleSortClick("number", "desc")}>
                                                 <div>
                                                     Rom nr
                                                 </div>
                                                 <div className="pl-1">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${!sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-200 ${!sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
                                                         <polyline points="18 15 12 9 6 15"></polyline>
                                                     </svg>
                                                 </div>
                                             </div>
                                         ) : (
-                                            <div className={`group flex justify-center items-center ${!sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color hover:dark:text-dark-primary-color'}  transition duration-300 cursor-pointer`} onClick={() => handleSortClick("number", "asc")}>
+                                            <div className={`group flex justify-center items-center ${!sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color hover:dark:text-dark-primary-color'}  transition duration-200 cursor-pointer`} onClick={() => handleSortClick("number", "asc")}>
                                                 <div>
                                                     Rom nr
                                                 </div>
                                                 <div className="pr-1 rotate-180">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${!sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-200 ${!sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
                                                         <polyline points="18 15 12 9 6 15"></polyline>
                                                     </svg>
                                                 </div>
@@ -121,23 +121,23 @@ function RoomTable({ projectId, buildingUid, callRefetchOfRooms, setChildLoading
                                 <TableTHelement width="10%">
                                     {
                                         ascending ? (
-                                            <div className={`group flex justify-center items-center ${sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color font-normal hover:dark:text-dark-primary-color'} cursor-pointer transition duration-300`} onClick={() => handleSortClick("name", "desc")}>
+                                            <div className={`group flex justify-center items-center ${sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color font-normal hover:dark:text-dark-primary-color'} cursor-pointer transition duration-200`} onClick={() => handleSortClick("name", "desc")}>
                                                 <div>
                                                     Romnavn
                                                 </div>
                                                 <div className="pl-1">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-200 ${sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
                                                         <polyline points="18 15 12 9 6 15"></polyline>
                                                     </svg>
                                                 </div>
                                             </div>
                                         ) : (
-                                            <div className={`group flex justify-center items-center ${sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color font-normal hover:dark:text-dark-primary-color'}  transition duration-300 cursor-pointer`} onClick={() => handleSortClick("name", "asc")}>
+                                            <div className={`group flex justify-center items-center ${sortbyName ? 'font-semibold text-primary-color dark:text-dark-primary-color' : 'hover:text-primary-color font-normal hover:dark:text-dark-primary-color'}  transition duration-200 cursor-pointer`} onClick={() => handleSortClick("name", "asc")}>
                                                 <div>
                                                     Romnavn
                                                 </div>
                                                 <div className="pr-1 rotate-180">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-300 ${sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`stroke-grey-text dark:stroke-dark-grey-text fill-none cursor-pointer  transition duration-200 ${sortbyName ? 'stroke-primary-color dark:stroke-dark-primary-color' : `group-hover:dark:stroke-dark-primary-color group-hover:stroke-primary-color`}`}>
                                                         <polyline points="18 15 12 9 6 15"></polyline>
                                                     </svg>
                                                 </div>

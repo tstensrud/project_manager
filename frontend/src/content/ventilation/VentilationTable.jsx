@@ -28,7 +28,7 @@ function VentilationTable({ projectId, buildingUid }) {
 
     const [floors, setFloors] = useState([]);
     const [collapseAll, setCollapseAll] = useState(true);
-
+    
     useEffect(() => {
         if (buildingData?.success === true) {
             const floorSummaryKeys = Object.keys(buildingData?.data?.floor_summaries);
@@ -36,6 +36,7 @@ function VentilationTable({ projectId, buildingUid }) {
             setFloors(sortedKeys);
         }
     }, [buildingData]);
+
 
     return (
         <>
@@ -78,8 +79,8 @@ function VentilationTable({ projectId, buildingUid }) {
                                                                             sensitivity: "base"
                                                                         });
                                                                     })
-                                                                    .map((key, index, rowIndex) => (
-                                                                        <VentilationTableRowComponent index={rowIndex} buildingReFetch={buildingReFetch} key={roomData.data[key].roomData.uid} allRoomData={roomData.data[key]} totalColumns={12} roomId={roomData.data[key].roomData.uid} systems={ventSystemData} />
+                                                                    .map((key, index) => (
+                                                                        <VentilationTableRowComponent rowIndex={index} buildingReFetch={buildingReFetch} key={roomData.data[key].roomData.uid} allRoomData={roomData.data[key]} totalColumns={12} roomId={roomData.data[key].roomData.uid} systems={ventSystemData} />
                                                                     )
                                                                     )
                                                             }

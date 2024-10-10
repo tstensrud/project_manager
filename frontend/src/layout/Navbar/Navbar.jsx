@@ -39,7 +39,6 @@ function Navbar() {
 
     return (
         <>
-            <NavPanel />
             <div className="w-full bg-tertiary-color justify-end pr-11 pl-11 dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color flex pt-2 pb-2">
                 <div className="flex h-full pr-3">
                     {

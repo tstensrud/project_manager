@@ -41,6 +41,8 @@ function CardButton({ clickFunction, tabIndex, disabled, buttonText, loading }) 
                             hover:dark:border-dark-accent-color
                             focus:border-primary-color
                             focus:dark:border-dark-accent-color
+                            transition
+                            duration-200
                             "
                                     tabIndex={tabIndex}
                                     disabled={disabled}
@@ -68,7 +70,9 @@ function CardButton({ clickFunction, tabIndex, disabled, buttonText, loading }) 
                             hover:border-primary-color
                             hover:dark:border-dark-accent-color
                             focus:border-primary-color
-                            focus:dark:border-dark-accent-color"
+                            focus:dark:border-dark-accent-color
+                            transition
+                            duration-200"
                                     tabIndex={tabIndex}
                                     disabled={disabled}
                                 >

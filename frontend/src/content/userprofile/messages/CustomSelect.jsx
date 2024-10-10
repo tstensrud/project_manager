@@ -56,7 +56,7 @@ function CustomSelect({ selections, handleReceiverChange, userDataLoading }) {
                 <>
                     {
                         showUserList && (
-                            <div onMouseLeave={() => setShowUserList(false)} className="w-52 transition duration-300 text-sm bg-tertiary-color dark:bg-dark-secondary-color border-default-border-color dark:border-dark-default-border-color absolute z-50 top-full left-0 rounded-bl-lg rounded-br-lg rounded-tl-none rounded-tr-none cursor-pointer">
+                            <div onMouseLeave={() => setShowUserList(false)} className="w-52 transition duration-200 text-sm bg-tertiary-color dark:bg-dark-secondary-color border-default-border-color dark:border-dark-default-border-color absolute z-50 top-full left-0 rounded-bl-lg rounded-br-lg rounded-tl-none rounded-tr-none cursor-pointer">
                                 {
                                     selections && Object.keys(selections)
                                         .sort((a, b) => {

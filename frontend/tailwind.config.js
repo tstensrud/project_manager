@@ -39,7 +39,7 @@ export default {
       "dark-marked-row": "#1e7e3659",
       "dark-grey-text": "rgba(212, 212, 212, 0.644)",
       "dark-system-summary": "rgba(89, 113, 157, 0.2)",
-      "dark-navbar-hover-bg-color" : "#3b3b3d41",
+      "dark-navbar-hover-bg-color" : "#3B3B3D",
       "dark-navbar-active-bg-color" : "#3B3B3D",
       "dark-form-background-color": "#0c1219",
     }
@@ -73,12 +73,12 @@ export default {
           '100%': {left: '100%'},
         },
         slideInFromLeft: {
-          '0%': {left: '-100%'},
-          '100%': {left: '0'}
+          '0%': {width: '48px'},
+          '100%': {width: '288px'}
         },
         slideOutToLeft: {
-          '0%': {left: '0'},
-          '100%': {left: '-100%'}
+          '0%': {width: '288px'},
+          '100%': {width: '48px'}
         },
         slideInFromTop: {
           '0%': {top: '-100%'},
@@ -92,8 +92,8 @@ export default {
       animation: {
         fade: 'fadeOut 5s forwards',
         slide: 'slide 3.0s linear infinite',
-        slideInFromLeft: 'slideInFromLeft 0.5s ease-in forwards',
-        slideOutToLeft: 'slideOutToLeft 0.5s ease-in forwards',
+        slideInFromLeft: 'slideInFromLeft 0.2s ease-in forwards',
+        slideOutToLeft: 'slideOutToLeft 0.2s ease-in forwards',
         slideInFromTop: 'slideInFromTop 0.5s ease-in forwards',
         slideOutToTop: 'slideOutToTop 0.5s ease-in forwards'
       }

@@ -52,7 +52,7 @@ function Specification() {
                                 <div className='container-flex-col-spec'>
                                     <LinkButton icon={false} text="Legg inn nye romtyper" url={`/specifications/${suid}/new_room`} />
                                 </div>
-                                <div className="flex flex-row flex-1 justify-end items-center cursor-pointer text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300">
+                                <div className="flex flex-row flex-1 justify-end items-center cursor-pointer text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-200">
                                         <LinkButton icon={false} text="Rediger kravspesifikasjon" url={`/specifications/edit/${suid}/${data.spec_name}`} />
                                 </div>
                             </div>

@@ -75,12 +75,12 @@ function EditSpecification() {
                                             <div className="items-center text-center">
                                                 <LinkButton url={`/specifications/${suid}`} text={name} />
                                             </div>
-                                            <div className="group flex flex-row flex-1 justify-end items-center cursor-pointer text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300">
+                                            <div className="group flex flex-row flex-1 justify-end items-center cursor-pointer text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-200">
                                                 <div className="pr-3" onClick={openDeleteDialog}>
                                                     Slett kravspesifikasjon
                                                 </div>
                                                 <div>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-accent-color dark:stroke-dark-accent-color fill-none group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color transition duration-300">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-accent-color dark:stroke-dark-accent-color fill-none group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color transition duration-200">
                                                         <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
                                                         <line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line>
                                                     </svg>

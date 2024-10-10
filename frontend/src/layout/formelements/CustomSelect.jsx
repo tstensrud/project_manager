@@ -24,7 +24,7 @@ const CustomSelect = forwardRef((props, ref) => {
             hidden
             w-52
             transition
-            duration-300
+            duration-200
             text-sm
             bg-tertiary-color
             dark:bg-dark-secondary-color

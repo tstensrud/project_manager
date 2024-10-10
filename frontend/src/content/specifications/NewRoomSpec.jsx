@@ -127,7 +127,7 @@ function NewRoomSpec() {
                             <div className="flex flex-col w-[600px]">
                                 <div className="flex flex-row w-full">
                                     <div className="w-[100px]">
-                                        <div onClick={toggleHelpBox} className="group relative cursor-pointer group w-fit p-1 border hover:dark:bg-dark-navbar-hover-bg-color hover:bg-tertiary-color dark:border-dark-grey-text hover:dark:border-dark-primary-color rounded-lg transition duration-300">
+                                        <div onClick={toggleHelpBox} className="group relative cursor-pointer group w-fit p-1 border hover:dark:bg-dark-navbar-hover-bg-color hover:bg-tertiary-color dark:border-dark-grey-text hover:dark:border-dark-primary-color rounded-lg transition duration-200">
                                             <Link onClick={toggleHelpBox} to="#"><HelpIcon /></Link>
                                         </div>
                                     </div>

@@ -12,7 +12,7 @@ function Linkbutton({ text, url, icon, onClick }) {
         }
     }
     return (
-        <div onClick={handleClick} className="group items-center cursor-pointer h-12 border rounded-lg bg-secondary-color dark:bg-dark-secondary-color hover:bg-accent-color hover:border-accent-color dark:border-dark-default-border-color hover:dark:border-dark-accent-color transition duration-300 w-fit flex flex-row">
+        <div onClick={handleClick} className="group items-center cursor-pointer h-12 border rounded-lg bg-secondary-color dark:bg-dark-secondary-color hover:bg-accent-color hover:border-accent-color dark:border-dark-default-border-color hover:dark:border-dark-accent-color transition duration-200 w-fit flex flex-row">
             <div className="flex items-start justify-end h-full pl-3 pr-1">
                 {
                     icon &&
@@ -22,7 +22,7 @@ function Linkbutton({ text, url, icon, onClick }) {
                     </svg>
                 }
             </div>
-            <div className="h-full flex items-center pr-3 text-primary-color dark:text-dark-primary-color group-hover:text-secondary-color group-hoverdark:text-dark-primary-color transition duration-300">
+            <div className="h-full flex items-center pr-3 text-primary-color dark:text-dark-primary-color group-hover:text-secondary-color group-hoverdark:text-dark-primary-color transition duration-200">
                 {text}
             </div>
         </div>

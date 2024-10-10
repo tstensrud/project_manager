@@ -11,7 +11,7 @@ import useSubmitData from '../../hooks/useSubmitData.jsx';
 import Linkbutton from '../../layout/Linkbutton.jsx';
 
 function ProjectSummary({ projectId, projectData }) {
-    const { data: isFavData } = useFetch(`/user/is_favourite/${projectId}/`)
+    const { data: isFavData, loading: isFavLoading } = useFetch(`/user/is_favourite/${projectId}/`)
     const { setData: setFavData, response: favResponse, error: favError, handleSubmit } = useSubmitData(`/user/set_favourite/${projectId}/`);
 
     const [isFav, setIsFav] = useState(false);
@@ -50,17 +50,23 @@ function ProjectSummary({ projectId, projectData }) {
                             </div>
                             <div className="flex flex-1 justify-end h-full">
                                 {
-                                    !isFav && (
-                                        <div onClick={handleSetFav} className="group cursor-pointer flex flex-row h-full items-center p-2 rounded-lg border dark:border-dark-default-border-color border-primary-color  hover:bg-accent-color hover:border-accent-color hover:dark:text-dark-primary-color dark:bg-dark-secondary-color hover:dark:border-dark-accent-color transition duration-300">
-                                            <div className="flex text-sm text-primary-color dark:text-dark-primary-color transition duration-300 text-center items-center h-full pr-3 group-hover:dark:text-dark-primary-color group-hover:text-secondary-color">
-                                                Sett som favoritt
-                                            </div>
-                                            <div className="flex items-center h-full">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" strokeWidth="2" className="stroke-primary-color dark:stroke-dark-primary-color fill-none group-hover:stroke-secondary-color group-hover:dark:stroke-dark-primary-color  transition duration-300" strokeLinecap="round" strokeLinejoin="round">
-                                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
+                                    !isFavLoading && (
+                                        <>
+                                            {
+                                                !isFav && (
+                                                    <div onClick={handleSetFav} className="group cursor-pointer flex flex-row h-full items-center p-2 rounded-lg border dark:border-dark-default-border-color border-primary-color  hover:bg-accent-color hover:border-accent-color hover:dark:text-dark-primary-color dark:bg-dark-secondary-color hover:dark:border-dark-accent-color transition duration-200">
+                                                        <div className="flex text-sm text-primary-color dark:text-dark-primary-color transition duration-200 text-center items-center h-full pr-3 group-hover:dark:text-dark-primary-color group-hover:text-secondary-color">
+                                                            Sett som favoritt
+                                                        </div>
+                                                        <div className="flex items-center h-full">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" strokeWidth="2" className="stroke-primary-color dark:stroke-dark-primary-color fill-none group-hover:stroke-secondary-color group-hover:dark:stroke-dark-primary-color  transition duration-200" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        </>
                                     )
                                 }
                             </div>

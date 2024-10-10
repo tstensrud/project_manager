@@ -22,7 +22,9 @@ const InputField = forwardRef((props, ref) => {
                 focus:border-primary-color
                 focus:dark:border-dark-accent-color
                 hover:border-primary-color
-                hover:dark:border-dark-accent-color"
+                hover:dark:border-dark-accent-color
+                transition
+                duration-200"
             onChange={props.changeFunction}
             type="text"
             value={props.value}

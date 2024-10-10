@@ -49,7 +49,7 @@ function Dashboard() {
 
   return (
     <>
-      <SubTitleComponent svg={<HeaderIcon />} headerText={"Dashboard - velg prosjekt"} projectName={""} projectNumber={""} />
+      <SubTitleComponent svg={<HeaderIcon />} headerText={"Velg prosjekt"} projectName={""} projectNumber={""} />
       <MainContentContainer>
         {
           loading ? (

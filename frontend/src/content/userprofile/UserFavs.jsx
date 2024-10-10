@@ -63,7 +63,7 @@ function UserFavs({ userData, fetchData }) {
                                         </Link>
                                     </div>
                                     <div className="flex flex-1 justify-end">
-                                        <button className="border border-accent-color dark:border-dark-accent-color pl-2 pr-2 rounded-lg text-sm text-primary-color dark:text-dark-primary-color hover:text-secondary-color hover:bg-accent-color hover:dark:bg-dark-navbar-hover-bg-color duration-300" onClick={(e) => handleDeleteClick(e, userData[key].uid)}>Fjern</button>
+                                        <button className="border border-accent-color dark:border-dark-accent-color pl-2 pr-2 rounded-lg text-sm text-primary-color dark:text-dark-primary-color hover:text-secondary-color hover:bg-accent-color hover:dark:bg-dark-navbar-hover-bg-color duration-200" onClick={(e) => handleDeleteClick(e, userData[key].uid)}>Fjern</button>
                                     </div>
                                 </div>
                             ))

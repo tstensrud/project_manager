@@ -135,12 +135,12 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
 
     const calculateMinAirFlow = () => {
         let minimumAir = 0;
-        const supply = ventData && ventData.data.roomData.AirSupply;
-        const extract = ventData && ventData.data.roomData.AirExtract;
-        const min = ventData && ventData.data.roomData.AirMinimum;
-        const area = allRoomData && allRoomData.Area;
-        const emission = ventData && ventData.data.roomData.AirEmissionSum;
-        const controls = ventData && ventData.data.roomData.RoomControl;
+        const supply = ventData?.data?.roomData?.AirSupply;
+        const extract = ventData?.data?.roomData?.AirExtract;
+        const min = ventData?.data?.roomData?.AirMinimum;
+        const area = allRoomData && allRoomData?.roomData?.Area;
+        const emission = ventData?.data?.roomData?.AirEmissionSum;
+        const controls = ventData?.data?.roomData?.RoomControl;
         const cav = ventData && controls.toUpperCase().includes("CAV");
         const vav = ventData && controls.toUpperCase().includes("VAV");
 
@@ -183,7 +183,7 @@ function RoomTableRowComponent({ roomId, buildingReFetch, systems, allRoomData, 
                                         </TableTDelement>
                                         <TableTDelement pointer={true} width="10%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
                                             <div className="flex flex-col">
-                                                <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
+                                                <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-200 font-semibold">
                                                     {allRoomData?.roomData.RoomNumber}
                                                 </div>
                                                 <div className="text-grey-text dark:text-dark-grey-text uppercase">

@@ -143,7 +143,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
                                         </TableTDelement>
                                         <TableTDelement width="5%">
                                             <div className="flex flex-col">
-                                                <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
+                                                <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-200 font-semibold">
                                                     {coolingData && coolingData.room_data.RoomNumber}
                                                 </div>
                                                 <div className="text-grey-text dark:text-dark-grey-text uppercase">

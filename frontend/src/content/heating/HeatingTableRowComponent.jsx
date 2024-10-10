@@ -120,7 +120,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                                         </TableTDelement>
                                         <TableTDelement pointer={true} width="5%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
                                             <div className="flex flex-col">
-                                                <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-300 font-semibold">
+                                                <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-200 font-semibold">
                                                     {allRoomData?.roomData.RoomNumber}
                                                 </div>
                                                 <div className="text-grey-text dark:text-dark-grey-text uppercase">
