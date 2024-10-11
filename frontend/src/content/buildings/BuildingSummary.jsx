@@ -76,7 +76,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
 
     return (
 
-        <ContentCard>
+        <ContentCard width="400">
             {response?.success === false && <MessageBox closeable={true} message={response.message} />}
             {
                 editBuildingContainer && editBuildingContainer === true ? (

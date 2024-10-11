@@ -6,12 +6,15 @@
   html {
     @apply m-0 p-0 h-full w-full antialiased;
   }
+
   body {
     @apply overflow-hidden m-0 p-0 h-full w-full antialiased;
   }
+
   a {
     @apply no-underline text-primary-color dark:text-dark-primary-color hover:no-underline;
   }
+
   a:hover {
     @apply text-accent-color dark:text-dark-accent-color transition duration-200;
   }
@@ -25,7 +28,7 @@
   }
 
   h4 {
-   @apply text-xl;
+    @apply text-xl;
   }
 }
 
@@ -38,15 +41,20 @@
     @apply absolute content-[""] h-[12px] w-[12px] left-[2px] top-[2px] bottom-[2px] bg-accent-color dark:bg-dark-accent-color transition duration-200 rounded-[50%];
   }
 
-  input:checked + .slider {
+  input:checked+.slider {
     @apply bg-tertiary-color dark:bg-dark-tertiary-color;
   }
-  
-  input:checked + .slider::before {
+
+  input:checked+.slider::before {
     @apply transform translate-x-5;
-  }  
-  
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
 }
+
 .app-container {
   display: flex;
   flex-direction: row;

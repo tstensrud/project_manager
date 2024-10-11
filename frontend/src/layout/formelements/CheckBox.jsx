@@ -9,7 +9,8 @@ const CheckBox = forwardRef((props, ref) => {
         onChange={props.changeFunction}
         name={props.name}
         tabIndex={props.tabIndex}
-        disabled={props.disabled} />
+        disabled={props.disabled}
+         />
     );
 });
 

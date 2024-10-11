@@ -5,8 +5,8 @@ import ContentCard from '../../layout/ContentCard.jsx';
 function Userinfo({ firebaseData, userData }) {
 
     return (
-        <ContentCard>
-            <div className="flex flex-row items-center mb-3 w-[450px]">
+        <ContentCard width="450">
+            <div className="flex flex-row items-center mb-3 w-full">
                 <div>
                     <h2 className="text-grey-text dark:text-dark-grey-text">Din brukerinformasjon</h2>
                 </div>

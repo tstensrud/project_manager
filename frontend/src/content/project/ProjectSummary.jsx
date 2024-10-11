@@ -40,7 +40,6 @@ function ProjectSummary({ projectId, projectData }) {
 
     return (
         <ContentCard>
-
             {
                 projectData && (
                     <>

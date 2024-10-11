@@ -39,7 +39,7 @@ function Navbar() {
 
     return (
         <>
-            <div className="w-full bg-tertiary-color justify-end pr-11 pl-11 dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color flex pt-2 pb-2">
+            <div className="w-full bg-tertiary-color justify-between pr-8 pl-8 pt-2 pb-2 dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color flex">
                 <div className="flex h-full pr-3">
                     {
                         (activeProject && activeProject !== "0") && (

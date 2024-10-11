@@ -10,13 +10,13 @@ function SubTitleComponent(props) {
         <div className="w-full h-16 flex items-center bg-tertiary-color dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color pl-8 pr-8 ">
             <div className="flex justify-between items-center h-full w-full bg-secondary-color dark:bg-dark-tertiary-color rounded-lg pl-3 pr-3 ">
 
-                <div className="flex flex-row h-full w-1/4">
+                <div className="flex flex-row h-full w-1/12 sm:w-1/4">
                     <div className="flex items-center text-center mr-5 h-full">
                         <div className="dark:bg-dark-accent-color bg-accent-color p-1 border border-accent-color dark:border-dark-accent-color rounded-lg">
                             {props.svg}
                         </div>
                     </div>
-                    <div className="flex items-center">
+                    <div className="hidden sm:flex items-center">
                         {props.headerText}
                     </div>
                 </div>
@@ -26,7 +26,7 @@ function SubTitleComponent(props) {
                     {props.projectNumber && props.projectNumber !== "" && (<>&nbsp;{props.projectNumber}</>)}
                 </div>
 
-                <div className="flex flex-row h-full w-1/4">
+                <div className="flex flex-row h-full w-1/12 sm:w-1/4">
                 </div>
             </div>
         </div>

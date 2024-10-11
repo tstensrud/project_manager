@@ -14,6 +14,8 @@ import ContentCard from '../../layout/ContentCard';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import SearchInput from '../../layout/formelements/SearchInput.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
+import Linkbutton from '../../layout/Linkbutton.jsx';
+import CheckBox from '../../layout/formelements/CheckBox.jsx';
 
 function Dashboard() {
 
@@ -22,6 +24,8 @@ function Dashboard() {
 
   const [searchValue, setSearhValue] = useState("");
   const { data: searchData, setData: setSearchData, loading: searchLoading, fetchData } = useFetchRequest(`/projects/search/${searchValue}/`);
+
+  const [showAll, setShowAll] = useState(false);
 
   const navigate = useNavigate();
 
@@ -46,6 +50,9 @@ function Dashboard() {
     setSearhValue(e.target.value)
   }
 
+  const handleShowAll = (e) => {
+    setShowAll(!showAll);
+  }
 
   return (
     <>
@@ -58,9 +65,9 @@ function Dashboard() {
             <>
               {
                 data?.success ? (
-                  <div className="flex justify-center flex-row w-full mb-32">
+                  <div className="flex justify-center flex-row w-full">
                     <ContentCard>
-                      <div className="w-[900px] flex flex-col">
+                      <div className="w-full flex flex-col">
                         <div className="mb-3">
                           <h2>Velg prosjekt</h2>
                         </div>
@@ -70,18 +77,30 @@ function Dashboard() {
                           </div>
                           <SearchInput value={searchValue} changeFunction={onInputChange} />
                         </div>
+                        <div>
+                          <div className="flex flex-row justify-end w-full pt-1 pb-1 pr-2">
+                            <div className="w-fit">
+                              {
+                                showAll ? "Gjem prosjekter" : "Vis alle prosjekter"
+                              }
+                            </div>
+                            <div className="pl-5">
+                              <CheckBox changeFunction={handleShowAll} name="" tabIndex="15" />
+                            </div>
+                          </div>
+                        </div>
 
                         <div className="w-full flex flex-col">
                           <table>
                             <thead>
-                              <tr className="border-default-border-color  border-b dark:border-b-dark-default-border-color w-56">
-                                <th className="pt-1 pb-1 pl-3 min-w-[300px] max-w-[300px] w-[300px] text-start">
+                              <tr className="border-default-border-color border-b dark:border-b-dark-default-border-color">
+                                <th className="pt-1 pb-1 pl-3 min-w-[20%] max-w-[20%] w-[20%] text-start">
                                   Prosjektnr
                                 </th>
-                                <th className="pt-1 pb-1 min-w-[400px] max-w-[400px] w-[400px] text-start">
+                                <th className="pt-1 pb-1 min-w-[70%] max-w-[70%] w-[70%] text-start">
                                   Prosjektnavn
                                 </th>
-                                <th className="pt-1 pb-1 pr-3 min-w-[200px] max-w-[200px] w-[200px] text-end">
+                                <th className="pt-1 pb-1 pr-3 min-w-[10%] max-w-[10%] w-[10%] text-end">
                                   Påbegynt
                                 </th>
                               </tr>
@@ -90,34 +109,39 @@ function Dashboard() {
                             {
                               !searchValue ? (
                                 <>
-                                  <tbody>
-                                    {
-                                      data?.success === true &&
-                                      Object.keys(data.data)
-                                        .sort((a, b) => {
-                                          const numA = data.data[a].ProjectNumber;
-                                          const numB = data.data[b].ProjectNumber;
-                                          return numA - numB;
-                                        })
-                                        .map((key, index) => (
-                                          <tr onClick={() => navigate(`/project/${data.data[key].uid}/`)} className="cursor-pointer border-default-border-color border-b dark:border-b-dark-default-border-color text-primary-color dark:text-dark-primary-color hover:no-underline hover:text-accent-color hover:dark:text-dark-accent-color transition duration-200" key={index}>
-                                            <td className="pt-1 pb-1 pl-3 pr-3 min-w-[300px] max-w-[300px] w-[300px]">
+                                  {
+                                    showAll && (
+                                      <tbody>
+                                        {
+                                          data?.success === true &&
+                                          Object.keys(data.data)
+                                            .sort((a, b) => {
+                                              const numA = data.data[a].ProjectNumber;
+                                              const numB = data.data[b].ProjectNumber;
+                                              return numA - numB;
+                                            })
+                                            .map((key, index) => (
+                                              <tr onClick={() => navigate(`/project/${data.data[key].uid}/`)} className="cursor-pointer border-default-border-color border-b dark:border-b-dark-default-border-color text-primary-color dark:text-dark-primary-color hover:no-underline hover:text-accent-color hover:dark:text-dark-accent-color transition duration-200" key={index}>
+                                                <td className="pt-1 pb-1 pl-3 pr-3 min-w-[20%] max-w-[20%] w-[20%]">
 
-                                              {data.data[key].ProjectNumber}
+                                                  {data.data[key].ProjectNumber}
 
-                                            </td>
-                                            <td className="pt-1 pb-1 pr-3 min-w-[400px] max-w-[400px] w-[400px]">
+                                                </td>
+                                                <td className="pt-1 pb-1 pr-3 min-w-[70%] max-w-[70%] w-[70%]">
 
-                                              {data.data[key].ProjectName}
+                                                  {data.data[key].ProjectName}
 
-                                            </td>
-                                            <td className="pt-1 pb-1 pl-3 pr-3 min-w-[200px] max-w-[200px] w-[200px] text-end">
-                                              {data.data[key].CreatedAt}
-                                            </td>
-                                          </tr>
-                                        ))
-                                    }
-                                  </tbody>
+                                                </td>
+                                                <td className="pt-1 pb-1 pl-3 pr-3 min-w-[10%] max-w-[10%] w-[10%] text-end">
+                                                  {data.data[key].CreatedAt}
+                                                </td>
+                                              </tr>
+                                            ))
+                                        }
+                                      </tbody>
+                                    )
+                                  }
+
                                 </>
                               ) : (
                                 <>
@@ -126,13 +150,13 @@ function Dashboard() {
                                       searchData?.success === true &&
                                       searchData?.data && Object.keys(searchData.data).map((key, index) => (
                                         <tr onClick={() => navigate(`/project/${searchData.data[key].uid}/`)} className="cursor-pointer border-default-border-color border-b dark:border-b-dark-default-border-color text-primary-color dark:text-dark-primary-color hover:no-underline hover:text-accent-color hover:dark:text-dark-accent-color transition duration-200" key={index}>
-                                          <td className="pt-1 pb-1 pl-3 pr-3 min-w-[300px] max-w-[300px] w-[300px]">
+                                          <td className="pt-1 pb-1 pl-3 pr-3 min-w-[20%] max-w-[20%] w-[20%]">
                                             {searchData.data[key].ProjectNumber}
                                           </td>
-                                          <td className="pt-1 pb-1 pl-3 pr-3 min-w-[400px] max-w-[400px] w-[400px]">
+                                          <td className="pt-1 pb-1 pl-3 pr-3 min-w-[70%] max-w-[70%] w-[70%]">
                                             {searchData.data[key].ProjectName}
                                           </td>
-                                          <td className="pt-1 pb-1 pl-3 pr-3 min-w-[200px] max-w-[200px] w-[200px] text-end">
+                                          <td className="pt-1 pb-1 pl-3 pr-3 min-w-[10%] max-w-[10%] w-[10%] text-end">
                                             {searchData.data[key].CreatedAt}
                                           </td>
                                         </tr>
@@ -142,7 +166,6 @@ function Dashboard() {
                                 </>
                               )
                             }
-
                           </table>
                         </div>
                         {error && error}
@@ -151,9 +174,9 @@ function Dashboard() {
                   </div>
                 ) : (
                   <>
-                  {
-                    ! loading && <MessageBox message={data?.message ?? 'En alvorlig feil har oppstått. Kontakt admin.'} closeable={false} />
-                  }
+                    {
+                      !loading && <MessageBox message={data?.message ?? 'En alvorlig feil har oppstått. Kontakt admin.'} closeable={false} />
+                    }
                   </>
                 )
               }

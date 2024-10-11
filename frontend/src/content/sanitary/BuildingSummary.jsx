@@ -89,8 +89,8 @@ function BuildingSummary({ buildingUid, projectId }) {
                 response?.success === false && <MessageBox closeable={true} message={response.message} />
             }
 
-            <ContentCard>
-                <div className="flex w-[400px] mb-5">
+            <ContentCard width="400">
+                <div className="flex w-full mb-5">
                     <CardTitle svg={<BuildingIcon />} title={buildingSummaryData?.data?.BuildingName} />
                 </div>
                 {

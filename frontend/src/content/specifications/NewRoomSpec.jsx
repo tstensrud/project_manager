@@ -123,8 +123,8 @@ function NewRoomSpec() {
 
                 <form onSubmit={submitNewData}>
                     <div className="flex justify-center flex-row w-full">
-                        <ContentCard>
-                            <div className="flex flex-col w-[600px]">
+                        <ContentCard width="600">
+                            <div className="flex flex-col w-full">
                                 <div className="flex flex-row w-full">
                                     <div className="w-[100px]">
                                         <div onClick={toggleHelpBox} className="group relative cursor-pointer group w-fit p-1 border hover:dark:bg-dark-navbar-hover-bg-color hover:bg-tertiary-color dark:border-dark-grey-text hover:dark:border-dark-primary-color rounded-lg transition duration-200">

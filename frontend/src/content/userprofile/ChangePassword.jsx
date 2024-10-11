@@ -60,7 +60,7 @@ function ChangePassword() {
     }
 
     return (
-        <ContentCard>
+        <ContentCard width="450">
             <div className="flex flex-row mb-3">
                 <div>
                     <h2 className="text-grey-text dark:text-dark-grey-text mb-3">Bytt passord</h2>

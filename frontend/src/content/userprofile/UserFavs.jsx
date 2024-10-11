@@ -32,8 +32,8 @@ function UserFavs({ userData, fetchData }) {
     }
 
     return (
-        <ContentCard>
-            <div className="flex flex-row mb-3 w-[450px]">
+        <ContentCard width="450">
+            <div className="flex flex-row mb-3 w-full">
                 <div>
                     <h2 className="text-grey-text dark:text-dark-grey-text">Dine prosjekter</h2>
                 </div>

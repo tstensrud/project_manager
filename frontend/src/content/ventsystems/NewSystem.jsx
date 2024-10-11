@@ -69,7 +69,7 @@ function NewSystem() {
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Legg til nytt ventilasjonssystem"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 <div className="flex justify-center flex-row w-full">
-                    <ContentCard>
+                    <ContentCard width="400">
                         <h3>Legg til nytt ventilasjonssystem</h3>
                         <form id="system" onSubmit={handleSubmitNewSystem} role="form">
                             <div className="relative mt-5 w-full">

@@ -12,7 +12,7 @@ function DarkmodeContainer() {
 
     return (
         <div onClick={toggleDarkModeContainer} className="cursor-pointer flex items-center justify-center">
-            <div className="group relative cursor-pointer group border hover:bg-accent-color hover:border-accent-color hover:dark:bg-dark-navbar-active-bg-color dark:border-dark-accent-color rounded-lg transition duration-200 p-2">
+            <div className="group cursor-pointer group border hover:bg-accent-color hover:border-accent-color hover:dark:bg-dark-navbar-active-bg-color dark:border-dark-accent-color rounded-lg transition duration-200 p-2">
             {
                 darkMode ? (
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 26" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-primary-color group-hover:stroke-secondary-color group-hover:dark:stroke-dark-primary-color dark:stroke-dark-grey-text fill-none transition duration-200">

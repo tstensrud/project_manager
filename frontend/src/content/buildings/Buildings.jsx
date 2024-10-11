@@ -63,9 +63,9 @@ function Buildings() {
                                 data?.success === true ? (
                                     <>
                                         <form onSubmit={handleFormSubmit}>
-                                            <div className="flex flex-col w-full items-center justify-center text-center">
-                                                <div className="flex h-20 flex-row w-full items-center justify-center text-center">
-                                                    <div className="mr-5 w-96">
+                                            <div className="flex flex-col w-full items-center justify-center pt-5 sm:pt-0 text-center">
+                                                <div className="flex h-20 flex-row flex-wrap w-full items-center justify-center text-center">
+                                                    <div className="mr-5">
                                                         <InputField buildingNameRef={buildingNameRef} changeFunction={handleChange} value={formInput} name="buildingName" placeholder="Navn på bygg. Eks.: A, Hovedbygg" required={true} />
                                                     </div>
                                                     <div className="items-center justify-center text-center">
@@ -98,9 +98,6 @@ function Buildings() {
                         </>
                     )
                 }
-
-
-
             </MainContentContainer>
         </>
     );
