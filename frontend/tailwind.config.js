@@ -73,12 +73,12 @@ export default {
           '100%': {left: '100%'},
         },
         slideInFromLeft: {
-          '0%': {width: '48px'},
-          '100%': {width: '288px'}
+          '0%': {width: '3rem'},
+          '100%': {width: '19rem'}
         },
         slideOutToLeft: {
-          '0%': {width: '288px'},
-          '100%': {width: '48px'}
+          '0%': {width: '19rem'},
+          '100%': {width: '3rem'}
         },
         slideInFromTop: {
           '0%': {top: '-100%'},
@@ -92,8 +92,8 @@ export default {
       animation: {
         fade: 'fadeOut 5s forwards',
         slide: 'slide 3.0s linear infinite',
-        slideInFromLeft: 'slideInFromLeft 0.2s ease-in forwards',
-        slideOutToLeft: 'slideOutToLeft 0.2s ease-in forwards',
+        slideInFromLeft: 'slideInFromLeft 0.1s ease-in forwards',
+        slideOutToLeft: 'slideOutToLeft 0.1s ease-in forwards',
         slideInFromTop: 'slideInFromTop 0.5s ease-in forwards',
         slideOutToTop: 'slideOutToTop 0.5s ease-in forwards'
       }

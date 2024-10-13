@@ -20,6 +20,7 @@ import TableTop from '../../layout/TableTop.jsx';
 // help
 import { title, sections } from '../help/SanitaryEquipmentHelp.jsx'
 import MessageBox from '../../layout/MessageBox.jsx';
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 function SanitaryEquipmentTable({ projectId, buildingUid }) {
     const { data: roomData, loading: roomDataLoading, error: roomDataError } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
@@ -46,7 +47,7 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                 ) : (
                     <>
                         {
-                            roomData?.success ? (
+                            roomData?.success && (
                                 <>
                                     <TableTop collapseAll={collapseAll} setCollapseAll={setCollapseAll} title={title} sections={sections} />
                                     <TableContainer>
@@ -139,14 +140,11 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                                         <td className="h-6" colspan="14"></td>
                                     </TableFooter>
                                 </>
-                            ) : (
-                                <>
-                                    {
-                                        !roomDataLoading && <MessageBox message={roomData?.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis feilen vedvarer'} closeable={false} />
-                                    }
-                                </>
                             )
                         }
+                        {roomData?.success === false && <MessageBox message={roomData?.message ?? ERROR_FALLBACK_MSG} closeable={false} />}
+                        {roomDataError && <MessageBox error message={`${roomDataError} @ room data` ?? ERROR_FALLBACK_MSG} closeable={true} />}
+                        {buildingDataError && <MessageBox error message={`${buildingDataError} @ building data` ?? ERROR_FALLBACK_MSG} closeable={true} />}
                     </>
                 )
             }

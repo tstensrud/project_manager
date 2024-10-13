@@ -22,13 +22,13 @@ import MessageBox from '../../layout/MessageBox.jsx';
 
 function VentilationTable({ projectId, buildingUid }) {
 
-    const { data: roomData, loading } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
-    const { data: ventSystemData, loading: ventSystemDataLoading } = useFetch(`/project_api/${projectId}/systems/`);
-    const { data: buildingData, refetch: buildingReFetch, loading: buildingDataLoading } = useFetch(`/project_api/${projectId}/ventilation/building_data/${buildingUid}/`);
+    const { data: roomData, loading, error: roomDataError } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
+    const { data: ventSystemData, error: ventSystemDataError, loading: ventSystemDataLoading } = useFetch(`/project_api/${projectId}/systems/`);
+    const { data: buildingData, error: buildingDataError, refetch: buildingReFetch, loading: buildingDataLoading } = useFetch(`/project_api/${projectId}/ventilation/building_data/${buildingUid}/`);
 
     const [floors, setFloors] = useState([]);
     const [collapseAll, setCollapseAll] = useState(true);
-    
+
     useEffect(() => {
         if (buildingData?.success === true) {
             const floorSummaryKeys = Object.keys(buildingData?.data?.floor_summaries);
@@ -46,7 +46,7 @@ function VentilationTable({ projectId, buildingUid }) {
                 ) : (
                     <>
                         {
-                            roomData?.success ? (
+                            roomData?.success && ventSystemData?.success && buildingData?.success && (
                                 <>
                                     <TableTop collapseAll={collapseAll} setCollapseAll={setCollapseAll} title={title} sections={sections} />
                                     <TableContainer>
@@ -80,7 +80,7 @@ function VentilationTable({ projectId, buildingUid }) {
                                                                         });
                                                                     })
                                                                     .map((key, index) => (
-                                                                        <VentilationTableRowComponent rowIndex={index} buildingReFetch={buildingReFetch} key={roomData.data[key].roomData.uid} allRoomData={roomData.data[key]} totalColumns={12} roomId={roomData.data[key].roomData.uid} systems={ventSystemData} />
+                                                                        <VentilationTableRowComponent rowIndex={index} buildingReFetch={buildingReFetch} key={roomData.data[key].roomData.uid} roomData={roomData.data[key].roomData} roomSystemData={roomData.data[key].ventSystemData} totalColumns={12} systems={ventSystemData} />
                                                                     )
                                                                     )
                                                             }
@@ -194,14 +194,13 @@ function VentilationTable({ projectId, buildingUid }) {
                                         <TableTDFooter width="34%" />
                                     </TableFooter>
                                 </>
-                            ) : (
-                                <>
-                                    {
-                                        loading && <MessageBox message={roomData?.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis den vedvarer'} closeable={false} />
-                                    }
-                                </>
                             )
                         }
+                        {roomData?.success === false && <MessageBox message={roomData?.message ?? ERROR_FALLBACK_MSG} closeable={false} />}
+                        {roomDataError && <MessageBox message={`${roomDataError} @room data` ?? ERROR_FALLBACK_MSG} closeable={false} />}
+                        {ventSystemDataError && <MessageBox message={`${ventSystemDataError} @vent system data` ?? ERROR_FALLBACK_MSG} closeable={false} />}
+                        {buildingDataError && <MessageBox message={`${buildingDataError} @building data` ?? ERROR_FALLBACK_MSG} closeable={false} />}
+
                     </>
                 )
             }

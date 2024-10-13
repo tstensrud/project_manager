@@ -4,7 +4,6 @@ import React, { useContext, useState } from 'react';
 import ContentCard from '../../../layout/ContentCard.jsx';
 import MessageNavButtons from './MessageNavButtons.jsx';
 import Inbox from './Inbox.jsx';
-import Sent from './Sent.jsx';
 import Archive from './Archive.jsx';
 import NewMessage from './NewMessage.jsx';
 
@@ -18,7 +17,7 @@ function Messages() {
     ];
 
     return (
-        <div className="flex w-full sm:w-1/2 bg-secondary-color dark:bg-dark-tertiary-color rounded-lg mt-5 overflow-hidden">
+        <ContentCard width="40">
             <div className="flex flex-col p-4 h-full w-full flex-wrap">
                 <div className="flex flex-row mb-3 w-full">
                     <div>
@@ -57,7 +56,7 @@ function Messages() {
                 </div>
 
             </div>
-        </div>
+        </ContentCard>
     );
 
 

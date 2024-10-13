@@ -14,6 +14,7 @@ import HeaderIcon from '../../assets/svg/buildingIcon.jsx';
 import InputField from '../../layout/formelements/InputField.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
 import LoadingBar from '../../layout/LoadingBar.jsx'
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 function Buildings() {
     const { activeProject } = useContext(GlobalContext);
@@ -46,7 +47,7 @@ function Buildings() {
         e.preventDefault();
         await handleSubmit();
     }
-
+    console.log(error)
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Bygg"} projectName={""} projectNumber={""} />
@@ -60,7 +61,7 @@ function Buildings() {
                     ) : (
                         <>
                             {
-                                data?.success === true ? (
+                                data?.success && (
                                     <>
                                         <form onSubmit={handleFormSubmit}>
                                             <div className="flex flex-col w-full items-center justify-center pt-5 sm:pt-0 text-center">
@@ -87,14 +88,17 @@ function Buildings() {
                                             }
                                         </div>
                                     </>
-                                ) : (
-                                    <>
-                                    {
-                                        !loading && <MessageBox closeable={false} message={`${data?.message} - ${error}`} />
-                                    }
-                                    </>
                                 )
                             }
+                            <>
+                                {
+                                    !data?.success === false && <MessageBox error closeable={false} message={data?.message ?? ERROR_FALLBACK_MSG} />
+                                }
+                                {
+                                    error && <MessageBox error closeable={false} message={error} />
+                                }
+                            </>
+
                         </>
                     )
                 }

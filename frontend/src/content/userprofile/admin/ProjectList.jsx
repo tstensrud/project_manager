@@ -35,7 +35,7 @@ function ProjectList() {
             <div className="flex flex-col w-full">
                 <div className="flex flex-row mb-3 items-center">
                     <div className="w-1/2">
-                        <SearchInput value={searchValue} changeFunction={onInputChange} />
+                        <SearchInput placeholder="Prosjektnr eller prosjektnavn" value={searchValue} changeFunction={onInputChange} />
                     </div>
                 </div>
                 {

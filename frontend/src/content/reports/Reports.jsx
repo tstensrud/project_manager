@@ -45,7 +45,7 @@ function Reports() {
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Rapporter"} projectName="" projectNumber="" />
             <MainContentContainer>
                 <div className="flex justify-center flex-row w-full">
-                    <ContentCard width="300">
+                    <ContentCard width="40">
                         <div className="mb-5 w-full flex justify-center">Excel-rapporter</div>
                         <div className="pt-1 pb-1">
                             <Linkbutton text="Luftmengdetabell" onClick={handleGetVentSheet} />
@@ -67,7 +67,7 @@ function Reports() {
                 </div>
 
                 <div className="flex w-full justify-center">
-                    <ContentCard width="300">
+                    <ContentCard width="40">
                         <h3>Klartgjorte filer</h3>
                         {
                             ventLoading || heatingLoading ? (

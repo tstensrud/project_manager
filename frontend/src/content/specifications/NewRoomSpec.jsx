@@ -123,7 +123,7 @@ function NewRoomSpec() {
 
                 <form onSubmit={submitNewData}>
                     <div className="flex justify-center flex-row w-full">
-                        <ContentCard width="600">
+                        <ContentCard width="36">
                             <div className="flex flex-col w-full">
                                 <div className="flex flex-row w-full">
                                     <div className="w-[100px]">
@@ -142,7 +142,7 @@ function NewRoomSpec() {
                                 </div>
 
                                 <div className="flex flex-row">
-                                    <div className="mr-10">
+                                    <div className="mr-5">
 
                                         <div className="relative mt-5 w-full">
                                             <div>Romtype</div>

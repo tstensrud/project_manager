@@ -71,8 +71,8 @@ function Settings() {
             <MainContentContainer>
                 {error || specError && <MessageBox closeable={true} message={`${error ?? ''} ${specError ?? ''}`}/>}
                 <div className="flex justify-center flex-row w-full">
-                    <ContentCard>
-                        <div className="w-[900px]">
+                    <ContentCard width="44">
+                        <div className="w-full">
                             {
                                 loading || specLoading ? (
                                     <LoadingSpinner text="prosjektinnstillinger" />

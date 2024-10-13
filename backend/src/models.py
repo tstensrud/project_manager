@@ -294,7 +294,7 @@ class Rooms(db.Model):
         Index("idx_rooms_system_uid", "system_uid"),
     )
     
-    def get_json_room_data(self):
+    def get_json(self):
         return {
             "id": self.id,
             "uid": self.uid,
@@ -305,33 +305,27 @@ class Rooms(db.Model):
             "RoomName": self.room_name,
             "Area": self.area,
             "RoomPopulation": self.room_population,
-            "Comments": self.comments
-        }
-    
-    def get_json_ventilation_data(self):
-            return {
-                "SystemId": self.system_uid,
-                "AirPerPerson": self.air_per_person,
-                "AirPersonSum": self.air_person_sum,
-                "AirEmission": self.air_emission,
-                "AirEmissionSum": self.air_emission_sum,
-                "AirProcess": self.air_process,
-                "AirMinimum": self.air_minimum,
-                "AirDemand": self.air_demand,
-                "AirSupply": self.air_supply,
-                "AirExtract": self.air_extract,
-                "AirChosen": self.air_chosen,
-                "VentilationPrinciple": self.vent_principle,
-                "HeatExchange": self.heat_exchange,
-                "RoomControl": self.room_control,
-                "Notes": self.notes,
-                "DbTechnical": self.db_technical,
-                "DbNeighbour": self.db_neighbour,
-                "DbCorridor": self.db_corridor
-            }
-    
-    def get_json_heating_data(self):
-        return {
+            "Comments": self.comments,
+
+            "SystemId": self.system_uid,
+            "AirPerPerson": self.air_per_person,
+            "AirPersonSum": self.air_person_sum,
+            "AirEmission": self.air_emission,
+            "AirEmissionSum": self.air_emission_sum,
+            "AirProcess": self.air_process,
+            "AirMinimum": self.air_minimum,
+            "AirDemand": self.air_demand,
+            "AirSupply": self.air_supply,
+            "AirExtract": self.air_extract,
+            "AirChosen": self.air_chosen,
+            "VentilationPrinciple": self.vent_principle,
+            "HeatExchange": self.heat_exchange,
+            "RoomControl": self.room_control,
+            "Notes": self.notes,
+            "DbTechnical": self.db_technical,
+            "DbNeighbour": self.db_neighbour,
+            "DbCorridor": self.db_corridor,
+   
             "OuterWallArea": self.outer_wall_area,
             "RoomHeight": self.room_height,
             "WindowDoorArea": self.window_door_area,
@@ -346,11 +340,8 @@ class Rooms(db.Model):
             "HeatLossVentilation": self.heatloss_ventilation,
             "HeatLossSum": self.heatloss_sum,
             "ChosenHeating": self.chosen_heating,
-            "HeatSource": self.heat_source
-        }
-    
-    def get_json_cooling_data(self):
-        return {
+            "HeatSource": self.heat_source,
+
             "RoomTempSummer": self.room_temp_summer,
             "InternalHeatloadPeople": self.internal_heatload_people,
             "InternalHeatloadLights": self.internal_heatload_lights,
@@ -363,11 +354,8 @@ class Rooms(db.Model):
             "SumInternalHeatLoad": self.sum_internal_heatload,
             "CoolingVentilationAir": self.cooling_ventilationair,
             "CoolingEquipment": self.cooling_equipment,
-            "CoolingSum": self.cooling_sum
-    }
-
-    def get_json_sanitary_data(self):
-        return {
+            "CoolingSum": self.cooling_sum,
+   
             "shaft": self.shaft,
             "drinking_fountain": self.drinking_fountain,
             "sink_1_14_inch": self.sink_1_14_inch,

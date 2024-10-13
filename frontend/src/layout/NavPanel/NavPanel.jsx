@@ -5,8 +5,9 @@ import { GlobalContext } from '../../context/GlobalContext';
 
 // components
 import SubMenuItem from "./SubMenuItem";
+import PinIcon from "../../assets/svg/pinIcon";
 
-function NavPanel({ showMenu, setShowMenu }) {
+function NavPanel({ showMenu, setShowMenu, setMenuPinned, menuPinned, setIsMenuAnimationInProgress }) {
     const { activeProject, activeProjectName } = useContext(GlobalContext);
     const [activeNavIndex, setActiveNavIndex] = useState(0);
 
@@ -142,7 +143,7 @@ function NavPanel({ showMenu, setShowMenu }) {
         {
             text: "Sanitærutstyr",
             svg:
-                <svg version="1.1" height={svgDimension} width={svgDimension} xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" className={menuItemsCssClasses}>
+                <svg version="1.1" height={svgDimension} width={svgDimension} xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" className={menuItemsCssClasses}>
                     <g>
                         <path className="dark:fill-dark-grey-text fill-grey-text" d="M73.41,512h233.41v-63.997c60.239-7.534,131.77-101.65,131.77-161.88H73.41V512z" />
                         <rect x="73.41" className="dark:fill-dark-grey-text fill-grey-text" width="128.002" height="267.289" />
@@ -220,25 +221,31 @@ function NavPanel({ showMenu, setShowMenu }) {
 
     const handleToggleMenu = (e) => {
         e.preventDefault();
-        setShowMenu(!showMenu)
+        if (menuPinned) {
+            setIsMenuAnimationInProgress(true);
+            setMenuPinned(false);
+            setShowMenu(false);
+        }
+        else if (!menuPinned) {
+            setMenuPinned(true);
+            setShowMenu(true);
+        }
     }
 
-
     return (
-        <div className={` flex flex-row h-full bg-secondary-color dark:bg-dark-tertiary-color `}>
+        <div className={`flex flex-row h-full bg-secondary-color dark:bg-dark-tertiary-color overflow-y-auto`}>
             <div className="w-full flex flex-col border-primary-color bg-secondary-color border-r dark:border-dark-default-border-color dark:bg-dark-tertiary-color">
 
-                <div onClick={handleToggleMenu} className="group sticky top-0 z-50 bg-secondary-color dark:bg-dark-tertiary-color cursor-pointer flex items-center pt-2 pl-2 pb-3 border-b dark:border-dark-default-border-color h-12 text-grey-text dark:text-dark-grey-text">
+                <div onClick={handleToggleMenu} className="group sticky top-0 bg-secondary-color dark:bg-dark-tertiary-color cursor-pointer flex items-center pt-2 pl-2 pb-3 border-b dark:border-dark-default-border-color h-12 text-grey-text dark:text-dark-grey-text">
                     <div className="flex items-center justify-center w-7 h-7 border border-accent-color bg-tertiary-color group-hover:bg-accent-color dark:bg-dark-tertiary-color dark:border-dark-accent-color rounded-lg transition duration-200 group-hover:dark:bg-dark-navbar-active-bg-color">
-                        <div className={`${!showMenu && 'rotate-180'}`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="stroke-grey-text stroke-2 group-hover:stroke-secondary-color dark:stroke-dark-grey-text group-hover:dark:stroke-dark-primary-color transition duration-200 fill-none">
-                                <polyline points="15 18 9 12 15 6"></polyline>
-                            </svg>
+                        <div className={`${!menuPinned && 'rotate-180'}`}>
+                           <PinIcon />
                         </div>
                     </div>
+
                 </div>
 
-                <div className={`flex flex-col ${activeProjectName && activeProjectName !== "0" && 'border-b pb-2'}border-table-border-color dark:border-dark-default-border-color pb-2 overflow-y-auto 2xl:overflow-visible`}>
+                <div className={`flex flex-col ${activeProjectName && activeProjectName !== "0" && 'border-b'}border-table-border-color dark:border-dark-default-border-color pb-2`}>
                     {
                         activeProjectName && activeProjectName !== "0" && (
                             <>
@@ -247,7 +254,7 @@ function NavPanel({ showMenu, setShowMenu }) {
                                         <>
                                             {
                                                 menuItem.text !== "Portal" && menuItem.text !== "Kalkulatorer" && (
-                                                    <div className="pl-2 pr-2 pt-1">
+                                                    <div className="p-1">
                                                         <SubMenuItem showNavPanel={showMenu} activeNavIndex={activeNavIndex} setActiveNavIndex={setActiveNavIndex} key={index} index={index} url={menuItem.url} svg={menuItem.svg} text={menuItem.text} />
                                                     </div>
                                                 )
@@ -261,11 +268,11 @@ function NavPanel({ showMenu, setShowMenu }) {
                     }
                 </div>
 
-                <div className="pb-3">
-                    <div className="flex flex-col pl-2 pr-2">
+                <div className="pb-3 border-t border-default-border-color dark:border-dark-default-border-color">
+                    <div className="flex flex-col">
                         {
                             globalNavPanel.map((menuItem, index) => (
-                                <div className="pt-1">
+                                <div className="p-1">
                                     <SubMenuItem showNavPanel={showMenu} activeNavIndex={activeNavIndex} setActiveNavIndex={setActiveNavIndex} key={index} index={index + 20} url={menuItem.url} svg={menuItem.svg} text={menuItem.text} />
                                 </div>
 
@@ -276,18 +283,22 @@ function NavPanel({ showMenu, setShowMenu }) {
                 </div>
 
                 <div className="flex flex-1 items-end">
-                    <div className="border-t pl-2 pr-2 pt-1 pb-1 w-full border-table-border-color dark:border-dark-default-border-color">
-                        <SubMenuItem showNavPanel={showMenu} activeNavIndex={activeNavIndex} setActiveNavIndex={setActiveNavIndex} index={30} text="Min side" url="/" svg={
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" className="transition duration-200 stroke-grey-text dark:stroke-dark-grey-text group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color fill-none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>} />
-                        <SubMenuItem showNavPanel={showMenu} activeNavIndex={activeNavIndex} setActiveNavIndex={setActiveNavIndex} index={31} text="Logg ut" url="/logout" svg={
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" className="transition duration-200 stroke-grey-text dark:stroke-dark-grey-text group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color fill-none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M10 22H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h5"></path>
-                                <polyline points="17 16 21 12 17 8"></polyline>
-                                <line x1="21" y1="12" x2="9" y2="12"></line>
-                            </svg>} />
+                    <div className="border-t  w-full border-table-border-color dark:border-dark-default-border-color">
+                        <div className="p-1">
+                            <SubMenuItem showNavPanel={showMenu} activeNavIndex={activeNavIndex} setActiveNavIndex={setActiveNavIndex} index={30} text="Min side" url="/" svg={
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" className="transition duration-200 stroke-grey-text dark:stroke-dark-grey-text group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color fill-none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>} />
+                        </div>
+                        <div className="p-1">
+                            <SubMenuItem showNavPanel={showMenu} activeNavIndex={activeNavIndex} setActiveNavIndex={setActiveNavIndex} index={31} text="Logg ut" url="/logout" svg={
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" className="transition duration-200 stroke-grey-text dark:stroke-dark-grey-text group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color fill-none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M10 22H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h5"></path>
+                                    <polyline points="17 16 21 12 17 8"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>} />
+                        </div>
                     </div>
                 </div>
 

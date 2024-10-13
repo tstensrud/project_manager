@@ -329,11 +329,12 @@ def get_rooms_in_building(project_uid: str, building_uid: str):
     rooms = dbo.get_all_room_data_building(building_uid)
     if rooms:
         data = {}
-        for room, room_type, building in rooms:
+        for room, room_type, building, vent_system in rooms:
             room_data = {}
-            room_data["roomData"] = room.get_json_room_data()
-            room_data["roomType"] = room_type.name
-            room_data["buildingName"] = building.building_name
+            room_data["roomData"] = room.get_json()
+            room_data["ventSystemData"] = vent_system.get_json() if vent_system is not None else None
+            room_data["roomTypeData"] = room_type.get_json()
+            room_data["buildingData"] = building.get_json()
             data[room.uid] = room_data
         return jsonify({"success": True, "data": data})
     return jsonify({"success": False, "message": "Fant ingen rom"})
@@ -342,17 +343,15 @@ def get_rooms_in_building(project_uid: str, building_uid: str):
 @firebase_required
 def get_room(project_uid, room_uid):
     room = dbo.get_room_data(room_uid)
-    print(room)
     if room:
-        room_data, building_data, roomtype_data = room
+        room, building, room_type, vent_system = room
         data = {}
-        data["roomData"] = room_data.get_json_room_data()
-        data["buildingData"] = building_data.get_json()
-        data["roomTypeData"] = roomtype_data.get_json()
-        #building = dbo.get_building(room.building_uid)
-        #room_data["BuildingName"] = building.building_name
+        data["roomData"] = room.get_json()
+        data["ventSystemData"] = vent_system.get_json() if vent_system is not None else None
+        data["roomTypeData"] = room_type.get_json()
+        data["buildingData"] = building.get_json()
         return jsonify({"success": True, "data": data})
-    return jsonify({"success": False, "message": "Fant ikke rom"})
+    return jsonify({"success": False, "message": f"Fant ikke rom: {room_uid}"})
 
 @project_api_bp.route('/rooms/update_room/<room_uid>/', methods=['PATCH'])
 @firebase_required
@@ -545,7 +544,7 @@ def ventilation_get_room(project_uid, room_uid):
     if room:
         room_data, vent_system_data = room
         data = {}
-        data["roomData"] = room_data.get_json_ventilation_data()
+        data["ventData"] = room_data.get_json_ventilation_data()
         if vent_system_data:
             data["systemData"] = vent_system_data.get_json()
         else:
@@ -578,6 +577,7 @@ def ventilation_update_room(project_uid, room_uid, cooling):
                 if dbo.update_room_data(room_uid, processed_data):
                     dbo.update_system_airflows(value)
                     return jsonify({"success": True, "message": "System satt"})
+                return jsonify({"success": False, "message": "Kunne ikke sette system"})
             else:
                 if dbo.update_room_data(room_uid, processed_data):
                     if dbo.update_airflow_changed_system(value, current_room_system_uid):
@@ -621,13 +621,16 @@ def get_building_heating_data(project_uid, building_uid):
 @project_api_bp.route('/heating/get_room/<room_uid>/', methods=['GET'])
 @firebase_required
 def heating_room_data(project_uid, room_uid):
-    room = dbo.get_room(room_uid)
-    building = dbo.get_building(room.building_uid)
-    building_data = building.get_json()
+    room = dbo.get_room_data(room_uid)
     if room:
-        room_heating_data = room.get_json_heating_data()
-        room_heating_data["Airflow"] = room.air_supply
-        return jsonify({"success": True, "heating_data": room_heating_data, "building_data": building_data})
+        data = {}
+        room_data, building_data, room_type = room
+        data["roomData"] = room_data.get_json_room_data()
+        data["heatingData"] = room_data.get_json_heating_data()
+        data["ventData"] = room_data.get_json_ventilation_data()
+        data["buildingData"] = building_data.get_json()
+        data["roomTypeData"] = room_type.get_json()
+        return jsonify({"success": True, "data": data})
     else:
         return ({"success": False, "message": "Fant ikke rom"})
 
@@ -712,12 +715,14 @@ def set_heatsource(project_uid, building_uid):
 @project_api_bp.route('/cooling/get_room/<room_uid>/', methods=['GET'])
 @firebase_required
 def get_room_cooling(project_uid, room_uid):
-    room = dbo.get_room(room_uid)
+    room = dbo.get_room_data(room_uid)
+    room, room_type, building = room
     if room:
-        room_data = room.get_json_room_data()
-        room_cooling_data = room.get_json_cooling_data()
-        room_cooling_data["Airflow"] = room.air_supply
-        return jsonify({"success": True, "room_data": room_data, "cooling_data": room_cooling_data})
+        data = {}
+        data["roomData"] = room.get_json_room_data()
+        data["coolingData"] = room.get_json_cooling_data()
+        data["ventData"] = room.get_json_ventilation_data()
+        return jsonify({"success": True, "data": data})
     else:
         return ({"success": False, "message": "Fant ingen rom"})
 

@@ -6,7 +6,7 @@ import CardTitle from '../../layout/CardTitle';
 function VentilationSummary({ systemData, totalAirflow }) {
 
     return (
-        <ContentCard>
+        <ContentCard width="24">
             <CardTitle svg={<VentIcon />} title="Ventilasjonsdata" />
             <div className="border-0 p-3 rounder-lg">
                 {

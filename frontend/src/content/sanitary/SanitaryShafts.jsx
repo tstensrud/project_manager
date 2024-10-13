@@ -12,6 +12,7 @@ import SortingButtons from '../../layout/SortingButtons.jsx';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 function SanitaryShafts() {
     const { activeProject } = useContext(GlobalContext);
@@ -54,7 +55,7 @@ function SanitaryShafts() {
                     ) : (
                         <>
                             {
-                                buildingData?.success ? (
+                                buildingData?.success && (
                                     <>
                                         <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
                                         {
@@ -67,14 +68,10 @@ function SanitaryShafts() {
                                             )
                                         }
                                     </>
-                                ) : (
-                                    <>
-                                        {
-                                            !buildingDataLoading && <MessageBox message={`${buildingData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
-                                        }
-                                    </>
                                 )
                             }
+                            {buildingData?.success === false && <MessageBox message={buildingData?.message ?? ERROR_FALLBACK_MSG } closeable={false} />}
+                            {buildingDataError === false && <MessageBox error message={buildingDataError ?? ERROR_FALLBACK_MSG } closeable={false} />}
                         </>
                     )
                 }

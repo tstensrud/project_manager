@@ -13,7 +13,7 @@ const CardInputField = forwardRef((props, ref) => {
             text-primary-color
             dark:text-dark-primary-color
             outline-none
-            w-auto
+            w-full
             border 
             pl-5
             pr-5

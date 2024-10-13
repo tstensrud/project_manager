@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 
 // Hooks
-import useFetch from '../../hooks/useFetch';
+import useFetchRequest from '../../hooks/useFetchRequest';
 import useUpdateData from '../../hooks/useUpdateData';
 
 // Components
@@ -17,14 +17,15 @@ import EditableInputField from "../../layout/tableelements/EditableInputField.js
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import LoadingRow from "../../layout/tableelements/LoadingRow.jsx";
 
-function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalColumns, buildingData, settingsUpdatedState }) {
+function HeatingTableRowComponent({ buildingReFetch, roomData, totalColumns, ventSystemData, roomTypeData, buildingData, settingsUpdatedState }) {
     const { projectId } = useParams();
+    const [currentSettingsCounter, setCurrentSettingsCounter] = useState(0);
 
     // Initial fetches and refetch
-    const { data: heatingData, loading: heatingLoading, refetch: heatingRefetch } = useFetch(`/project_api/${projectId}/heating/get_room/${roomId}/`);
+    const { data: updatedHeatingData, loading: heatingLoading, fetchData: heatingRefetch } = useFetchRequest(`/project_api/${projectId}/rooms/get_room/${roomData.roomData.uid}/`);
 
     // Update data
-    const { data: updatedRoomData, response: updateRoomDataResponse, setData, handleSubmit: updateRoomData, loading: updateRoomDataLoading } = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomId}/`);
+    const { response: updateRoomDataResponse, setData, handleSubmit: updateRoomData, loading: updateRoomDataLoading } = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomData.roomData.uid}/`);
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
@@ -36,8 +37,11 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
     const [showRoomData, setShowRoomData] = useState(false);
 
     // useEffects
-    useEffect(() => { // Refetch upon received message theat heating settings has changed
-        heatingRefetch();
+    useEffect(() => { // Refetch upon received message that cooling settings has changed
+        if (settingsUpdatedState > currentSettingsCounter) {
+            heatingRefetch();
+            setCurrentSettingsCounter(prevCounter => prevCounter + 1);
+        }
     }, [settingsUpdatedState]);
 
     useEffect(() => {
@@ -91,11 +95,11 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
     const renderEditableCell = (cellName, width) => (
         <TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
             {
-                editingCell === cellName && heatingData ? (
-                    <EditableInputField value={heatingData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+                editingCell === cellName && roomData ? (
+                    <EditableInputField changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
                     <EditableTableCell>
-                        {heatingData ? heatingData.heating_data[cellName] : ''}
+                        {!updatedHeatingData ? roomData.roomData[cellName] : updatedHeatingData.data.roomData[cellName]}
                     </EditableTableCell>
                 )
             }
@@ -104,7 +108,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
     
     return (
         <>
-            {showRoomData ? <RoomData buildingData={buildingData} roomData={allRoomData} heatingData={heatingData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
+            {showRoomData && <RoomData roomTypeData={roomTypeData} buildingData={buildingData} roomData={roomData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} />}
             {updateRoomDataResponse?.success === false && <MessageBox closeable={true} message={updateRoomDataResponse.message} />}
             <MarkedRow markedRow={markedRow}>
                 {
@@ -113,7 +117,7 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                     ) : (
                         <>
                             {
-                                heatingData?.success ? (
+                                roomData ? (
                                     <>
                                         <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
                                             <MarkRowIcon />
@@ -121,10 +125,10 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                                         <TableTDelement pointer={true} width="5%" clickFunction={(e) => handleOpenRoomData(e, setShowRoomData)}>
                                             <div className="flex flex-col">
                                                 <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-200 font-semibold">
-                                                    {allRoomData?.roomData.RoomNumber}
+                                                    {roomData?.roomData.RoomNumber}
                                                 </div>
                                                 <div className="text-grey-text dark:text-dark-grey-text uppercase">
-                                                    {allRoomData?.roomData.RoomName}
+                                                    {roomData?.roomData.RoomName}
                                                 </div>
                                             </div>
                                         </TableTDelement>
@@ -137,35 +141,24 @@ function HeatingTableRowComponent({ roomId, buildingReFetch, allRoomData, totalC
                                         {renderEditableCell("FloorAirArea", "5%")}
                                         <TableTDelement width="5%">
                                             <strong>
-                                                {heatingData ? (heatingData.heating_data.HeatLossSum).toFixed(0) : ''}
+                                                {!updatedHeatingData ? roomData?.roomData.HeatLossSum.toFixed(0) : updatedHeatingData.data.roomData.HeatLossSum}
                                             </strong>
                                         </TableTDelement>
 
                                         <TableTDelement width="5%">
-                                            {heatingData?.heating_data?.ChosenHeating}
+                                        {!updatedHeatingData ? roomData?.roomData.ChosenHeating.toFixed(0) : updatedHeatingData.data.roomData.ChosenHeating}
                                         </TableTDelement>
                                         <TableTDelement width="5%">
-                                            {heatingData && heatingData && (heatingData.heating_data.ChosenHeating / allRoomData.roomData.Area).toFixed(1)}
+                                            {!updatedHeatingData ? (roomData?.roomData.ChosenHeating / roomData.roomData.Area).toFixed(1) : (updatedHeatingData.data.roomData.ChosenHeating / roomData?.roomData.Area).toFixed(1) }
                                         </TableTDelement>
                                         {renderEditableCell("HeatSource", "8%")}
 
                                         <TableTDelement width="10%">
-                                            {
-                                                heatingData?.heating_data?.ChosenHeating < heatingData?.heating_data?.HeatLossSum && (
-                                                    <>
-                                                        <strong>NB!</strong> For lite valgt varme
-                                                    </>
-                                                )
-                                            }
+
                                         </TableTDelement>
                                     </>
                                 ) : (
-                                    <>
-                                    {
-                                        !heatingLoading && !updateRoomDataLoading && <td colspan={totalColumns} className="text-center">{heatingData.message}</td>
-                                    }
-                                    
-                                    </>
+                                    <td colspan={totalColumns} className="text-center">En feil har oppstått. Prøve igjen og kontakt admin ved vedvarende feil.</td>
                                 )
                             }
                         </>

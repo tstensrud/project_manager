@@ -1,6 +1,5 @@
 function TableSelect({ currentSystemName, systems, handleSystemChange }) {
 
-
     return (
         <div className="
         group

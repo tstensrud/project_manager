@@ -6,7 +6,7 @@ import CardTitle from '../../layout/CardTitle';
 function HeatingSummary({ totalHeating, totalCooling }) {
 
     return (
-        <ContentCard>
+        <ContentCard width="24">
             <CardTitle svg={<HeatingIcon />} title="Varme- og kjøledata" />
             <div className="border-0 p-3 rounder-lg">
                 <div className="text-grey-text dark:text-dark-grey-text mb-1">

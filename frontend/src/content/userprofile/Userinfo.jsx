@@ -1,11 +1,10 @@
-import InfoIcon from '../../assets/svg/infoIcon.jsx'
 import Avatar from '../../layout/Avatar.jsx';
 import ContentCard from '../../layout/ContentCard.jsx';
 
 function Userinfo({ firebaseData, userData }) {
 
     return (
-        <ContentCard width="450">
+        <ContentCard width="32">
             <div className="flex flex-row items-center mb-3 w-full">
                 <div>
                     <h2 className="text-grey-text dark:text-dark-grey-text">Din brukerinformasjon</h2>
@@ -14,7 +13,7 @@ function Userinfo({ firebaseData, userData }) {
                     <Avatar letter={userData?.name[0]} />
                 </div>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-full">
                 <div className="flex flex-row">
                     <div className="text-grey-text dark:text-dark-grey-text">Brukernavn: </div>
                     <div className="flex flex-1 justify-end">{userData?.name}</div>

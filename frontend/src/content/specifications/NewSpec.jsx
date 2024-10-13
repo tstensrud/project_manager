@@ -48,7 +48,7 @@ function NewSpec() {
             <MainContentContainer>
                 {error && <MessageBox message={error} closeable={true} />}
                 <div className="flex justify-center flex-row w-full">
-                    <ContentCard>
+                    <ContentCard width="44">
                         <div>
                             <h2>Opprett ny kravspesifikasjon</h2>
                         </div>

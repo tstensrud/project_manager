@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from 'react-router-dom';
 
 // Hooks
-import useFetch from '../../hooks/useFetch';
+import useFetchRequest from '../../hooks/useFetchRequest';
 import useUpdateData from '../../hooks/useUpdateData';
 
 // Components
@@ -18,17 +18,18 @@ import LoadingRow from "../../layout/tableelements/LoadingRow.jsx";
 
 
 
-function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }) {
+function CoolingTableRowComponent({ roomData, settingsUpdatedState, totalColumns }) {
     const { projectId } = useParams();
 
     const [extraAirNeeded, setExtraAirNeeded] = useState(0)
+    const [currentSettingsCounter, setCurrentSettingsCounter] = useState(0);
 
     // Initial fetches and refetch
-    const { data: coolingData, loading: coolingLoading, error: coolingError, refetch: coolingRefetch } = useFetch(`/project_api/${projectId}/cooling/get_room/${roomId}/`);
+    const { data: updatedCoolingData, loading: coolingLoading, error: coolingError, fetchData: coolingRefetch } = useFetchRequest(`/project_api/${projectId}/rooms/get_room/${roomData.roomData.uid}/`);
 
     // Update data
-    const { response: updateRoomDataResponse, setData, handleSubmit: updateRoomData, loading: updateCoolingDataLoading } = useUpdateData(`/project_api/${projectId}/cooling/update_room/${roomId}/`);
-    const { data: updateVentilationData, response: updateVentDataResponse, setData: setUpdateVentData, handleSubmit: updateVentilationDataSubmit } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomId}/1/`);
+    const { response: updateRoomDataResponse, setData, handleSubmit: updateRoomData, loading: updateCoolingDataLoading } = useUpdateData(`/project_api/${projectId}/cooling/update_room/${roomData.roomData.uid}/`);
+    const { response: updateVentDataResponse, setData: setUpdateVentData, handleSubmit: updateVentilationDataSubmit } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomData.roomData.uid}/1/`);
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
@@ -38,21 +39,30 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
 
     // useEffects
     useEffect(() => { // Refetch upon received message that cooling settings has changed
-        coolingRefetch();
+        if (settingsUpdatedState > currentSettingsCounter) {
+            coolingRefetch();
+            setCurrentSettingsCounter(prevCounter => prevCounter + 1);
+        }
     }, [settingsUpdatedState]);
 
     useEffect(() => {
-        if (coolingData) {
+        if (roomData) {
             calculateExtraAirNeeded();
         }
-    }, [coolingData]);
+    }, [roomData]);
 
     useEffect(() => {
-        if (updateVentDataResponse?.success === true) {
+        if (updatedCoolingData?.success) {
+            calculateExtraAirNeeded();
+        }
+    }, [updatedCoolingData]);
+
+    useEffect(() => {
+        if (updateVentDataResponse?.success) {
             setUpdateVentData({});
             coolingRefetch();
         }
-        if (updateRoomDataResponse?.success === true) {
+        if (updateRoomDataResponse?.success) {
             setData({});
             coolingRefetch();
         }
@@ -93,11 +103,10 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
         }
     };
 
-
     const calculateExtraAirNeeded = () => {
-        const { SumInternalHeatLoad, CoolingSum, VentairTempSummer, RoomTempSummer } = coolingData.cooling_data;
+        const { SumInternalHeatLoad, CoolingSum, VentairTempSummer, RoomTempSummer } = !updatedCoolingData ? roomData : updatedCoolingData?.data.roomData;
         const calculatedValue = (SumInternalHeatLoad - CoolingSum) / (0.35 * (VentairTempSummer - RoomTempSummer));
-        const airFlow = coolingData && coolingData.cooling_data.Airflow;
+        const airFlow = !updatedCoolingData ? roomData?.AirSupply : updatedCoolingData?.data.roomData.AirSupply;
         if (calculatedValue < 0) {
             setExtraAirNeeded(calculatedValue.toFixed(0));
             setUpdateVentData({ air_supply: ((calculatedValue.toFixed(0) * - 1) + airFlow), air_extract: ((calculatedValue.toFixed(0) * - 1) + airFlow) })
@@ -109,11 +118,11 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
     const renderEditableCell = (cellName, width) => (
         <TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
             {
-                editingCell === cellName && coolingData ? (
-                    <EditableInputField value={coolingData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+                editingCell === cellName && roomData ? (
+                    <EditableInputField changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
                     <EditableTableCell>
-                        {coolingData ? coolingData.cooling_data[cellName] : ''}
+                        {!updatedCoolingData ? roomData.roomData[cellName] : updatedCoolingData?.data?.roomData[cellName]}
                     </EditableTableCell>
                 )
             }
@@ -136,7 +145,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
                     ) : (
                         <>
                             {
-                                coolingData?.success ? (
+                                roomData ? (
                                     <>
                                         <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
                                             <MarkRowIcon />
@@ -144,10 +153,10 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
                                         <TableTDelement width="5%">
                                             <div className="flex flex-col">
                                                 <div className="text-accent-color dark:text-dark-accent-color hover:text-primary-color hover:dark:text-dark-primary-color transition duration-200 font-semibold">
-                                                    {coolingData && coolingData.room_data.RoomNumber}
+                                                    {roomData?.roomData.RoomNumber}
                                                 </div>
                                                 <div className="text-grey-text dark:text-dark-grey-text uppercase">
-                                                    {coolingData && coolingData.room_data.RoomName}
+                                                    {roomData?.roomData.RoomName}
                                                 </div>
                                             </div>
                                         </TableTDelement>
@@ -159,12 +168,12 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
                                         {renderEditableCell("SunAdition", "5%")}
                                         {renderEditableCell("SunReduction", "5%")}
                                         <TableTDelement width="5%">
-                                            {coolingData ? coolingData.cooling_data.SumInternalHeatLoad : ''}
+                                            {!updatedCoolingData ? roomData?.roomData.SumInternalHeatLoad : updatedCoolingData.data.roomData.SumInternalHeatLoad}
                                         </TableTDelement>
                                         {renderEditableCell("CoolingEquipment", "5%")}
                                         <TableTDelement width="5%">
                                             <strong>
-                                                {coolingData ? (coolingData.cooling_data.CoolingSum).toFixed(0) : ''}
+                                                {!updatedCoolingData ? roomData?.roomData.CoolingSum : updatedCoolingData.data.roomData.CoolingSum}
                                             </strong>
                                         </TableTDelement>
                                         <TableTDelement width="5%">
@@ -183,11 +192,7 @@ function CoolingTableRowComponent({ roomId, settingsUpdatedState, totalColumns }
                                         </TableTDelement>
                                     </>
                                 ) : (
-                                    <>
-                                        {
-                                            !coolingLoading && !updateCoolingDataLoading && <td colspan="totalColumns" className="text-center">{coolingData.message}</td>
-                                        }
-                                    </>
+                                    <td colspan={totalColumns} className="text-center">En feil har oppstått. Prøve igjen og kontakt admin ved vedvarende feil.</td>
                                 )
                             }
                         </>

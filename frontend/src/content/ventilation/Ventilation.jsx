@@ -12,6 +12,7 @@ import SortingButtons from '../../layout/SortingButtons.jsx';
 import VentilationTable from './VentilationTable.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 //import BuildingSummary from './BuildingSummary';
 
@@ -47,7 +48,7 @@ function Ventilation() {
 
     return (
         <>
-            {error && <MessageBox closeable={true} message={error} />}
+            
             <SubTitleComponent svg={<VentilationIcon />} headerText={"Luftmengdetabeller"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 {
@@ -56,7 +57,7 @@ function Ventilation() {
                     ) : (
                         <>
                             {
-                                buildingData?.success ? (
+                                buildingData?.success && (
                                     <>
                                         <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
                                         {
@@ -69,15 +70,10 @@ function Ventilation() {
                                             )
                                         }
                                     </>
-                                ) : (
-                                    <>
-                                        {
-                                            !loading && <MessageBox message={buildingData.message ?? 'En feil har oppstått. Prøv på nytt og kontakt admin hvis den vedvarer'} closeable={false} />
-                                        }
-                                    </>
-
                                 )
                             }
+                            {buildingData?.success === false && <MessageBox message={buildingData.message ?? ERROR_FALLBACK_MSG} closeable={false} />}
+                            {error && <MessageBox error closeable={false} message={error ?? ERROR_FALLBACK_MSG} />}
                         </>
                     )
                 }

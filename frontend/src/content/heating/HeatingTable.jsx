@@ -19,6 +19,7 @@ import MessageBox from '../../layout/MessageBox.jsx';
 
 // help
 import { title, sections } from '../help/HeatingTableHelp.jsx'
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
     const { data: roomData, loading: roomDataLoading, error: roomDataError } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
@@ -26,6 +27,7 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
 
     const [floors, setFloors] = useState([]);
     const [collapseAll, setCollapseAll] = useState(true);
+    const [currentSettingsCounter, setCurrentSettingsCounter] = useState(0);
 
     useEffect(() => {
         if (buildingData?.success === true) {
@@ -36,7 +38,10 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
     }, [buildingData]);
 
     useEffect(() => {
-        buildingReFetch();
+        if (settingsUpdatedState > currentSettingsCounter) {
+            buildingReFetch();
+            setCurrentSettingsCounter(prevCounter => prevCounter + 1);
+        }
     }, [settingsUpdatedState]);
 
     return (
@@ -92,7 +97,15 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                                                                         });
                                                                                     })
                                                                                     .map((key, index, rowIndex) => (
-                                                                                        <HeatingTableRowComponent settingsUpdatedState={settingsUpdatedState} buildingReFetch={buildingReFetch} key={roomData.data[key].roomData.uid} allRoomData={roomData.data[key]} totalColumns={14} roomId={roomData.data[key].roomData.uid} buildingData={buildingData} />
+                                                                                        <HeatingTableRowComponent
+                                                                                        settingsUpdatedState={settingsUpdatedState}
+                                                                                        buildingReFetch={buildingReFetch}
+                                                                                        key={index}
+                                                                                        roomData={roomData.data[key]}
+                                                                                        totalColumns={14}
+                                                                                        buildingData={roomData.data[key].buildingData}
+                                                                                        roomTypeData={roomData.data[key].roomTypeData}
+                                                                                        ventSystemData={roomData.data[key].ventSystemData} />
                                                                                     ))
                                                                             )
                                                                         }
@@ -172,7 +185,7 @@ function HeatingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                         ) : (
                                             <>
                                                 {
-                                                    !roomDataLoading && <MessageBox message={`${roomData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                                    roomData?.success === false && <MessageBox message={`${roomData?.message ?? ERROR_FALLBACK_MSG}`} closeable={false} />
                                                 }
                                             </>
                                         )

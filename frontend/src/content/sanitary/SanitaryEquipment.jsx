@@ -13,6 +13,7 @@ import SortingButtons from '../../layout/SortingButtons.jsx';
 import SanitaryEquipmentTable from './SanitaryEquipmentTable.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 function SanitaryEquipment() {
     const { activeProject } = useContext(GlobalContext);
@@ -48,14 +49,13 @@ function SanitaryEquipment() {
         <>
             <SubTitleComponent svg={<TapwaterIcon />} headerText={"Sanitærutstyr"} projectName={""} projectNumber={""} />
             <MainContentContainer>
-                {buildingDataError && <MessageBox message={buildingDataError} closeable={true} />}
                 {
                     buildingDataLoading ? (
                         <LoadingSpinner text="bygg" />
                     ) : (
                         <>
                             {
-                                buildingData?.success ? (
+                                buildingData?.success && (
                                     <>
                                         <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
                                         {
@@ -68,14 +68,11 @@ function SanitaryEquipment() {
                                             )
                                         }
                                     </>
-                                ) : (
-                                    <>
-                                        {
-                                            !buildingDataLoading && <MessageBox message={buildingData?.message ?? ''} closeable={false} />
-                                        }
-                                    </>
                                 )
                             }
+                            {buildingData?.success === false && <MessageBox message={buildingData?.message ?? ERROR_FALLBACK_MSG} closeable={false} />}
+                            {buildingDataError && <MessageBox error message={`${buildingDataError} @ building data` ?? ERROR_FALLBACK_MSG} closeable={false} />}
+
                         </>
                     )
                 }

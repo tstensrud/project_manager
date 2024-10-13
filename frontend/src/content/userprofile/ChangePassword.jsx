@@ -60,10 +60,10 @@ function ChangePassword() {
     }
 
     return (
-        <ContentCard width="450">
-            <div className="flex flex-row mb-3">
+        <ContentCard width="32">
+            <div className="flex flex-row">
                 <div>
-                    <h2 className="text-grey-text dark:text-dark-grey-text mb-3">Bytt passord</h2>
+                    <h2 className="text-grey-text dark:text-dark-grey-text">Bytt passord</h2>
                 </div>
                 <div className="flex flex-1 justify-end items-center">
                     <div className="w-fit dark:bg-dark-accent-color bg-accent-color p-1 border border-accent-color dark:border-dark-accent-color rounded-lg">
@@ -76,16 +76,19 @@ function ChangePassword() {
             </div>
 
             <form onSubmit={handleUpdatePassword}>
-                <div className="flex flex-col mt-1">
-                    <div className="pl-1">
-                        Gammelt passord
-                    </div>
-                    <div>
-                        <CardInputField password={true} changeFunction={(e) => setOldPassword(e.target.value)} value={oldPassword} required={true} placeholder="Skriv inn gammelt passord" />
+
+                <div className="mt-2 flex">
+                    <div className="flex flex-col mt-1">
+                        <div className="pl-1">
+                            Gammelt passord
+                        </div>
+                        <div>
+                            <CardInputField password={true} changeFunction={(e) => setOldPassword(e.target.value)} value={oldPassword} required={true} placeholder="Skriv inn gammelt passord" />
+                        </div>
                     </div>
                 </div>
 
-                <div className="mt-2 flex flex-row">
+                <div className="mt-2 flex">
                     <div className="flex flex-col mt-1">
                         <div className="pl-1">
                             Nytt passord
@@ -95,12 +98,13 @@ function ChangePassword() {
                         </div>
                     </div>
                 </div>
-                <div className="mt-2 flex flex-row items-center">
+
+                <div className="mt-2 flex items-center">
                     <div className="flex flex-col mt-1">
                         <div className="pl-1">
-                            Bekreft passord
+                            Bekreft nytt passord
                         </div>
-                        <div className="flex items-center flex-row">
+                        <div className="flex items-center">
                             <div className="mr-10">
                                 <CardInputField password={true} changeFunction={(e) => setConfirmPass(e.target.value)} value={confirmPass} required={true} placeholder="Bekreft nytt passord" />
                             </div>
@@ -111,8 +115,8 @@ function ChangePassword() {
                             </div>
                         </div>
                     </div>
-
                 </div>
+
                 <div className="mt-3">
                     <CardButton buttonText="Oppdater" />
                 </div>

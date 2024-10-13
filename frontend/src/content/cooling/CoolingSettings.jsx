@@ -73,7 +73,7 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
                                 </div>
                             </div>
 
-                            <div className="flex flex-col pl-3 mt-3 h-full text-primary-color dark:text-dark-primary-color justify-start w-full text-base-item-container">
+                            <div className="flex flex-col pl-3 pr-3 mt-3 h-full text-primary-color dark:text-dark-primary-color justify-start w-full text-base-item-container">
                                 <div>
                                     <form name="building_heating_settings" onSubmit={handleSubmit}>
                                         <div>
@@ -125,7 +125,7 @@ function CoolingSettings({ setShowCoolingSettings, buildingUid, onSettingsUpdate
                                         </div>
 
                                     </form>
-                                    <div className="mt-2">
+                                    <div className="pt-2 pb-2">
                                         <strong>NB!</strong> Disse verdiene settes for alle rom i bygget. Du kan etterpå justere enkeltrom med egne verdier ved behov.
                                     </div>
                                 </div>

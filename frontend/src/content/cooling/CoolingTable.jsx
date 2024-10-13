@@ -18,6 +18,7 @@ import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 // help
 import { title, sections } from '../help/CoolingTableHelp.jsx'
 import MessageBox from '../../layout/MessageBox.jsx';
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
     const { data: roomData, loading: roomDataLoading, error } = useFetch(`/project_api/${projectId}/rooms/building/${buildingUid}/`);
@@ -25,6 +26,7 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
 
     const [floors, setFloors] = useState([]);
     const [collapseAll, setCollapseAll] = useState(true);
+    const [currentSettingsCounter, setCurrentSettingsCounter] = useState(0);
 
     useEffect(() => {
         if (buildingData?.success === true) {
@@ -35,12 +37,15 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
     }, [buildingData]);
 
     useEffect(() => {
-        buildingReFetch();
+        if (settingsUpdatedState > currentSettingsCounter) {
+            buildingReFetch();
+            setCurrentSettingsCounter(prevCounter => prevCounter + 1);
+        }
     }, [settingsUpdatedState]);
 
     return (
         <>
-            {error && <MessageBox closeable={true} message={error} />}
+            {error && <MessageBox error closeable={true} message={`${error} @ loading table`} />}
             {
                 roomDataLoading ? (
                     <LoadingSpinner text="rom" />
@@ -58,7 +63,7 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                             <TableTHelement width="5%">Temp vent<br /> &#176;C</TableTHelement>
                                             <TableTHelement width="5%">W/Pers</TableTHelement>
                                             <TableTHelement width="5%">Lys<br /> W/m<sup>2</sup></TableTHelement>
-                                            <TableTHelement width="5%">Ustyr<br /> W/m<sup>2</sup></TableTHelement>
+                                            <TableTHelement width="5%">Ustyr<br /> W</TableTHelement>
                                             <TableTHelement width="5%">Soltilskudd<br /> W/m<sup>2</sup></TableTHelement>
                                             <TableTHelement width="5%">Solreduksjon<br /> (0-1,0)</TableTHelement>
                                             <TableTHelement width="5%">&#8721; Internlast<br /> W</TableTHelement>
@@ -84,7 +89,7 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
                                                                         });
                                                                     })
                                                                     .map((key, index, rowIndex) => (
-                                                                        <CoolingTableRowComponent settingsUpdatedState={settingsUpdatedState} key={roomData.data[key].roomData.uid} totalColumns={14} roomId={roomData.data[key].roomData.uid} />
+                                                                        <CoolingTableRowComponent settingsUpdatedState={settingsUpdatedState} key={roomData.data[key].roomData.uid} totalColumns={14} roomData={roomData.data[key]} />
                                                                     )
                                                                     )
 
@@ -102,7 +107,7 @@ function CoolingTable({ projectId, buildingUid, settingsUpdatedState }) {
                             ) : (
                                 <>
                                     {
-                                        !roomDataLoading && <MessageBox message={`${roomData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
+                                        roomData?.success === false && <MessageBox message={`${roomData?.message ?? ERROR_FALLBACK_MSG}`} closeable={false} />
                                     }
                                 </>
                             )

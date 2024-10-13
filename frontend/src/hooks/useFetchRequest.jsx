@@ -3,7 +3,7 @@ import AxiosInstance from '../AxiosInstance';
 
 const useFetchRequest = (endpoint) => {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchData = useCallback(async () => {

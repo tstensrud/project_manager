@@ -6,7 +6,7 @@ import ContentCard from '../../layout/ContentCard';
 function BuildingRoomData({ data }) {
     
     return (
-        <ContentCard>
+        <ContentCard width="24">
             <CardTitle svg={<BuildingIcon />} title="Bygnings- og romdata" />
             <div className="border-0 p-3 rounder-lg">
                 {

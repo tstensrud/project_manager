@@ -19,7 +19,7 @@ function Specifications() {
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Kravspesifikasjoner"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 <div className="flex justify-center flex-row w-full">
-                    <ContentCard>
+                    <ContentCard width="44">
                         {
                             loading && loading === true ? (
                                 <LoadingSpinner text="kravspesifikasjoner" />

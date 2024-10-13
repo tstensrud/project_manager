@@ -13,6 +13,7 @@ import SortingButtons from '../../layout/SortingButtons.jsx';
 import HeatingTable from './HeatingTable.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 function Heating() {
     const { activeProject } = useContext(GlobalContext);
@@ -21,7 +22,7 @@ function Heating() {
     const { data: buildingData, error: buildingDataError, refetch: buildingReFetch, loading } = useFetch(activeProject ? `/project_api/${activeProject}/buildings/get_project_buildings/` : null);
 
     // State changes between child components
-    const [settingsUpdatedState, setSettingsUpdatedState] = useState(false);
+    const [settingsUpdatedState, setSettingsUpdatedState] = useState(0);
 
     // Sorting
     const [buildings, setBuildings] = useState([]);
@@ -57,14 +58,13 @@ function Heating() {
         <>
             <SubTitleComponent svg={<HeatingIcon />} headerText={"Varmetapsberegninger"} projectName={""} projectNumber={""} />
             <MainContentContainer>
-                {buildingDataError && <MessageBox message={buildingDataError} closeable={true} />}
                 {
                     loading ? (
                         <LoadingSpinner text="data" />
                     ) : (
                         <>
                             {
-                                buildingData?.success ? (
+                                buildingData?.success && (
                                     <>
                                         <div className="overflow-y-hidden flex flex-row justify-center items-center mr-5 ml-5 h-32">
                                             <SortingButtons buildings={buildings} currentBuilding={currentBuilding} sortButtonClick={sortButtonClick} />
@@ -83,14 +83,14 @@ function Heating() {
                                             )
                                         }
                                     </>
-                                ) : (
-                                    <>
-                                        {
-                                            !loading && <MessageBox message={`${buildingData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
-                                        }
-
-                                    </>
                                 )
+                            }
+
+                            {
+                                buildingData?.success === false && <MessageBox error message={`${buildingData?.message ?? ERROR_FALLBACK_MSG}`} closeable={false} />
+                            }
+                            {
+                                buildingDataError && <MessageBox error={true} message={`${buildingDataError} @ Loading building data`} closeable={false} />
                             }
                         </>
                     )

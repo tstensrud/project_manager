@@ -14,7 +14,7 @@ const useUpdateData = (endpoint) => {
         setResponse(res.data);
         setLoading(false);
       } catch (err) {
-        setError(err);
+        setError(err.message);
         setLoading(false);
       }
     }, [systemData, endpoint]);

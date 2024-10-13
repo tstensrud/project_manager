@@ -15,6 +15,7 @@ import VentilationSummary from './VentilationSummary';
 import HeatingCoolingSummary from './HeatingCoolingSummary';
 import LoadingBar from '../../layout/LoadingBar.jsx'
 import MessageBox from '../../layout/MessageBox.jsx'
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 function Project() {
     const { projectId } = useParams();
@@ -29,7 +30,7 @@ function Project() {
         if (projectName && projectName !== activeProjectName) {
             setActiveProjectName(projectName);
             setActiveProject(projectId);
-    
+
             const activeProjectData = {
                 projectName: data?.data?.ProjectName,
                 projectId: data?.data?.uid
@@ -48,26 +49,25 @@ function Project() {
                     ) : (
                         <>
                             {
-                                data?.success === true ? (
+                                data?.success && (
                                     <div className="flex justify-between flex-row w-full flex-wrap">
                                         <ProjectSummary projectData={data.data} projectId={projectId} />
                                         <BuildingRoomData data={data.data} projectId={projectId} />
                                         <VentilationSummary systemData={data.data.ventsystemData} totalAirflow={data.data.airflow} projectId={projectId} />
                                         <HeatingCoolingSummary totalCooling={data.data.cooling} totalHeating={data.data.heating} projectId={projectId} />
                                     </div>
-                                ) : (
-                                    <>
-                                    {
-                                        !loading && <MessageBox message={`${data?.message} - ${error}`} closeable={false} />
-                                    }
-                                    </>
                                 )
+                            }
+                            {
+                                data?.success === false && <MessageBox error message={data?.message ?? ERROR_FALLBACK_MSG} closeable={false} />
+                            }
+                            {
+                                error && <MessageBox error message={error ?? ERROR_FALLBACK_MSG} closeable={false} />
                             }
                         </>
                     )
                 }
             </MainContentContainer>
-
         </>
     );
 }

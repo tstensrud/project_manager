@@ -50,7 +50,7 @@ function NewProject() {
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Opprett nytt prosjekt"} projectName={""} projectNumber={""} />
             <MainContentContainer>
                 <div className="flex justify-center flex-row w-full">
-                    <ContentCard>
+                    <ContentCard width="44">
                         <div>
                         <h2>Opprett nytt prosjekt</h2>
                         <form onSubmit={submitProject}>

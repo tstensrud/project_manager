@@ -11,6 +11,7 @@ import { GlobalContext } from '../context/GlobalContext';
 import TodoItem from './TodoItem';
 import LoadingSpinner from './LoadingSpinner';
 import CardButton from './formelements/CardButton';
+import CardInputField from './formelements/CardInputField';
 
 
 
@@ -31,7 +32,7 @@ function TodoList({ setShowTodoList, showTodoList }) {
             setData({})
         }
     }, [response]);
-    
+
     // Handlers
     const handleClick = (e) => {
         setShowTodoList(!showTodoList);
@@ -51,18 +52,19 @@ function TodoList({ setShowTodoList, showTodoList }) {
         }
         await handleSubmit();
     }
-/* <div className="flex fixed left-0 top-0 w-full z-10 h-full bg-background-shade"> */
-/*<div className="flex top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 fixed border rounded-lg dark:border-dark-default-border-color border-default-border-color h-[500px] bg-secondary-color dark:bg-dark-secondary-color shadow-lg shadow-background-shade justify-start flex-col items-start z-[1000] w-[400px] text-xs"> */
+    /* <div className="flex fixed left-0 top-0 w-full z-10 h-full bg-background-shade"> */
+    /*<div className="flex top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 fixed border rounded-lg dark:border-dark-default-border-color border-default-border-color h-[500px] bg-secondary-color dark:bg-dark-secondary-color shadow-lg shadow-background-shade justify-start flex-col items-start z-[1000] w-[400px] text-xs"> */
     return (
-        
-            <div className={`flex animate-slideInFromTop right-11 top-10 fixed border rounded-lg dark:border-dark-default-border-color border-default-border-color h-[500px] bg-secondary-color dark:bg-dark-secondary-color shadow-lg shadow-background-shade justify-start flex-col items-start z-[1000] w-[400px] text-xs`}>
-                <div className="flex flex-col sticky border-b items-center border-default-border-color dark:border-dark-default-border-color w-full dark:bg-dark-tertiary-color">
-                    
+        <div className="flex fixed left-0 top-0 w-full z-10 h-full bg-background-shade">
+            <div className={`flex absolute animate-slideInFromTop left-1/2 -translate-x-1/2 rounded-lg dark:border-dark-default-border-color border-default-border-color h-[500px] overflow-y-auto bg-secondary-color dark:bg-dark-secondary-color shadow-lg shadow-background-shade justify-start flex-col items-start z-[1000] w-[400px]`}>
+
+                <div className="flex flex-col sticky top-0 border-b items-center border-default-border-color dark:border-dark-default-border-color w-full bg-secondary-color dark:bg-dark-tertiary-color">
+
                     <div className="flex flex-row w-full items-center justify-center h-10">
                         <div className="w-[10%] h-full">
 
                         </div>
-                        <div className="flex flex-1 justify-center text-xl h-full items-center font-semibold tracking-wide">
+                        <div className="flex flex-1 justify-center text-md h-full items-center font-semibold tracking-wide">
                             {activeProjectName}
                         </div>
                         <div className="flex justify-center w-[10%] h-full items-start font-extrabold">
@@ -70,19 +72,20 @@ function TodoList({ setShowTodoList, showTodoList }) {
                         </div>
                     </div>
 
-                    <div className="w-full">
-                        <form id="todoItem" onSubmit={submitTodoItem}>
-                            <div className="bg-tertiary-color dark:bg-dark-tertiary-color p-2 relative h-12 w-full">
-                                <input ref={inputRef} name="todo_content" type="text" className="bg-tertiary-color border-form-border-color dark:border-dark-default-border-color dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color pl-3 text-base rounded-none w-full h-full m-0 border-t border-b top-0 left-0 right-0 absolute focus:outline-none" placeholder="Nytt huskepunkt" onChange={handleInputChange} required />
+                    <form className="w-[90%]" onSubmit={submitTodoItem}>
+                        <div className="w-full flex justify-between pb-2">
+                            <div className="bg-tertiary-color dark:bg-dark-tertiary-color">
+                                <CardInputField ref={inputRef} name="todo_content" placeholder="Nytt huskepunkt" changeFunction={handleInputChange} required={true} />
                             </div>
-                            <div className="flex flex-col border-b-default-border-color p-1 mt-2 mb-2 relative">
-                                <CardButton buttonText="Legg til huskepunkt" disabled={false} />
+                            <div className="flex border-b-default-border-color">
+                                <CardButton buttonText="Legg til" disabled={false} />
                             </div>
-                        </form>
-                    </div>
-                    
+                        </div>
+                    </form>
+
                 </div>
-                <div className="overflow-y-auto w-full">
+
+                <div className="flex flex-col items-center justify-center w-full pt-3 pb-3">
                     {
                         loading ? (
                             <LoadingSpinner />
@@ -95,7 +98,7 @@ function TodoList({ setShowTodoList, showTodoList }) {
                                         </div>
                                     ) : (
                                         todo?.todo && Object.keys(todo.todo).map((key, index) => {
-                                            return (<TodoItem key={index} user={currentUser.uid} itemData={todo.todo[key]} />);
+                                            return (<TodoItem key={index} user={currentUser.uid} itemData={todo.todo[key]} refetch={refetch} />);
                                         })
                                     )
                                 }
@@ -104,7 +107,7 @@ function TodoList({ setShowTodoList, showTodoList }) {
                     }
                 </div>
             </div>
-        
+        </div>
     );
 }
 

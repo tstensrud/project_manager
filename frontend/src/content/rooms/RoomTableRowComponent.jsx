@@ -3,9 +3,9 @@ import { GlobalContext } from '../../context/GlobalContext';
 
 // Hooks
 import useSubmitData from '../../hooks/useSubmitData'
-import useFetch from '../../hooks/useFetch'
 import useUpdateData from '../../hooks/useUpdateData'
 import useDeleteData from '../../hooks/useDeleteData'
+import useFetchRequest from '../../hooks/useFetchRequest.jsx'
 
 // Components
 import MessageBox from '../../layout/MessageBox';
@@ -20,15 +20,15 @@ import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import TableButton from "../../layout/tableelements/TableButton.jsx";
 
 
-function RoomTableRowComponent({ roomId, totalColumns }) {
+function RoomTableRowComponent({ totalColumns, roomData, roomTypeData, buildingData }) {
     const { activeProject } = useContext(GlobalContext);
 
     // Initial fetches
-    const { data: roomData, loading: roomLoading, error: roomError, refetch: roomRefetch } = useFetch(activeProject ? `/project_api/${activeProject}/rooms/get_room/${roomId}/` : null);
+    const { data: roomDataUpdated, loading: roomUpdateLoading, error: roomError, fetchData: getUpdatedRoomData } = useFetchRequest(activeProject ? `/project_api/${activeProject}/rooms/get_room/${roomData.uid}/` : null);
 
     // Update and delete
-    const { response, setData, handleSubmit: updateRoomData } = useUpdateData(activeProject ? `/project_api/${activeProject}/rooms/update_room/${roomId}/` : null);
-    const { setData: setDeleteData, handleSubmit: deleteSubmit, response: deleteResponse } = useDeleteData(activeProject ? `/project_api/${activeProject}/rooms/delete_room/${roomId}/` : null);
+    const { response, setData, handleSubmit: updateRoomData } = useUpdateData(activeProject ? `/project_api/${activeProject}/rooms/update_room/${roomData.uid}/` : null);
+    const { setData: setDeleteData, handleSubmit: deleteSubmit, response: deleteResponse } = useDeleteData(activeProject ? `/project_api/${activeProject}/rooms/delete_room/${roomData.uid}/` : null);
 
     // Edit cells
     const [editingCell, setEditingCell] = useState(null);
@@ -39,17 +39,17 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     // Undo and deletion
     const [deletedRoom, setDeletedRoom] = useState(false);
     const [undoButton, setUndoButton] = useState(false);
-    const { setData: setUndoDeleteData, response: undoDeleteResponse, handleSubmit: handleUndoDelete } = useSubmitData(activeProject ? `/project_api/${activeProject}/rooms/undo_delete/${roomId}/` : null);
+    const { setData: setUndoDeleteData, response: undoDeleteResponse, handleSubmit: handleUndoDelete } = useSubmitData(activeProject ? `/project_api/${activeProject}/rooms/undo_delete/${roomData.uid}/` : null);
 
     // Use effects
     useEffect(() => {
-        setDeleteData({ roomId: roomId });
+        setDeleteData({ roomId: roomData.uid });
     }, []);
 
     useEffect(() => {
         if (response?.success === true) {
             setData('');
-            roomRefetch();
+            getUpdatedRoomData();
         }
     }, [response]);
 
@@ -111,11 +111,11 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
     const renderEditableCell = (cellName, width) => (
         <TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
             {
-                editingCell === cellName && roomData ? (
-                    <EditableInputField value={roomData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+                editingCell === cellName ? (
+                    <EditableInputField changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
                     <EditableTableCell>
-                        {roomData?.data?.roomData?.[cellName]}
+                        {!roomDataUpdated ? roomData[cellName] : roomDataUpdated.data.roomData[cellName]}
                     </EditableTableCell>
                 )
             }
@@ -126,31 +126,32 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
         e.preventDefault();
         await handleUndoDelete();
     }
-    
+
     return (
         <>
             {response?.success === false && <MessageBox closeable={true} message={response.message} />}
             {roomError && <MessageBox message={roomError} closeable={true} />}
             <MarkedRow deleted={deletedRoom} markedRow={markedRow}>
+
                 {
-                    roomLoading ? (
-                        <LoadingRow cols={totalColumns} />
-                    ) : (
+                    roomData ? (
                         <>
                             {
-                                roomData?.success ? (
+                                roomUpdateLoading ? (
+                                    <LoadingRow cols={totalColumns} />
+                                ) : (
                                     <>
                                         <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
                                             <MarkRowIcon />
                                         </TableTDelement>
 
                                         <TableTDelement width="12%">
-                                            {roomData?.data?.buildingData.BuildingName}
+                                            {buildingData.BuildingName}
                                         </TableTDelement>
 
                                         {renderEditableCell("RoomNumber", "10%")}
                                         <TableTDelement width="15%">
-                                            {roomData?.data?.roomTypeData.name}
+                                            {roomTypeData.name}
                                         </TableTDelement>
                                         {renderEditableCell("RoomName", "10%")}
                                         {renderEditableCell("Area", "5%")}
@@ -167,15 +168,12 @@ function RoomTableRowComponent({ roomId, totalColumns }) {
                                             </div>
                                         </TableTDelement>
                                     </>
-                                ) : (
-                                    <>
-                                        {
-                                            !roomLoading && <td colspan={totalColumns} className="text-center">{roomData?.message ?? 'En feil har oppstått. Prøve igjen og kontakt admin ved vedvarende feil.'}</td>
-                                        }
-                                    </>
                                 )
                             }
+
                         </>
+                    ) : (
+                        <td colspan={totalColumns} className="text-center">En feil har oppstått. Prøve igjen og kontakt admin ved vedvarende feil.</td>
                     )
                 }
             </MarkedRow>

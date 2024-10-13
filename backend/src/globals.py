@@ -70,6 +70,15 @@ def replace_and_convert_to_int(input: str):
     except ValueError:
         return False
 
+'''
+Other
+'''
+def is_int(input):
+    try:
+        int(input)
+        return True
+    except ValueError:
+        return False
 
 def log(entry):
     with open(f"log.txt", "a") as file:

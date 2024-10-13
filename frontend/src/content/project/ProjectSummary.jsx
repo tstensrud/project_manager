@@ -39,7 +39,7 @@ function ProjectSummary({ projectId, projectData }) {
     }
 
     return (
-        <ContentCard>
+        <ContentCard width="44">
             {
                 projectData && (
                     <>

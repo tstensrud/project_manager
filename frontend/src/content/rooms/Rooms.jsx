@@ -16,6 +16,7 @@ import SortingButtons from '../../layout/SortingButtons.jsx';
 import RoomTable from './RoomTable.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
 import LoadingBar from '../../layout/LoadingBar.jsx';
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 function Rooms() {
     const { activeProject } = useContext(GlobalContext);
@@ -101,9 +102,6 @@ function Rooms() {
         <>
             <SubTitleComponent svg={<RoomIcon />} headerText={"Romskjema"} projectName={""} projectNumber={""} />
             <MainContentContainer>
-                {buildingDataError && <MessageBox message={buildingDataError} closeable={true} />}
-                {specDataError && <MessageBox message={specDataError} closeable={true} />}
-                {roomTypeError && <MessageBox message={roomTypeError} closeable={true} />}
                 {newRoomDataResponse?.success === false && (<MessageBox closeable={true} message={newRoomDataResponse.message} />)}
                 {
                     childLoading && <LoadingBar />
@@ -115,7 +113,7 @@ function Rooms() {
                     ) : (
                         <>
                             {
-                                buildingData?.success && specData?.success && roomTypeData?.success ? (
+                                buildingData?.success && specData?.success && roomTypeData?.success && (
                                     <>
                                         {
                                             currentBuilding !== -1 && (
@@ -132,13 +130,19 @@ function Rooms() {
                                                                 <SelectElement ref={roomTypeRef} name="roomType" changeFunction={handleFormChange} tabIndex={4}>
                                                                     <option key="0" value="">- Velg romtype -</option>
                                                                     {
-                                                                        roomTypeData?.data && roomTypeData.data
+                                                                        roomTypeData?.success ? (roomTypeData.data
                                                                             .sort((a, b) => a.name.localeCompare(b.name))
                                                                             .map(type => (
                                                                                 <option key={type.uid} value={type.uid}>
                                                                                     {type.name}
                                                                                 </option>
-                                                                            ))
+                                                                            )
+                                                                        )
+                                                                        ) : (
+                                                                            <option>
+                                                                                Ingen kravspek. satt
+                                                                            </option>
+                                                                        )
                                                                     }
                                                                 </SelectElement>
                                                             </div>
@@ -172,14 +176,16 @@ function Rooms() {
                                             )
                                         }
                                     </>
-                                ) : (
-                                    <>
-                                    {
-                                        !buildingDataLoading && !specDataLoading && !roomTypeLoading && <MessageBox message={`${buildingData?.message ?? ''} ${specData?.message ?? ''} ${roomTypeData?.message ?? ''}`} closeable={false} />
-                                    }   
-                                    </>
                                 )
                             }
+                            <div className="flex flex-col mt-5">
+                                {buildingData?.success === false && <MessageBox message={buildingData?.message} closeable={false} />}
+                                {roomTypeData?.success === false && <MessageBox message={roomTypeData?.message} closeable={false} />}
+                                {buildingDataError && <MessageBox error message={`${buildingDataError} @Building data` ?? ERROR_FALLBACK_MSG} closeable={false} />}
+                                {roomTypeError && <MessageBox error message={`${roomTypeError} @Roomtype data` ?? ERROR_FALLBACK_MSG} closeable={false} />}
+                                {specDataError && <MessageBox error message={`${specDataError} @Specification data` ?? ERROR_FALLBACK_MSG} closeable={false} />}
+                            </div>
+
                         </>
                     )
                 }

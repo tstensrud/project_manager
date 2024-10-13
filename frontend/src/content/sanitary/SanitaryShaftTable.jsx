@@ -12,10 +12,11 @@ import TableHeader from '../../layout/tableelements/TableHeader.jsx'
 
 //help
 import { title, sections } from '../help/SanitaryShaftsHelp.jsx'
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 
 function SanitaryShaftTable({ projectId, buildingUid }) {
-    const { data: buildingData, loading: buildingDataLoading } = useFetch(`/project_api/${projectId}/sanitary/get_building/${buildingUid}/`);
+    const { data: buildingData, loading: buildingDataLoading, error: buildingDataError } = useFetch(`/project_api/${projectId}/sanitary/get_building/${buildingUid}/`);
     const [collapseAll, setCollapseAll] = useState(true);
 
     return (
@@ -26,7 +27,7 @@ function SanitaryShaftTable({ projectId, buildingUid }) {
                 ) : (
                     <>
                         {
-                            buildingData?.success ? (
+                            buildingData?.success && (
                                 <>
                                     <TableTop title={title} sections={sections} collapseAll={collapseAll} setCollapseAll={setCollapseAll} />
                                     <TableContainer>
@@ -63,15 +64,10 @@ function SanitaryShaftTable({ projectId, buildingUid }) {
                                         <td className="h-6" colspan="8"></td>
                                     </TableFooter>
                                 </>
-                            ) : (
-                                <>
-                                {
-                                    !buildingDataLoading && <MessageBox message={`${buildingData?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'}`} closeable={false} />
-                                }
-                                </>
-                                
                             )
                         }
+                        {buildingData?.success === false && <MessageBox message={buildingData?.message ?? ERROR_FALLBACK_MSG} closeable={false} />}
+                        {buildingDataError && <MessageBox error message={buildingDataError ?? ERROR_FALLBACK_MSG} closeable={false} />}
                     </>
                 )
             }

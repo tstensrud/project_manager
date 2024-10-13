@@ -11,12 +11,13 @@ import BuildingSummary from './BuildingSummary';
 import LoadingSpinner from '../../layout/LoadingSpinner';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import MessageBox from '../../layout/MessageBox.jsx';
+import { ERROR_FALLBACK_MSG } from '../../utils/globals.js';
 
 function Sanitary() {
     const { activeProject } = useContext(GlobalContext);
 
     // Hooks
-    const { data, loading } = useFetch(activeProject ? `/project_api/${activeProject}/sanitary/buildings/` : null);
+    const { data, loading, error } = useFetch(activeProject ? `/project_api/${activeProject}/sanitary/buildings/` : null);
 
     return (
         <>
@@ -28,7 +29,7 @@ function Sanitary() {
                     ) : (
                         <>
                             {
-                                data?.success ? (
+                                data?.success && (
                                     <div className="flex justify-evenly flex-row w-full flex-wrap">
                                         {
                                             data?.data && Object.values(data.data).map((value) => (
@@ -36,14 +37,9 @@ function Sanitary() {
                                             ))
                                         }
                                     </div>
-                                ) : (
-                                    <>
-                                        {
-                                            !loading && <MessageBox message={data?.message ?? 'Feil har oppstått. Gå inn "min side" eller velg prosjekt og åpne prosjektet du vil jobbe med på nytt.'} closeable={false} />
-                                        }
-                                    </>
-                                )
-                            }
+                                )}
+                            {data?.success === false && <MessageBox message={data?.message ?? ERROR_FALLBACK_MSG} closeable={false} />}
+                            {error && <MessageBox error message={error ?? ERROR_FALLBACK_MSG} closeable={false} />}
                         </>
                     )
                 }
