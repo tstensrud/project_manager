@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useEffect, useState, useContext } from "react";
 
-// Hooks
+// Hooks and utils
 import useFetchRequest from '../../hooks/useFetchRequest';
 import useUpdateData from '../../hooks/useUpdateData';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import RoomData from './RoomData';
@@ -17,15 +17,16 @@ import EditableInputField from "../../layout/tableelements/EditableInputField.js
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import LoadingRow from "../../layout/tableelements/LoadingRow.jsx";
 
-function HeatingTableRowComponent({ buildingReFetch, roomData, totalColumns, ventSystemData, roomTypeData, buildingData, settingsUpdatedState }) {
-    const { projectId } = useParams();
+function HeatingTableRowComponent({ buildingReFetch, roomData, totalColumns, roomTypeData, buildingData, settingsUpdatedState }) {
+    const { activeProject } = useContext(GlobalContext);
+    const [serverSuccesFalseMsg, setServerSuccesFalseMsg] = useState(null);
     const [currentSettingsCounter, setCurrentSettingsCounter] = useState(0);
 
     // Initial fetches and refetch
-    const { data: updatedHeatingData, loading: heatingLoading, fetchData: heatingRefetch } = useFetchRequest(`/project_api/${projectId}/rooms/get_room/${roomData.roomData.uid}/`);
+    const { data: updatedHeatingData, loading: heatingLoading, fetchData: heatingRefetch } = useFetchRequest(`/project_api/${activeProject}/rooms/get_room/${roomData.roomData.uid}/`);
 
     // Update data
-    const { response: updateRoomDataResponse, setData, handleSubmit: updateRoomData, loading: updateRoomDataLoading } = useUpdateData(`/project_api/${projectId}/heating/update_room/${roomData.roomData.uid}/`);
+    const { response: updateRoomDataResponse, setData, handleSubmit: updateRoomData, loading: updateRoomDataLoading } = useUpdateData(`/project_api/${activeProject}/heating/update_room/${roomData.roomData.uid}/`);
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
@@ -45,11 +46,14 @@ function HeatingTableRowComponent({ buildingReFetch, roomData, totalColumns, ven
     }, [settingsUpdatedState]);
 
     useEffect(() => {
-        if (updateRoomDataResponse?.success === true) {
-            setData('');
+        if (updateRoomDataResponse?.success) {
             heatingRefetch();
             buildingReFetch();
         }
+        if (updateRoomDataResponse?.success === false) {
+            setServerSuccesFalseMsg(updateRoomDataResponse.message);
+        }
+        setData('');
     }, [updateRoomDataResponse])
 
     // Handlers
@@ -106,10 +110,11 @@ function HeatingTableRowComponent({ buildingReFetch, roomData, totalColumns, ven
         </TableTDelement>
     );
     
+    console.log(updateRoomDataResponse)
     return (
         <>
             {showRoomData && <RoomData roomTypeData={roomTypeData} buildingData={buildingData} roomData={roomData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} />}
-            {updateRoomDataResponse?.success === false && <MessageBox closeable={true} message={updateRoomDataResponse.message} />}
+            {serverSuccesFalseMsg && <MessageBox setServerSuccesFalseMsg={setServerSuccesFalseMsg} closeable={true} message={serverSuccesFalseMsg} />}
             <MarkedRow markedRow={markedRow}>
                 {
                     heatingLoading || updateRoomDataLoading ? (

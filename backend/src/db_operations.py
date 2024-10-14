@@ -664,9 +664,8 @@ def initial_ventilation_calculations(room_uid: int) -> bool:
         room.air_chosen = 0.0
     
     room_controls = room.room_control
-    
     if "cav" in room_controls.lower():
-        room.air_minium = air_supply
+        room.air_minimum = air_supply
     try:
         db.session.commit()
         return True

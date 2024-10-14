@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function MessageBox({ message, closeable, error }) {
+function MessageBox({ message, closeable, error, setServerSuccesFalseMsg }) {
     const [errorPopUpClass, setErrorPopUpClass] = useState('popup-hide');
 
     useEffect(() => {
@@ -8,7 +8,8 @@ function MessageBox({ message, closeable, error }) {
     }, [message]);
 
     const closeMessagePopUp = () => {
-        setErrorPopUpClass('hidden');
+        //setErrorPopUpClass('hidden');
+        setServerSuccesFalseMsg(null);
     }
 
     return (

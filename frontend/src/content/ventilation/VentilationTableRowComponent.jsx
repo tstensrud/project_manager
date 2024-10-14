@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams } from 'react-router-dom';
 
-// Hooks
+// Hooks and utils
 import useUpdateData from '../../hooks/useUpdateData';
 import useUpdateSystem from '../../hooks/useUpdateSystem';
 import useFetchRequest from '../../hooks/useFetchRequest';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import RoomData from './RoomData';
@@ -21,14 +21,15 @@ import TableSelect from "../../layout/tableelements/TableSelect.jsx";
 
 
 function RoomTableRowComponent({ buildingReFetch, systems, roomData, totalColumns }) {
-    const { projectId } = useParams();
+    const { activeProject } = useContext(GlobalContext);
+    const [serverSuccesFalseMsg, setServerSuccesFalseMsg] = useState(null);
 
     // Initial fetches and refetch
-    const { data: updatedVentData, loading: ventLoading, error: ventError, fetchData: fetchUpdatedVentData } = useFetchRequest(`/project_api/${projectId}/rooms/get_room/${roomData.roomData.uid}/`);
+    const { data: updatedVentData, loading: ventLoading, error: ventError, fetchData: fetchUpdatedVentData } = useFetchRequest(`/project_api/${activeProject}/rooms/get_room/${roomData.roomData.uid}/`);
 
     // Update data
-    const { response: updateVentDataResponse, setData: setVentData, handleSubmit: updateRoomData, loading: updateRoomLoading } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomData.roomData.uid}/0/`);
-    const { systemData: updatedSystemData, response: systemResponse, setResponse, setSystemData, handleSubmit: updateSystemData } = useUpdateSystem(`/project_api/${projectId}/ventilation/update_room/${roomData.roomData.uid}/0/`);
+    const { response: updateVentDataResponse, setData: setVentData, handleSubmit: updateRoomData, loading: updateRoomLoading } = useUpdateData(`/project_api/${activeProject}/ventilation/update_room/${roomData.roomData.uid}/0/`);
+    const { systemData: updatedSystemData, response: systemResponse, setResponse, setSystemData, handleSubmit: updateSystemData } = useUpdateSystem(`/project_api/${activeProject}/ventilation/update_room/${roomData.roomData.uid}/0/`);
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
@@ -64,6 +65,8 @@ function RoomTableRowComponent({ buildingReFetch, systems, roomData, totalColumn
     useEffect(() => {
         if (systemResponse?.success) {
             fetchUpdatedVentData();
+        } else if (systemResponse?.success === false) {
+            setServerSuccesFalseMsg(systemResponse.message);
         }
     }, [systemResponse]);
 
@@ -80,6 +83,8 @@ function RoomTableRowComponent({ buildingReFetch, systems, roomData, totalColumn
             fetchUpdatedVentData();
             buildingReFetch();
             setResponse("");
+        } else if (updateVentDataResponse?.success === false) {
+            setServerSuccesFalseMsg(updateVentDataResponse.message);
         }
     }, [updateVentDataResponse]);
 
@@ -145,9 +150,8 @@ function RoomTableRowComponent({ buildingReFetch, systems, roomData, totalColumn
     return (
         <>
             {showRoomData ? <RoomData roomData={!updatedVentData ? roomData : updatedVentData.data} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
-            {updateVentDataResponse?.success === false && <MessageBox closeable={true} message={updateVentDataResponse.message} />}
-            {systemResponse?.success === false && <MessageBox closeable={true} message={systemResponse.message} />}
-            {ventError && <MessageBox closeable={true} message={ventError} />}
+            {serverSuccesFalseMsg && <MessageBox setServerSuccesFalseMsg={setServerSuccesFalseMsg} closeable={true} message={serverSuccesFalseMsg} />}
+            {ventError && <MessageBox setServerSuccesFalseMsg={setServerSuccesFalseMsg} closeable={true} message={ventError} />}
             <MarkedRow markedRow={markedRow}>
                 {
                     ventLoading || updateRoomLoading ? (

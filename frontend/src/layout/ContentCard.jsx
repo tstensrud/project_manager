@@ -10,7 +10,7 @@ function ContentCard({ children, width }) {
         full: 'sm:w-full'
     }
     return (
-        <div className={`flex flex-col w-full ${widths[width]} p-4 h-full bg-secondary-color dark:bg-dark-tertiary-color rounded-lg mt-5`}>
+        <div className={`flex flex-col w-full ${widths[width]} p-4  bg-secondary-color dark:bg-dark-tertiary-color rounded-lg mt-5`}>
             {children}
         </div>
     );

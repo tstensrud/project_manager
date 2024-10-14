@@ -1,11 +1,8 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 import useFetch from '../../hooks/useFetch'
 import useDeleteData from '../../hooks/useDeleteData';
-
-// SVG
-import HeaderIcon from '../../assets/svg/editIcon.jsx';
 
 // Components
 import SubTitleComponent from '../../layout/SubTitleComponent';
@@ -15,9 +12,7 @@ import TableTop from '../../layout/TableTop';
 import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import LinkButton from '../../layout/Linkbutton.jsx'
 import Table from '../../layout/tableelements/Table.jsx';
-import TableTDFooter from "../../layout/tableelements/TableTDFooter.jsx";
 import TableFooter from '../../layout/tableelements/TableFooter.jsx'
-import TableWrapper from '../../layout/tableelements/TableWrapper.jsx';
 import TableTHelement from '../../layout/tableelements/TableTHelement.jsx';
 import TableHeader from '../../layout/tableelements/TableHeader.jsx';
 import LoadingSpinner from '../../layout/LoadingSpinner.jsx';
@@ -54,7 +49,12 @@ function EditSpecification() {
 
     return (
         <>
-            <SubTitleComponent svg={<HeaderIcon width={24} height={24} primary />} headerText={"Rediger kravspesifikasjon"} projectName={data && data.spec_name} projectNumber={""} />
+            <SubTitleComponent svg={
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-secondary-color dark:stroke-dark-primary-color fill-none">
+                    <polygon points="14 2 18 6 7 17 3 17 3 13 14 2"></polygon>
+                    <line x1="3" y1="22" x2="21" y2="22"></line>
+                </svg>
+            } headerText={"Rediger kravspesifikasjon"} projectName={data && data.spec_name} projectNumber={""} />
             <MainContentContainer>
                 {error && <MessageBox message={error} closeable={true} />}
                 {deleteError && <MessageBox message={deleteError} closeable={true} />}

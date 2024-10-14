@@ -22,6 +22,7 @@ import TableButton from "../../layout/tableelements/TableButton.jsx";
 
 function RoomTableRowComponent({ totalColumns, roomData, roomTypeData, buildingData }) {
     const { activeProject } = useContext(GlobalContext);
+    const [serverSuccesFalseMsg, setServerSuccesFalseMsg] = useState(null);
 
     // Initial fetches
     const { data: roomDataUpdated, loading: roomUpdateLoading, error: roomError, fetchData: getUpdatedRoomData } = useFetchRequest(activeProject ? `/project_api/${activeProject}/rooms/get_room/${roomData.uid}/` : null);
@@ -47,10 +48,12 @@ function RoomTableRowComponent({ totalColumns, roomData, roomTypeData, buildingD
     }, []);
 
     useEffect(() => {
-        if (response?.success === true) {
-            setData('');
+        if (response?.success) {
             getUpdatedRoomData();
+        } else if (response?.success === false) {
+            setServerSuccesFalseMsg(response.message)
         }
+        setData('');
     }, [response]);
 
     useEffect(() => {
@@ -129,7 +132,7 @@ function RoomTableRowComponent({ totalColumns, roomData, roomTypeData, buildingD
 
     return (
         <>
-            {response?.success === false && <MessageBox closeable={true} message={response.message} />}
+            {serverSuccesFalseMsg && <MessageBox setServerSuccesFalseMsg={setServerSuccesFalseMsg} closeable={true} message={serverSuccesFalseMsg} />}
             {roomError && <MessageBox message={roomError} closeable={true} />}
             <MarkedRow deleted={deletedRoom} markedRow={markedRow}>
 

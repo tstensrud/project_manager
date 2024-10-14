@@ -1,8 +1,6 @@
-import json
 from flask import Blueprint, jsonify, request
 from .. import db_operations as dbo
 from ..globals import replace_and_convert_to_float
-from markupsafe import escape
 from functools import wraps
 from firebase_admin import auth
 
@@ -98,15 +96,17 @@ def new_room_for_spec(spec_uid):
                 if room_type is True:
                     return jsonify({"success": False, "message": f"Romtype {key} finnes allerede"})
                 else:
-                    processed_data[key] = escape(value).strip()
+                    processed_data[key] = value.strip()
             if key in float_values:
                 converted_value = replace_and_convert_to_float(value.strip())
                 if converted_value is False:
                     return jsonify({"success": False, "message": f"Luftmengder må kun inneholde tall"})
                 else:
                     processed_data[key] = converted_value
+            if key == "notes":
+                processed_data[key] = value.strip()
             else:
-                processed_data[key] = escape(value).strip()
+                processed_data[key] = value
 
         if dbo.new_specification_room_type(spec_uid, processed_data):
             return jsonify({"success": True, "message": "Rom lagt til"})
@@ -117,7 +117,7 @@ def new_room_for_spec(spec_uid):
 def new_specification():
     data = request.get_json()
     if data:
-        spec_name = escape(data["spec_name"])
+        spec_name = data["spec_name"]
         if dbo.find_specification_name(spec_name):
             return jsonify({"success": False, "message": f"Kravspesifikasjon {spec_name} finnes allerede i databasen"})
         else:
@@ -187,20 +187,20 @@ def update_room(room_uid):
         for key, value in data.items():
             if key == "room_control":
                 if "vav" in value.lower() and "cav" in value.lower():
-                    return jsonify({"success": False, "error": "Styring må ha enten CAV eller VAV, ikke begge deler"})
+                    return jsonify({"success": False, "message": "Styring må ha enten CAV eller VAV, ikke begge deler"})
                 
             if key in float_values:
                 converted_value = replace_and_convert_to_float(value)
                 if converted_value is not False:
                     processed_data[key] = converted_value
                 else:
-                    return jsonify({"success": False, "error": "Luftmengde må kun inneholde tall"})
+                    return jsonify({"success": False, "message": "Luftmengde må kun inneholde tall"})
             else:
                 processed_data[key] = value.strip()
         if dbo.update_room_type_data(processed_data, room_uid):
             return jsonify({"success": True, "message": "Updated room"})
         else:
-            return jsonify({"success": False, "error": "Kunne ikke oppdatere romdata"})
+            return jsonify({"success": False, "message": "Kunne ikke oppdatere romdata"})
     return jsonify({"success": False, "message": "Mottok ingen data"})
         
 

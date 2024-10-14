@@ -15,6 +15,7 @@ import EditableTableCell from "../../layout/tableelements/EditableTableCell.jsx"
 
 
 function EditSpecTableRow({ roomUid, totalColumns, refetch, loading }) {
+    const [serverSuccesFalseMsg, setServerSuccesFalseMsg] = useState(null);
 
     // Initial room data fetch
     const { data: roomData, loading: roomLoading, error: roomDataError, refetch: roomRefetch } = useFetch(`/specifications/get_room_type_data/${roomUid}/`);
@@ -27,24 +28,26 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch, loading }) {
     const [editingCell, setEditingCell] = useState(null);
     const [disabledDeleteButton, setDisabledDeleteButton] = useState(false);
 
-    // useEffects
-
     // Use effects
     useEffect(() => {
         setDeleteData({ "roomId": roomUid });
     }, []);
 
     useEffect(() => {
-        if (responseDeleteRoom?.success === true) {
+        if (responseDeleteRoom?.success) {
             refetch();
+        } else if (responseDeleteRoom?.success === false) {
+            setServerSuccesFalseMsg(responseDeleteRoom.message);
         }
     }, [responseDeleteRoom]);
 
     useEffect(() => {
-        if (updateRoomDataResponse?.success === true) {
-            setData('');
+        if (updateRoomDataResponse?.success) {
             roomRefetch();
+        } else if (updateRoomDataResponse?.success === false) {
+            setServerSuccesFalseMsg(updateRoomDataResponse.message);
         }
+        setData('');
     }, [updateRoomDataResponse])
 
     // Handlers
@@ -97,8 +100,8 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch, loading }) {
 
     return (
         <>
-            {updateRoomDataResponse?.error && <MessageBox closeable={true} message={updateRoomDataResponse.error} />}
-            {roomDataError && <MessageBox message={roomDataError} closeable={true} />}
+            {serverSuccesFalseMsg && <MessageBox setServerSuccesFalseMsg={setServerSuccesFalseMsg} closeable={true} message={serverSuccesFalseMsg} />}
+            {roomDataError && <MessageBox setServerSuccesFalseMsg={setServerSuccesFalseMsg} message={roomDataError} closeable={true} />}
 
             <tr className="hover:bg-table-hover hover:dark:bg-dark-table-hover">
                 {

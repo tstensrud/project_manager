@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams } from 'react-router-dom';
 
 // Hooks
 import useFetch from '../../hooks/useFetch'
 import useUpdateData from '../../hooks/useUpdateData';
 import useDeleteData from '../../hooks/useDeleteData';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import MessageBox from '../../layout/MessageBox';
@@ -19,12 +19,13 @@ import LoadingRow from '../../layout/tableelements/LoadingRow.jsx'
 import MarkRowIcon from '../../assets/svg/MarkRowIcon.jsx';
 
 function SystemTableRowComponent({ systemId, systemsRefetch, cols }) {
-    const { projectId } = useParams();
+    const { activeProject } = useContext(GlobalContext);
+    const [serverSuccesFalseMsg, setServerSuccesFalseMsg] = useState(null);
 
     // Hooks
-    const { data: systemData, loading: systemLoading, error: systemError, refetch: systemRefetch } = useFetch(`/project_api/${projectId}/get_system/${systemId}/`);
-    const { response: updateSystemDataResponse, setData, handleSubmit: updateSystemData } = useUpdateData(`/project_api/${projectId}/update_system/${systemId}/`);
-    const { response: responseDeleteSystem, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/project_api/${projectId}/delete_system/${systemId}/`);
+    const { data: systemData, loading: systemLoading, error: systemError, refetch: systemRefetch } = useFetch(`/project_api/${activeProject}/get_system/${systemId}/`);
+    const { response: updateSystemDataResponse, setData, handleSubmit: updateSystemData } = useUpdateData(`/project_api/${activeProject}/update_system/${systemId}/`);
+    const { response: responseDeleteSystem, setData: setDeleteData, handleSubmit: deleteSubmit } = useDeleteData(`/project_api/${activeProject}/delete_system/${systemId}/`);
 
     // Use states
     const [editingCell, setEditingCell] = useState(null);
@@ -37,16 +38,20 @@ function SystemTableRowComponent({ systemId, systemsRefetch, cols }) {
     }, []);
 
     useEffect(() => {
-        if (responseDeleteSystem?.success === true) {
+        if (responseDeleteSystem?.success) {
             systemsRefetch();
+        } else if(responseDeleteSystem?.success === false) {
+            setServerSuccesFalseMsg(responseDeleteSystem.message)
         }
     }, [responseDeleteSystem]);
 
     useEffect(() => {
-        if (updateSystemDataResponse?.success === true) {
-            setData('');
+        if (updateSystemDataResponse?.success) {
             systemRefetch();
+        } else if (updateSystemDataResponse?.success === false) {
+            setServerSuccesFalseMsg(updateSystemDataResponse.message);
         }
+        setData('');
     }, [updateSystemDataResponse]);
 
     // Handlers
@@ -108,7 +113,7 @@ function SystemTableRowComponent({ systemId, systemsRefetch, cols }) {
 
     return (
         <>
-            {updateSystemDataResponse?.success === false && (<MessageBox closeable={true} message={updateSystemDataResponse.message} />)}
+            {serverSuccesFalseMsg&& (<MessageBox setServerSuccesFalseMsg={setServerSuccesFalseMsg} closeable={true} message={serverSuccesFalseMsg} />)}
             {
                 systemLoading ? (
                     <LoadingRow cols={cols}/>

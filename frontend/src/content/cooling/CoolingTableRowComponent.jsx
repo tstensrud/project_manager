@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from 'react-router-dom';
+import { useEffect, useContext, useState } from "react";
+import { Link } from 'react-router-dom';
 
-// Hooks
+// Hooks and utils
 import useFetchRequest from '../../hooks/useFetchRequest';
 import useUpdateData from '../../hooks/useUpdateData';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import MessageBox from '../../layout/MessageBox';
@@ -19,17 +20,18 @@ import LoadingRow from "../../layout/tableelements/LoadingRow.jsx";
 
 
 function CoolingTableRowComponent({ roomData, settingsUpdatedState, totalColumns }) {
-    const { projectId } = useParams();
+    const { activeProject } = useContext(GlobalContext);
 
     const [extraAirNeeded, setExtraAirNeeded] = useState(0)
     const [currentSettingsCounter, setCurrentSettingsCounter] = useState(0);
+    const [serverSuccesFalseMsg, setServerSuccesFalseMsg] = useState(null);
 
     // Initial fetches and refetch
-    const { data: updatedCoolingData, loading: coolingLoading, error: coolingError, fetchData: coolingRefetch } = useFetchRequest(`/project_api/${projectId}/rooms/get_room/${roomData.roomData.uid}/`);
+    const { data: updatedCoolingData, loading: coolingLoading, error: coolingError, fetchData: coolingRefetch } = useFetchRequest(`/project_api/${activeProject}/rooms/get_room/${roomData.roomData.uid}/`);
 
     // Update data
-    const { response: updateRoomDataResponse, setData, handleSubmit: updateRoomData, loading: updateCoolingDataLoading } = useUpdateData(`/project_api/${projectId}/cooling/update_room/${roomData.roomData.uid}/`);
-    const { response: updateVentDataResponse, setData: setUpdateVentData, handleSubmit: updateVentilationDataSubmit } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomData.roomData.uid}/1/`);
+    const { response: updateRoomDataResponse, setData, handleSubmit: updateRoomData, loading: updateCoolingDataLoading } = useUpdateData(`/project_api/${activeProject}/cooling/update_room/${roomData.roomData.uid}/`);
+    const { response: updateVentDataResponse, setData: setUpdateVentData, handleSubmit: updateVentilationDataSubmit } = useUpdateData(`/project_api/${activeProject}/ventilation/update_room/${roomData.roomData.uid}/1/`);
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
@@ -54,18 +56,24 @@ function CoolingTableRowComponent({ roomData, settingsUpdatedState, totalColumns
     useEffect(() => {
         if (updatedCoolingData?.success) {
             calculateExtraAirNeeded();
+        } else if (updatedCoolingData?.success === false) {
+            setServerSuccesFalseMsg(updatedCoolingData.message);
         }
     }, [updatedCoolingData]);
 
     useEffect(() => {
         if (updateVentDataResponse?.success) {
-            setUpdateVentData({});
             coolingRefetch();
+        } else if (updateVentDataResponse?.success === false) {
+            setServerSuccesFalseMsg(updateVentDataResponse?.message);
         }
         if (updateRoomDataResponse?.success) {
             setData({});
             coolingRefetch();
+        } else if (updateRoomDataResponse?.success === false) {
+            setServerSuccesFalseMsg(updateRoomDataResponse.message)
         }
+        setUpdateVentData({});
     }, [updateVentDataResponse, updateRoomDataResponse]);
 
     // Handlers
@@ -136,8 +144,8 @@ function CoolingTableRowComponent({ roomData, settingsUpdatedState, totalColumns
 
     return (
         <>
-            {updateRoomDataResponse?.success === false && <MessageBox closeable={true} message={updateRoomDataResponse.message} />}
-            {coolingError && <MessageBox closeable={true} message={coolingError} />}
+            {serverSuccesFalseMsg && <MessageBox setServerSuccesFalseMsg={setServerSuccesFalseMsg}  closeable={true} message={serverSuccesFalseMsg} />}
+            {coolingError && <MessageBox setServerSuccesFalseMsg={setServerSuccesFalseMsg} closeable={true} message={coolingError} />}
             <MarkedRow markedRow={markedRow}>
                 {
                     coolingLoading || updateCoolingDataLoading ? (

@@ -93,7 +93,7 @@ function SanitaryEquipmentTable({ projectId, buildingUid }) {
                                                                                         });
                                                                                     })
                                                                                     .map((key, index, rowIndex) => (
-                                                                                        <SanitaryTableRowComponent buildingReFetch={buildingReFetch} key={roomData.data[key].roomData.uid} totalColumns={14} roomId={roomData.data[key].roomData.uid} />
+                                                                                        <SanitaryTableRowComponent buildingReFetch={buildingReFetch} key={index} totalColumns={14} roomData={roomData.data[key]} />
                                                                                     )
                                                                                     )
                                                                             )

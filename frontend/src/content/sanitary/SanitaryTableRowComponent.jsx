@@ -1,9 +1,9 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams } from 'react-router-dom';
 
 // Hooks
-import useFetch from '../../hooks/useFetch';
+import useFetchRequest from '../../hooks/useFetchRequest';
 import useUpdateData from '../../hooks/useUpdateData';
+import { GlobalContext } from '../../context/GlobalContext';
 
 // Components
 import MessageBox from '../../layout/MessageBox';
@@ -17,14 +17,15 @@ import EditableInputField from "../../layout/tableelements/EditableInputField.js
 import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 
 
-function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
-    const { projectId } = useParams();
+function SanitaryTableRowComponent({ buildingReFetch, roomData, totalColumns }) {
+    const { activeProject } = useContext(GlobalContext);
+    const [serverSuccesFalseMsg, setServerSuccesFalseMsg] = useState(null);
 
     // Initial fetches and refetch
-    const { data: sanitaryData, loading: sanitaryLoading, error: sanitaryError, refetch: sanitaryRefetch } = useFetch(`/project_api/${projectId}/sanitary/get_room/${roomId}/`);
+    const { data: updatedSanitaryData, loading: sanitaryLoading, error: sanitaryError, fetchData: sanitaryRefetch } = useFetchRequest(`/project_api/${activeProject}/rooms/get_room/${roomData.roomData.uid}/`);
 
     // Update data
-    const { response, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${projectId}/sanitary/update_room/${roomId}/`);
+    const { response: updateDataResponse, setData, handleSubmit: updateRoomData } = useUpdateData(`/project_api/${activeProject}/sanitary/update_room/${roomData.roomData.uid}/`);
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
@@ -34,12 +35,13 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
 
     // useEffects
     useEffect(() => {
-        if (response?.success === true) {
-            setData('');
+        if (updateDataResponse?.success === true) {
             sanitaryRefetch();
-            //buildingReFetch();
+        } else if (updateDataResponse?.success === false) {
+            setServerSuccesFalseMsg(updateDataResponse.message);
         }
-    }, [response])
+        setData('');
+    }, [updateDataResponse])
 
 
     // Handlers
@@ -80,11 +82,11 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
     const renderEditableCell = (cellName, width) => (
         <TableTDelement pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
             {
-                editingCell === cellName && sanitaryData ? (
-                    <EditableInputField value={sanitaryData[cellName]} changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
+                editingCell === cellName && roomData ? (
+                    <EditableInputField changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
                     <EditableTableCell>
-                        {sanitaryData ? sanitaryData.data[cellName] : ''}
+                        {!updatedSanitaryData ? roomData?.roomData[cellName] : updatedSanitaryData?.data?.roomData[cellName]}
                     </EditableTableCell>
                 )
             }
@@ -93,8 +95,8 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
 
     return (
         <>
-            {sanitaryError && <MessageBox message={sanitaryError} closeable={true} />}
-            {response?.success === false ? <MessageBox closeable={true} message={response.message} /> : null}
+            {sanitaryError && <MessageBox setServerSuccesFalseMsg={setServerSuccesFalseMsg} message={sanitaryError} closeable={true} />}
+            {serverSuccesFalseMsg ? <MessageBox setServerSuccesFalseMsg={setServerSuccesFalseMsg} closeable={true} message={serverSuccesFalseMsg} /> : null}
             <MarkedRow markedRow={markedRow}>
                 {
                     sanitaryLoading ? (
@@ -102,7 +104,7 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
                     ) : (
                         <>
                             {
-                                sanitaryData?.success ? (
+                                roomData ? (
                                     <>
                                         <TableTDelement width="2%" clickFunction={handleOnMarkedRow}>
                                             <MarkRowIcon />
@@ -110,10 +112,10 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
 
                                         <TableTDelement width="12%">
                                             <div className="font-semibold">
-                                                {sanitaryData?.room_data ? sanitaryData.room_data.RoomNumber : ''}
+                                                {roomData?.roomData?.RoomNumber}
                                             </div>
                                             <div className="text-grey-text dark:text-dark-grey-text uppercase font-semibold">
-                                                {sanitaryData?.room_data ? sanitaryData.room_data.RoomName : ''}
+                                                {roomData?.roomData?.RoomName}
                                             </div>
                                         </TableTDelement>
                                         {renderEditableCell("shaft", "5%")}
@@ -134,11 +136,7 @@ function SanitaryTableRowComponent({ buildingReFetch, roomId, totalColumns }) {
                                         {renderEditableCell("drain_110_mm", "5%")}
                                     </>
                                 ) : (
-                                    <>
-                                        {
-                                            !sanitaryLoading && <td colspan={totalColumns} className="text-center"></td>
-                                        }
-                                    </>
+                                    <td colspan={totalColumns} className="text-center">En feil har oppstått. Prøve igjen og kontakt admin ved vedvarende feil.</td>
                                 )
                             }
                         </>
