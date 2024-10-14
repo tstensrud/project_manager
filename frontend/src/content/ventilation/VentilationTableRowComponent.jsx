@@ -20,15 +20,15 @@ import TableTDelement from "../../layout/tableelements/TableTDelement.jsx";
 import TableSelect from "../../layout/tableelements/TableSelect.jsx";
 
 
-function RoomTableRowComponent({ buildingReFetch, roomSystemData, systems, roomData, ventData, totalColumns }) {
+function RoomTableRowComponent({ buildingReFetch, systems, roomData, totalColumns }) {
     const { projectId } = useParams();
 
     // Initial fetches and refetch
-    const { data: updatedVentData, loading: ventLoading, error: ventError, fetchData: fetchUpdatedVentData } = useFetchRequest(`/project_api/${projectId}/ventilation/get_room/${roomData.uid}/`);
+    const { data: updatedVentData, loading: ventLoading, error: ventError, fetchData: fetchUpdatedVentData } = useFetchRequest(`/project_api/${projectId}/rooms/get_room/${roomData.roomData.uid}/`);
 
     // Update data
-    const { response: updateVentDataResponse, setData: setVentData, handleSubmit: updateRoomData, loading: updateRoomLoading } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomData.uid}/0/`);
-    const { systemData: updatedSystemData, response: systemResponse, setResponse, setSystemData, handleSubmit: updateSystemData } = useUpdateSystem(`/project_api/${projectId}/ventilation/update_room/${roomData.uid}/0/`);
+    const { response: updateVentDataResponse, setData: setVentData, handleSubmit: updateRoomData, loading: updateRoomLoading } = useUpdateData(`/project_api/${projectId}/ventilation/update_room/${roomData.roomData.uid}/0/`);
+    const { systemData: updatedSystemData, response: systemResponse, setResponse, setSystemData, handleSubmit: updateSystemData } = useUpdateSystem(`/project_api/${projectId}/ventilation/update_room/${roomData.roomData.uid}/0/`);
 
     // Edit of values
     const [editingCell, setEditingCell] = useState(null);
@@ -40,16 +40,16 @@ function RoomTableRowComponent({ buildingReFetch, roomSystemData, systems, roomD
 
     // Roomdata
     const [showRoomData, setShowRoomData] = useState(false);
-
+    
     // useEffects
     useEffect(() => {
-        if (roomSystemData) {
-            setCurrentSystemId(roomSystemData.uid);
-            setCurrentSystemName(roomSystemData.SystemName);
+        if (roomData) {
+            setCurrentSystemId(roomData?.ventSystemData.uid);
+            setCurrentSystemName(roomData?.ventSystemData.SystemName);
         } else {
             setCurrentSystemName("Ikke satt")
         }
-    }, [ventData]);
+    }, [roomData]);
 
     useEffect(() => {
         if (updatedSystemData) {
@@ -69,8 +69,8 @@ function RoomTableRowComponent({ buildingReFetch, roomSystemData, systems, roomD
 
     useEffect(() => {
         if (updatedVentData?.success) {
-            setCurrentSystemName(updatedVentData.data.systemData.SystemName);
-            setCurrentSystemId(updatedVentData.data.systemData.uid)
+            setCurrentSystemName(updatedVentData?.data?.ventSystemData.SystemName);
+            setCurrentSystemId(updatedVentData?.data?.ventSystemData.uid)
         }
     },[updatedVentData])
 
@@ -121,11 +121,11 @@ function RoomTableRowComponent({ buildingReFetch, roomSystemData, systems, roomD
     const renderEditableCell = (cellName, cellClass, width) => (
         <TableTDelement overFlow={true} cellClass={cellClass} pointer={true} width={width} name={cellName} clickFunction={() => handleEdit(cellName)}>
             {
-                editingCell === cellName && ventData ? (
+                editingCell === cellName && roomData ? (
                     <EditableInputField changeFunction={(e) => handleChange(e, cellName)} blur={handleBlur} keyDown={handleKeyDown} />
                 ) : (
                     <EditableTableCell>
-                        {!updatedVentData ? ventData[cellName] : updatedVentData.data.ventData[cellName]}
+                        {!updatedVentData ? roomData.roomData[cellName] : updatedVentData.data.roomData[cellName]}
                     </EditableTableCell>
                 )
             }
@@ -144,14 +144,14 @@ function RoomTableRowComponent({ buildingReFetch, roomSystemData, systems, roomD
 
     const calculateMinAirFlow = () => {
         let minimumAir = 0;
-        const supply = !updatedVentData ? ventData?.AirSupply : updatedVentData.data.ventData.AirSupply;
-        const extract = !updatedVentData ? ventData?.AirExtract : updatedVentData.data.ventData.AirExtract;
-        const min = ventData?.AirMinimum;
-        const area = roomData && roomData?.Area;
-        const emission = ventData?.AirEmissionSum;
-        const controls = ventData?.RoomControl;
-        const cav = ventData && controls.toUpperCase().includes("CAV");
-        const vav = ventData && controls.toUpperCase().includes("VAV");
+        const supply = !updatedVentData ? roomData?.roomData.AirSupply : updatedVentData.data.roomData.AirSupply;
+        const extract = !updatedVentData ? roomData?.roomData.AirExtract : updatedVentData.data.roomData.AirExtract;
+        const min = roomData?.roomData.AirMinimum;
+        const area = roomData?.roomData.Area;
+        const emission = roomData?.roomData.AirEmissionSum;
+        const controls = roomData?.roomData.RoomControl;
+        const cav = roomData && controls.toUpperCase().includes("CAV");
+        const vav = roomData && controls.toUpperCase().includes("VAV");
 
         if (cav) {
             if (supply !== 0) {
@@ -235,25 +235,25 @@ function RoomTableRowComponent({ buildingReFetch, roomSystemData, systems, roomD
                                                         updatedVentData?.success ? (
                                                             <>
                                                                 {
-                                                                   updatedVentData.data.ventData.AirSupply < updatedVentData.data.ventData.AirDemand && (<div className="mr-2">For lite tilluft.</div>)
+                                                                   updatedVentData.data.roomData.AirSupply < updatedVentData.data.roomData.AirDemand && (<div className="mr-2">For lite tilluft.</div>)
                                                                 }
                                                                 {
-                                                                   updatedVentData.data.ventData.AirExtract < updatedVentData.data.ventData.AirDemand && (<div className="mr-2">For lite avtrekk.</div>)
+                                                                   updatedVentData.data.roomData.AirExtract < updatedVentData.data.roomData.AirDemand && (<div className="mr-2">For lite avtrekk.</div>)
                                                                 }
                                                                 {
-                                                                   updatedVentData.data.ventData.AirSupply !== updatedVentData.data.ventData.AirExtract && 'Ubalanse i rom.'
+                                                                   updatedVentData.data.roomData.AirSupply !== updatedVentData.data.roomData.AirExtract && 'Ubalanse i rom.'
                                                                 }
                                                             </>
                                                         ) : (
                                                             <>
                                                                 {
-                                                                    ventData?.AirSupply < ventData.AirDemand && (<div className="mr-2">For lite tilluft.</div>)
+                                                                    roomData?.roomData.AirSupply < roomData?.roomData.AirDemand && (<div className="mr-2">For lite tilluft.</div>)
                                                                 }
                                                                 {
-                                                                    ventData?.AirExtract < ventData.AirDemand && (<div className="mr-2">For lite avtrekk.</div>)
+                                                                    roomData?.roomData?.AirExtract < roomData?.roomData.AirDemand && (<div className="mr-2">For lite avtrekk.</div>)
                                                                 }
                                                                 {
-                                                                    ventData?.AirSupply !== ventData.AirExtract && 'Ubalanse i rom.'
+                                                                    roomData?.roomData?.AirSupply !== roomData?.roomData.AirExtract && 'Ubalanse i rom.'
                                                                 }
                                                             </>
                                                         )

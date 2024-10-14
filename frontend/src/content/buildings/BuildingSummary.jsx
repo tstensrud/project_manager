@@ -143,7 +143,7 @@ function BuildingSummary({ refetchBuildingData, buildingData }) {
                     <h4>Prosjektert varme</h4>
                 </div>
                 <div className="mb-5">
-                    {Number((buildingData?.heating && buildingData.heating / 1000).toFixed(2)).toLocaleString()} kW
+                    {buildingData?.heating && Number(( buildingData.heating / 1000).toFixed(2)).toLocaleString()} kW
                 </div>
             </div>
             <div className="flex flex-row h-full">

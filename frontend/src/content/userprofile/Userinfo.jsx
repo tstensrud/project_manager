@@ -30,7 +30,7 @@ function Userinfo({ firebaseData, userData }) {
                     <div className="text-grey-text dark:text-dark-grey-text">Sist innlogget: </div>
                     <div className="flex flex-1 justify-end">
                         {
-                            new Date(firebaseData.last_sign_in_timestamp).toLocaleString('no-NO', {
+                            new Date(firebaseData?.last_sign_in_timestamp).toLocaleString('no-NO', {
                                 year: 'numeric',
                                 month: 'short',
                                 day: 'numeric',
@@ -42,7 +42,7 @@ function Userinfo({ firebaseData, userData }) {
                     <div className="text-grey-text dark:text-dark-grey-text">Opprettet </div>
                     <div className="flex flex-1 justify-end">
                         {
-                            new Date(firebaseData.creation_timestamp).toLocaleString('no-NO', {
+                            new Date(firebaseData?.creation_timestamp).toLocaleString('no-NO', {
                                 year: 'numeric',
                                 month: 'short',
                                 day: 'numeric',

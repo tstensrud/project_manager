@@ -80,7 +80,7 @@ function VentilationTable({ projectId, buildingUid }) {
                                                                         });
                                                                     })
                                                                     .map((key, index) => (
-                                                                        <VentilationTableRowComponent rowIndex={index} buildingReFetch={buildingReFetch} key={roomData.data[key].roomData.uid} roomData={roomData.data[key].roomData} roomSystemData={roomData.data[key].ventSystemData} totalColumns={12} systems={ventSystemData} />
+                                                                        <VentilationTableRowComponent rowIndex={index} buildingReFetch={buildingReFetch} key={index} roomData={roomData.data[key]} totalColumns={12} systems={ventSystemData} />
                                                                     )
                                                                     )
                                                             }

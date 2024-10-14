@@ -47,7 +47,7 @@ function Buildings() {
         e.preventDefault();
         await handleSubmit();
     }
-    console.log(error)
+
     return (
         <>
             <SubTitleComponent svg={<HeaderIcon />} headerText={"Bygg"} projectName={""} projectNumber={""} />
@@ -60,21 +60,21 @@ function Buildings() {
                         <LoadingBar />
                     ) : (
                         <>
+                            <form onSubmit={handleFormSubmit}>
+                                <div className="flex flex-col w-full items-center justify-center pt-5 sm:pt-0 text-center">
+                                    <div className="flex h-20 flex-row flex-wrap w-full items-center justify-center text-center">
+                                        <div className="mr-5">
+                                            <InputField buildingNameRef={buildingNameRef} changeFunction={handleChange} value={formInput} name="buildingName" placeholder="Navn på bygg. Eks.: A, Hovedbygg" required={true} />
+                                        </div>
+                                        <div className="items-center justify-center text-center">
+                                            <FormButton buttonText="Legg til" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                             {
                                 data?.success && (
                                     <>
-                                        <form onSubmit={handleFormSubmit}>
-                                            <div className="flex flex-col w-full items-center justify-center pt-5 sm:pt-0 text-center">
-                                                <div className="flex h-20 flex-row flex-wrap w-full items-center justify-center text-center">
-                                                    <div className="mr-5">
-                                                        <InputField buildingNameRef={buildingNameRef} changeFunction={handleChange} value={formInput} name="buildingName" placeholder="Navn på bygg. Eks.: A, Hovedbygg" required={true} />
-                                                    </div>
-                                                    <div className="items-center justify-center text-center">
-                                                        <FormButton buttonText="Legg til" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
 
                                         <div className="flex justify-evenly flex-row flex-wrap w-full">
                                             {
@@ -92,7 +92,7 @@ function Buildings() {
                             }
                             <>
                                 {
-                                    !data?.success === false && <MessageBox error closeable={false} message={data?.message ?? ERROR_FALLBACK_MSG} />
+                                    data?.success === false && <MessageBox error closeable={false} message={data?.message ?? ERROR_FALLBACK_MSG} />
                                 }
                                 {
                                     error && <MessageBox error closeable={false} message={error} />

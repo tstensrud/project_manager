@@ -20,10 +20,10 @@ function BuildingRoomData({ data }) {
                                     data.buildingData && Object.keys(data.buildingData.building_data).map((building, index) => (
                                         <div key={index} className="flex flex-row w-full">
                                             <div className="flex w-1/2">
-                                                {data.buildingData.building_data[building]?.BuildingName && data.buildingData.building_data[building].BuildingName}
+                                                {data?.buildingData?.building_data[building]?.BuildingName && data.buildingData.building_data[building].BuildingName}
                                             </div>
                                             <div className="flex w-1/2 justify-end">
-                                                {data.buildingData.building_data[building]?.area && data.buildingData.building_data[building].area.toLocaleString()} <div className="ml-1">m<sup>2</sup></div>
+                                                {data?.buildingData?.building_data[building]?.area && data.buildingData.building_data[building].area.toLocaleString()} <div className="ml-1">m<sup>2</sup></div>
                                             </div>
                                         </div>
                                     ))
@@ -38,7 +38,7 @@ function BuildingRoomData({ data }) {
                                         Antall rom:
                                     </div>
                                     <div className="flex w-1/2 justify-end">
-                                        {data.buildingData.rooms} stk.
+                                        {data?.buildingData.rooms} stk.
                                     </div>
                                 </div>
                                 <div className="flex flex-row w-full">
@@ -46,7 +46,7 @@ function BuildingRoomData({ data }) {
                                         Totalt kvm:
                                     </div>
                                     <div className="flex w-1/2 justify-end">
-                                        {data.area.toLocaleString()} <div>m<sup>2</sup></div>
+                                        {data?.area && data.area.toLocaleString()} <div>m<sup>2</sup></div>
                                     </div>
                                 </div>
 

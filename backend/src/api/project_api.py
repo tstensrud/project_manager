@@ -544,7 +544,7 @@ def ventilation_get_room(project_uid, room_uid):
     if room:
         room_data, vent_system_data = room
         data = {}
-        data["ventData"] = room_data.get_json_ventilation_data()
+        data["ventData"] = room_data.get_json()
         if vent_system_data:
             data["systemData"] = vent_system_data.get_json()
         else:
