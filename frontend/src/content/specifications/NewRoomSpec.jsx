@@ -144,12 +144,19 @@ function NewRoomSpec() {
                                 <div className="flex flex-row">
                                     <div className="mr-5">
 
-                                        <div className="relative mt-5 w-full">
+                                        <div className="mt-5 w-full">
                                             <div>Romtype</div>
                                             <CardInputField ref={roomTypeRef} changeFunction={handleInputChange} name="room_type" placeholder="eks: Kontor" tabIndex="1" required={true} />
                                         </div>
 
-                                        <div className="relative mt-5 w-full">
+                                        <div className="pt-1">
+                                            <CardSelect ref={vavRef} changeFunction={handleInputChange} name="vav" tabIndex="11">
+                                                <option value="1">VAV</option>
+                                                <option value="0">CAV</option>
+                                            </CardSelect>
+                                        </div>
+
+                                        <div className="mt-5 w-full">
                                             <div>Personbelastning</div>
                                             <CardInputField ref={airPerPersonRef} changeFunction={handleInputChange} name="air_per_person" placeholder="m3/pers" tabIndex="2" required={true} />
                                             <div>
@@ -157,7 +164,7 @@ function NewRoomSpec() {
                                             </div>
                                         </div>
 
-                                        <div className="relative mt-5 w-full">
+                                        <div className="mt-5 w-full">
                                             <div>Emisjon</div>
                                             <CardInputField ref={airEmissionRef} changeFunction={handleInputChange} name="air_emission" placeholder="m3/h" tabIndex="3" required={true} />
                                             <div>
@@ -165,7 +172,7 @@ function NewRoomSpec() {
                                             </div>
                                         </div>
 
-                                        <div className="relative mt-5 w-full">
+                                        <div className="mt-5 w-full">
                                             <div>Prosess</div>
                                             <CardInputField ref={airProcessRef} changeFunction={handleInputChange} name="air_process" placeholder="m3/h" tabIndex="4" required={false} />
                                             <div>
@@ -173,9 +180,9 @@ function NewRoomSpec() {
                                             </div>
                                         </div>
 
-                                        <div className="relative mt-5 w-full">
-                                            <div>Minimum luftmengde</div>
-                                            <CardInputField ref={airMinimumRef} changeFunction={handleInputChange} name="air_minimum" placeholder="m3/h" tabIndex="5" required={false} />
+                                        <div className="mt-5 w-full">
+                                            <div>m3/m2 per time</div>
+                                            <CardInputField ref={airMinimumRef} changeFunction={handleInputChange} name="air_per_area" placeholder="m3/m2" tabIndex="5" required={false}/>
                                             <div>
                                                 {response && response.error_air_minimum && <>NB! Kun tall i luftmengder</>}
                                             </div>
@@ -191,6 +198,9 @@ function NewRoomSpec() {
                                             </CardSelect>
                                         </div>
 
+
+                                    </div>
+                                    <div className="ml-10">
                                         <div className="pt-3">
                                             Gjenvinner
                                         </div>
@@ -201,30 +211,23 @@ function NewRoomSpec() {
                                                 <option value="B">Batteri</option>
                                             </CardSelect>
                                         </div>
-                                    </div>
-                                    <div className="ml-10">
-                                        <div className="relative mt-5 w-full">
+
+                                        <div className="mt-5 w-full">
                                             <div>dB teknisk</div>
                                             <CardInputField ref={dbTechnicalRef} changeFunction={handleInputChange} name="db_technical" placeholder="dB" tabIndex="8" required={false} />
                                         </div>
 
-                                        <div className="relative mt-5 w-full">
+                                        <div className="mt-5 w-full">
                                             <div>dB til naborom</div>
                                             <CardInputField ref={dbNeighbourRef} changeFunction={handleInputChange} name="db_neighbour" placeholder="dB" tabIndex="9" required={false} />
                                         </div>
 
-                                        <div className="relative mt-5 w-full">
+                                        <div className="mt-5 w-full">
                                             <div>dB mot korridorsone</div>
                                             <CardInputField ref={dbCorridorRef} changeFunction={handleInputChange} name="db_corridor" placeholder="dB" tabIndex="10" required={false} />
                                         </div>
                                         <div className="pt-3">
                                             Romstyring
-                                        </div>
-                                        <div className="pt-1">
-                                            <CardSelect ref={vavRef} changeFunction={handleInputChange} name="vav" tabIndex="11">
-                                                <option value="1">VAV</option>
-                                                <option value="0">CAV</option>
-                                            </CardSelect>
                                         </div>
                                         <div className="mt-3">
                                             <div className="flex flex-row">
@@ -259,7 +262,7 @@ function NewRoomSpec() {
                                                 </div>
                                             </div>
 
-                                            <div className="relative mt-5 w-full">
+                                            <div className="mt-5 w-full">
                                                 <div>Presiseringer</div>
                                                 <CardInputField ref={notesRef} changeFunction={handleInputChange} name="notes" placeholder="Presiseringer" tabIndex="18" required={false} />
                                             </div>

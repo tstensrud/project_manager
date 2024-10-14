@@ -43,9 +43,9 @@ function RoomTableRowComponent({ buildingReFetch, systems, roomData, totalColumn
     
     // useEffects
     useEffect(() => {
-        if (roomData) {
-            setCurrentSystemId(roomData?.ventSystemData.uid);
-            setCurrentSystemName(roomData?.ventSystemData.SystemName);
+        if (roomData?.ventSystemData) {
+            setCurrentSystemId(roomData?.ventSystemData?.uid);
+            setCurrentSystemName(roomData?.ventSystemData?.SystemName);
         } else {
             setCurrentSystemName("Ikke satt")
         }
@@ -69,8 +69,8 @@ function RoomTableRowComponent({ buildingReFetch, systems, roomData, totalColumn
 
     useEffect(() => {
         if (updatedVentData?.success) {
-            setCurrentSystemName(updatedVentData?.data?.ventSystemData.SystemName);
-            setCurrentSystemId(updatedVentData?.data?.ventSystemData.uid)
+            setCurrentSystemName(updatedVentData?.data?.ventSystemData?.SystemName);
+            setCurrentSystemId(updatedVentData?.data?.ventSystemData?.uid)
         }
     },[updatedVentData])
 
@@ -141,40 +141,10 @@ function RoomTableRowComponent({ buildingReFetch, systems, roomData, totalColumn
         e.preventDefault();
         setShowRoomData(!showRoomData);
     }
-
-    const calculateMinAirFlow = () => {
-        let minimumAir = 0;
-        const supply = !updatedVentData ? roomData?.roomData.AirSupply : updatedVentData.data.roomData.AirSupply;
-        const extract = !updatedVentData ? roomData?.roomData.AirExtract : updatedVentData.data.roomData.AirExtract;
-        const min = roomData?.roomData.AirMinimum;
-        const area = roomData?.roomData.Area;
-        const emission = roomData?.roomData.AirEmissionSum;
-        const controls = roomData?.roomData.RoomControl;
-        const cav = roomData && controls.toUpperCase().includes("CAV");
-        const vav = roomData && controls.toUpperCase().includes("VAV");
-
-        if (cav) {
-            if (supply !== 0) {
-                minimumAir = supply;
-            } else {
-                minimumAir = extract;
-            }
-        }
-
-        if (vav) {
-            if (emission > (min * area)) {
-                minimumAir = emission;
-            } else {
-                minimumAir = min * area;
-            }
-        }
-
-        return minimumAir.toFixed(0);
-    }
     
     return (
         <>
-            {showRoomData ? <RoomData roomData={roomData} ventData={ventData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
+            {showRoomData ? <RoomData roomData={!updatedVentData ? roomData : updatedVentData.data} showRoomData={showRoomData} setShowRoomData={setShowRoomData} /> : ''}
             {updateVentDataResponse?.success === false && <MessageBox closeable={true} message={updateVentDataResponse.message} />}
             {systemResponse?.success === false && <MessageBox closeable={true} message={systemResponse.message} />}
             {ventError && <MessageBox closeable={true} message={ventError} />}
@@ -215,11 +185,9 @@ function RoomTableRowComponent({ buildingReFetch, systems, roomData, totalColumn
                                         {renderEditableCell("AirSupply", "supply", "6%")}
                                         {renderEditableCell("AirExtract", "extract", "6%")}
                                         <TableTDelement width="6%">
-                                            {roomData?.roomData.AirChosen}
+                                            {!updatedVentData ? roomData?.roomData.AirChosen : updatedVentData.data.roomData.AirChosen}
                                         </TableTDelement>
-                                        <TableTDelement width="6%">
-                                            {calculateMinAirFlow()}
-                                        </TableTDelement>
+                                            {renderEditableCell("AirMinimum", "6%")}
                                         <TableTDelement width="6%">
                                             <TableSelect handleSystemChange={handleSystemChange} currentSystemName={currentSystemName} systems={systems?.data} />
                                         </TableTDelement>
@@ -234,27 +202,17 @@ function RoomTableRowComponent({ buildingReFetch, systems, roomData, totalColumn
                                                     {
                                                         updatedVentData?.success ? (
                                                             <>
-                                                                {
-                                                                   updatedVentData.data.roomData.AirSupply < updatedVentData.data.roomData.AirDemand && (<div className="mr-2">For lite tilluft.</div>)
-                                                                }
-                                                                {
-                                                                   updatedVentData.data.roomData.AirExtract < updatedVentData.data.roomData.AirDemand && (<div className="mr-2">For lite avtrekk.</div>)
-                                                                }
-                                                                {
-                                                                   updatedVentData.data.roomData.AirSupply !== updatedVentData.data.roomData.AirExtract && 'Ubalanse i rom.'
-                                                                }
+                                                                {updatedVentData.data.roomData.AirSupply < updatedVentData.data.roomData.AirDemand && (<div className="mr-2">For lite tilluft.</div>)}
+                                                                {updatedVentData.data.roomData.AirExtract < updatedVentData.data.roomData.AirDemand && (<div className="mr-2">For lite avtrekk.</div>)}
+                                                                {updatedVentData.data.roomData.AirSupply !== updatedVentData.data.roomData.AirExtract && <div className="mr-2">Ubalanse i rom.</div>}
+                                                                {updatedVentData.data.roomData.AirChosen > 40 && 'OBS! Høy luftmengde.'}
                                                             </>
                                                         ) : (
                                                             <>
-                                                                {
-                                                                    roomData?.roomData.AirSupply < roomData?.roomData.AirDemand && (<div className="mr-2">For lite tilluft.</div>)
-                                                                }
-                                                                {
-                                                                    roomData?.roomData?.AirExtract < roomData?.roomData.AirDemand && (<div className="mr-2">For lite avtrekk.</div>)
-                                                                }
-                                                                {
-                                                                    roomData?.roomData?.AirSupply !== roomData?.roomData.AirExtract && 'Ubalanse i rom.'
-                                                                }
+                                                                {roomData?.roomData.AirSupply < roomData?.roomData.AirDemand && (<div className="mr-2">For lite tilluft.</div>)}
+                                                                {roomData?.roomData?.AirExtract < roomData?.roomData.AirDemand && (<div className="mr-2">For lite avtrekk.</div>)}
+                                                                {roomData?.roomData?.AirSupply !== roomData?.roomData.AirExtract && <div className="mr-2">Ubalanse i rom.</div>}
+                                                                {roomData?.roomData.AirChosen > 40 && 'OBS! Høy luftmengde.'}
                                                             </>
                                                         )
                                                     }

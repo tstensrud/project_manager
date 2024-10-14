@@ -113,7 +113,7 @@ function EditSpecTableRow({ roomUid, totalColumns, refetch, loading }) {
                                         {renderEditableCell("air_per_person", "5%")}
                                         {renderEditableCell("air_emission", "5%")}
                                         {renderEditableCell("air_process", "5%")}
-                                        {renderEditableCell("air_minimum", "5%")}
+                                        {renderEditableCell("air_per_area", "5%")}
                                         {renderEditableCell("ventilation_principle", "5%")}
                                         {renderEditableCell("heat_exchange", "5%")}
                                         {renderEditableCell("room_control", "5%")}

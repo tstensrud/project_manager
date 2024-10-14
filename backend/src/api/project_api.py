@@ -312,12 +312,13 @@ def new_room(project_uid: str, building_uid: str):
             return jsonify({"success": False,"message": "Persontantall må kun inneholde tall"})
     
         vent_props = dbo.get_room_type(room_type_id, project_specification)
-        new_room_id = dbo.new_room(project.uid, building_uid, room_type_id, floor, room_number, name, converted_area, converted_people, 
-                                    vent_props.air_per_person, vent_props.air_emission,
-                                    vent_props.air_process, vent_props.air_minimum,
-                                    vent_props.ventilation_principle, vent_props.heat_exchange,
-                                    vent_props.room_control, vent_props.notes, vent_props.db_technical,
-                                    vent_props.db_neighbour, vent_props.db_corridor)
+        new_room_id = dbo.new_room(project_uid=project.uid, building_uid=building_uid, room_type_uid=room_type_id, floor=floor,
+                                   room_number=room_number, room_name=name, area=converted_area, room_pop=converted_people,
+                                    air_per_person=vent_props.air_per_person, air_emission=vent_props.air_emission,
+                                    air_process=vent_props.air_process, air_per_area=vent_props.air_per_area,
+                                    ventilation_principle=vent_props.ventilation_principle, heat_exchange=vent_props.heat_exchange,
+                                    room_control=vent_props.room_control, notes=vent_props.notes, db_technical=vent_props.db_technical,
+                                    db_neighbour=vent_props.db_neighbour, db_corridor=vent_props.db_corridor)
         dbo.initial_ventilation_calculations(new_room_id)
 
         return jsonify({"success": True, "message": f"Rom opprettet: {new_room_id}"})
@@ -425,7 +426,6 @@ def undo_delete(project_uid, room_uid):
 #   VENTILATIONSYSTEMS
 #
 #
-
 @project_api_bp.route('/systems/', methods=['GET'])
 @firebase_required
 @project_exists
@@ -518,12 +518,12 @@ def delete_system(project_uid, system_uid):
     else:
         response = {"success": False}
     return jsonify(response)
+
 #
 #               
 #   VENTILATION
 #
 #
-
 @project_api_bp.route('/ventilation/', methods=['GET'])
 @firebase_required
 def ventilation(project_uid):
@@ -537,22 +537,6 @@ def get_building_vent_data(project_uid: str, building_uid: str):
         return jsonify({"success": True, "data": building_data})
     return jsonify({"success": False, "message":" No building data found"})
 
-@project_api_bp.route('/ventilation/get_room/<room_uid>/', methods=['GET'])
-@firebase_required
-def ventilation_get_room(project_uid, room_uid):
-    room = dbo.get_room_ventilation_data(room_uid)
-    if room:
-        room_data, vent_system_data = room
-        data = {}
-        data["ventData"] = room_data.get_json()
-        if vent_system_data:
-            data["systemData"] = vent_system_data.get_json()
-        else:
-            data["systemData"] = None
-        return jsonify({"success": True, "data": data})
-    print(room_uid)
-    return jsonify({"success": False, "message": "Fant ikke romdata"})
-
 @project_api_bp.route('/ventilation/update_room/<room_uid>/<cooling>/', methods=['PATCH'])
 @firebase_required
 def ventilation_update_room(project_uid, room_uid, cooling):
@@ -563,12 +547,11 @@ def ventilation_update_room(project_uid, room_uid, cooling):
 
     for key, value in data.items():
         key = globals.camelcase_to_snake(key)
-
-        if key == "air_supply" or key == "air_extract":
-            
+        float_values = ["air_supply", "air_extract", "air_minimum"]
+        if key in float_values:
             converted_value = globals.replace_and_convert_to_float(str(value))
             if converted_value is False:
-                return jsonify({"success": False, "message": "Tilluft og avtrekk må kun inneholde tall"})
+                return jsonify({"success": False, "message": "Luftmengder må kun inneholde tall"})
             processed_data[key] = converted_value
         
         if key == "system_uid":
@@ -585,6 +568,7 @@ def ventilation_update_room(project_uid, room_uid, cooling):
                     else:
                         return jsonify({"success": False, "message": "Kunne ikke bytte system"})   
     
+
     updated_room = dbo.update_room_data(room_uid, processed_data)
     if updated_room is False:
         return jsonify({"success": False, "message": "Kunne ikke oppdatere rom"})
@@ -617,22 +601,6 @@ def get_building_heating_data(project_uid, building_uid):
     if building_data:
         return jsonify({"success": True, "data": building_data})
     return jsonify({"success": False, "message": "No building data found"})
-
-@project_api_bp.route('/heating/get_room/<room_uid>/', methods=['GET'])
-@firebase_required
-def heating_room_data(project_uid, room_uid):
-    room = dbo.get_room_data(room_uid)
-    if room:
-        data = {}
-        room_data, building_data, room_type = room
-        data["roomData"] = room_data.get_json_room_data()
-        data["heatingData"] = room_data.get_json_heating_data()
-        data["ventData"] = room_data.get_json_ventilation_data()
-        data["buildingData"] = building_data.get_json()
-        data["roomTypeData"] = room_type.get_json()
-        return jsonify({"success": True, "data": data})
-    else:
-        return ({"success": False, "message": "Fant ikke rom"})
 
 @project_api_bp.route('/heating/update_room/<room_uid>/', methods=['PATCH'])
 @firebase_required
@@ -678,7 +646,7 @@ def update_buildingsettings(project_uid, building_uid):
     building = dbo.get_building(building_uid)
     data = request.get_json()
     if not building:
-        return jsonify({"error": "Fant ingen bygg"})
+        return jsonify({"success": False, "message": "Fant ikke bygg"})
     if data:
         processed_data = {}
         for key, value in data.items():
@@ -702,30 +670,15 @@ def set_heatsource(project_uid, building_uid):
     data = request.get_json()
     if data:
         rooms = dbo.get_all_rooms_building(building_uid)
-        for room in rooms:
-            update = dbo.update_room_data(room.uid, data)
-            if update is False:
-                return jsonify({"success": False, "message": "Kunne ikke sette varmekilde for rom"})
+        update = dbo.update_room_data_bulk(rooms, "heat_source", data["heat_source"])
+        if update is False:
+            return jsonify({"success": False, "message": "Kunne ikke sette varmekilde for rom"})
     return jsonify({"success": True, "message": "Rom oppdatert"})
 #
 #               
 #   COOLING
 #
 #
-@project_api_bp.route('/cooling/get_room/<room_uid>/', methods=['GET'])
-@firebase_required
-def get_room_cooling(project_uid, room_uid):
-    room = dbo.get_room_data(room_uid)
-    room, room_type, building = room
-    if room:
-        data = {}
-        data["roomData"] = room.get_json_room_data()
-        data["coolingData"] = room.get_json_cooling_data()
-        data["ventData"] = room.get_json_ventilation_data()
-        return jsonify({"success": True, "data": data})
-    else:
-        return ({"success": False, "message": "Fant ingen rom"})
-
 @project_api_bp.route('/cooling/building_data/<building_uid>/', methods=['GET'])
 def get_building_cooling_data(project_uid, building_uid):
     building_data = dbo.get_building_data(building_uid, False, False, False)

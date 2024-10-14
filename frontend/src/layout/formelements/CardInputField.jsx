@@ -34,6 +34,7 @@ const CardInputField = forwardRef((props, ref) => {
                 placeholder={props?.placeholder}
                 required={props?.required}
                 tabIndex={props?.tabIndex}
+                disabled={props.disabled}
             />
         </div>
     );

@@ -90,7 +90,7 @@ def get_specification_room_types(spec_uid):
 def new_room_for_spec(spec_uid):
     data = request.get_json()
     if data:
-        float_values = ["air_per_person", "air_emission", "air_minimum", "air_process"]
+        float_values = ["air_per_person", "air_emission", "air_per_area", "air_process"]
         processed_data = {}
         for key, value in data.items():
             if key == "room_type":
@@ -100,15 +100,14 @@ def new_room_for_spec(spec_uid):
                 else:
                     processed_data[key] = escape(value).strip()
             if key in float_values:
-                cleansed_value = escape(value).strip()
-                converted_value = replace_and_convert_to_float(cleansed_value)
+                converted_value = replace_and_convert_to_float(value.strip())
                 if converted_value is False:
                     return jsonify({"success": False, "message": f"Luftmengder må kun inneholde tall"})
                 else:
                     processed_data[key] = converted_value
             else:
                 processed_data[key] = escape(value).strip()
-        #print(f"Data: {processed_data}.")
+
         if dbo.new_specification_room_type(spec_uid, processed_data):
             return jsonify({"success": True, "message": "Rom lagt til"})
     return jsonify({"success": False, "message": "Kunne ikke legge til nytt rom."})
@@ -184,7 +183,7 @@ def update_room(room_uid):
     data = request.get_json()
     if data:
         processed_data = {}
-        float_values = ["air_per_person", "air_emission", "air_process", "air_minimum"]
+        float_values = ["air_per_person", "air_emission", "air_process", "air_minimum", "air_per_area"]
         for key, value in data.items():
             if key == "room_control":
                 if "vav" in value.lower() and "cav" in value.lower():

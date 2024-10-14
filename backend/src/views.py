@@ -158,7 +158,8 @@ def spec_rooms_setup() -> bool:
                                     air_per_person = values[0],
                                     air_emission = values[1],
                                     air_process = values[2],
-                                    air_minimum = values[3],
+                                    air_minimum = 0.0,
+                                    air_per_area = values[3],
                                     ventilation_principle = values[4],
                                     heat_exchange = values[5],
                                     room_control = values[6],
@@ -213,7 +214,7 @@ def dummy_project(project_name=None, project_number=None):
 
 
         new_room = dbo.new_room(new_project.uid, building.uid, room_type.uid, floor, room_number, room_name, area, pop,
-                     room_type.air_per_person, room_type.air_emission, room_type.air_process, room_type.air_minimum,
+                     room_type.air_per_person, room_type.air_emission, room_type.air_process, room_type.air_per_area,
                      room_type.ventilation_principle, room_type.heat_exchange, room_type.room_control,
                      room_type.notes, room_type.db_technical, room_type.db_neighbour, room_type.db_corridor)
         dbo.initial_ventilation_calculations(new_room)

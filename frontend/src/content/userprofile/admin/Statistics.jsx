@@ -5,7 +5,7 @@ import LoadingSpinner from '../../../layout/LoadingSpinner';
 
 function Statistics() {
     const { data, loading, error, refetch } = useFetch(`/projects/stats/`);
-    console.log(data)
+    
     return (
         <>
             {

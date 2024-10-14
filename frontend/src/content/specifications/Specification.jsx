@@ -66,7 +66,7 @@ function Specification() {
                                                 <TableTHelement width="5%">Luft per person<br />m<sup>3</sup>/h/pers</TableTHelement>
                                                 <TableTHelement width="5%">Emisjon<br />m<sup>3</sup>/m<sup>2</sup>/h</TableTHelement>
                                                 <TableTHelement width="5%">Prosess<br />m<sup>3</sup>/h</TableTHelement>
-                                                <TableTHelement width="5%">Luft minimum<br />m<sup>3</sup>/h</TableTHelement>
+                                                <TableTHelement width="5%">m<sup>3</sup>/m<sup>2</sup><br />per time</TableTHelement>
                                                 <TableTHelement width="5%">Vent.prinsipp</TableTHelement>
                                                 <TableTHelement width="5%">Gjenvinner</TableTHelement>
                                                 <TableTHelement width="5%">Styring</TableTHelement>
@@ -91,7 +91,7 @@ function Specification() {
                                                                     <TableTDelement width="5%">{data.data[key].air_per_person}</TableTDelement>
                                                                     <TableTDelement width="5%">{data.data[key].air_emission}</TableTDelement>
                                                                     <TableTDelement width="5%">{data.data[key].air_process}</TableTDelement>
-                                                                    <TableTDelement width="5%">{data.data[key].air_minimum}</TableTDelement>
+                                                                    <TableTDelement width="5%">{data.data[key].air_per_area}</TableTDelement>
                                                                     <TableTDelement width="5%">{data.data[key].ventilation_principle}</TableTDelement>
                                                                     <TableTDelement width="5%">{data.data[key].heat_exchange}</TableTDelement>
                                                                     <TableTDelement width="5%">{data.data[key].room_control}</TableTDelement>

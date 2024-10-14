@@ -448,7 +448,7 @@ Rooms methods
 def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str,
              room_number: str,room_name: str, area: float, room_pop: int,
              air_per_person: float, air_emission: float, air_process: float,
-             air_minimum: float, ventilation_principle: str,
+             air_per_area: float, ventilation_principle: str,
              heat_exchange: str, room_control: str, notes: str, db_technical: str,
              db_neighbour: str, db_corridor: str):
     val = 0
@@ -466,7 +466,8 @@ def new_room(project_uid: str, building_uid: str, room_type_uid: str, floor: str
         air_per_person=air_per_person,
         air_emission=air_emission,
         air_process=air_process,
-        air_minimum=air_minimum,
+        air_minimum=0.0,
+        air_per_area=air_per_area,
         air_supply=0.0,
         air_extract=0.0,
         vent_principle=ventilation_principle,
@@ -616,6 +617,16 @@ def update_room_data(room_uid: int, data) -> bool:
         globals.log(f"update_room_data(): {e}")
         return False
 
+def update_room_data_bulk(rooms, column, data) -> bool:
+    try:
+        db.session.bulk_update_mappings(models.Rooms, [{'id': room.id, column: data} for room in rooms])
+        db.session.commit()
+        return True
+    except Exception as e:
+        globals.log(f"Failed to bulk update room: {e}")
+        db.session.rollback()
+        return False
+    
 '''
 Ventilation methods
 '''
@@ -636,21 +647,26 @@ def initial_ventilation_calculations(room_uid: int) -> bool:
     
     # Check if the minimum requirement per sqm is > person + emission + process. Set demand to largest of the two
     air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process), 1)
-    room_calculated_minimum = room.air_minimum * room.area
+    room_calculated_air_per_area = room.air_per_area * room.area
     set_airflow = 0
-    if room_calculated_minimum > air_demand:
-        set_airflow = room_calculated_minimum
+    if room_calculated_air_per_area > air_demand:
+        set_airflow = room_calculated_air_per_area
     else:
         set_airflow = air_demand
     room.air_demand = round(set_airflow, 1)
     
-    
-    room.air_supply = round((math.ceil(set_airflow / 10) * 10), 1)
+    air_supply = round((math.ceil(set_airflow / 10) * 10), 1)
+    room.air_supply = air_supply
     room.air_extract = room.air_supply
     if room.area > 0:
         room.air_chosen = round((room.air_supply / room.area), 1)
     else:
         room.air_chosen = 0.0
+    
+    room_controls = room.room_control
+    
+    if "cav" in room_controls.lower():
+        room.air_minium = air_supply
     try:
         db.session.commit()
         return True
@@ -667,10 +683,10 @@ def update_ventilation_calculations(room_uid=None, rooms=None) -> bool:
             
             # Check if the minimum requirement per sqm is > person + emission + process. Set demand to largest of the two
             air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process),1)
-            room_calculated_minimum = room.area * room.air_minimum
+            room_calculated_air_per_area = room.area * room.air_per_area
             set_airflow = 0
-            if room_calculated_minimum > air_demand:
-                set_airflow = room_calculated_minimum
+            if room_calculated_air_per_area > air_demand:
+                set_airflow = room_calculated_air_per_area
             else:
                 set_airflow = air_demand
             room.air_demand = round(set_airflow, 1)
@@ -689,10 +705,10 @@ def update_ventilation_calculations(room_uid=None, rooms=None) -> bool:
         
         # Check if the minimum requirement per sqm is > person + emission + process. Set demand to largest of the two
         air_demand = round((room.air_person_sum + room.air_emission_sum + room.air_process),1)
-        room_calculated_minimum = room.area * room.air_minimum
+        room_calculated_air_per_area = room.area * room.air_per_area
         set_airflow = 0
-        if room_calculated_minimum > air_demand:
-            set_airflow = room_calculated_minimum
+        if room_calculated_air_per_area > air_demand:
+            set_airflow = room_calculated_air_per_area
         else:
             set_airflow = air_demand
         room.air_demand = round(set_airflow, 1)
@@ -710,28 +726,6 @@ def update_ventilation_calculations(room_uid=None, rooms=None) -> bool:
     except Exception as e:
         globals.log(f"update_ventilation_calculations: {e}")
         db.session.rollback()
-        return False
-
-def update_ventilation_table(room_uid: int, new_supply: float, new_extract: float, system=None) -> bool:
-    room = get_room(room_uid)
-    room = room.room_ventilation
-    room.air_supply = new_supply
-    room.air_extract = new_extract
-    if room.area > 0:
-        room.air_chosen = round((new_supply / room.Area), 1)
-    else:
-        room.air_chosen = 0.0
-    if system is not None:
-        room.system = system
-    try:
-        db.session.commit()
-        if system is not None:
-            update_system_airflows(room.system_uid)
-            calculate_total_heat_loss_for_room(room_uid)
-        return True
-    except Exception as e:
-        db.session.rollback()
-        globals.log(f"update_ventilation_table: {e}")
         return False
 
 def set_system_for_room(room_uid: int, system_uid: int) -> bool:
@@ -1014,7 +1008,7 @@ def update_room_type_data(data, room_type_uid: str) -> bool:
                 setattr(room_type, key, value)
                 updated_columns[key] = value
         
-        float_values = ["air_per_person", "air_emission", "air_process", "air_minimum"]
+        float_values = ["air_per_person", "air_emission", "air_process", "air_minimum", "air_per_area"]
         project_rooms_with_room_type = db.session.query(models.Rooms).filter(models.Rooms.room_type_uid == room_type_uid).all()
         update_project_rooms = update(models.Rooms).where(models.Rooms.room_type_uid == room_type_uid).values(updated_columns)
         if updated_columns:
@@ -1091,6 +1085,10 @@ def get_spec_room_type_data(room_uid: str) -> dict:
 
 def new_specification_room_type(specification_uid: int, data) -> bool:
     room_control = ""
+    air_per_area = 0
+    if "air_per_area" in data:
+        air_per_area = data["air_per_area"]
+        
     if data["vav"] == "1":
         room_control = room_control + "VAV, "
     else:
@@ -1124,7 +1122,8 @@ def new_specification_room_type(specification_uid: int, data) -> bool:
                             air_per_person=data["air_per_person"],
                             air_emission=data["air_emission"],
                             air_process=data["air_process"],
-                            air_minimum=data["air_minimum"],
+                            air_minimum=0.0,
+                            air_per_area = air_per_area,
                             ventilation_principle=data["ventilation_principle"],
                             heat_exchange=data["heat_ex"],
                             room_control=room_control,

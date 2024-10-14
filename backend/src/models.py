@@ -224,6 +224,7 @@ class Rooms(db.Model):
     air_emission_sum = db.Column(db.Float)
     air_process = db.Column(db.Float)
     air_minimum = db.Column(db.Float)
+    air_per_area = db.Column(db.Float)
     air_demand = db.Column(db.Float)
     air_supply = db.Column(db.Float)
     air_extract = db.Column(db.Float)
@@ -314,6 +315,7 @@ class Rooms(db.Model):
             "AirEmissionSum": self.air_emission_sum,
             "AirProcess": self.air_process,
             "AirMinimum": self.air_minimum,
+            "AirPerArea": self.air_per_area,
             "AirDemand": self.air_demand,
             "AirSupply": self.air_supply,
             "AirExtract": self.air_extract,
@@ -444,6 +446,7 @@ class RoomTypes(db.Model):
     name = db.Column(db.String(50), nullable=False)
     air_per_person = db.Column(db.Float)
     air_emission = db.Column(db.Float)
+    air_per_area = db.Column(db.Float)
     air_process = db.Column(db.Float)
     air_minimum = db.Column(db.Float)
     ventilation_principle = db.Column(db.String(50))
@@ -471,6 +474,7 @@ class RoomTypes(db.Model):
             "air_emission": self.air_emission,
             "air_process": self.air_process,
             "air_minimum": self.air_minimum,
+            "air_per_area": self.air_per_area,
             "ventilation_principle": self.ventilation_principle,
             "heat_exchange": self.heat_exchange,
             "room_control": self.room_control,
@@ -507,6 +511,7 @@ class DeletedRooms(db.Model):
     air_emission_sum = db.Column(db.Float)
     air_process = db.Column(db.Float)
     air_minimum = db.Column(db.Float)
+    air_per_area = db.Column(db.Float)
     air_demand = db.Column(db.Float)
     air_supply = db.Column(db.Float)
     air_extract = db.Column(db.Float)
