@@ -8,6 +8,7 @@ import MainContentContainer from '../../layout/MainContentContainer.jsx';
 import CardInputField from '../../layout/formelements/CardInputField.jsx';
 import CardButton from '../../layout/formelements/CardButton.jsx';
 import CardSelect from '../../layout/formelements/CardSelect.jsx';
+import MessageBox from '../../layout/MessageBox.jsx';
 
 function CalculatorSpeedAirflowDucts() {
     const [diameter, setDiameter] = useState(0);

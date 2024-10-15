@@ -4,14 +4,16 @@ function SubMenuItem({ svg, text, url, index, activeNavIndex, setActiveNavIndex,
     const navigate = useNavigate();
 
     const handleClick = () => {
-        setActiveNavIndex(index);
-        navigate(url);
+        if (setActiveNavIndex) {
+            setActiveNavIndex(index);
+            navigate(url);
+        }
     }
 
     return (
 
-        <div className="flex justify-center items-center whitespace-nowrap h-9 relative" onClick={handleClick}>
-            <div className={`group p-2 mt-1 mb-1 overflow-x-hidden flex flex-row w-full items-center cursor-pointer ${index === activeNavIndex ? 'bg-navbar-active-bg-color  dark:bg-dark-navbar-hover-bg-color' : 'hover:bg-navbar-hover-bg-color hover:dark:bg-dark-navbar-hover-bg-color'}  rounded-lg transition duration-200`}>
+        <div className="flex justify-center items-center whitespace-nowrap h-7 relative" onClick={handleClick}>
+            <div className={`group p-2 mt-1 mb-1 overflow-x-hidden flex flex-row w-full items-center cursor-pointer ${index === activeNavIndex && 'bg-navbar-active-bg-color  dark:bg-dark-navbar-hover-bg-color'}  rounded-lg transition duration-200`}>
                 <div className="flex pl-[2px] h-full justify-center items-center">
                     {svg}
                 </div>

@@ -33,10 +33,12 @@ function Navbar() {
     }, []);
 
     useEffect(() => {
-        setUserUuid(userData?.data?.uuid);
-        setUserName(userData?.data?.name);
+        if (userData?.success === true) {
+            setUserUuid(userData?.data?.firebase?.uuid);
+            setUserName(userData?.data?.server?.user_info?.name);
+        }
     }, [userData]);
-
+    
     return (
         <>
             <div className="w-full bg-tertiary-color justify-between pr-8 pl-8 pt-2 pb-2 dark:bg-dark-secondary-color text-primary-color dark:text-dark-primary-color flex">

@@ -6,9 +6,11 @@ import { GlobalContext } from '../../context/GlobalContext';
 // components
 import SubMenuItem from "./SubMenuItem";
 import PinIcon from "../../assets/svg/pinIcon";
+import Avatar from "../Avatar";
+import LampLogo from "../../assets/svg/lampLogo";
 
 function NavPanel({ showMenu, setShowMenu, setMenuPinned, menuPinned, setIsMenuAnimationInProgress }) {
-    const { activeProject, activeProjectName } = useContext(GlobalContext);
+    const { activeProject, activeProjectName, userName } = useContext(GlobalContext);
     const [activeNavIndex, setActiveNavIndex] = useState(0);
 
     const menuItemsCssClasses = "transition duration-200 stroke-2 stroke-grey-text dark:stroke-dark-grey-text group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color fill-none";
@@ -236,13 +238,8 @@ function NavPanel({ showMenu, setShowMenu, setMenuPinned, menuPinned, setIsMenuA
         <div className={`flex flex-row h-full bg-secondary-color dark:bg-dark-tertiary-color overflow-y-auto`}>
             <div className="w-full flex flex-col border-primary-color bg-secondary-color border-r dark:border-dark-default-border-color dark:bg-dark-tertiary-color">
 
-                <div onClick={handleToggleMenu} className="group sticky top-0 bg-secondary-color dark:bg-dark-tertiary-color cursor-pointer flex items-center pt-2 pl-2 pb-3 border-b dark:border-dark-default-border-color h-12 text-grey-text dark:text-dark-grey-text">
-                    <div className="flex items-center justify-center w-7 h-7 border border-accent-color bg-tertiary-color group-hover:bg-accent-color dark:bg-dark-tertiary-color dark:border-dark-accent-color rounded-lg transition duration-200 group-hover:dark:bg-dark-navbar-active-bg-color">
-                        <div className={`${!menuPinned && 'rotate-180'}`}>
-                           <PinIcon />
-                        </div>
-                    </div>
-
+                <div className="sticky top-0 w-full bg-secondary-color dark:bg-dark-tertiary-color flex items-center pt-2 pl-2 pb-3 dark:border-dark-default-border-color h-12 text-grey-text dark:text-dark-grey-text">
+                    <LampLogo showMenu={showMenu} menuPinned={menuPinned} />
                 </div>
 
                 <div className={`flex flex-col ${activeProjectName && activeProjectName !== "0" && 'border-b'}border-table-border-color dark:border-dark-default-border-color pb-2`}>
@@ -268,7 +265,7 @@ function NavPanel({ showMenu, setShowMenu, setMenuPinned, menuPinned, setIsMenuA
                     }
                 </div>
 
-                <div className="pb-3 border-t border-default-border-color dark:border-dark-default-border-color">
+                <div className="pb-3 pt-1 border-t border-default-border-color dark:border-dark-default-border-color">
                     <div className="flex flex-col">
                         {
                             globalNavPanel.map((menuItem, index) => (
@@ -283,7 +280,7 @@ function NavPanel({ showMenu, setShowMenu, setMenuPinned, menuPinned, setIsMenuA
                 </div>
 
                 <div className="flex flex-1 items-end">
-                    <div className="border-t  w-full border-table-border-color dark:border-dark-default-border-color">
+                    <div className="border-t pb-2 pt-2 w-full border-table-border-color dark:border-dark-default-border-color">
                         <div className="p-1">
                             <SubMenuItem showNavPanel={showMenu} activeNavIndex={activeNavIndex} setActiveNavIndex={setActiveNavIndex} index={30} text="Min side" url="/" svg={
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" className="transition duration-200 stroke-grey-text dark:stroke-dark-grey-text group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color fill-none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -298,6 +295,24 @@ function NavPanel({ showMenu, setShowMenu, setMenuPinned, menuPinned, setIsMenuA
                                     <polyline points="17 16 21 12 17 8"></polyline>
                                     <line x1="21" y1="12" x2="9" y2="12"></line>
                                 </svg>} />
+                        </div>
+                        <div className="p-1">
+                            <div className="flex justify-center items-center whitespace-nowrap h-7 relative" onClick={handleToggleMenu}>
+                                <div className={`group p-2 mt-1 mb-1 overflow-x-hidden flex flex-row w-full items-center cursor-pointer rounded-lg transition duration-200`}>
+                                    <div className="flex pl-[2px] h-full justify-center items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" className="transition duration-200 stroke-grey-text dark:stroke-dark-grey-text group-hover:stroke-primary-color group-hover:dark:stroke-dark-primary-color fill-none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="5" r="3"></circle>
+                                            <line x1="12" y1="22" x2="12" y2="8"></line>
+                                            <path d="M5 12H2a10 10 0 0 0 20 0h-3"></path>
+                                        </svg>
+                                    </div>
+                                    <div className={`pl-3 flex h-full items-center justify-center text-sm tracking-wide text-grey-text dark:text-dark-grey-text group-hover:dark:text-dark-primary-color group-hover:text-primary-color transition duration-200`}>
+                                        {
+                                            menuPinned ? 'Skjul meny' : 'Fest meny'
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

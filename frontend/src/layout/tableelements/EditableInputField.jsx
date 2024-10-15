@@ -7,7 +7,7 @@ function EditableInputField(props) {
             dark:bg-dark-secondary-color
             text-primary-color
             dark:text-dark-primary-color
-            text-base
+            text-sm
             font-normal
             rounded-none
             w-full

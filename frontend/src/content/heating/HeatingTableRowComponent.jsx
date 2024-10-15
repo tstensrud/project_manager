@@ -110,7 +110,6 @@ function HeatingTableRowComponent({ buildingReFetch, roomData, totalColumns, roo
         </TableTDelement>
     );
     
-    console.log(updateRoomDataResponse)
     return (
         <>
             {showRoomData && <RoomData roomTypeData={roomTypeData} buildingData={buildingData} roomData={roomData} showRoomData={showRoomData} setShowRoomData={setShowRoomData} />}

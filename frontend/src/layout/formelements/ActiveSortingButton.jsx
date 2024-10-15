@@ -7,14 +7,16 @@ function ActiveSortingButton({name, index, sortButtonClick, buttonText, disabled
         <button
             name={name}
             onClick={handleClick}
-            className="uppercase h-11 outline-none 
+            className="uppercase
+            h-11
+            outline-none 
             bg-secondary-color
-            dark:bg-dark-navbar-active-bg-color
+            dark:bg-dark-secondary-color
             font-semibold
             rounded-lg
             border
             border-primary-color
-            dark:border-dark-navbar-active-bg-color
+            dark:border-dark-accent-color
             pl-5
             pr-5
             text-primary-color

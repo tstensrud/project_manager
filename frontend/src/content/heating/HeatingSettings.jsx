@@ -103,91 +103,91 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                                                         <div className="mt-3">
                                                             Innetempertaur (C&#176;)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="inside_temp" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             DUT (C&#176;)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="dut" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             Temp ventilasjon (C&#176;)
                                                         </div>
-                                                        <div className="mt-2 flex flex-row">
+                                                        <div className="w-1/2">
                                                             <CardInputField name="vent_temp" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             Luftveksling infilt. (1/h)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="infiltration" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             U-verdi yttervegg (W/m<div><sup>2</sup></div>K)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="u_value_outer_wall" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             U-verdi vindu/dør (W/m<div><sup>2</sup></div>K)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="u_value_window_doors" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             U-verdi gulv grunn (W/m<div><sup>2</sup></div>K)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="u_value_floor_ground" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             U-verdi gulv luft (W/m<div><sup>2</sup></div>K)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="u_value_floor_air" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             U-verdi tak (W/m<div><sup>2</sup></div>K)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="u_value_roof" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             Kuldebroveri (W/m<div><sup>2</sup></div>K)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="cold_bridge_value" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             Årsmiddeltemp. (C&#176;)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="year_mid_temp" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             Temp gulv mot luft (C&#176;)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="temp_floor_air" changeFunction={handleFormChange} />
                                                         </div>
 
                                                         <div className="mt-2 flex flex-row">
                                                             Tillegg (%)
                                                         </div>
-                                                        <div>
+                                                        <div className="w-1/2">
                                                             <CardInputField name="safety" changeFunction={handleFormChange} />
                                                         </div>
 
@@ -198,12 +198,13 @@ function HeatingSettings({ setShowHeatingSettings, buildingUid, onSettingsUpdate
                                                 </form>
                                             </div>
 
-                                            <div className="flex flex-col w-1/2 items-end text-end pr-7">
+                                            <div className="flex flex-col h-full w-1/2 items-end text-end pr-7">
                                                 <form onSubmit={handleHeatSourceSubmit}>
-                                                    <div>
                                                         <h3>Sett primærvarmekilde</h3>
-                                                    </div>
                                                     <div className="mt-3">
+                                                        Varmekilde
+                                                        </div>
+                                                        <div>
                                                         <CardInputField name="heat_source" changeFunction={handleHeatSourceChange} />
                                                     </div>
                                                     <div className="flex w-fill justify-end mt-3">

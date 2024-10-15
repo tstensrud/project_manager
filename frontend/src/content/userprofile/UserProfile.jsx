@@ -18,7 +18,7 @@ import Messages from './messages/Messages.jsx';
 
 function UserProfile() {
     const { currentUser, loading: authLoading } = useContext(AuthContext);
-    const { setActiveProject, setActiveProjectName } = useContext(GlobalContext);
+    const { setActiveProject, setActiveProjectName, setUserName } = useContext(GlobalContext);
     
     const { data, loading, fetchData } = useFetchRequest(`/user/${currentUser.uid}/`);
     
@@ -32,7 +32,7 @@ function UserProfile() {
         setActiveProject('0');
         setActiveProjectName('');
       }, []);
-
+      
     return (
         <>
             <SubTitleComponent svg={<AccountIcon />} headerText={!loading && `${data?.data?.server?.user_info?.name ?? ''}`} projectName={""} projectNumber={""} />

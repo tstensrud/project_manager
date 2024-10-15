@@ -55,8 +55,8 @@ function TodoList({ setShowTodoList, showTodoList }) {
     /* <div className="flex fixed left-0 top-0 w-full z-10 h-full bg-background-shade"> */
     /*<div className="flex top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 fixed border rounded-lg dark:border-dark-default-border-color border-default-border-color h-[500px] bg-secondary-color dark:bg-dark-secondary-color shadow-lg shadow-background-shade justify-start flex-col items-start z-[1000] w-[400px] text-xs"> */
     return (
-        <div className="flex fixed left-0 top-0 w-full z-10 h-full bg-background-shade">
-            <div className={`flex absolute animate-slideInFromTop left-1/2 -translate-x-1/2 rounded-lg dark:border-dark-default-border-color border-default-border-color h-[500px] overflow-y-auto bg-secondary-color dark:bg-dark-secondary-color shadow-lg shadow-background-shade justify-start flex-col items-start z-[1000] w-[400px]`}>
+        <div className="flex fixed left-0 top-0 w-full z-[999] h-full bg-background-shade">
+            <div className={`flex absolute animate-slideInFromTop left-1/2 -translate-x-1/2 rounded-lg dark:border-dark-default-border-color border-default-border-color h-[500px] overflow-y-auto bg-secondary-color dark:bg-dark-tertiary-color shadow-lg shadow-background-shade justify-start flex-col items-start z-[1000] w-[400px]`}>
 
                 <div className="flex flex-col sticky top-0 border-b items-center border-default-border-color dark:border-dark-default-border-color w-full bg-secondary-color dark:bg-dark-tertiary-color">
 
