@@ -238,7 +238,7 @@ function NavPanel({ showMenu, setShowMenu, setMenuPinned, menuPinned, setIsMenuA
         <div className={`flex flex-row h-full bg-secondary-color dark:bg-dark-tertiary-color overflow-y-auto`}>
             <div className="w-full flex flex-col border-primary-color bg-secondary-color border-r dark:border-dark-default-border-color dark:bg-dark-tertiary-color">
 
-                <div className="sticky top-0 w-full bg-secondary-color dark:bg-dark-tertiary-color flex items-center pt-2 pl-2 pb-3 dark:border-dark-default-border-color h-12 text-grey-text dark:text-dark-grey-text">
+                <div className="sticky top-0 w-full z-50 bg-secondary-color dark:bg-dark-tertiary-color flex items-center pt-2 pl-2 pb-3 dark:border-dark-default-border-color h-12 text-grey-text dark:text-dark-grey-text">
                     <LampLogo showMenu={showMenu} menuPinned={menuPinned} />
                 </div>
 
